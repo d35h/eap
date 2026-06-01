@@ -1,13 +1,23 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 
 export default function Footer() {
   const { t } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const scrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  // Прокрутить к секции на главной — работает с любого роута
+  const goToSection = (id) => {
+    if (location.pathname !== '/') {
+      navigate('/', { state: { scrollTo: id } });
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -44,19 +54,17 @@ export default function Footer() {
           <div className="footer-col">
             <h5>{t('footer.platformHead')}</h5>
             <ul>
-              <li><a onClick={() => scrollTo('opencall')}>{t('nav.opencall')}</a></li>
               <li><Link to="/process">{t('nav.process')}</Link></li>
-              <li><a onClick={() => scrollTo('team')}>{t('nav.team')}</a></li>
+              <li><a onClick={() => goToSection('team')}>{t('nav.team')}</a></li>
+              <li><Link to="/faq">{t('nav.faq')}</Link></li>
             </ul>
           </div>
 
           <div className="footer-col">
             <h5>{t('footer.connectHead')}</h5>
             <ul>
-              <li><a onClick={() => scrollTo('contact')}>{t('nav.contact')}</a></li>
+              <li><a onClick={() => goToSection('contact')}>{t('nav.contact')}</a></li>
               <li><a href="mailto:info@eap.art">info@eap.art</a></li>
-              <li><a onClick={() => scrollTo('contact')}>{t('footer.subscribe')}</a></li>
-              <li><Link to="/apply">{t('footer.cabinet')}</Link></li>
             </ul>
           </div>
         </div>
