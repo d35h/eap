@@ -21,11 +21,24 @@ export default function Footer() {
           </div>
 
           <div className="footer-col">
+            <h5>{t('team.teamLabel')}</h5>
+            <ul>
+              <li className="founder">
+                <span className="fname">{t('team.member1Name')}</span>
+                <span className="frole">{t('team.role1')}</span>
+              </li>
+              <li className="founder">
+                <span className="fname">{t('team.member2Name')}</span>
+                <span className="frole">{t('team.role2')}</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="footer-col">
             <h5>{t('footer.platformHead')}</h5>
             <ul>
               <li><a onClick={() => scrollTo('opencall')}>{t('nav.opencall')}</a></li>
               <li><Link to="/process">{t('nav.process')}</Link></li>
-              <li><a onClick={() => scrollTo('participants')}>{t('nav.participants')}</a></li>
               <li><a onClick={() => scrollTo('team')}>{t('nav.team')}</a></li>
             </ul>
           </div>

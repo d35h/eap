@@ -25,6 +25,8 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+/* Offset anchor scrolling so the fixed header doesn't cover/cut section content */
+section[id] { scroll-margin-top: 96px; }
 body {
   background: var(--bg);
   color: var(--fg);
@@ -162,12 +164,25 @@ input, textarea, select { font-family: inherit; }
   font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.4em;
   color: hsla(36, 22%, 92%, 0.5);
 }
+.hero-grid {
+  display: grid; grid-template-columns: 1.1fr 0.9fr;
+  gap: 72px; align-items: center;
+}
+.hero-right {
+  display: flex; flex-direction: column;
+  border-left: 1px solid hsla(36, 22%, 92%, 0.12); padding-left: 56px;
+}
+.hero-right .countdown { margin: 0 0 32px; gap: 36px; }
+.hero-cta { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.hero-opening { font-size: 0.85rem; color: var(--fg-muted); }
 .hero h1 {
   font-family: var(--font-display); font-weight: 300;
   font-size: clamp(2rem, 5.5vw, 4rem);
   line-height: 1; letter-spacing: -0.02em;
   white-space: nowrap; margin-bottom: 28px;
 }
+.hero-left h1 { white-space: normal; }
+.hero-left .hero-sub { margin-bottom: 0; }
 .hero h1 em { font-style: italic; }
 .hero-vp {
   max-width: 600px; font-size: clamp(1rem, 1.4vw, 1.2rem);
@@ -337,6 +352,39 @@ input, textarea, select { font-family: inherit; }
 }
 .team-member .bio { font-size: 0.9rem; color: var(--fg-muted); line-height: 1.6; }
 
+/* Sub-section labels inside Team / Jury */
+.subsection-title {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: 1rem; letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--accent); margin: 56px 0 28px;
+}
+.subsection-title:first-of-type { margin-top: 40px; }
+
+/* Jury cards with photos */
+.jury-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px;
+}
+.jury-photo { margin-bottom: 18px; }
+.jury-photo img {
+  display: block; width: auto; height: auto;
+  /* Height scales with the browser window so photos + names always fit:
+     min 120px, max 240px, otherwise ~30% of the viewport height */
+  max-width: 100%; max-height: clamp(120px, 30vh, 240px);
+  border-radius: 2px;
+  filter: grayscale(100%) contrast(1.04);
+  transition: filter 0.4s ease, transform 0.6s ease;
+}
+.jury-member:hover .jury-photo img { filter: grayscale(0%); transform: scale(1.03); }
+.jury-member .role {
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.4em; color: var(--accent); margin-bottom: 10px;
+}
+.jury-member h4 {
+  font-family: var(--font-display); font-size: 1.6rem; font-weight: 400;
+  letter-spacing: -0.01em; margin-bottom: 8px;
+}
+.jury-member .bio { font-size: 0.9rem; color: var(--fg-muted); line-height: 1.6; }
+
 /* ─── Contact (ivory) ─── */
 .contact-block {
   background: var(--ivory); color: var(--ink); padding: 120px 0;
@@ -430,8 +478,14 @@ input, textarea, select { font-family: inherit; }
   border-top: 1px solid var(--border);
 }
 .footer-top {
-  display: grid; grid-template-columns: 1.5fr 1fr 1fr;
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
   gap: 60px; margin-bottom: 60px;
+}
+.footer-col .founder { display: flex; flex-direction: column; gap: 3px; margin-bottom: 16px; }
+.footer-col .founder .fname { color: hsla(36, 22%, 92%, 0.9); font-size: 0.95rem; }
+.footer-col .founder .frole {
+  font-size: 0.62rem; text-transform: uppercase;
+  letter-spacing: 0.25em; color: var(--fg-muted);
 }
 .footer-brand .logo { font-size: 1.8rem; display: inline-block; margin-bottom: 16px; }
 .footer-brand p {
@@ -717,9 +771,13 @@ input, textarea, select { font-family: inherit; }
   .nav-primary { display: none; }
   .menu-toggle { display: block; }
   .hero h1 { white-space: normal; }
+  .hero-grid { grid-template-columns: 1fr; gap: 48px; align-items: start; }
+  .hero-right { border-left: 0; padding-left: 0; }
+  .hero-left .hero-sub { margin-bottom: 0; }
   .manifest .container { grid-template-columns: 1fr; gap: 48px; }
   .participants-grid { grid-template-columns: repeat(2, 1fr); }
   .team-grid { grid-template-columns: 1fr; gap: 32px; }
+  .jury-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
   .contact-grid { grid-template-columns: 1fr; gap: 48px; }
   .contact-aside { border-left: 0; border-top: 1px solid #d6cec2; padding-left: 0; padding-top: 40px; }
   .footer-top { grid-template-columns: 1fr; gap: 40px; }
@@ -743,6 +801,7 @@ input, textarea, select { font-family: inherit; }
   .process-steps { grid-template-columns: 1fr; }
   .step { padding: 28px 24px; min-height: auto; }
   .participants-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .jury-grid { grid-template-columns: 1fr; gap: 36px; }
   .contact-form { grid-template-columns: 1fr; }
   .contact-form .full { grid-column: span 1; }
   .countdown { gap: 24px; }

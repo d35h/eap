@@ -33,11 +33,9 @@ export default function Header() {
           </Link>
 
           <nav className="nav-primary" aria-label="Primary">
-            <a onClick={() => goToSection('opencall')}>{t('nav.opencall')}</a>
             <Link to="/process" className={location.pathname === '/process' ? 'active' : ''}>
               {t('nav.process')}
             </Link>
-            <a onClick={() => goToSection('participants')}>{t('nav.participants')}</a>
             <a onClick={() => goToSection('team')}>{t('nav.team')}</a>
             <a onClick={() => goToSection('contact')}>{t('nav.contact')}</a>
           </nav>
@@ -79,11 +77,9 @@ export default function Header() {
           <button className="close" onClick={() => setMenuOpen(false)} aria-label="Close menu">
             ×
           </button>
-          <button onClick={() => goToSection('opencall')}>{t('nav.opencall')}</button>
           <Link to="/process" onClick={() => setMenuOpen(false)}>
             {t('nav.process')}
           </Link>
-          <button onClick={() => goToSection('participants')}>{t('nav.participants')}</button>
           <button onClick={() => goToSection('team')}>{t('nav.team')}</button>
           <button onClick={() => goToSection('contact')}>{t('nav.contact')}</button>
           <Link to="/apply" onClick={() => setMenuOpen(false)} className="btn-gold" style={{ marginTop: '24px' }}>

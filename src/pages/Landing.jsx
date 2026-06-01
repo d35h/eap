@@ -3,62 +3,54 @@ import { Link } from 'react-router-dom';
 import Countdown from '../components/Countdown.jsx';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 
+// ── Временный состав жюри (hardcoded). Фото лежат в /public/jury. ──
+const JURY = [
+  {
+    name: 'Marina Abramović',
+    photo: '/jury/abramovic.jpg',
+    role: 'Перформанс',
+    bio: 'Сербская художница, пионер перформанса. Исследует пределы тела и сознания в работах, ставших классикой современного искусства.',
+  },
+  {
+    name: 'Ai Weiwei',
+    photo: '/jury/aiweiwei.jpg',
+    role: 'Современное искусство',
+    bio: 'Китайский художник и активист. Работает на стыке скульптуры, инсталляции и архитектуры, поднимая темы прав человека и свободы.',
+  },
+  {
+    name: 'Anish Kapoor',
+    photo: '/jury/kapoor.jpg',
+    role: 'Скульптура',
+    bio: 'Британско-индийский скульптор. Известен монументальными работами с зеркальными и пигментными поверхностями, меняющими восприятие пространства.',
+  },
+];
+
 export default function Landing() {
   const { t } = useTranslation();
 
   return (
     <main>
       {/* HERO */}
-      <section className="hero">
+      <section className="hero" id="opencall">
         <div className="container">
           <div className="hero-meta">
             <span>— {t('hero.meta1')}</span>
             <span>{t('hero.meta2')}</span>
           </div>
-          <h1>EAP — <em>Eurasian</em> Art Platform</h1>
-          <p className="hero-vp">
-            {t('hero.vpStart')}
-            <strong>{t('hero.vpStrong')}</strong>
-            {t('hero.vpRest')}
-          </p>
-          <p className="hero-sub">{t('hero.sub')}</p>
-          <div className="hero-bottom">
-            <div className="hero-founders">
-              <div className="label">{t('hero.foundedBy')}</div>
-              {t('team.member1Name')}
-              <span style={{ color: 'hsla(36,22%,92%,0.3)', margin: '0 12px' }}>·</span>
-              {t('team.member2Name')}
+          <div className="hero-grid">
+            <div className="hero-left">
+              <h1>EAP — <em>Eurasian</em> Art Platform</h1>
+              <p className="hero-vp">
+                {t('hero.vpStart')}
+                <strong>{t('hero.vpStrong')}</strong>
+                {t('hero.vpRest')}
+              </p>
+              <p className="hero-sub">{t('hero.sub')}</p>
             </div>
-            <div>
-              <Link to="/process" className="btn-ghost">{t('nav.process')}</Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* OPEN CALL */}
-      <section className="block is-darker" id="opencall">
-        <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">{t('opencall.eyebrow')}</span>
-            <h2>
-              {t('opencall.titlePart1')}
-              <em>{t('opencall.titleEm')}</em>
-              {t('opencall.titlePart2')}
-            </h2>
-            <p className="section-intro">{t('opencall.intro')}</p>
-          </div>
-
-          <div className="deadline-row">
-            <span className="label">{t('opencall.deadlineLabel')}</span>
-            <span>{t('opencall.deadlineValue')}</span>
-          </div>
-
-          <Countdown />
-
-          <div style={{ display: 'flex', gap: '24px', alignItems: 'center', marginTop: '32px', flexWrap: 'wrap' }}>
-            <Link to="/apply" className="btn-gold btn-gold-large">{t('nav.apply')}</Link>
-            <span style={{ fontSize: '0.85rem', color: 'var(--fg-muted)' }}>{t('opencall.opening')}</span>
+            <aside className="hero-right">
+              <Countdown />
+              <span className="hero-opening">{t('opencall.opening')}</span>
+            </aside>
           </div>
         </div>
       </section>
@@ -118,32 +110,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* PARTICIPANTS */}
-      <section className="block" id="participants">
-        <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">{t('participants.eyebrow')}</span>
-            <h2>
-              {t('participants.titlePart1')}
-              <em>{t('participants.titleEm')}</em>
-              {t('participants.titlePart2')}
-            </h2>
-            <p className="section-intro">{t('participants.intro')}</p>
-          </div>
-          <div className="participants-grid">
-            {[1, 2, 3, 4].map((n) => (
-              <div className="participant-card" key={n}>
-                <div className="pcontent">
-                  <div className="pname">{t('participants.soonName')}</div>
-                  <div className="pmeta">{t('participants.soonMeta')}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* TEAM */}
+      {/* TEAM / JURY */}
       <section className="block" id="team">
         <div className="container">
           <div className="section-head">
@@ -154,12 +121,16 @@ export default function Landing() {
             </h2>
             <p className="section-intro">{t('team.intro')}</p>
           </div>
-          <div className="team-grid">
-            {[1, 2, 3].map((n) => (
-              <div className="team-member" key={n}>
-                <div className="role">{t(`team.role${n}`)}</div>
-                <h4>{t(`team.member${n}Name`)}</h4>
-                <p className="bio">{t(`team.member${n}Bio`)}</p>
+
+          <div className="jury-grid">
+            {JURY.map((j) => (
+              <div className="jury-member" key={j.name}>
+                <div className="jury-photo">
+                  <img src={j.photo} alt={j.name} loading="lazy" />
+                </div>
+                <div className="role">{j.role}</div>
+                <h4>{j.name}</h4>
+                <p className="bio">{j.bio}</p>
               </div>
             ))}
           </div>
@@ -225,11 +196,6 @@ function ContactBlock() {
     <section className="contact-block" id="contact">
       <div className="container">
         <span className="eyebrow">{t('contact.eyebrow')}</span>
-        <h2>
-          {t('contact.titlePart1')}
-          <em>{t('contact.titleEm')}</em>
-          {t('contact.titlePart2')}
-        </h2>
         <p className="lead">{t('contact.lead')}</p>
 
         <div className="contact-grid">
@@ -256,16 +222,6 @@ function ContactBlock() {
                 className={errors.email ? 'error' : ''}
               />
               <span className="field-error">{errors.email}</span>
-            </div>
-
-            <div className="field-group">
-              <label>{t('contact.phone')}</label>
-              <input
-                type="tel"
-                placeholder={t('contact.phonePh')}
-                value={form.phone}
-                onChange={(e) => update('phone', e.target.value)}
-              />
             </div>
 
             <div className="field-group">

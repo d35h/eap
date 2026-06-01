@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0f1113"/>
+  <rect x="0" y="0" width="1200" height="630" fill="none" stroke="#1d2024" stroke-width="2"/>
+  <text x="90" y="130" font-family="Georgia, serif" font-size="22" letter-spacing="8" fill="#c2a063">— EURASIAN ART PLATFORM</text>
+  <text x="86" y="370" font-family="Georgia, serif" font-size="200" fill="#efe9df">EAP</text>
+  <text x="92" y="455" font-family="Georgia, serif" font-style="italic" font-size="46" fill="#b6ab9b">Современное искусство Евразии</text>
+  <rect x="92" y="500" width="120" height="2" fill="#c2a063"/>
+  <text x="92" y="552" font-family="Georgia, serif" font-size="22" letter-spacing="5" fill="#7c7468">OPEN CALL · ВЫСТАВКИ · КУРАТОРСКИЕ ПРОЕКТЫ</text>
+</svg>
