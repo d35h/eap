@@ -23,11 +23,13 @@ export default function FAQ() {
                 onClick={() => setOpen(open === i ? -1 : i)}
                 aria-expanded={open === i}
               >
-                <span>{item.q}</span>
-                <span className="faq-icon" aria-hidden="true">{open === i ? '−' : '+'}</span>
+                <span className="faq-q-text">{item.q}</span>
+                <span className="faq-icon" aria-hidden="true" />
               </button>
               <div className="faq-a">
-                <p>{item.a}</p>
+                <div className="faq-a-inner">
+                  <p>{item.a}</p>
+                </div>
               </div>
             </div>
           ))}

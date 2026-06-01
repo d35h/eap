@@ -14,7 +14,7 @@ export const translations = {
       participants: 'Участники',
       team: 'Жюри',
       contact: 'Контакты',
-      faq: 'FAQ',
+      faq: 'Часто задаваемые вопросы',
       apply: 'Подать заявку',
     },
     faq: {
@@ -543,7 +543,7 @@ export const translations = {
       participants: 'Қатысушылар',
       team: 'Жюри',
       contact: 'Байланыс',
-      faq: 'FAQ',
+      faq: 'Жиі қойылатын сұрақтар',
       apply: 'Өтінім беру',
     },
     faq: {
