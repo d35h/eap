@@ -69,7 +69,7 @@ input, textarea, select { font-family: inherit; }
 
 .nav-primary { display: flex; align-items: center; gap: 32px; }
 .nav-primary a {
-  color: hsla(36, 22%, 92%, 0.75); text-decoration: none;
+  color: hsla(36, 22%, 92%, 0.75); text-decoration: none; white-space: nowrap;
   font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.28em;
   transition: color 0.3s; position: relative; background: none; border: none;
   cursor: pointer; font-weight: 300;
@@ -821,6 +821,11 @@ input, textarea, select { font-family: inherit; }
 .notfound p { color: var(--fg-muted); margin-bottom: 32px; }
 
 /* ─── Responsive ─── */
+/* Switch to the hamburger before the long nav labels start to wrap */
+@media (max-width: 1280px) {
+  .nav-primary { display: none; }
+  .menu-toggle { display: block; }
+}
 @media (max-width: 1024px) {
   .nav-primary { display: none; }
   .menu-toggle { display: block; }
