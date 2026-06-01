@@ -9,7 +9,7 @@ export default function Process() {
     title: t(`processPage.detail${n}Title`),
     p1: t(`processPage.detail${n}P1`),
     items: t(`processPage.detail${n}Items`),
-    extraP: n === 2 ? [t('processPage.detail2P2'), t('processPage.detail2P3')] : [],
+    extraP: n === 2 ? [t('processPage.detail2P3')] : [],
   }));
 
   return (
@@ -21,8 +21,6 @@ export default function Process() {
           <em>{t('processPage.titleEm')}</em>
           {t('processPage.titlePart2')}
         </h1>
-        <p className="lead">{t('processPage.lead')}</p>
-
         <div className="process-detail-list">
           {details.map((d) => (
             <div className="process-detail-item" key={d.n}>
@@ -46,7 +44,6 @@ export default function Process() {
 
         <div className="process-cta">
           <h3>{t('processPage.ctaTitle')}</h3>
-          <p>{t('processPage.ctaDesc')}</p>
           <Link to="/apply" className="btn-gold btn-gold-large">
             {t('processPage.ctaButton')}
           </Link>

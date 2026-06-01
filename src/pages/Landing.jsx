@@ -35,7 +35,6 @@ export default function Landing() {
         <div className="container">
           <div className="hero-meta">
             <span>— {t('hero.meta1')}</span>
-            <span>{t('hero.meta2')}</span>
           </div>
           <div className="hero-grid">
             <div className="hero-left">
