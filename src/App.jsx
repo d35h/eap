@@ -5,6 +5,7 @@ import Footer from './components/Footer.jsx';
 import Landing from './pages/Landing.jsx';
 import Apply from './pages/Apply.jsx';
 import Process from './pages/Process.jsx';
+import FAQ from './pages/FAQ.jsx';
 import NotFound from './pages/NotFound.jsx';
 
 // Прокрутка наверх при смене страницы
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/apply" element={<Apply />} />
         <Route path="/process" element={<Process />} />
+        <Route path="/faq" element={<FAQ />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

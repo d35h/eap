@@ -1,8 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 
 export default function Footer() {
   const { t } = useTranslation();
+  const location = useLocation();
 
   const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -14,7 +15,13 @@ export default function Footer() {
       <div className="container">
         <div className="footer-top">
           <div className="footer-brand">
-            <Link to="/" className="logo">
+            <Link
+              to="/"
+              className="logo"
+              onClick={() => {
+                if (location.pathname === '/') window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+            >
               <em>Eurasian</em> Art Platform
             </Link>
             <p>{t('footer.brandDesc')}</p>

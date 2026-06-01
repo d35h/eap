@@ -28,7 +28,14 @@ export default function Header() {
     <>
       <header className="site-header">
         <div className="container">
-          <Link to="/" className="logo" onClick={() => setMenuOpen(false)}>
+          <Link
+            to="/"
+            className="logo"
+            onClick={() => {
+              setMenuOpen(false);
+              if (location.pathname === '/') window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          >
             <em>Eurasian</em> Art Platform
           </Link>
 
@@ -37,6 +44,9 @@ export default function Header() {
               {t('nav.process')}
             </Link>
             <a onClick={() => goToSection('team')}>{t('nav.team')}</a>
+            <Link to="/faq" className={location.pathname === '/faq' ? 'active' : ''}>
+              {t('nav.faq')}
+            </Link>
             <a onClick={() => goToSection('contact')}>{t('nav.contact')}</a>
           </nav>
 
@@ -81,6 +91,9 @@ export default function Header() {
             {t('nav.process')}
           </Link>
           <button onClick={() => goToSection('team')}>{t('nav.team')}</button>
+          <Link to="/faq" onClick={() => setMenuOpen(false)}>
+            {t('nav.faq')}
+          </Link>
           <button onClick={() => goToSection('contact')}>{t('nav.contact')}</button>
           <Link to="/apply" onClick={() => setMenuOpen(false)} className="btn-gold" style={{ marginTop: '24px' }}>
             {t('nav.apply')}
