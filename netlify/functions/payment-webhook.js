@@ -1,8 +1,9 @@
 import { makeAdmin } from './_lib/supabaseAdmin.js';
 import { getProvider } from './_lib/providers/index.js';
 import { json } from './_lib/json.js';
+import { createAccountForApplication } from './_lib/accounts.js';
 
-export async function handleWebhook({ admin, channel }, req) {
+export async function handleWebhook({ admin, channel, env }, req) {
   const provider = getProvider(channel);
   const { ref, paid } = provider.verifyWebhook(req);
   if (!paid) return json(200, { ignored: true });
@@ -13,8 +14,11 @@ export async function handleWebhook({ admin, channel }, req) {
     .eq('payment_ref', ref);
   if (error) return json(500, { error: error.message });
 
-  // PHASE 3 HOOK: create the Supabase auth user for this application's email
-  // and trigger the confirmation email. Added in the accounts plan.
+  // load email for the paid ref, then create the account
+  const { data: app } = await admin.from('applications').select('email').eq('payment_ref', ref).single();
+  if (app?.email) {
+    await createAccountForApplication({ admin, env }, { email: app.email, ref });
+  }
 
   return json(200, { ok: true });
 }
@@ -22,5 +26,5 @@ export async function handleWebhook({ admin, channel }, req) {
 export async function handler(event) {
   const env = process.env;
   const channel = (event.queryStringParameters && event.queryStringParameters.channel) || env.PAYMENTS_PROVIDER || 'mock';
-  return handleWebhook({ admin: makeAdmin(env), channel }, { headers: event.headers, body: event.body });
+  return handleWebhook({ admin: makeAdmin(env), channel, env }, { headers: event.headers, body: event.body });
 }

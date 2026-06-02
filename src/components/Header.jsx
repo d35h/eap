@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { LANGUAGES } from '../i18n';
+import { isSupabaseConfigured } from '../lib/supabase.js';
 
 export default function Header() {
   const { lang, setLang, t } = useTranslation();
@@ -67,6 +68,12 @@ export default function Header() {
               ))}
             </div>
 
+            {isSupabaseConfigured() && (
+              <Link to="/account" className={location.pathname === '/account' ? 'active' : ''}>
+                {t('account.nav')}
+              </Link>
+            )}
+
             <Link to="/apply" className="btn-gold">
               {t('nav.apply')}
             </Link>
@@ -95,6 +102,11 @@ export default function Header() {
             {t('nav.faq')}
           </Link>
           <button onClick={() => goToSection('contact')}>{t('nav.contact')}</button>
+          {isSupabaseConfigured() && (
+            <Link to="/account" onClick={() => setMenuOpen(false)}>
+              {t('account.nav')}
+            </Link>
+          )}
           <Link to="/apply" onClick={() => setMenuOpen(false)} className="btn-gold" style={{ marginTop: '24px' }}>
             {t('nav.apply')}
           </Link>
