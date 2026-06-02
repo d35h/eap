@@ -361,7 +361,7 @@ input, textarea, select { font-family: inherit; }
 .subsection-title:first-of-type { margin-top: 40px; }
 
 /* Evaluation criteria */
-.jury-criteria { margin: 8px 0 56px; }
+.jury-criteria { margin-top: 8px; }
 .criteria-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px 48px; }
 .criterion h4 {
   font-family: var(--font-display); font-weight: 400; font-size: 1.3rem;

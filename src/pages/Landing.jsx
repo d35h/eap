@@ -121,18 +121,6 @@ export default function Landing() {
             <p className="section-intro">{t('team.intro')}</p>
           </div>
 
-          <div className="jury-criteria">
-            <h3 className="subsection-title">{t('team.criteriaLabel')}</h3>
-            <div className="criteria-list">
-              {(Array.isArray(t('team.criteria')) ? t('team.criteria') : []).map((c, i) => (
-                <div className="criterion" key={i}>
-                  <h4>{c.title}</h4>
-                  <p>{c.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
           <div className="jury-grid">
             {JURY.map((j) => (
               <div className="jury-member" key={j.name}>
@@ -144,6 +132,18 @@ export default function Landing() {
                 <p className="bio">{j.bio}</p>
               </div>
             ))}
+          </div>
+
+          <div className="jury-criteria">
+            <h3 className="subsection-title">{t('team.criteriaLabel')}</h3>
+            <div className="criteria-list">
+              {(Array.isArray(t('team.criteria')) ? t('team.criteria') : []).map((c, i) => (
+                <div className="criterion" key={i}>
+                  <h4>{c.title}</h4>
+                  <p>{c.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
