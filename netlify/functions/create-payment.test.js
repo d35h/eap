@@ -29,4 +29,10 @@ describe('handlePayment', () => {
     const res = await handlePayment({ admin: client, env: {} }, { channel: 'mock' });
     expect(res.statusCode).toBe(400);
   });
+
+  it('400s on unknown channel', async () => {
+    const { client } = adminStub({ id: 'app-1', tier: 1 });
+    const res = await handlePayment({ admin: client, env: {} }, { applicationId: 'app-1', channel: 'nope' });
+    expect(res.statusCode).toBe(400);
+  });
 });

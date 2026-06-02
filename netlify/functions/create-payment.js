@@ -12,7 +12,9 @@ export async function handlePayment({ admin, env }, input) {
     .from('applications').select('*').eq('id', applicationId).single();
   if (error || !app) return json(404, { error: 'application not found' });
 
-  const provider = getProvider(channel);
+  let provider;
+  try { provider = getProvider(channel); }
+  catch { return json(400, { error: 'unknown channel' }); }
   const amount = amountFor(app.tier);
   const returnUrl = `${env.PUBLIC_SITE_URL || ''}/apply`;
   const session = provider.createSession({ applicationId, channel, amount, returnUrl });
