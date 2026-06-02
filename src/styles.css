@@ -360,6 +360,15 @@ input, textarea, select { font-family: inherit; }
 }
 .subsection-title:first-of-type { margin-top: 40px; }
 
+/* Evaluation criteria */
+.jury-criteria { margin: 8px 0 56px; }
+.criteria-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px 48px; }
+.criterion h4 {
+  font-family: var(--font-display); font-weight: 400; font-size: 1.3rem;
+  color: var(--accent-soft); letter-spacing: -0.01em; margin-bottom: 10px;
+}
+.criterion p { font-size: 0.95rem; color: var(--fg-muted); line-height: 1.7; margin: 0; }
+
 /* Jury cards with photos */
 .jury-grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px;
@@ -912,6 +921,7 @@ input, textarea, select { font-family: inherit; }
   .step { padding: 28px 24px; min-height: auto; }
   .participants-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
   .jury-grid { grid-template-columns: 1fr; gap: 36px; }
+  .criteria-list { grid-template-columns: 1fr; gap: 28px; }
   .contact-form { grid-template-columns: 1fr; }
   .contact-form .full { grid-column: span 1; }
   .countdown { gap: 24px; }
