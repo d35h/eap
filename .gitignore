@@ -9,3 +9,6 @@ dist
 # Editor / OS
 .idea
 .DS_Store
+
+# Dependencies (installed by npm/Netlify, never tracked)
+node_modules/
