@@ -31,6 +31,7 @@ describe('createApplication', () => {
     expect(payload.email).toBe('a@b.com'); // lowercased
     expect(payload.payment_status).toBe('pending');
     expect(payload.tier).toBe(1);
+    expect(payload.amount).toBe(100); // amount derived from tier, not client
     expect(payload.works).toHaveLength(1);
     expect(result).toEqual(row);
   });
