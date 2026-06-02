@@ -8,6 +8,9 @@ import Process from './pages/Process.jsx';
 import FAQ from './pages/FAQ.jsx';
 import NotFound from './pages/NotFound.jsx';
 import MockPay from './pages/MockPay.jsx';
+import Login from './pages/Login.jsx';
+import SetPassword from './pages/SetPassword.jsx';
+import Account from './pages/Account.jsx';
 
 // Прокрутка наверх при смене страницы
 function ScrollToTop() {
@@ -29,6 +32,9 @@ export default function App() {
         <Route path="/process" element={<Process />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/mock-pay" element={<MockPay />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/set-password" element={<SetPassword />} />
+        <Route path="/account" element={<Account />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

@@ -927,3 +927,48 @@ input, textarea, select { font-family: inherit; }
   .countdown { gap: 24px; }
   .apply-page { padding: 120px 0 80px; }
 }
+
+/* ── Account cabinet ── */
+.account-app-card {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+.account-app-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.account-app-card__ref {
+  font-family: var(--mono);
+  font-size: 13px;
+  opacity: 0.6;
+}
+.account-app-card__status {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.account-app-card__status--paid {
+  background: hsl(140, 40%, 18%);
+  color: hsl(140, 60%, 60%);
+}
+.account-app-card__status--pending {
+  background: hsl(40, 40%, 18%);
+  color: hsl(40, 60%, 60%);
+}
+.account-app-card__works {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.8;
+}
+.account-app-card__works li + li {
+  margin-top: 4px;
+}
