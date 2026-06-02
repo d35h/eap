@@ -69,8 +69,8 @@ export default function Header() {
             </div>
 
             {isSupabaseConfigured() && (
-              <Link to="/account" className={location.pathname === '/account' ? 'active' : ''}>
-                {t('account.nav')}
+              <Link to="/login" className={location.pathname === '/login' || location.pathname === '/account' ? 'active' : ''}>
+                {t('account.signIn')}
               </Link>
             )}
 
@@ -103,8 +103,8 @@ export default function Header() {
           </Link>
           <button onClick={() => goToSection('contact')}>{t('nav.contact')}</button>
           {isSupabaseConfigured() && (
-            <Link to="/account" onClick={() => setMenuOpen(false)}>
-              {t('account.nav')}
+            <Link to="/login" onClick={() => setMenuOpen(false)}>
+              {t('account.signIn')}
             </Link>
           )}
           <Link to="/apply" onClick={() => setMenuOpen(false)} className="btn-gold" style={{ marginTop: '24px' }}>
