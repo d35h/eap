@@ -385,7 +385,7 @@ export const translations = {
       criteriaLabel: 'How we evaluate',
       criteria: [
         { title: 'Idea over technique', desc: 'High technique ≠ strong art. The jury looks at the artist’s language, idea and atmosphere, not academic perfection — a raw but honest work can beat a flawless one.' },
-        { title: 'Originality', desc: 'The jury’s main question — “have I seen this a hundred times?” What matters is not flawless borrowed language but your own world: a recognizable signature, your own symbolism, a new visual idea.' },
+        { title: 'Originality', desc: 'The jury’s main question — “have I seen this a hundred times?” Flawless technique won’t save a work that speaks in someone else’s language. We value your own world: a recognizable signature, your own symbolism, a new visual idea.' },
       ],
       juryLabel: 'Jury',
       teamLabel: 'Team',
@@ -659,7 +659,7 @@ export const translations = {
       criteriaLabel: 'Қалай бағалаймыз',
       criteria: [
         { title: 'Идея техникадан маңызды', desc: 'Жоғары техника ≠ күшті өнер. Жюри академиялық мінсіздікке емес, суретшінің тіліне, идеясы мен атмосферасына қарайды — кейде «дөрекі», бірақ шынайы жұмыс мінсіз орындалғаннан күшті.' },
-        { title: 'Түпнұсқалық', desc: 'Жюридің басты сұрағы — «мұны жүз рет көрдім бе?». Мінсіз, бірақ бөтен тіл емес, өзіндік әлем маңызды: танымал қолтаңба, өз символикасы, жаңа визуалды идея.' },
+        { title: 'Түпнұсқалық', desc: 'Жюридің басты сұрағы — «мұны жүз рет көрдім бе?». Жұмыс бөтен тілде сөйлесе, мінсіз техника да құтқармайды. Бізге сіздің өз әлеміңіз маңызды: танымал қолтаңба, өзіндік символика, жаңа визуалды идея.' },
       ],
       juryLabel: 'Жюри',
       teamLabel: 'Команда',
@@ -932,7 +932,7 @@ export const translations = {
       criteriaLabel: '我们如何评估',
       criteria: [
         { title: '理念重于技巧', desc: '高超的技巧 ≠ 强有力的艺术。评审团关注艺术家的语言、理念与氛围，而非学院式的完美——一件粗糙但真诚的作品，可能胜过完美无瑕的作品。' },
-        { title: '原创性', desc: '评审团最常问：「这个我是不是已经见过一百次了？」重要的不是用他人语言的完美呈现，而是你自己的世界：可辨识的个人风格、独有的符号、全新的视觉理念。' },
+        { title: '原创性', desc: '评审团最常问：「这个我是不是已经见过一百次了？」技巧再完美，若作品说的是他人的语言，也无济于事。我们看重的是你自己的世界：可辨识的个人风格、独有的符号、全新的视觉理念。' },
       ],
       juryLabel: '评审团',
       teamLabel: '团队',
