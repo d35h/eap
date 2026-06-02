@@ -12,20 +12,13 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  if (!isSupabaseConfigured()) {
-    return (
-      <main className="apply-page">
-        <div className="container">
-          <p className="eyebrow">— {t('account.nav')}</p>
-          <p>{t('account.notConfigured')}</p>
-        </div>
-      </main>
-    );
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    if (!isSupabaseConfigured()) {
+      setError(t('account.notConfigured'));
+      return;
+    }
     setLoading(true);
     try {
       await signIn(email, password);
