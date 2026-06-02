@@ -1,5 +1,15 @@
 # EAP — Eurasian Art Platform
 
+## Backend — Phase 1 (persistence)
+
+Set in `.env.local` locally and in Netlify (Site settings → Environment variables):
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+
+Run `db/migrations/0001_applications.sql` in the Supabase SQL editor once.
+Without these vars the form falls back to simulated submit (no data stored).
+
 Сайт платформы современного искусства Евразии.
 React + Vite + React Router. Без сторонних UI-фреймворков.
 
