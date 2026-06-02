@@ -7,6 +7,7 @@ import Apply from './pages/Apply.jsx';
 import Process from './pages/Process.jsx';
 import FAQ from './pages/FAQ.jsx';
 import NotFound from './pages/NotFound.jsx';
+import MockPay from './pages/MockPay.jsx';
 
 // Прокрутка наверх при смене страницы
 function ScrollToTop() {
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/apply" element={<Apply />} />
         <Route path="/process" element={<Process />} />
         <Route path="/faq" element={<FAQ />} />
+        <Route path="/mock-pay" element={<MockPay />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

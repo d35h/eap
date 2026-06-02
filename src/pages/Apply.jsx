@@ -1,8 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useFormPersist } from '../hooks/useFormPersist.js';
 import { submitApplication, uploadWorkFiles } from '../lib/applicationsRepo.js';
+import { startPayment } from '../lib/payments.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 
 const emptyWork = () => ({ title: '', year: '', media: '', size: '', desc: '' });
@@ -11,7 +12,7 @@ const INITIAL = {
   firstName: '', lastName: '', email: '', phone: '', country: '', city: '',
   website: '', instagram: '',
   works: [emptyWork()],
-  paymentMethod: 'apple',
+  paymentChannel: 'byn',
 };
 
 const fmtSize = (bytes) => {
@@ -24,6 +25,9 @@ const fmtSize = (bytes) => {
 const PRICE_BY_COUNT = { 1: 100, 2: 150, 3: 170 };
 const feeFor = (n) => `${PRICE_BY_COUNT[Math.min(Math.max(n, 1), 3)]} BYN`;
 
+const EUR_BY_COUNT = { 1: 30, 2: 45, 3: 50 };
+const eurFor = (n) => `€${EUR_BY_COUNT[Math.min(Math.max(n, 1), 3)]}`;
+
 export default function Apply() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -35,6 +39,11 @@ export default function Apply() {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('status') === 'success') { clearForm(); setSuccess(true); }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const update = (k, v) => {
     setForm((f) => ({ ...f, [k]: v }));
@@ -115,8 +124,10 @@ export default function Apply() {
         const application = await submitApplication({ ...form, tier: form.works.length });
         const paths = await uploadWorkFiles(supabase, application.id, workFiles);
         console.log('Application stored:', application.id, paths);
-        // NOTE: payment + marking paid arrives in Phase 2 (webhook). For now the
-        // row stays 'pending' and we show the success screen.
+        const channel = form.paymentChannel === 'intl' ? 'georgia' : 'bepaid';
+        const redirectUrl = await startPayment(application.id, channel);
+        window.location.assign(redirectUrl);
+        return;
       } else {
         await new Promise((res) => setTimeout(res, 1800)); // simulated fallback
         console.log('Submitted (simulated):', form, workFiles.map((f) => f?.name || null));
@@ -392,13 +403,6 @@ function WorkEntry({ index, work, file, onChange, onFile, onRemove, errors, t })
 
 // ─── Step 3: Review + Payment ───
 function Step4({ form, workFiles, update, t }) {
-  const methods = [
-    { id: 'apple', name: t('apply.payApple'), desc: t('apply.payAppleDesc') },
-    { id: 'card', name: t('apply.payCard'), desc: t('apply.payCardDesc') },
-    { id: 'google', name: t('apply.payGoogle'), desc: t('apply.payGoogleDesc') },
-    { id: 'bank', name: t('apply.payBank'), desc: t('apply.payBankDesc') },
-  ];
-
   const empty = (val) => (val && val.trim()) ? val : t('apply.emptyField');
   const valClass = (val) => (val && val.trim()) ? 'val' : 'val empty';
 
@@ -443,17 +447,14 @@ function Step4({ form, workFiles, update, t }) {
         </div>
 
         <div className="pay-methods">
-          {methods.map((m) => (
-            <button
-              key={m.id}
-              className={`pay-method ${form.paymentMethod === m.id ? 'selected' : ''}`}
-              onClick={() => update('paymentMethod', m.id)}
-              type="button"
-            >
-              <span className="pm-name">{m.name}</span>
-              <span className="pm-desc">{m.desc}</span>
-            </button>
-          ))}
+          <button type="button" className={`pay-method ${form.paymentChannel === 'byn' ? 'selected' : ''}`} onClick={() => update('paymentChannel', 'byn')}>
+            <span className="pm-name">{t('apply.payByn')}</span>
+            <span className="pm-desc">{feeFor(form.works.length)}</span>
+          </button>
+          <button type="button" className={`pay-method ${form.paymentChannel === 'intl' ? 'selected' : ''}`} onClick={() => update('paymentChannel', 'intl')}>
+            <span className="pm-name">{t('apply.payIntl')}</span>
+            <span className="pm-desc">≈ {eurFor(form.works.length)}</span>
+          </button>
         </div>
       </div>
     </>
