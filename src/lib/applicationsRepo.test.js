@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { createApplication } from './applicationsRepo.js';
+import { createApplication, uploadWorkFiles } from './applicationsRepo.js';
 
 function fakeClient(insertResult) {
   const single = vi.fn().mockResolvedValue(insertResult);
@@ -40,5 +40,39 @@ describe('createApplication', () => {
     await expect(
       createApplication(client, { email: 'x@y.com', works: [], tier: 1 })
     ).rejects.toThrow('boom');
+  });
+});
+
+function fakeStorageClient(uploadResult) {
+  const upload = vi.fn().mockResolvedValue(uploadResult);
+  const fromStorage = vi.fn(() => ({ upload }));
+  return { client: { storage: { from: fromStorage } }, fromStorage, upload };
+}
+
+describe('uploadWorkFiles', () => {
+  it('uploads each non-null file and returns its storage path', async () => {
+    const { client, fromStorage, upload } = fakeStorageClient({ error: null });
+    const files = [
+      { name: 'a.jpg', type: 'image/jpeg' },
+      null,
+      { name: 'c.png', type: 'image/png' },
+    ];
+
+    const paths = await uploadWorkFiles(client, 'app-1', files);
+
+    expect(fromStorage).toHaveBeenCalledWith('works');
+    expect(upload).toHaveBeenCalledTimes(2);
+    expect(paths).toEqual([
+      'applications/app-1/work1.jpg',
+      null,
+      'applications/app-1/work3.png',
+    ]);
+  });
+
+  it('throws if an upload errors', async () => {
+    const { client } = fakeStorageClient({ error: { message: 'no space' } });
+    await expect(
+      uploadWorkFiles(client, 'app-1', [{ name: 'a.jpg' }])
+    ).rejects.toThrow('no space');
   });
 });

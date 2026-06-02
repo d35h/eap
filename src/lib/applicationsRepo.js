@@ -40,3 +40,28 @@ export function submitApplication(form) {
   if (!supabase) throw new Error('Supabase is not configured');
   return createApplication(supabase, form);
 }
+
+const extOf = (file) => {
+  const fromName = (file.name || '').split('.').pop();
+  return fromName && fromName.length <= 5 ? fromName.toLowerCase() : 'bin';
+};
+
+// Upload one file per work (index-aligned). Null entries are skipped.
+// Returns an array of storage paths (null where no file).
+export async function uploadWorkFiles(client, applicationId, files) {
+  const paths = [];
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (!file) {
+      paths.push(null);
+      continue;
+    }
+    const path = `applications/${applicationId}/work${i + 1}.${extOf(file)}`;
+    const { error } = await client.storage
+      .from('works')
+      .upload(path, file, { upsert: true });
+    if (error) throw new Error(error.message);
+    paths.push(path);
+  }
+  return paths;
+}
