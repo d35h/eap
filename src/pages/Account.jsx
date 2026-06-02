@@ -28,7 +28,8 @@ export default function Account() {
       .then(({ data }) => {
         setApplications(data || []);
         setAppsLoading(false);
-      });
+      })
+      .catch(() => setAppsLoading(false));
   }, [user]);
 
   if (!isSupabaseConfigured()) {
