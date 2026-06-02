@@ -1,0 +1,11 @@
+# Environment / secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Build output
+dist
+
+# Editor / OS
+.idea
+.DS_Store

@@ -2,6 +2,8 @@ import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useFormPersist } from '../hooks/useFormPersist.js';
+import { submitApplication, uploadWorkFiles } from '../lib/applicationsRepo.js';
+import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 
 const emptyWork = () => ({ title: '', year: '', media: '', size: '', desc: '' });
 
@@ -109,14 +111,16 @@ export default function Apply() {
   const submitFinal = async () => {
     setSubmitting(true);
     try {
-      // ───────────────────────────────────────────────────────
-      //  Здесь подключается реальная оплата (Stripe Checkout).
-      //  Только после успешной оплаты — POST на бэк с данными.
-      //  Сейчас симулируем задержку.
-      // ───────────────────────────────────────────────────────
-      await new Promise((res) => setTimeout(res, 1800));
-
-      console.log('Submitted application:', form, 'Files:', workFiles.map((f) => f?.name || null));
+      if (isSupabaseConfigured()) {
+        const application = await submitApplication({ ...form, tier: form.works.length });
+        const paths = await uploadWorkFiles(supabase, application.id, workFiles);
+        console.log('Application stored:', application.id, paths);
+        // NOTE: payment + marking paid arrives in Phase 2 (webhook). For now the
+        // row stays 'pending' and we show the success screen.
+      } else {
+        await new Promise((res) => setTimeout(res, 1800)); // simulated fallback
+        console.log('Submitted (simulated):', form, workFiles.map((f) => f?.name || null));
+      }
 
       clearForm();
       setWorkFiles([null]);
@@ -125,7 +129,7 @@ export default function Apply() {
     } catch (e) {
       console.error(e);
       setSubmitting(false);
-      alert('Payment error. Please try again.');
+      alert('Submission error. Please try again.');
     }
   };
 
