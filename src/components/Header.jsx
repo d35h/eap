@@ -1,16 +1,36 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { LANGUAGES } from '../i18n';
 import { isSupabaseConfigured } from '../lib/supabase.js';
 import { useAuth } from '../hooks/useAuth.jsx';
+import { signOut } from '../lib/auth.js';
 
 export default function Header() {
   const { lang, setLang, t } = useTranslation();
   const { user } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const accountRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Close the account dropdown on outside click
+  useEffect(() => {
+    if (!accountMenuOpen) return;
+    const onDocClick = (e) => {
+      if (accountRef.current && !accountRef.current.contains(e.target)) setAccountMenuOpen(false);
+    };
+    document.addEventListener('mousedown', onDocClick);
+    return () => document.removeEventListener('mousedown', onDocClick);
+  }, [accountMenuOpen]);
+
+  const handleLogout = async () => {
+    setAccountMenuOpen(false);
+    setMenuOpen(false);
+    await signOut();
+    navigate('/');
+  };
 
   // Прокрутить к секции на главной (с любого роута)
   const goToSection = (id) => {
@@ -72,14 +92,29 @@ export default function Header() {
 
             {isSupabaseConfigured() && (
               user ? (
-                <Link
-                  to="/account"
-                  className={`account-avatar ${location.pathname === '/account' ? 'active' : ''}`}
-                  aria-label={t('account.nav')}
-                  title={user.email}
-                >
-                  {(user.email || '?').charAt(0).toUpperCase()}
-                </Link>
+                <div className="account-menu" ref={accountRef}>
+                  <button
+                    type="button"
+                    className={`account-avatar ${accountMenuOpen ? 'open' : ''}`}
+                    onClick={() => setAccountMenuOpen((o) => !o)}
+                    aria-label={t('account.nav')}
+                    aria-expanded={accountMenuOpen}
+                    title={user.email}
+                  >
+                    {(user.email || '?').charAt(0).toUpperCase()}
+                  </button>
+                  {accountMenuOpen && (
+                    <div className="account-dropdown">
+                      <div className="account-dropdown-email">{user.email}</div>
+                      <Link to="/account" className="account-dropdown-item" onClick={() => setAccountMenuOpen(false)}>
+                        {t('account.nav')}
+                      </Link>
+                      <button type="button" className="account-dropdown-item" onClick={handleLogout}>
+                        {t('account.signOut')}
+                      </button>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <Link to="/login" className={location.pathname === '/login' ? 'active' : ''}>
                   {t('account.signIn')}
@@ -116,9 +151,14 @@ export default function Header() {
           </Link>
           <button onClick={() => goToSection('contact')}>{t('nav.contact')}</button>
           {isSupabaseConfigured() && (
-            <Link to={user ? '/account' : '/login'} onClick={() => setMenuOpen(false)}>
-              {user ? t('account.nav') : t('account.signIn')}
-            </Link>
+            user ? (
+              <>
+                <Link to="/account" onClick={() => setMenuOpen(false)}>{t('account.nav')}</Link>
+                <button onClick={handleLogout}>{t('account.signOut')}</button>
+              </>
+            ) : (
+              <Link to="/login" onClick={() => setMenuOpen(false)}>{t('account.signIn')}</Link>
+            )
           )}
           <Link to="/apply" onClick={() => setMenuOpen(false)} className="btn-gold" style={{ marginTop: '24px' }}>
             {t('nav.apply')}
