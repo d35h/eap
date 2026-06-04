@@ -20,7 +20,7 @@ function newId() {
 
 // Insert a pending application. `client` is injected for testability.
 // The id is generated client-side so we never need to read the row back
-// (anon has no SELECT policy — INSERT ... RETURNING would be blocked by RLS).
+// (anon has no SELECT policy - INSERT ... RETURNING would be blocked by RLS).
 export async function createApplication(client, form) {
   const id = newId();
   const payload = {

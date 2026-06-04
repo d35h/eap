@@ -26,28 +26,28 @@ export async function sendEmail(env, { to, subject, html }) {
 // `invite` = new applicant (set a password); `login` = returning applicant (magic login link).
 const COPY = {
   ru: {
-    subject: 'EAP — заявка оплачена',
+    subject: 'EAP:заявка оплачена',
     title: 'Заявка оплачена',
     fallback: 'Если кнопка не работает, откройте ссылку:',
     invite: { body: 'Спасибо! Мы получили вашу оплату. Создайте пароль, чтобы войти в личный кабинет и следить за статусом заявки.', button: 'Создать пароль' },
     login: { body: 'Спасибо! Мы получили вашу оплату. Войдите в личный кабинет, чтобы следить за статусом заявки.', button: 'Войти в кабинет' },
   },
   en: {
-    subject: 'EAP — application paid',
+    subject: 'EAP:application paid',
     title: 'Application paid',
     fallback: 'If the button does not work, open this link:',
     invite: { body: 'Thank you! We have received your payment. Set a password to sign in to your account and follow your application status.', button: 'Set password' },
     login: { body: 'Thank you! We have received your payment. Sign in to your account to follow your application status.', button: 'Open account' },
   },
   kz: {
-    subject: 'EAP — өтінім төленді',
+    subject: 'EAP:өтінім төленді',
     title: 'Өтінім төленді',
     fallback: 'Түйме жұмыс істемесе, сілтемені ашыңыз:',
     invite: { body: 'Рақмет! Төлеміңізді алдық. Жеке кабинетке кіріп, өтінім күйін бақылау үшін құпиясөз орнатыңыз.', button: 'Құпиясөз орнату' },
     login: { body: 'Рақмет! Төлеміңізді алдық. Өтінім күйін бақылау үшін жеке кабинетке кіріңіз.', button: 'Кабинетке кіру' },
   },
   zh: {
-    subject: 'EAP — 申请已支付',
+    subject: 'EAP:申请已支付',
     title: '申请已支付',
     fallback: '如果按钮无法使用，请打开此链接：',
     invite: { body: '谢谢！我们已收到您的付款。请设置密码，以登录个人账户并跟踪申请状态。', button: '设置密码' },

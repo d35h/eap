@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 
-// Дата дедлайна — поменяйте здесь и она поменяется везде
+// Дата дедлайна - поменяйте здесь и она поменяется везде
 const DEADLINE = new Date('2027-03-31T23:59:00Z');
 
 function calcTimeLeft() {

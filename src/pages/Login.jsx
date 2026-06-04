@@ -33,7 +33,7 @@ export default function Login() {
   return (
     <main className="apply-page">
       <div className="container">
-        <p className="eyebrow">— {t('account.nav')}</p>
+        <p className="eyebrow">- {t('account.nav')}</p>
         <h1>{t('account.loginTitle')}</h1>
         <form onSubmit={handleSubmit} style={{ maxWidth: '400px', marginTop: '32px' }}>
           <div className="field-group">

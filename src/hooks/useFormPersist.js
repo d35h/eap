@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 /**
  * Сохраняет состояние формы в localStorage.
  * Возвращает [state, setState, clear, justSaved].
- * justSaved становится true на короткое время после изменения — для индикатора "Сохранено".
+ * justSaved становится true на короткое время после изменения - для индикатора "Сохранено".
  */
 export function useFormPersist(key, initialState) {
   const [state, setState] = useState(() => {

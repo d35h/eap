@@ -6,7 +6,7 @@ export default function Footer() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Прокрутить к секции на главной — работает с любого роута
+  // Прокрутить к секции на главной - работает с любого роута
   const goToSection = (id) => {
     if (location.pathname !== '/') {
       navigate('/', { state: { scrollTo: id } });

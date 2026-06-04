@@ -1,4 +1,4 @@
-/* EAP — Eurasian Art Platform */
+/* EAP - Eurasian Art Platform */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap');
 
 :root {
@@ -808,7 +808,7 @@ input, textarea, select { font-family: inherit; }
   color: hsla(36, 22%, 92%, 0.7); font-size: 0.95rem;
 }
 .process-detail-item ul li::before {
-  content: "—"; position: absolute; left: 0; color: var(--accent);
+  content: "-"; position: absolute; left: 0; color: var(--accent);
 }
 .process-cta {
   margin-top: 80px; padding: 56px;

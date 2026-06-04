@@ -34,11 +34,11 @@ export default function Landing() {
       <section className="hero" id="opencall">
         <div className="container">
           <div className="hero-meta">
-            <span>— {t('hero.meta1')}</span>
+            <span>- {t('hero.meta1')}</span>
           </div>
           <div className="hero-grid">
             <div className="hero-left">
-              <h1>EAP — <em>Eurasian</em> Art Platform</h1>
+              <h1>EAP - <em>Eurasian</em> Art Platform</h1>
               <p className="hero-vp">
                 {t('hero.vpStart')}
                 <strong>{t('hero.vpStrong')}</strong>
