@@ -12,3 +12,7 @@ dist
 
 # Dependencies (installed by npm/Netlify, never tracked)
 node_modules/
+
+# Local Netlify folder
+.netlify
+deno.lock
