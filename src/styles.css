@@ -103,6 +103,16 @@ input, textarea, select { font-family: inherit; }
   color: var(--fg); font-size: 1.5rem; padding: 4px 8px;
 }
 
+/* Logged-in avatar (email initial) */
+.account-avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid var(--accent); color: var(--accent);
+  font-family: var(--font-display); font-size: 1.05rem; line-height: 1;
+  text-decoration: none; transition: background 0.3s, color 0.3s;
+}
+.account-avatar:hover, .account-avatar.active { background: var(--accent); color: var(--bg); }
+
 /* ─── Buttons ─── */
 .btn-gold {
   display: inline-flex; align-items: center; justify-content: center; gap: 12px;

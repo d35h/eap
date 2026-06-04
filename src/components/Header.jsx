@@ -3,9 +3,11 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { LANGUAGES } from '../i18n';
 import { isSupabaseConfigured } from '../lib/supabase.js';
+import { useAuth } from '../hooks/useAuth.jsx';
 
 export default function Header() {
   const { lang, setLang, t } = useTranslation();
+  const { user } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -69,9 +71,20 @@ export default function Header() {
             </div>
 
             {isSupabaseConfigured() && (
-              <Link to="/login" className={location.pathname === '/login' || location.pathname === '/account' ? 'active' : ''}>
-                {t('account.signIn')}
-              </Link>
+              user ? (
+                <Link
+                  to="/account"
+                  className={`account-avatar ${location.pathname === '/account' ? 'active' : ''}`}
+                  aria-label={t('account.nav')}
+                  title={user.email}
+                >
+                  {(user.email || '?').charAt(0).toUpperCase()}
+                </Link>
+              ) : (
+                <Link to="/login" className={location.pathname === '/login' ? 'active' : ''}>
+                  {t('account.signIn')}
+                </Link>
+              )
             )}
 
             <Link to="/apply" className="btn-gold">
@@ -103,8 +116,8 @@ export default function Header() {
           </Link>
           <button onClick={() => goToSection('contact')}>{t('nav.contact')}</button>
           {isSupabaseConfigured() && (
-            <Link to="/login" onClick={() => setMenuOpen(false)}>
-              {t('account.signIn')}
+            <Link to={user ? '/account' : '/login'} onClick={() => setMenuOpen(false)}>
+              {user ? t('account.nav') : t('account.signIn')}
             </Link>
           )}
           <Link to="/apply" onClick={() => setMenuOpen(false)} className="btn-gold" style={{ marginTop: '24px' }}>
