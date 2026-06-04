@@ -11,6 +11,8 @@ export default function Account() {
   const { user, loading } = useAuth();
   const [applications, setApplications] = useState([]);
   const [appsLoading, setAppsLoading] = useState(false);
+  // app.id → { <workNumber>: signedUrl } for the uploaded work files.
+  const [filesByApp, setFilesByApp] = useState({});
 
   useEffect(() => {
     if (!loading && !user && isSupabaseConfigured()) {
@@ -31,6 +33,36 @@ export default function Account() {
       })
       .catch(() => setAppsLoading(false));
   }, [user]);
+
+  // Mint short-lived signed URLs for each application's uploaded work files.
+  // Bucket is private; an owner-only SELECT policy lets us list + sign here.
+  useEffect(() => {
+    if (!user || !supabase || applications.length === 0) return;
+    let cancelled = false;
+    (async () => {
+      const map = {};
+      for (const app of applications) {
+        const folder = `applications/${app.id}`;
+        const { data: list } = await supabase.storage.from('works').list(folder);
+        if (!list || list.length === 0) continue;
+        const paths = list.map((f) => `${folder}/${f.name}`);
+        const { data: signed } = await supabase.storage
+          .from('works')
+          .createSignedUrls(paths, 3600);
+        const byNumber = {};
+        (signed || []).forEach((s, i) => {
+          if (!s?.signedUrl) return;
+          const m = /^work(\d+)\./.exec(list[i].name);
+          if (m) byNumber[Number(m[1])] = s.signedUrl;
+        });
+        map[app.id] = byNumber;
+      }
+      if (!cancelled) setFilesByApp(map);
+    })().catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [applications, user]);
 
   if (!isSupabaseConfigured()) {
     return (
@@ -90,9 +122,23 @@ export default function Account() {
             </div>
             {app.works && app.works.length > 0 && (
               <ul className="account-app-card__works">
-                {app.works.map((w, i) => (
-                  <li key={i}>{w.title || `-`}{w.year ? `, ${w.year}` : ''}{w.media ? ` · ${w.media}` : ''}</li>
-                ))}
+                {app.works.map((w, i) => {
+                  const url = filesByApp[app.id]?.[i + 1];
+                  return (
+                    <li key={i} className="account-work">
+                      {url ? (
+                        <a href={url} target="_blank" rel="noreferrer" className="account-work__thumb">
+                          <img src={url} alt={w.title || ''} loading="lazy" />
+                        </a>
+                      ) : (
+                        <span className="account-work__thumb account-work__thumb--empty" aria-hidden="true" />
+                      )}
+                      <span className="account-work__meta">
+                        {w.title || `-`}{w.year ? `, ${w.year}` : ''}{w.media ? ` · ${w.media}` : ''}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>
