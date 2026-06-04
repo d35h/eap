@@ -122,9 +122,11 @@ export default function Header() {
               )
             )}
 
-            <Link to="/apply" className="btn-gold">
-              {t('nav.apply')}
-            </Link>
+            {!user && (
+              <Link to="/apply" className="btn-gold">
+                {t('nav.apply')}
+              </Link>
+            )}
 
             <button
               className="menu-toggle"
@@ -160,9 +162,11 @@ export default function Header() {
               <Link to="/login" onClick={() => setMenuOpen(false)}>{t('account.signIn')}</Link>
             )
           )}
-          <Link to="/apply" onClick={() => setMenuOpen(false)} className="btn-gold" style={{ marginTop: '24px' }}>
-            {t('nav.apply')}
-          </Link>
+          {!user && (
+            <Link to="/apply" onClick={() => setMenuOpen(false)} className="btn-gold" style={{ marginTop: '24px' }}>
+              {t('nav.apply')}
+            </Link>
+          )}
         </div>
       )}
     </>
