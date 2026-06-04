@@ -73,9 +73,11 @@ export async function uploadWorkFiles(client, applicationId, files) {
       continue;
     }
     const path = `applications/${applicationId}/work${i + 1}.${extOf(file)}`;
+    // upsert:false → plain INSERT (anon has insert, not update, policy on storage).
+    // Paths are unique per application id, so there's never a collision to overwrite.
     const { error } = await client.storage
       .from('works')
-      .upload(path, file, { upsert: true });
+      .upload(path, file, { upsert: false });
     if (error) throw new Error(error.message);
     paths.push(path);
   }
