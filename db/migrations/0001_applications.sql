@@ -23,8 +23,12 @@ create table if not exists public.applications (
   payment_provider text,
   payment_ref      text,
   user_id          uuid references auth.users(id) on delete set null,
+  lang             text not null default 'ru',
   created_at       timestamptz not null default now()
 );
+
+-- Add lang to a pre-existing table (no-op if already present).
+alter table public.applications add column if not exists lang text not null default 'ru';
 
 -- Indexes: webhook looks up by payment_ref; cabinet reads by user_id.
 create index if not exists applications_payment_ref_idx on public.applications (payment_ref);

@@ -14,10 +14,10 @@ export async function handleWebhook({ admin, channel, env }, req) {
     .eq('payment_ref', ref);
   if (error) return json(500, { error: error.message });
 
-  // load email for the paid ref, then create the account
-  const { data: app } = await admin.from('applications').select('email').eq('payment_ref', ref).single();
+  // load email + language for the paid ref, then create the account
+  const { data: app } = await admin.from('applications').select('email, lang').eq('payment_ref', ref).single();
   if (app?.email) {
-    await createAccountForApplication({ admin, env }, { email: app.email, ref });
+    await createAccountForApplication({ admin, env }, { email: app.email, ref, lang: app.lang });
   }
 
   return json(200, { ok: true });

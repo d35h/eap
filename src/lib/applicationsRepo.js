@@ -2,6 +2,14 @@ import { supabase } from './supabase.js';
 
 const AMOUNT_BY_TIER = { 1: 100, 2: 150, 3: 170 };
 
+function currentLang() {
+  try {
+    return localStorage.getItem('eap-lang') || 'ru';
+  } catch {
+    return 'ru';
+  }
+}
+
 function newId() {
   if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
@@ -35,6 +43,7 @@ export async function createApplication(client, form) {
     amount: AMOUNT_BY_TIER[form.tier] ?? AMOUNT_BY_TIER[3],
     currency: 'BYN',
     payment_status: 'pending',
+    lang: currentLang(),
   };
 
   const { error } = await client.from('applications').insert(payload);
