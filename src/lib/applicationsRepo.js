@@ -2,9 +2,21 @@ import { supabase } from './supabase.js';
 
 const AMOUNT_BY_TIER = { 1: 100, 2: 150, 3: 170 };
 
+function newId() {
+  if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+  });
+}
+
 // Insert a pending application. `client` is injected for testability.
+// The id is generated client-side so we never need to read the row back
+// (anon has no SELECT policy — INSERT ... RETURNING would be blocked by RLS).
 export async function createApplication(client, form) {
+  const id = newId();
   const payload = {
+    id,
     email: (form.email || '').trim().toLowerCase(),
     first_name: form.firstName || '',
     last_name: form.lastName || '',
@@ -25,14 +37,9 @@ export async function createApplication(client, form) {
     payment_status: 'pending',
   };
 
-  const { data, error } = await client
-    .from('applications')
-    .insert(payload)
-    .select()
-    .single();
-
+  const { error } = await client.from('applications').insert(payload);
   if (error) throw new Error(error.message);
-  return data;
+  return payload;
 }
 
 // Bound to the real client for app use.

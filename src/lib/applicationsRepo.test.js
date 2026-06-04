@@ -2,17 +2,15 @@ import { describe, it, expect, vi } from 'vitest';
 import { createApplication, uploadWorkFiles } from './applicationsRepo.js';
 
 function fakeClient(insertResult) {
-  const single = vi.fn().mockResolvedValue(insertResult);
-  const select = vi.fn(() => ({ single }));
-  const insert = vi.fn(() => ({ select }));
+  // createApplication awaits client.from(...).insert(payload) directly (no select).
+  const insert = vi.fn().mockResolvedValue(insertResult);
   const from = vi.fn(() => ({ insert }));
   return { client: { from }, from, insert };
 }
 
 describe('createApplication', () => {
-  it('inserts a pending application and returns the row', async () => {
-    const row = { id: 'app-1', email: 'a@b.com', payment_status: 'pending' };
-    const { client, from, insert } = fakeClient({ data: row, error: null });
+  it('inserts a pending application with a generated id and returns the payload', async () => {
+    const { client, from, insert } = fakeClient({ error: null });
 
     const result = await createApplication(client, {
       email: 'A@B.com',
@@ -28,16 +26,17 @@ describe('createApplication', () => {
 
     expect(from).toHaveBeenCalledWith('applications');
     const payload = insert.mock.calls[0][0];
+    expect(payload.id).toBeTruthy(); // id generated client-side
     expect(payload.email).toBe('a@b.com'); // lowercased
     expect(payload.payment_status).toBe('pending');
     expect(payload.tier).toBe(1);
     expect(payload.amount).toBe(100); // amount derived from tier, not client
     expect(payload.works).toHaveLength(1);
-    expect(result).toEqual(row);
+    expect(result.id).toBe(payload.id); // returns the inserted payload (with id)
   });
 
   it('throws on supabase error', async () => {
-    const { client } = fakeClient({ data: null, error: { message: 'boom' } });
+    const { client } = fakeClient({ error: { message: 'boom' } });
     await expect(
       createApplication(client, { email: 'x@y.com', works: [], tier: 1 })
     ).rejects.toThrow('boom');
