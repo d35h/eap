@@ -1001,6 +1001,14 @@ input, textarea, select { font-family: inherit; }
   background: hsl(40, 40%, 18%);
   color: hsl(40, 60%, 60%);
 }
+.account-app-card__status--review-in_review {
+  background: hsl(210, 40%, 18%);
+  color: hsl(210, 60%, 65%);
+}
+.account-app-card__status--review-reviewed {
+  background: hsl(265, 35%, 20%);
+  color: hsl(265, 65%, 72%);
+}
 .account-app-card__works {
   list-style: none;
   padding: 0;

@@ -119,6 +119,11 @@ export default function Account() {
               <span className={`account-app-card__status account-app-card__status--${app.payment_status}`}>
                 {app.payment_status === 'paid' ? t('account.statusPaid') : t('account.statusPending')}
               </span>
+              {app.payment_status === 'paid' && (
+                <span className={`account-app-card__status account-app-card__status--review-${app.review_status === 'reviewed' ? 'reviewed' : 'in_review'}`}>
+                  {app.review_status === 'reviewed' ? t('account.statusReviewed') : t('account.statusInReview')}
+                </span>
+              )}
             </div>
             {app.works && app.works.length > 0 && (
               <ul className="account-app-card__works">
