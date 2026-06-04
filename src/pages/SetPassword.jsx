@@ -39,9 +39,11 @@ export default function SetPassword() {
   return (
     <main className="apply-page">
       <div className="container">
-        <p className="eyebrow">- {t('account.nav')}</p>
-        <h1>{t('account.setPasswordTitle')}</h1>
-        <form onSubmit={handleSubmit} style={{ maxWidth: '400px', marginTop: '32px' }}>
+        <div className="apply-head">
+          <span className="eyebrow">- {t('account.nav')}</span>
+          <h1>{t('account.setPasswordTitle')}</h1>
+        </div>
+        <form onSubmit={handleSubmit} className="auth-form">
           <div className="field-group">
             <label>{t('account.password')}</label>
             <input
@@ -53,7 +55,7 @@ export default function SetPassword() {
               minLength={6}
             />
           </div>
-          {error && <p style={{ color: 'var(--red, #c0392b)', marginBottom: '16px' }}>{error}</p>}
+          {error && <p className="auth-error">{error}</p>}
           <button type="submit" className="btn-ink" disabled={loading}>
             {loading ? '…' : t('account.setPasswordBtn')}
           </button>

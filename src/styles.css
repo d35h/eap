@@ -568,6 +568,14 @@ input, textarea, select { font-family: inherit; }
   min-height: 100vh; padding: 160px 0 120px;
 }
 .apply-page .eyebrow { color: var(--ink-soft); }
+
+/* Auth pages (login / set password) */
+.auth-form { max-width: 380px; margin-top: 40px; }
+.auth-form .field-group { margin-bottom: 28px; }
+.auth-form .btn-ink { margin-top: 12px; }
+.auth-error {
+  color: var(--error); font-size: 0.85rem; line-height: 1.5; margin-bottom: 20px;
+}
 .apply-head h1 {
   font-family: var(--font-display); font-weight: 300;
   font-size: clamp(2.4rem, 4vw, 3.6rem);

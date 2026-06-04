@@ -63,10 +63,12 @@ export default function Account() {
   return (
     <main className="apply-page">
       <div className="container">
-        <p className="eyebrow">- {t('account.nav')}</p>
-        <h1>{t('account.cabinetTitle')}</h1>
-        <p style={{ marginBottom: '8px', opacity: 0.7 }}>{user.email}</p>
-        <button className="btn-ink" onClick={handleSignOut} style={{ marginBottom: '40px' }}>
+        <div className="apply-head">
+          <span className="eyebrow">- {t('account.nav')}</span>
+          <h1>{t('account.cabinetTitle')}</h1>
+        </div>
+        <p style={{ marginBottom: '16px', opacity: 0.7 }}>{user.email}</p>
+        <button className="btn-ink" onClick={handleSignOut} style={{ marginBottom: '48px' }}>
           {t('account.signOut')}
         </button>
 
