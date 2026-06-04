@@ -58,4 +58,28 @@ describe('createAccountForApplication', () => {
     expect(update).toHaveBeenCalledWith({ user_id: 'u-9' });
     vi.unstubAllGlobals();
   });
+
+  it('falls back to a magic login link when the user already exists', async () => {
+    const genLink = vi.fn()
+      .mockResolvedValueOnce({ data: null, error: { message: 'already registered' } }) // invite fails
+      .mockResolvedValueOnce({ data: { user: { id: 'u-2' }, properties: { action_link: 'https://link/magic' } }, error: null }); // magiclink
+    const eq = vi.fn().mockResolvedValue({ error: null });
+    const update = vi.fn(() => ({ eq }));
+    const admin = { auth: { admin: { generateLink: genLink } }, from: vi.fn(() => ({ update })) };
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, text: async () => '' });
+    vi.stubGlobal('fetch', fetchMock);
+
+    await createAccountForApplication(
+      { admin, env: { RESEND_API_KEY: 're_x', PUBLIC_SITE_URL: 'https://site' } },
+      { email: 'x@y.com', ref: 'r2' }
+    );
+
+    expect(genLink).toHaveBeenCalledTimes(2);
+    expect(genLink).toHaveBeenNthCalledWith(2, {
+      type: 'magiclink', email: 'x@y.com', options: { redirectTo: 'https://site/account' },
+    });
+    expect(fetchMock).toHaveBeenCalled();
+    expect(update).toHaveBeenCalledWith({ user_id: 'u-2' });
+    vi.unstubAllGlobals();
+  });
 });
