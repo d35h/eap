@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { handlePayment } from './create-payment.js';
+import { handlePayment } from '../create-payment.js';
 
 function adminStub(app) {
   const update = vi.fn().mockResolvedValue({ error: null });

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { handleWebhook } from './payment-webhook.js';
+import { handleWebhook } from '../payment-webhook.js';
 
 function adminStub() {
   // select chain: .select('email').eq('payment_ref', ref).single() => { data: { email: 'a@b.com' } }
