@@ -11,6 +11,7 @@ import MockPay from './pages/MockPay.jsx';
 import Login from './pages/Login.jsx';
 import SetPassword from './pages/SetPassword.jsx';
 import Account from './pages/Account.jsx';
+import ReviewEvaluation from './pages/ReviewEvaluation.jsx';
 
 // Прокрутка наверх при смене страницы
 function ScrollToTop() {
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/set-password" element={<SetPassword />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/account/review/:id" element={<ReviewEvaluation />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

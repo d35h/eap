@@ -1,0 +1,230 @@
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth.jsx';
+import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
+import {
+  REVIEW_CRITERIA,
+  MIN_REVIEW_CHARS,
+  MAX_RATING,
+  isCriterionValid,
+  isEvaluationComplete,
+} from '../lib/reviewCriteria.js';
+import { getMyReview, saveDraft, finishReview } from '../lib/reviewsRepo.js';
+
+export default function ReviewEvaluation() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { user, loading } = useAuth();
+  const isJuror = user?.app_metadata?.role === 'juror';
+
+  const [app, setApp] = useState(null);
+  const [scores, setScores] = useState({});
+  const [status, setStatus] = useState('draft');
+  const [unlocked, setUnlocked] = useState(false);
+  const [active, setActive] = useState(REVIEW_CRITERIA[0].key);
+  const [files, setFiles] = useState({});
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState(null); // { type, text }
+  const [ready, setReady] = useState(false);
+
+  // Only jurors evaluate.
+  useEffect(() => {
+    if (loading || !isSupabaseConfigured()) return;
+    if (!user) navigate('/login');
+    else if (!isJuror) navigate('/account');
+  }, [user, loading, isJuror, navigate]);
+
+  // Load the application + this juror's existing review (draft or finished).
+  useEffect(() => {
+    if (!user || !isJuror || !supabase) return;
+    let cancelled = false;
+    (async () => {
+      const { data: appRow } = await supabase
+        .from('applications').select('*').eq('id', id).maybeSingle();
+      const review = await getMyReview(id, user.id);
+      if (cancelled) return;
+      setApp(appRow || null);
+      const base = {};
+      REVIEW_CRITERIA.forEach((c) => {
+        const e = review?.scores?.[c.key];
+        base[c.key] = { rating: e?.rating ?? 0, text: e?.text ?? '' };
+      });
+      setScores(base);
+      setStatus(review?.status || 'draft');
+      setUnlocked(review?.unlocked || false);
+      setReady(true);
+    })();
+    return () => { cancelled = true; };
+  }, [id, user, isJuror]);
+
+  // Signed URLs so the juror can see the actual works.
+  useEffect(() => {
+    if (!app || !supabase) return;
+    let cancelled = false;
+    (async () => {
+      const folder = `applications/${app.id}`;
+      const { data: list } = await supabase.storage.from('works').list(folder);
+      if (!list || list.length === 0) return;
+      const paths = list.map((f) => `${folder}/${f.name}`);
+      const { data: signed } = await supabase.storage.from('works').createSignedUrls(paths, 3600);
+      const map = {};
+      (signed || []).forEach((s, i) => {
+        if (!s?.signedUrl) return;
+        const m = /^work(\d+)\./.exec(list[i].name);
+        if (m) map[Number(m[1])] = s.signedUrl;
+      });
+      if (!cancelled) setFiles(map);
+    })();
+    return () => { cancelled = true; };
+  }, [app]);
+
+  if (!isSupabaseConfigured() || loading || !user || !isJuror) return null;
+
+  const locked = status === 'finished' && !unlocked;
+  const complete = isEvaluationComplete(scores);
+
+  const setEntry = (key, patch) =>
+    setScores((prev) => ({ ...prev, [key]: { ...prev[key], ...patch } }));
+
+  const persist = async (finish) => {
+    setBusy(true);
+    setMsg(null);
+    try {
+      const args = { applicationId: id, userId: user.id, email: user.email, scores };
+      if (finish) {
+        await finishReview(args);
+        setStatus('finished');
+        setUnlocked(false);
+        setMsg({ type: 'ok', text: 'Оценка завершена.' });
+      } else {
+        await saveDraft(args);
+        setMsg({ type: 'ok', text: 'Черновик сохранён.' });
+      }
+    } catch {
+      setMsg({ type: 'error', text: 'Не удалось сохранить.' });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const activeCriterion = REVIEW_CRITERIA.find((c) => c.key === active);
+  const entry = scores[active] || { rating: 0, text: '' };
+  const textLen = (entry.text || '').trim().length;
+
+  return (
+    <main className="apply-page">
+      <div className="container">
+        <Link to="/account" className="review-back">← Назад</Link>
+        <div className="apply-head">
+          <span className="eyebrow">- Рассмотрение</span>
+          <h1>Оценка заявки</h1>
+        </div>
+
+        {app && (
+          <div className="review-app">
+            <div className="review-app__applicant">
+              {[app.first_name, app.last_name].filter(Boolean).join(' ')}
+              {app.email ? ` · ${app.email}` : ''}
+            </div>
+            {app.works && app.works.length > 0 && (
+              <ul className="account-app-card__works">
+                {app.works.map((w, i) => {
+                  const url = files[i + 1];
+                  return (
+                    <li key={i} className="account-work">
+                      {url ? (
+                        <a href={url} target="_blank" rel="noreferrer" className="account-work__thumb">
+                          <img src={url} alt={w.title || ''} loading="lazy" />
+                        </a>
+                      ) : (
+                        <span className="account-work__thumb account-work__thumb--empty" aria-hidden="true" />
+                      )}
+                      <span className="account-work__meta">
+                        {w.title || '-'}{w.year ? `, ${w.year}` : ''}{w.media ? ` · ${w.media}` : ''}
+                        {w.desc ? <span className="review-work-desc">{w.desc}</span> : null}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        )}
+
+        {locked && (
+          <p className="review-locked">Оценка завершена. Чтобы изменить её, обратитесь к администратору.</p>
+        )}
+
+        {ready && (
+          <div className="review-eval">
+            <nav className="review-tabs">
+              {REVIEW_CRITERIA.map((c) => {
+                const ok = isCriterionValid(scores[c.key]);
+                return (
+                  <button
+                    key={c.key}
+                    type="button"
+                    className={`review-tab ${active === c.key ? 'is-active' : ''} ${ok ? 'is-done' : ''}`}
+                    onClick={() => setActive(c.key)}
+                  >
+                    <span className="review-tab__check" aria-hidden="true">{ok ? '✓' : ''}</span>
+                    {c.title}
+                  </button>
+                );
+              })}
+            </nav>
+
+            <div className="review-panel">
+              <h2 className="review-panel__title">{activeCriterion.title}</h2>
+              <p className="review-panel__hint">{activeCriterion.hint}</p>
+
+              <div className="review-rating">
+                <label>Оценка: <strong>{entry.rating}</strong> / {MAX_RATING}</label>
+                <input
+                  type="range"
+                  min="0"
+                  max={MAX_RATING}
+                  step="1"
+                  value={entry.rating}
+                  disabled={locked}
+                  onChange={(e) => setEntry(active, { rating: Number(e.target.value) })}
+                />
+              </div>
+
+              <div className="review-text">
+                <textarea
+                  value={entry.text}
+                  disabled={locked}
+                  placeholder="Развёрнутый комментарий по этому критерию…"
+                  onChange={(e) => setEntry(active, { text: e.target.value })}
+                />
+                <div className={`review-counter ${textLen >= MIN_REVIEW_CHARS ? 'is-ok' : ''}`}>
+                  {textLen} / {MIN_REVIEW_CHARS}
+                </div>
+              </div>
+            </div>
+
+            {!locked && (
+              <div className="review-actions">
+                <button type="button" className="btn-ink" onClick={() => persist(false)} disabled={busy}>
+                  Сохранить черновик
+                </button>
+                <button
+                  type="button"
+                  className="btn-gold"
+                  onClick={() => persist(true)}
+                  disabled={busy || !complete}
+                  title={complete ? '' : 'Заполните все критерии (оценка и текст не короче ' + MIN_REVIEW_CHARS + ' символов)'}
+                >
+                  Завершить оценку
+                </button>
+              </div>
+            )}
+
+            {msg && <p className={`review-msg review-msg--${msg.type}`}>{msg.text}</p>}
+          </div>
+        )}
+      </div>
+    </main>
+  );
+}

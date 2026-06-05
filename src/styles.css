@@ -1096,6 +1096,65 @@ input, textarea, select { font-family: inherit; }
   color: hsl(140, 50%, 45%);
   font-size: 13px;
 }
+/* Juror's own state chip */
+.account-app-card__status--juror-finished { background: hsl(265, 35%, 20%); color: hsl(265, 65%, 72%); }
+.account-app-card__status--juror-draft    { background: hsl(40, 40%, 18%);  color: hsl(40, 60%, 60%); }
+.account-app-card__status--juror-none     { background: hsl(0, 0%, 22%);    color: hsl(0, 0%, 70%); }
+/* Admin per-juror review breakdown */
+.review-row { border-top: 1px solid var(--border); padding: 12px 0; }
+.review-row:first-child { border-top: 0; }
+.review-row__head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.review-row__email { font-size: 14px; font-weight: 500; }
+.review-row__status { font-size: 12px; opacity: 0.8; }
+.review-row__status--finished { color: hsl(140, 50%, 45%); }
+.review-row__unlock {
+  background: transparent; border: 1px solid var(--accent-deep); color: var(--accent-deep);
+  border-radius: 4px; padding: 4px 10px; font-size: 12px; cursor: pointer;
+}
+.review-row__detail { margin-top: 8px; font-size: 13px; }
+.review-row__detail summary { cursor: pointer; color: var(--ink-soft); }
+.review-row__crit { margin: 8px 0; }
+.review-row__crit p { margin: 4px 0 0; line-height: 1.5; opacity: 0.85; }
+
+/* ── Juror evaluation page ── */
+.review-back { display: inline-block; margin-bottom: 24px; color: var(--accent-deep); text-decoration: none; }
+.review-app { margin-bottom: 32px; }
+.review-app__applicant { font-weight: 500; margin-bottom: 16px; }
+.review-work-desc { display: block; margin-top: 6px; opacity: 0.7; font-size: 0.85em; }
+.review-locked {
+  background: hsl(40, 70%, 95%); border-left: 3px solid hsl(40, 70%, 50%);
+  padding: 12px 18px; margin-bottom: 24px; color: hsl(30, 30%, 28%);
+}
+.review-eval { display: grid; grid-template-columns: 240px 1fr; gap: 32px; align-items: start; }
+.review-tabs { display: flex; flex-direction: column; gap: 8px; }
+.review-tab {
+  text-align: left; background: transparent; border: 1px solid var(--border);
+  border-radius: 4px; padding: 12px 14px; color: var(--ink); cursor: pointer;
+  font-size: 14px; display: flex; align-items: center; gap: 8px; transition: border-color 0.2s;
+}
+.review-tab.is-active { border-color: var(--accent-deep); }
+.review-tab__check { color: hsl(140, 50%, 45%); width: 14px; display: inline-block; }
+.review-panel__title { margin: 0 0 8px; }
+.review-panel__hint { color: var(--ink-soft); line-height: 1.55; margin-bottom: 24px; }
+.review-rating { margin-bottom: 24px; }
+.review-rating label { display: block; margin-bottom: 8px; font-size: 14px; }
+.review-rating input[type="range"] { width: 100%; accent-color: var(--accent-deep); }
+.review-text textarea {
+  width: 100%; min-height: 160px; resize: vertical; padding: 14px;
+  border: 1px solid #cec4b6; border-radius: 4px; background: transparent;
+  color: var(--ink); font-family: inherit; font-size: 1rem; line-height: 1.5; outline: none;
+}
+.review-text textarea:focus { border-color: var(--accent-deep); }
+.review-counter { margin-top: 6px; font-size: 13px; color: var(--error); text-align: right; }
+.review-counter.is-ok { color: hsl(140, 50%, 45%); }
+.review-actions { grid-column: 1 / -1; display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+.review-msg { grid-column: 1 / -1; margin: 12px 0 0; font-size: 14px; }
+.review-msg--ok { color: hsl(140, 50%, 45%); }
+.review-msg--error { color: var(--error); }
+@media (max-width: 720px) {
+  .review-eval { grid-template-columns: 1fr; }
+  .review-tabs { flex-direction: row; flex-wrap: wrap; }
+}
 .account-actions {
   display: flex;
   flex-wrap: wrap;
