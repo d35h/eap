@@ -330,23 +330,26 @@ export default function Account() {
                     : 'draft';
                   return (
                     <div key={j.id} className="review-row">
-                      <div className="review-row__head">
-                        {r ? (
-                          <Link to={`/account/review/${app.id}/${j.id}`} className="review-row__email review-row__link">
-                            {j.email}
+                      <span className="review-row__email">{j.email}</span>
+                      <span className={`review-chip review-chip--${state}`}>
+                        {state === 'finished' ? 'Рассмотрено' : state === 'draft' ? 'Черновик' : 'Не рассмотрено'}
+                      </span>
+                      {r && (
+                        <div className="review-row__actions">
+                          <Link to={`/account/review/${app.id}/${j.id}`} className="review-row__btn">
+                            Открыть оценку
                           </Link>
-                        ) : (
-                          <span className="review-row__email">{j.email}</span>
-                        )}
-                        <span className={`review-row__status review-row__status--${state}`}>
-                          {state === 'finished' ? 'Рассмотрено' : state === 'draft' ? 'Черновик' : 'Не рассмотрено'}
-                        </span>
-                        {r && r.status === 'finished' && !r.unlocked && (
-                          <button type="button" className="review-row__unlock" onClick={() => handleUnlock(r)}>
-                            Разрешить редактирование
-                          </button>
-                        )}
-                      </div>
+                          {r.status === 'finished' && !r.unlocked && (
+                            <button
+                              type="button"
+                              className="review-row__btn review-row__btn--ghost"
+                              onClick={() => handleUnlock(r)}
+                            >
+                              Разрешить редактирование
+                            </button>
+                          )}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
