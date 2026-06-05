@@ -10,14 +10,12 @@
 
 Criteria live in **one config array** (`src/lib/reviewCriteria.js`) so wording is a one-line edit and the form/validation are driven by it generically. Each entry: `{ key, title, hint }` where `hint` is the guidance text shown to the juror.
 
-Seeded list (RU — **confirm/edit titles + hints**):
+List (RU) — the platform's real criteria, taken verbatim from the site rubric (`team.criteria`):
 
-1. `idea` — **Идея и высказывание** — «Есть ли за работой ясный замысел и авторское высказывание, а не только исполнение.»
-2. `emotion` — **Эмоциональное воздействие** — «Вызывает ли работа отклик, атмосферу, энергию у зрителя.»
-3. `craft` — **Идея важнее техники** — «Высокая техника ≠ сильное искусство. Иногда грубая, но честная работа сильнее идеально исполненной.»
-4. `originality` — **Оригинальность** — «„Я уже видел это сто раз?" Собственный мир, узнаваемость, авторский почерк, своя символика, новая визуальная идея.»
+1. `craft` — **Идея важнее техники** — «Высокая техника ≠ сильное искусство. Жюри смотрит на язык художника, идею и атмосферу, а не на академическую безупречность - иногда „грубая", но честная работа сильнее идеально исполненной.»
+2. `originality` — **Оригинальность** — «Главный вопрос жюри - „я уже видел это сто раз?". Безупречная техника не спасёт, если работа говорит чужим языком. Нам важен ваш собственный мир: узнаваемый почерк, своя символика, новая визуальная идея.»
 
-Criteria are RU-only (the staff cabinet is Russian-only). Adding/removing/renaming a criterion = editing this array; everything else adapts.
+Criteria are RU-only (the staff cabinet is Russian-only). Adding/removing/renaming a criterion = editing this array; everything else (form, validation, finish-gate) adapts automatically.
 
 ---
 
@@ -69,7 +67,7 @@ A server-side trigger keeps the artist-facing `applications.review_status`: set 
 
 **Route (b):** `/account/review/:applicationId` — a dedicated evaluation page (staff/juror only; redirect others). Reachable from the cabinet via the **«Оценить»** button on an application.
 
-**Form:** wizard-style switcher like the works step — a vertical/tab list of the criteria; clicking one shows just that criterion's **rating 0–10** (e.g. 0–10 segmented buttons or a select) + **textarea** with a live character counter and the ≥130 hint. Each criterion shows a ✓ when valid. Footer: **«Сохранить черновик»** (always) and **«Завершить оценку»** (disabled until all ✓). When the row is `finished` and not `unlocked`, the whole form is read-only with a notice.
+**Form:** wizard-style switcher like the works step — a vertical/tab list of the criteria; clicking one shows just that criterion's **rating 0–10 via a slider** (with the current value shown next to it) + **textarea** with a live character counter and the ≥130 hint. Each criterion shows a ✓ when valid. Footer: **«Сохранить черновик»** (always) and **«Завершить оценку»** (disabled until all ✓). When the row is `finished` and not `unlocked`, the whole form is read-only with a notice.
 
 **Cabinet (juror):** no payment badge. Each application shows the juror's own state — **Не оценено / Черновик / Завершено** — and an **«Оценить»** button (label «Продолжить» if a draft exists, hidden/disabled “Завершено” when finished & locked).
 
