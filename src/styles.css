@@ -215,6 +215,14 @@ input, textarea, select { font-family: inherit; }
 .hero-left h1 { white-space: normal; }
 .hero-left .hero-sub { margin-bottom: 0; }
 .hero h1 em { font-style: italic; }
+/* EAP as a small gold acronym lead-in above the full name (no inline dash). */
+.hero-title { display: flex; flex-direction: column; gap: 12px; white-space: normal; }
+.hero-title__acronym {
+  font-family: var(--mono);
+  font-size: 0.72rem; letter-spacing: 0.5em; text-transform: uppercase;
+  color: var(--accent); line-height: 1;
+}
+.hero-title__full { line-height: 1; }
 .hero-vp {
   max-width: 600px; font-size: clamp(1rem, 1.4vw, 1.2rem);
   color: hsla(36, 22%, 92%, 0.85); line-height: 1.55; margin-bottom: 14px;
@@ -646,6 +654,15 @@ input, textarea, select { font-family: inherit; }
   color: var(--accent-deep); text-decoration: none;
   border-bottom: 1px solid var(--accent-deep);
 }
+.apply-email-notice {
+  background: hsl(40, 70%, 95%); border-left: 3px solid hsl(40, 70%, 50%);
+  padding: 12px 18px; margin: 0 0 24px;
+  font-size: 0.9rem; color: hsl(30, 30%, 28%); line-height: 1.5;
+}
+.apply-email-notice a {
+  color: var(--accent-deep); text-decoration: none;
+  border-bottom: 1px solid var(--accent-deep);
+}
 .wizard-nav {
   display: flex; justify-content: space-between;
   padding: 32px 56px; border-top: 1px solid hsl(36, 22%, 84%);
@@ -1067,3 +1084,37 @@ input, textarea, select { font-family: inherit; }
   font-size: 13px;
   padding: 8px 16px;
 }
+.account-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.invite-jury {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.invite-jury input {
+  flex: 1 1 240px;
+  min-width: 0;
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--fg);
+  font-size: 15px;
+}
+.invite-jury__msg {
+  flex: 1 1 100%;
+  margin: 0;
+  font-size: 14px;
+}
+.invite-jury__msg--ok { color: hsl(140, 60%, 60%); }
+.invite-jury__msg--exists { color: hsl(40, 70%, 62%); }
+.invite-jury__msg--error { color: hsl(2, 70%, 64%); }

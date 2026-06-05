@@ -24,7 +24,10 @@ export default function Landing() {
           </div>
           <div className="hero-grid">
             <div className="hero-left">
-              <h1>EAP - <em>Eurasian</em> Art Platform</h1>
+              <h1 className="hero-title">
+                <span className="hero-title__acronym">EAP</span>
+                <span className="hero-title__full"><em>Eurasian</em> Art Platform</span>
+              </h1>
               <p className="hero-vp">
                 {t('hero.vpStart')}
                 <strong>{t('hero.vpStrong')}</strong>

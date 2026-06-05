@@ -258,6 +258,25 @@ export default function Apply() {
 
 // ─── Step 1: Contacts ───
 function Step1({ form, update, errors, t }) {
+  // Non-blocking heads-up: if this email already has an account, nudge to log in.
+  const [emailExists, setEmailExists] = useState(false);
+  useEffect(() => {
+    const email = (form.email || '').trim();
+    if (!supabase || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmailExists(false);
+      return;
+    }
+    let cancelled = false;
+    const id = setTimeout(async () => {
+      const { data, error } = await supabase.rpc('email_has_account', { p_email: email });
+      if (!cancelled && !error) setEmailExists(!!data);
+    }, 500);
+    return () => {
+      cancelled = true;
+      clearTimeout(id);
+    };
+  }, [form.email]);
+
   return (
     <>
       <div className="info-banner">
@@ -267,6 +286,13 @@ function Step1({ form, update, errors, t }) {
       </div>
       <span className="wizard-section-label">{t('apply.stepOf', { n: 1 })}</span>
       <h2>{t('apply.contactsTitle')}</h2>
+      {emailExists && (
+        <p className="apply-email-notice">
+          {t('apply.emailExistsBefore')}
+          <Link to="/login">{t('apply.emailExistsLink')}</Link>
+          {t('apply.emailExistsAfter')}
+        </p>
+      )}
       <div className="wizard-grid">
         <Field label={t('apply.firstName')} required value={form.firstName} ph={t('apply.firstNamePh')}
                error={errors.firstName} onChange={(v) => update('firstName', v)} />
