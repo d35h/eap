@@ -1103,13 +1103,20 @@ input, textarea, select { font-family: inherit; }
 .invite-jury input {
   flex: 1 1 240px;
   min-width: 0;
-  padding: 10px 14px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--fg);
-  font-size: 15px;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #cec4b6;
+  padding: 10px 0;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
 }
+.invite-jury input::placeholder {
+  color: #c5b9a8; font-style: italic; font-weight: 300;
+}
+.invite-jury input:focus { border-color: var(--accent-deep); }
 .invite-jury__msg {
   flex: 1 1 100%;
   margin: 0;

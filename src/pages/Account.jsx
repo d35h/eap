@@ -81,6 +81,7 @@ export default function Account() {
       if (res.ok && data.status === 'invited') {
         setInviteMsg({ type: 'ok', text: 'Приглашение отправлено.' });
         setInviteEmail('');
+        setInviteOpen(false); // collapse the form; the confirmation stays below
       } else if (data.status === 'exists') {
         setInviteMsg({ type: 'exists', text: 'Пользователь с таким email уже существует.' });
       } else {
@@ -167,7 +168,13 @@ export default function Account() {
             {L('signOut', 'Выйти')}
           </button>
           {isAdmin && (
-            <button className="btn-ink" onClick={() => setInviteOpen((o) => !o)}>
+            <button
+              className="btn-ink"
+              onClick={() => {
+                setInviteMsg(null);
+                setInviteOpen((o) => !o);
+              }}
+            >
               Пригласить жюри
             </button>
           )}
@@ -186,10 +193,15 @@ export default function Account() {
             <button type="submit" className="btn-gold" disabled={inviting}>
               {inviting ? '…' : 'Пригласить'}
             </button>
-            {inviteMsg && (
+            {(inviteMsg?.type === 'exists' || inviteMsg?.type === 'error') && (
               <p className={`invite-jury__msg invite-jury__msg--${inviteMsg.type}`}>{inviteMsg.text}</p>
             )}
           </form>
+        )}
+        {isAdmin && inviteMsg?.type === 'ok' && (
+          <p className="invite-jury__msg invite-jury__msg--ok" style={{ marginTop: '12px' }}>
+            {inviteMsg.text}
+          </p>
         )}
 
         <h2 style={{ margin: '40px 0 24px' }}>
