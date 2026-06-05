@@ -127,26 +127,27 @@ export default function ReviewEvaluation() {
               {app.email ? ` · ${app.email}` : ''}
             </div>
             {app.works && app.works.length > 0 && (
-              <ul className="account-app-card__works">
+              <div className="review-works">
                 {app.works.map((w, i) => {
                   const url = files[i + 1];
                   return (
-                    <li key={i} className="account-work">
+                    <figure className="review-work" key={i}>
                       {url ? (
-                        <a href={url} target="_blank" rel="noreferrer" className="account-work__thumb">
+                        <a href={url} target="_blank" rel="noreferrer">
                           <img src={url} alt={w.title || ''} loading="lazy" />
                         </a>
                       ) : (
-                        <span className="account-work__thumb account-work__thumb--empty" aria-hidden="true" />
+                        <div className="review-work__noimg">Нет изображения</div>
                       )}
-                      <span className="account-work__meta">
-                        {w.title || '-'}{w.year ? `, ${w.year}` : ''}{w.media ? ` · ${w.media}` : ''}
-                        {w.desc ? <span className="review-work-desc">{w.desc}</span> : null}
-                      </span>
-                    </li>
+                      <figcaption>
+                        <strong>{w.title || '-'}</strong>
+                        {w.year ? `, ${w.year}` : ''}{w.media ? ` · ${w.media}` : ''}{w.size ? ` · ${w.size}` : ''}
+                        {w.desc ? <p>{w.desc}</p> : null}
+                      </figcaption>
+                    </figure>
                   );
                 })}
-              </ul>
+              </div>
             )}
           </div>
         )}
