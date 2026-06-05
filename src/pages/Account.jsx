@@ -281,7 +281,7 @@ export default function Account() {
                 })}
               </ul>
             )}
-            {isStaff && app.payment_status === 'paid' && (
+            {isAdmin && app.payment_status === 'paid' && (
               <div className="account-app-card__reviews">
                 {reviewers.length > 0 ? (
                   <span className="account-app-card__reviewed-by">

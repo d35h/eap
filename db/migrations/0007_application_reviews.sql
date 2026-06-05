@@ -23,11 +23,21 @@ create policy "jurors insert own review"
     and (auth.jwt() -> 'app_metadata' ->> 'role') = 'juror'
   );
 
--- Staff (admin + juror) read every review (admin sees which jurors reviewed).
-drop policy if exists "staff read reviews" on public.application_reviews;
-create policy "staff read reviews"
+-- Admins read every review (they see which jurors reviewed what).
+drop policy if exists "staff read reviews"      on public.application_reviews;
+drop policy if exists "admins read all reviews" on public.application_reviews;
+create policy "admins read all reviews"
   on public.application_reviews for select to authenticated
-  using ( (auth.jwt() -> 'app_metadata' ->> 'role') in ('admin', 'juror') );
+  using ( (auth.jwt() -> 'app_metadata' ->> 'role') = 'admin' );
+
+-- Jurors read ONLY their own reviews (not other jurors').
+drop policy if exists "jurors read own reviews" on public.application_reviews;
+create policy "jurors read own reviews"
+  on public.application_reviews for select to authenticated
+  using (
+    reviewer_id = auth.uid()
+    and (auth.jwt() -> 'app_metadata' ->> 'role') = 'juror'
+  );
 
 -- Fill reviewer_email server-side from the auth user (don't trust the client).
 create or replace function public.set_reviewer_email()
