@@ -4,7 +4,6 @@ import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useAuth } from '../hooks/useAuth.jsx';
 import { isSupabaseConfigured, supabase } from '../lib/supabase.js';
 import { signOut } from '../lib/auth.js';
-import { REVIEW_CRITERIA } from '../lib/reviewCriteria.js';
 import { unlockReview } from '../lib/reviewsRepo.js';
 
 export default function Account() {
@@ -22,8 +21,10 @@ export default function Account() {
   const [appsLoading, setAppsLoading] = useState(false);
   // app.id → { <workNumber>: signedUrl } for the uploaded work files.
   const [filesByApp, setFilesByApp] = useState({});
-  // app.id → [{ reviewer_id, reviewer_email }] (which jurors reviewed it).
+  // app.id → [{ reviewer_id, reviewer_email, status, ... }] (review rows).
   const [reviewsByApp, setReviewsByApp] = useState({});
+  // All jurors in the system [{ id, email }] (admin only).
+  const [jurors, setJurors] = useState([]);
 
   // Invite jury (admin only).
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -75,6 +76,21 @@ export default function Account() {
       cancelled = true;
     };
   }, [applications, isStaff]);
+
+  // Admin: fetch every juror so we can show review status per juror per app.
+  useEffect(() => {
+    if (!isAdmin || !supabase) return;
+    let cancelled = false;
+    (async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch('/.netlify/functions/list-jurors', {
+        headers: { Authorization: `Bearer ${session?.access_token || ''}` },
+      });
+      const d = await res.json().catch(() => ({}));
+      if (!cancelled && Array.isArray(d.jurors)) setJurors(d.jurors);
+    })();
+    return () => { cancelled = true; };
+  }, [isAdmin]);
 
   // Admin reopens a specific juror's finished evaluation for editing.
   const handleUnlock = async (review) => {
@@ -302,40 +318,38 @@ export default function Account() {
             )}
             {isAdmin && app.payment_status === 'paid' && (
               <div className="account-app-card__reviews">
-                {reviewers.length === 0 && (
-                  <span className="account-app-card__not-reviewed">Пока никто не рассмотрел</span>
+                {jurors.length === 0 && (
+                  <span className="account-app-card__not-reviewed">Нет приглашённых жюри</span>
                 )}
-                {reviewers.map((r) => (
-                  <div key={r.id} className="review-row">
-                    <div className="review-row__head">
-                      <span className="review-row__email">{r.reviewer_email}</span>
-                      <span className={`review-row__status review-row__status--${r.status}`}>
-                        {r.status === 'finished' && !r.unlocked
-                          ? 'Завершено'
-                          : r.unlocked
-                          ? 'Открыто для правок'
-                          : 'Черновик'}
-                      </span>
-                      {r.status === 'finished' && !r.unlocked && (
-                        <button type="button" className="review-row__unlock" onClick={() => handleUnlock(r)}>
-                          Разрешить редактирование
-                        </button>
-                      )}
+                {jurors.map((j) => {
+                  const r = reviewers.find((x) => x.reviewer_id === j.id) || null;
+                  const state = !r
+                    ? 'none'
+                    : r.status === 'finished' && !r.unlocked
+                    ? 'finished'
+                    : 'draft';
+                  return (
+                    <div key={j.id} className="review-row">
+                      <div className="review-row__head">
+                        {r ? (
+                          <Link to={`/account/review/${app.id}/${j.id}`} className="review-row__email review-row__link">
+                            {j.email}
+                          </Link>
+                        ) : (
+                          <span className="review-row__email">{j.email}</span>
+                        )}
+                        <span className={`review-row__status review-row__status--${state}`}>
+                          {state === 'finished' ? 'Рассмотрено' : state === 'draft' ? 'Черновик' : 'Не рассмотрено'}
+                        </span>
+                        {r && r.status === 'finished' && !r.unlocked && (
+                          <button type="button" className="review-row__unlock" onClick={() => handleUnlock(r)}>
+                            Разрешить редактирование
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    <details className="review-row__detail">
-                      <summary>Оценки</summary>
-                      {REVIEW_CRITERIA.map((c) => {
-                        const e = r.scores?.[c.key];
-                        return (
-                          <div key={c.key} className="review-row__crit">
-                            <strong>{c.title}: {Number.isInteger(e?.rating) ? e.rating : '-'} / 10</strong>
-                            {e?.text ? <p>{e.text}</p> : null}
-                          </div>
-                        );
-                      })}
-                    </details>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
             {isJuror && (

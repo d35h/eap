@@ -1110,6 +1110,8 @@ input, textarea, select { font-family: inherit; }
 .review-row__email { font-size: 14px; font-weight: 500; }
 .review-row__status { font-size: 12px; opacity: 0.8; }
 .review-row__status--finished { color: hsl(140, 50%, 45%); }
+.review-row__link { color: var(--accent-deep); text-decoration: none; border-bottom: 1px solid var(--accent-deep); }
+.review-row__link:hover { color: var(--ink); }
 .review-row__unlock {
   background: transparent; border: 1px solid var(--accent-deep); color: var(--accent-deep);
   border-radius: 4px; padding: 4px 10px; font-size: 12px; cursor: pointer;
@@ -1169,6 +1171,13 @@ input, textarea, select { font-family: inherit; }
   padding: 48px; text-align: center; border: 1px dashed #cec4b6;
   color: var(--ink-soft); border-radius: 4px;
 }
+/* Admin read-only view of a juror's evaluation */
+.reviewview { display: flex; flex-direction: column; gap: 24px; }
+.reviewview-crit { border: 1px solid var(--border); border-radius: 4px; padding: 20px 24px; }
+.reviewview-crit__head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.reviewview-crit__head h3 { margin: 0; }
+.reviewview-crit__rating { font-family: var(--mono); font-size: 1.1rem; color: var(--accent-deep); white-space: nowrap; }
+.reviewview-crit__text { margin: 12px 0 0; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
 .review-msg { grid-column: 1 / -1; margin: 12px 0 0; font-size: 14px; }
 .review-msg--ok { color: hsl(140, 50%, 45%); }
 .review-msg--error { color: var(--error); }
