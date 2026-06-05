@@ -20,6 +20,8 @@ export default function Account() {
   const [appsLoading, setAppsLoading] = useState(false);
   // app.id → { <workNumber>: signedUrl } for the uploaded work files.
   const [filesByApp, setFilesByApp] = useState({});
+  // app.id → [{ reviewer_id, reviewer_email }] (which jurors reviewed it).
+  const [reviewsByApp, setReviewsByApp] = useState({});
 
   // Invite jury (admin only).
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -48,16 +50,38 @@ export default function Account() {
       .catch(() => setAppsLoading(false));
   }, [user, isStaff]);
 
-  const markReviewed = async (id) => {
+  // Load which jurors have reviewed each visible application (staff only).
+  useEffect(() => {
+    if (!isStaff || !supabase || applications.length === 0) return;
+    let cancelled = false;
+    supabase
+      .from('application_reviews')
+      .select('application_id, reviewer_id, reviewer_email')
+      .in('application_id', applications.map((a) => a.id))
+      .then(({ data }) => {
+        if (cancelled) return;
+        const map = {};
+        (data || []).forEach((r) => {
+          (map[r.application_id] ||= []).push(r);
+        });
+        setReviewsByApp(map);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [applications, isStaff]);
+
+  // A juror records THEIR review (admins cannot - enforced by RLS too).
+  const recordReview = async (id) => {
     if (!supabase) return;
     const { error } = await supabase
-      .from('applications')
-      .update({ review_status: 'reviewed' })
-      .eq('id', id);
+      .from('application_reviews')
+      .insert({ application_id: id, reviewer_id: user.id });
     if (!error) {
-      setApplications((prev) =>
-        prev.map((a) => (a.id === id ? { ...a, review_status: 'reviewed' } : a))
-      );
+      setReviewsByApp((prev) => ({
+        ...prev,
+        [id]: [...(prev[id] || []), { reviewer_id: user.id, reviewer_email: user.email }],
+      }));
     }
   };
 
@@ -214,16 +238,19 @@ export default function Account() {
           <p>{L('noApplications', 'Заявок пока нет.')}</p>
         )}
 
-        {!appsLoading && applications.map((app) => (
+        {!appsLoading && applications.map((app) => {
+          const reviewers = reviewsByApp[app.id] || [];
+          const iReviewed = reviewers.some((r) => r.reviewer_id === user.id);
+          return (
           <div key={app.id} className="account-app-card">
             <div className="account-app-card__meta">
               <span className="account-app-card__ref">{app.payment_ref || app.id}</span>
               <span className={`account-app-card__status account-app-card__status--${app.payment_status}`}>
                 {app.payment_status === 'paid' ? L('statusPaid', 'Оплачено') : L('statusPending', 'Ожидает оплаты')}
               </span>
-              {app.payment_status === 'paid' && (
+              {!isStaff && app.payment_status === 'paid' && (
                 <span className={`account-app-card__status account-app-card__status--review-${app.review_status === 'reviewed' ? 'reviewed' : 'in_review'}`}>
-                  {app.review_status === 'reviewed' ? L('statusReviewed', 'Рассмотрено') : L('statusInReview', 'На рассмотрении')}
+                  {app.review_status === 'reviewed' ? t('account.statusReviewed') : t('account.statusInReview')}
                 </span>
               )}
             </div>
@@ -254,17 +281,34 @@ export default function Account() {
                 })}
               </ul>
             )}
-            {isStaff && app.payment_status === 'paid' && app.review_status !== 'reviewed' && (
+            {isStaff && app.payment_status === 'paid' && (
+              <div className="account-app-card__reviews">
+                {reviewers.length > 0 ? (
+                  <span className="account-app-card__reviewed-by">
+                    Рассмотрели: {reviewers.map((r) => r.reviewer_email).join(', ')}
+                  </span>
+                ) : (
+                  <span className="account-app-card__not-reviewed">Пока никто не рассмотрел</span>
+                )}
+              </div>
+            )}
+            {isJuror && app.payment_status === 'paid' && !iReviewed && (
               <button
                 type="button"
                 className="btn-ink account-app-card__action"
-                onClick={() => markReviewed(app.id)}
+                onClick={() => recordReview(app.id)}
               >
                 Отметить рассмотренной
               </button>
             )}
+            {isJuror && app.payment_status === 'paid' && iReviewed && (
+              <div className="account-app-card__action account-app-card__you-reviewed">
+                Вы рассмотрели ✓
+              </div>
+            )}
           </div>
-        ))}
+          );
+        })}
       </div>
     </main>
   );
