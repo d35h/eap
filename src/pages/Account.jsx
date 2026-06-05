@@ -9,6 +9,7 @@ export default function Account() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const isAdmin = user?.app_metadata?.role === 'admin';
   const [applications, setApplications] = useState([]);
   const [appsLoading, setAppsLoading] = useState(false);
   // app.id → { <workNumber>: signedUrl } for the uploaded work files.
@@ -23,16 +24,30 @@ export default function Account() {
   useEffect(() => {
     if (!user || !supabase) return;
     setAppsLoading(true);
-    supabase
-      .from('applications')
-      .select('*')
-      .eq('user_id', user.id)
+    // Admins read every application; regular users only their own.
+    // RLS enforces this server-side too - the filter is just intent.
+    let query = supabase.from('applications').select('*').order('created_at', { ascending: false });
+    if (!isAdmin) query = query.eq('user_id', user.id);
+    query
       .then(({ data }) => {
         setApplications(data || []);
         setAppsLoading(false);
       })
       .catch(() => setAppsLoading(false));
-  }, [user]);
+  }, [user, isAdmin]);
+
+  const markReviewed = async (id) => {
+    if (!supabase) return;
+    const { error } = await supabase
+      .from('applications')
+      .update({ review_status: 'reviewed' })
+      .eq('id', id);
+    if (!error) {
+      setApplications((prev) =>
+        prev.map((a) => (a.id === id ? { ...a, review_status: 'reviewed' } : a))
+      );
+    }
+  };
 
   // Mint short-lived signed URLs for each application's uploaded work files.
   // Bucket is private; an owner-only SELECT policy lets us list + sign here.
@@ -104,7 +119,9 @@ export default function Account() {
           {t('account.signOut')}
         </button>
 
-        <h2 style={{ marginBottom: '24px' }}>{t('account.yourApplications')}</h2>
+        <h2 style={{ marginBottom: '24px' }}>
+          {isAdmin ? t('account.allApplications') : t('account.yourApplications')}
+        </h2>
 
         {appsLoading && <p>…</p>}
 
@@ -125,6 +142,12 @@ export default function Account() {
                 </span>
               )}
             </div>
+            {isAdmin && (
+              <div className="account-app-card__applicant">
+                {[app.first_name, app.last_name].filter(Boolean).join(' ')}
+                {app.email ? ` · ${app.email}` : ''}
+              </div>
+            )}
             {app.works && app.works.length > 0 && (
               <ul className="account-app-card__works">
                 {app.works.map((w, i) => {
@@ -145,6 +168,15 @@ export default function Account() {
                   );
                 })}
               </ul>
+            )}
+            {isAdmin && app.payment_status === 'paid' && app.review_status !== 'reviewed' && (
+              <button
+                type="button"
+                className="btn-ink account-app-card__action"
+                onClick={() => markReviewed(app.id)}
+              >
+                {t('account.markReviewed')}
+              </button>
             )}
           </div>
         ))}

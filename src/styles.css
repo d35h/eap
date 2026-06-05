@@ -1045,3 +1045,13 @@ input, textarea, select { font-family: inherit; }
 .account-work__meta {
   min-width: 0;
 }
+.account-app-card__applicant {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.account-app-card__action {
+  margin-top: 16px;
+  font-size: 13px;
+  padding: 8px 16px;
+}
