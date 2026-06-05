@@ -1073,11 +1073,13 @@ input, textarea, select { font-family: inherit; }
 }
 .account-work__meta {
   min-width: 0;
+  overflow-wrap: anywhere;
 }
 .account-app-card__applicant {
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 12px;
+  overflow-wrap: anywhere;
 }
 .account-app-card__action {
   margin-top: 16px;
@@ -1114,8 +1116,12 @@ input, textarea, select { font-family: inherit; }
 }
 .review-row__detail { margin-top: 8px; font-size: 13px; }
 .review-row__detail summary { cursor: pointer; color: var(--ink-soft); }
-.review-row__crit { margin: 8px 0; }
-.review-row__crit p { margin: 4px 0 0; line-height: 1.5; opacity: 0.85; }
+.review-row__crit { margin: 8px 0; min-width: 0; }
+.review-row__crit strong { overflow-wrap: anywhere; }
+.review-row__crit p {
+  margin: 4px 0 0; line-height: 1.5; opacity: 0.85;
+  overflow-wrap: anywhere; word-break: break-word; white-space: pre-wrap;
+}
 
 /* ── Juror evaluation page ── */
 .review-back { display: inline-block; margin-bottom: 24px; color: var(--accent-deep); text-decoration: none; }
@@ -1157,8 +1163,8 @@ input, textarea, select { font-family: inherit; }
   width: 100%; max-height: 80vh; object-fit: contain; display: block;
   border-radius: 4px; background: rgba(0, 0, 0, 0.04);
 }
-.review-work figcaption { margin-top: 12px; font-size: 14px; line-height: 1.5; }
-.review-work figcaption p { margin: 8px 0 0; opacity: 0.8; }
+.review-work figcaption { margin-top: 12px; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+.review-work figcaption p { margin: 8px 0 0; opacity: 0.8; white-space: pre-wrap; overflow-wrap: anywhere; }
 .review-work__noimg {
   padding: 48px; text-align: center; border: 1px dashed #cec4b6;
   color: var(--ink-soft); border-radius: 4px;
