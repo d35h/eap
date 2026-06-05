@@ -924,6 +924,10 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 1280px) {
   .nav-primary { display: none; }
   .menu-toggle { display: block; }
+  /* Apply + Login live in the hamburger menu on mobile - keep the bar uncluttered
+     so the menu toggle stays reachable on narrow screens. */
+  .header-right .header-apply,
+  .header-right .header-login { display: none; }
 }
 @media (max-width: 1024px) {
   .nav-primary { display: none; }
@@ -977,21 +981,29 @@ input, textarea, select { font-family: inherit; }
 .account-app-card__meta {
   display: flex;
   align-items: center;
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 10px 12px;
   margin-bottom: 8px;
 }
 .account-app-card__ref {
   font-family: var(--mono);
   font-size: 13px;
   opacity: 0.6;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .account-app-card__status {
+  flex: 0 0 auto;
   font-size: 12px;
   font-weight: 500;
   padding: 3px 10px;
   border-radius: 20px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 .account-app-card__status--paid {
   background: hsl(140, 40%, 18%);

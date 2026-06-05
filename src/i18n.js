@@ -101,6 +101,11 @@ export const translations = {
     },
     team: {
       eyebrow: '- Кто вас будет оценивать',
+      jury: [
+        { role: 'Перформанс', bio: 'Сербская художница, пионер перформанса. Исследует пределы тела и сознания в работах, ставших классикой современного искусства.' },
+        { role: 'Современное искусство', bio: 'Китайский художник и активист. Работает на стыке скульптуры, инсталляции и архитектуры, поднимая темы прав человека и свободы.' },
+        { role: 'Скульптура', bio: 'Британско-индийский скульптор. Известен монументальными работами с зеркальными и пигментными поверхностями, меняющими восприятие пространства.' },
+      ],
       criteriaLabel: 'Как мы оцениваем',
       criteria: [
         { title: 'Идея важнее техники', desc: 'Высокая техника ≠ сильное искусство. Жюри смотрит на язык художника, идею и атмосферу, а не на академическую безупречность - иногда «грубая», но честная работа сильнее идеально исполненной.' },
@@ -405,6 +410,11 @@ export const translations = {
     },
     team: {
       eyebrow: '- Who will evaluate you',
+      jury: [
+        { role: 'Performance', bio: 'Serbian artist and pioneer of performance art. She explores the limits of the body and mind in works that have become classics of contemporary art.' },
+        { role: 'Contemporary art', bio: 'Chinese artist and activist. He works at the intersection of sculpture, installation and architecture, raising themes of human rights and freedom.' },
+        { role: 'Sculpture', bio: 'British-Indian sculptor. Known for monumental works with mirrored and pigmented surfaces that transform the perception of space.' },
+      ],
       criteriaLabel: 'How we evaluate',
       criteria: [
         { title: 'Idea over technique', desc: 'High technique ≠ strong art. The jury looks at the artist’s language, idea and atmosphere, not academic perfection - a raw but honest work can beat a flawless one.' },
@@ -702,6 +712,11 @@ export const translations = {
     },
     team: {
       eyebrow: '- Сізді кім бағалайды',
+      jury: [
+        { role: 'Перформанс', bio: 'Серб суретшісі, перформанс өнерінің ізашары. Заманауи өнердің классикасына айналған жұмыстарында дене мен сананың шегін зерттейді.' },
+        { role: 'Заманауи өнер', bio: 'Қытай суретшісі әрі белсенді. Мүсін, инсталляция және сәулет тоғысында жұмыс істеп, адам құқықтары мен бостандық тақырыптарын көтереді.' },
+        { role: 'Мүсін', bio: 'Британ-үнді мүсіншісі. Кеңістікті қабылдауды өзгертетін айналы және пигментті беттері бар монументалды жұмыстарымен танымал.' },
+      ],
       criteriaLabel: 'Қалай бағалаймыз',
       criteria: [
         { title: 'Идея техникадан маңызды', desc: 'Жоғары техника ≠ күшті өнер. Жюри академиялық мінсіздікке емес, суретшінің тіліне, идеясы мен атмосферасына қарайды - кейде «дөрекі», бірақ шынайы жұмыс мінсіз орындалғаннан күшті.' },
@@ -998,6 +1013,11 @@ export const translations = {
     },
     team: {
       eyebrow: '- 谁将评估您',
+      jury: [
+        { role: '行为艺术', bio: '塞尔维亚艺术家，行为艺术的先驱。她在已成为当代艺术经典的作品中探索身体与意识的极限。' },
+        { role: '当代艺术', bio: '中国艺术家与活动家。他在雕塑、装置与建筑的交汇处创作，探讨人权与自由的主题。' },
+        { role: '雕塑', bio: '英印雕塑家。以改变空间感知的镜面与颜料表面巨型作品而闻名。' },
+      ],
       criteriaLabel: '我们如何评估',
       criteria: [
         { title: '理念重于技巧', desc: '高超的技巧 ≠ 强有力的艺术。评审团关注艺术家的语言、理念与氛围，而非学院式的完美--一件粗糙但真诚的作品，可能胜过完美无瑕的作品。' },

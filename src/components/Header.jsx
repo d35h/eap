@@ -116,14 +116,14 @@ export default function Header() {
                   )}
                 </div>
               ) : (
-                <Link to="/login" className={location.pathname === '/login' ? 'active' : ''}>
+                <Link to="/login" className={`header-login ${location.pathname === '/login' ? 'active' : ''}`}>
                   {t('account.signIn')}
                 </Link>
               )
             )}
 
             {!user && (
-              <Link to="/apply" className="btn-gold">
+              <Link to="/apply" className="btn-gold header-apply">
                 {t('nav.apply')}
               </Link>
             )}

@@ -3,26 +3,12 @@ import { Link } from 'react-router-dom';
 import Countdown from '../components/Countdown.jsx';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 
-// ── Временный состав жюри (hardcoded). Фото лежат в /public/jury. ──
+// ── Временный состав жюри (hardcoded). Имена и фото постоянны;
+//    роль и био берутся из переводов (team.jury, по индексу). ──
 const JURY = [
-  {
-    name: 'Marina Abramović',
-    photo: '/jury/abramovic.jpg',
-    role: 'Перформанс',
-    bio: 'Сербская художница, пионер перформанса. Исследует пределы тела и сознания в работах, ставших классикой современного искусства.',
-  },
-  {
-    name: 'Ai Weiwei',
-    photo: '/jury/aiweiwei.jpg',
-    role: 'Современное искусство',
-    bio: 'Китайский художник и активист. Работает на стыке скульптуры, инсталляции и архитектуры, поднимая темы прав человека и свободы.',
-  },
-  {
-    name: 'Anish Kapoor',
-    photo: '/jury/kapoor.jpg',
-    role: 'Скульптура',
-    bio: 'Британско-индийский скульптор. Известен монументальными работами с зеркальными и пигментными поверхностями, меняющими восприятие пространства.',
-  },
+  { name: 'Marina Abramović', photo: '/jury/abramovic.jpg' },
+  { name: 'Ai Weiwei', photo: '/jury/aiweiwei.jpg' },
+  { name: 'Anish Kapoor', photo: '/jury/kapoor.jpg' },
 ];
 
 export default function Landing() {
@@ -122,16 +108,19 @@ export default function Landing() {
           </div>
 
           <div className="jury-grid">
-            {JURY.map((j) => (
-              <div className="jury-member" key={j.name}>
-                <div className="jury-photo">
-                  <img src={j.photo} alt={j.name} loading="lazy" />
+            {JURY.map((j, i) => {
+              const meta = (Array.isArray(t('team.jury')) ? t('team.jury') : [])[i] || {};
+              return (
+                <div className="jury-member" key={j.name}>
+                  <div className="jury-photo">
+                    <img src={j.photo} alt={j.name} loading="lazy" />
+                  </div>
+                  <div className="role">{meta.role}</div>
+                  <h4>{j.name}</h4>
+                  <p className="bio">{meta.bio}</p>
                 </div>
-                <div className="role">{j.role}</div>
-                <h4>{j.name}</h4>
-                <p className="bio">{j.bio}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="jury-criteria">
