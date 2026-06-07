@@ -309,11 +309,14 @@ export default function Account() {
             </div>
             {isStaff && (
               <div className="account-app-card__applicant">
+                <span className="account-section-label">Художник</span>
                 {[app.first_name, app.last_name].filter(Boolean).join(' ')}
                 {app.email ? ` · ${app.email}` : ''}
               </div>
             )}
             {app.works && app.works.length > 0 && (
+              <>
+              {isStaff && <span className="account-section-label">Работы</span>}
               <ul className="account-app-card__works">
                 {app.works.map((w, i) => {
                   const url = filesByApp[app.id]?.[i + 1];
@@ -333,9 +336,11 @@ export default function Account() {
                   );
                 })}
               </ul>
+              </>
             )}
             {isAdmin && app.payment_status === 'paid' && (
               <div className="account-app-card__reviews">
+                <span className="account-section-label">Жюри</span>
                 {sortedJurors.length === 0 && (
                   <span className="account-app-card__not-reviewed">Нет приглашённых жюри</span>
                 )}
@@ -349,7 +354,7 @@ export default function Account() {
                   return (
                     <div key={j.id} className="review-row">
                       <span className="review-row__email">
-                        {j.name ? <><strong>{j.name}</strong> · {j.email}</> : j.email}
+                        {j.name || j.email}
                       </span>
                       <span className={`review-chip review-chip--${state}`}>
                         {state === 'finished' ? 'Рассмотрено' : state === 'draft' ? 'Черновик' : 'Не рассмотрено'}
