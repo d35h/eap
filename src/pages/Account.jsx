@@ -202,17 +202,17 @@ export default function Account() {
   };
 
   const jurorName = user?.app_metadata?.name || '';
-  const headTitle = isAdmin ? 'Администратор' : isJuror ? (jurorName || 'Жюри') : t('account.cabinetTitle');
-  const headEyebrow = isAdmin ? 'Администратор' : isJuror ? 'Жюри' : headTitle;
+  const headTitle = isAdmin ? 'Администратор' : isJuror ? 'Жюри' : t('account.cabinetTitle');
+  const identityLine = isJuror && jurorName ? `${jurorName} <${user.email}>` : user.email;
 
   return (
     <main className="apply-page">
       <div className="container">
         <div className="apply-head">
-          <span className="eyebrow">- {headEyebrow}</span>
+          <span className="eyebrow">- {headTitle}</span>
           <h1>{headTitle}</h1>
         </div>
-        <p style={{ marginBottom: '16px', opacity: 0.7 }}>{user.email}</p>
+        <p style={{ marginBottom: '16px', opacity: 0.7 }}>{identityLine}</p>
 
         <div className="account-actions">
           <button className="btn-ink" onClick={handleSignOut}>
