@@ -114,7 +114,10 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
             </span>
             {tourOpen && (
               <span className="cycle-note">
-                оценили {done}/{expected || 0} {quorumMet ? '· можно подводить итоги' : ''}
+                оценили {done}/{expected || 0}
+                {quorumMet
+                  ? ' · можно подводить итоги'
+                  : ' · отбор станет доступен, когда все жюри оценят все заявки'}
               </span>
             )}
             {!tourOpen && !submissionsClosed && (
