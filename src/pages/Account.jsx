@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Fragment } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useAuth } from '../hooks/useAuth.jsx';
@@ -340,6 +340,12 @@ export default function Account() {
   const hasWinners = applications.some((a) => a.standing === 'winner');
   const tourOngoing = shownTour === activeTour && !(activeTour === 1 ? tour2Exists : hasWinners);
 
+  // Artist: split their own applications into the current edition and the archive.
+  const isPast = (app) => !isStaff && !!artistEdition && (app.edition || 1) < artistEdition;
+  const currentApps = applications.filter((a) => !isPast(a));
+  const pastApps = applications.filter(isPast);
+  const orderedApps = [...currentApps, ...pastApps];
+
   return (
     <main className="apply-page">
       <div className="container">
@@ -436,7 +442,7 @@ export default function Account() {
         {(!isJuror || (cycle && evaluationsOpen)) && (!archiveMode || archiveTab === 'apps') && (
         <>
         <h2 style={{ margin: '40px 0 24px' }}>
-          {isStaff ? 'Все заявки' : t('account.yourApplications')}
+          {isStaff ? 'Все заявки' : (pastApps.length ? t('account.currentApplication') : t('account.yourApplications'))}
         </h2>
 
         {appsLoading && <p>…</p>}
@@ -445,7 +451,7 @@ export default function Account() {
           <p>{L('noApplications', 'Заявок пока нет.')}</p>
         )}
 
-        {!appsLoading && applications.map((app) => {
+        {!appsLoading && orderedApps.map((app, idx) => {
           const reviewers = reviewsByApp[app.id] || [];
           const myReview = reviewers.find((r) => r.reviewer_id === user.id) || null;
           const jurorState = !myReview
@@ -484,7 +490,16 @@ export default function Account() {
           }
 
           return (
-          <div key={app.id} className="account-app-card">
+          <Fragment key={app.id}>
+          {idx === currentApps.length && pastApps.length > 0 && (
+            <h2 style={{ margin: '48px 0 8px' }}>{t('account.archiveHeading')}</h2>
+          )}
+          {isPast(app) && (
+            <span className="account-section-label" style={{ marginBottom: '8px' }}>
+              {t('account.archivedBiennale', { year: new Date(app.created_at).getFullYear() })}
+            </span>
+          )}
+          <div className="account-app-card">
             <div className="account-app-card__meta">
               <span className="account-app-card__ref">{app.payment_ref || app.id}</span>
               {/* Jurors never see payment status. */}
@@ -652,6 +667,7 @@ export default function Account() {
               </Link>
             )}
           </div>
+          </Fragment>
           );
         })}
 

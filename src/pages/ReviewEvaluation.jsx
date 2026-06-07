@@ -142,35 +142,31 @@ export default function ReviewEvaluation() {
           <h1>Оценка заявки</h1>
         </div>
 
-        {app && (
+        {app && app.works && app.works.length > 0 && (
           <div className="review-app">
-            <div className="review-app__applicant">
-              {[app.first_name, app.last_name].filter(Boolean).join(' ')}
-              {app.email ? ` · ${app.email}` : ''}
+            {/* Jurors see the works only - no artist name, contact, or status. */}
+            <div className="review-works">
+              {app.works.map((w, i) => {
+                const url = files[i + 1];
+                return (
+                  <figure className="review-work" key={i}>
+                    <figcaption>
+                      <span className="work-num">Работа {i + 1}</span>
+                      <strong>{w.title || '-'}</strong>
+                      {w.year ? `, ${w.year}` : ''}{w.media ? ` · ${w.media}` : ''}{w.size ? ` · ${w.size}` : ''}
+                      {w.desc ? <p>{w.desc}</p> : null}
+                    </figcaption>
+                    {url ? (
+                      <a href={url} target="_blank" rel="noreferrer">
+                        <img src={url} alt={w.title || ''} loading="lazy" />
+                      </a>
+                    ) : (
+                      <div className="review-work__noimg">Нет изображения</div>
+                    )}
+                  </figure>
+                );
+              })}
             </div>
-            {app.works && app.works.length > 0 && (
-              <div className="review-works">
-                {app.works.map((w, i) => {
-                  const url = files[i + 1];
-                  return (
-                    <figure className="review-work" key={i}>
-                      {url ? (
-                        <a href={url} target="_blank" rel="noreferrer">
-                          <img src={url} alt={w.title || ''} loading="lazy" />
-                        </a>
-                      ) : (
-                        <div className="review-work__noimg">Нет изображения</div>
-                      )}
-                      <figcaption>
-                        <strong>{w.title || '-'}</strong>
-                        {w.year ? `, ${w.year}` : ''}{w.media ? ` · ${w.media}` : ''}{w.size ? ` · ${w.size}` : ''}
-                        {w.desc ? <p>{w.desc}</p> : null}
-                      </figcaption>
-                    </figure>
-                  );
-                })}
-              </div>
-            )}
           </div>
         )}
 

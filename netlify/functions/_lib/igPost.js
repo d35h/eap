@@ -97,7 +97,14 @@ async function igPublish(igUserId, token, { imageUrls, caption }) {
   }
   await waitReady(containerId, token);
   const pub = await gp(`${igUserId}/media_publish`, { creation_id: containerId, access_token: token });
-  return pub.id;
+  // Fetch the public permalink for the new post (best-effort).
+  let permalink = null;
+  try {
+    const res = await fetch(`${GRAPH}/${pub.id}?fields=permalink&access_token=${token}`);
+    const d = await res.json().catch(() => ({}));
+    permalink = d.permalink || null;
+  } catch { /* ignore */ }
+  return { id: pub.id, permalink };
 }
 
 // Publish one application's works to Instagram and stamp published_at.
@@ -124,7 +131,9 @@ export async function publishApplication(admin, env, app) {
     .map(igReadyUrl);
 
   const caption = buildCaption(app, cfg(env));
-  const postId = await igPublish(igUserId, token, { imageUrls, caption });
-  await admin.from('applications').update({ published_at: new Date().toISOString() }).eq('id', app.id);
-  return { status: 'published', postId };
+  const post = await igPublish(igUserId, token, { imageUrls, caption });
+  await admin.from('applications')
+    .update({ published_at: new Date().toISOString(), instagram_url: post.permalink })
+    .eq('id', app.id);
+  return { status: 'published', postId: post.id, permalink: post.permalink };
 }

@@ -164,7 +164,14 @@ export default function ApplicationDetail() {
         {app.payment_status === 'paid' && isCurrentEdition && (
           <div className="detail-ig">
             {app.published_at ? (
-              <span className="cycle-state cycle-state--open">Опубликовано в Instagram</span>
+              <>
+                <span className="cycle-state cycle-state--open">Опубликовано в Instagram</span>
+                {app.instagram_url && (
+                  <a href={app.instagram_url} target="_blank" rel="noreferrer" className="detail-ig__link">
+                    Открыть пост ↗
+                  </a>
+                )}
+              </>
             ) : (
               <button type="button" className="btn-gold tours-btn" disabled={publishing} onClick={publishIG}>
                 {publishing ? '…' : 'Опубликовать в Instagram'}
