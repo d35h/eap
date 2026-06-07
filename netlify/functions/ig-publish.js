@@ -4,7 +4,8 @@ import { makeAdmin } from './_lib/supabaseAdmin.js';
 // current edition to Instagram (carousel of its work images + caption).
 // Configured in netlify.toml (schedule). No-op without IG_* env vars.
 
-const GRAPH = 'https://graph.facebook.com/v21.0';
+// Instagram Login API (Instagram-scoped tokens publish here, not graph.facebook.com).
+const GRAPH = 'https://graph.instagram.com/v21.0';
 
 // Caption text (env-overridable so you can tweak without code changes).
 const cfg = (env) => ({
@@ -89,9 +90,10 @@ async function igPublish(igUserId, token, { imageUrls, caption }) {
 
 export async function handler() {
   const env = process.env;
-  if (!env.IG_USER_ID || !env.IG_ACCESS_TOKEN) {
+  if (!env.IG_ACCESS_TOKEN) {
     return { statusCode: 200, body: 'IG not configured' };
   }
+  const igUserId = env.IG_USER_ID || 'me';
   const admin = makeAdmin(env);
 
   const { data: cyc } = await admin.from('cycle_state').select('current_edition').eq('id', 1).maybeSingle();
@@ -122,7 +124,7 @@ export async function handler() {
   const caption = buildCaption(app, cfg(env));
 
   try {
-    const postId = await igPublish(env.IG_USER_ID, env.IG_ACCESS_TOKEN, { imageUrls, caption });
+    const postId = await igPublish(igUserId, env.IG_ACCESS_TOKEN, { imageUrls, caption });
     await admin.from('applications').update({ published_at: new Date().toISOString() }).eq('id', app.id);
     return { statusCode: 200, body: `published ${app.id} → ${postId}` };
   } catch (e) {
