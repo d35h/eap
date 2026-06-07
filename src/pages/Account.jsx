@@ -8,6 +8,7 @@ import { unlockReview } from '../lib/reviewsRepo.js';
 import AdminCyclePanel from '../components/AdminCyclePanel.jsx';
 import AdminToursPanel from '../components/AdminToursPanel.jsx';
 import { getCycle } from '../lib/cycleRepo.js';
+import EditionTourResults from '../components/EditionTourResults.jsx';
 
 // Medal for top-3 placements.
 const medal = (p) => (p === 1 ? '🥇' : p === 2 ? '🥈' : p === 3 ? '🥉' : '🏆');
@@ -55,6 +56,8 @@ export default function Account() {
   const isCurrentEdition = shownEdition === currentEdition;
   const [showArchive, setShowArchive] = useState(false);
   const [editionYears, setEditionYears] = useState({}); // edition → year
+  const [archiveTab, setArchiveTab] = useState('apps'); // 'apps' | 1 | 2
+  const archiveMode = isAdmin && showArchive && !isCurrentEdition;
   // Bumped after any change to refetch cycle/applications/reviews.
   const [refreshKey, setRefreshKey] = useState(0);
   // True once the current edition has winners (cycle finished).
@@ -350,6 +353,7 @@ export default function Account() {
                 const next = !showArchive;
                 setShowArchive(next);
                 setViewEdition(next ? currentEdition - 1 : null);
+                setArchiveTab('apps');
               }}
             >
               {showArchive ? 'Закрыть архив' : 'Архив биеннале'}
@@ -364,7 +368,7 @@ export default function Account() {
                 key={ed}
                 type="button"
                 className={`tours-tab ${shownEdition === ed ? 'is-active' : ''}`}
-                onClick={() => setViewEdition(ed)}
+                onClick={() => { setViewEdition(ed); setArchiveTab('apps'); }}
               >
                 Биеннале {editionYears[ed] || `№${ed}`}
               </button>
@@ -399,7 +403,19 @@ export default function Account() {
           </div>
         )}
 
-        {(!isJuror || (cycle && evaluationsOpen)) && (
+        {archiveMode && (
+          <div className="tours-tabs" style={{ marginTop: '20px' }}>
+            <button type="button" className={`tours-tab ${archiveTab === 'apps' ? 'is-active' : ''}`} onClick={() => setArchiveTab('apps')}>Все заявки</button>
+            <button type="button" className={`tours-tab ${archiveTab === 1 ? 'is-active' : ''}`} onClick={() => setArchiveTab(1)}>Тур 1</button>
+            <button type="button" className={`tours-tab ${archiveTab === 2 ? 'is-active' : ''}`} onClick={() => setArchiveTab(2)}>Тур 2</button>
+          </div>
+        )}
+
+        {archiveMode && archiveTab !== 'apps' && (
+          <EditionTourResults edition={shownEdition} tour={archiveTab} />
+        )}
+
+        {(!isJuror || (cycle && evaluationsOpen)) && (!archiveMode || archiveTab === 'apps') && (
         <>
         <h2 style={{ margin: '40px 0 24px' }}>
           {isStaff ? 'Все заявки' : t('account.yourApplications')}
