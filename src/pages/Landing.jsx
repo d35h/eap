@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Countdown from '../components/Countdown.jsx';
 import { useTranslation } from '../hooks/useTranslation.jsx';
+import { submissionsOpen } from '../lib/cycleRepo.js';
 
 // ── Временный состав жюри (hardcoded). Имена и фото постоянны;
 //    роль и био берутся из переводов (team.jury, по индексу). ──
@@ -13,6 +14,11 @@ const JURY = [
 
 export default function Landing() {
   const { t } = useTranslation();
+  const [closed, setClosed] = useState(false);
+
+  useEffect(() => {
+    submissionsOpen().then((open) => setClosed(!open));
+  }, []);
 
   return (
     <main>
@@ -36,8 +42,17 @@ export default function Landing() {
               <p className="hero-sub">{t('hero.sub')}</p>
             </div>
             <aside className="hero-right">
-              <Countdown />
-              <span className="hero-opening">{t('opencall.opening')}</span>
+              {closed ? (
+                <div className="hero-closed">
+                  <span className="hero-closed__title">{t('opencall.closedTitle')}</span>
+                  <p className="hero-closed__note">{t('opencall.closedNote')}</p>
+                </div>
+              ) : (
+                <>
+                  <Countdown />
+                  <span className="hero-opening">{t('opencall.opening')}</span>
+                </>
+              )}
             </aside>
           </div>
         </div>

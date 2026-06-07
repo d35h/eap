@@ -55,6 +55,8 @@ export const translations = {
       minutes: 'Мин',
       seconds: 'Сек',
       opening: 'Открытие выставки · Осень 2027',
+      closedTitle: 'Приём заявок закрыт',
+      closedNote: 'Сейчас мы не принимаем новые заявки. Следите за новостями о следующем приёме.',
     },
     process: {
       eyebrow: '- Как это работает',
@@ -369,6 +371,8 @@ export const translations = {
       minutes: 'Min',
       seconds: 'Sec',
       opening: 'Exhibition opening · Autumn 2027',
+      closedTitle: 'Submissions closed',
+      closedNote: 'We are not accepting new applications right now. Stay tuned for the next open call.',
     },
     process: {
       eyebrow: '- How it works',
@@ -676,6 +680,8 @@ export const translations = {
       minutes: 'Мин',
       seconds: 'Сек',
       opening: 'Көрме ашылуы · 2027 күз',
+      closedTitle: 'Өтінім қабылдау жабық',
+      closedNote: 'Қазір біз жаңа өтінімдерді қабылдамаймыз. Келесі қабылдау туралы жаңалықтарды бақылаңыз.',
     },
     process: {
       eyebrow: '- Как это работает',
@@ -982,6 +988,8 @@ export const translations = {
       minutes: '分',
       seconds: '秒',
       opening: '展览开幕 · 2027 年秋',
+      closedTitle: '申请通道已关闭',
+      closedNote: '我们目前暂不接受新的申请。请关注下一次征集的消息。',
     },
     process: {
       eyebrow: '- 运作方式',
