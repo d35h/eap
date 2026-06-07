@@ -15,6 +15,9 @@ export async function handlePublishOne({ admin, env }, { token, applicationId })
   if (!app) return json(404, { error: 'application not found' });
   if (app.payment_status !== 'paid') return json(400, { error: 'not paid' });
   if (app.published_at) return json(200, { status: 'already_published' });
+  // Only the current edition may be published - archived editions are off-limits.
+  const { data: cyc } = await admin.from('cycle_state').select('current_edition').eq('id', 1).maybeSingle();
+  if ((app.edition || 1) !== (cyc?.current_edition || 1)) return json(400, { error: 'archived edition' });
 
   try {
     const r = await publishApplication(admin, env, app);

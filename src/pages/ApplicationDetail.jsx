@@ -161,7 +161,7 @@ export default function ApplicationDetail() {
           </p>
         )}
 
-        {app.payment_status === 'paid' && (
+        {app.payment_status === 'paid' && isCurrentEdition && (
           <div className="detail-ig">
             {app.published_at ? (
               <span className="cycle-state cycle-state--open">Опубликовано в Instagram</span>
