@@ -1056,10 +1056,19 @@ input, textarea, select { font-family: inherit; }
 .tours-select__name { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; font-weight: 500; }
 .tours-select__score { font-family: var(--mono); color: var(--accent-deep); white-space: nowrap; }
 /* Artist's own results in their card */
-.artist-results { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 18px; }
+.artist-results { margin-top: 0; border-top: 1px solid var(--border); padding-top: 18px; }
 .artist-results .tours-tabs { margin-top: 0; }
 .artist-results .artist-result { border-top: 0; margin-top: 0; padding-top: 0; }
-.artist-result { border-top: 1px solid var(--border); margin-top: 16px; padding-top: 14px; }
+.artist-result { margin-top: 0; }
+.artist-outcome {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; border-radius: 8px; margin: 10px 0 4px;
+  font-size: 15px; font-weight: 500; line-height: 1.3;
+}
+.artist-outcome__icon { font-size: 18px; line-height: 1; }
+.artist-outcome--ok { background: hsl(140, 45%, 94%); color: hsl(140, 45%, 26%); border-left: 3px solid hsl(140, 45%, 42%); }
+.artist-outcome--win { background: hsl(43, 72%, 91%); color: hsl(36, 55%, 28%); border-left: 3px solid hsl(43, 72%, 46%); }
+.artist-outcome--neutral { background: hsl(30, 12%, 93%); color: hsl(30, 10%, 34%); border-left: 3px solid hsl(30, 12%, 55%); }
 .artist-result__head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
 .artist-result__crit { margin: 8px 0; }
 .artist-result__crit strong { display: block; }
@@ -1162,7 +1171,7 @@ input, textarea, select { font-family: inherit; }
 .account-app-card__works {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 16px 0;
   font-size: 14px;
   opacity: 0.8;
 }

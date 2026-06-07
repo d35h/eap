@@ -441,18 +441,24 @@ export default function Account() {
                     </div>
                   )}
                   <div className="artist-result">
-                    <div className="artist-result__head">
-                      <span className="account-section-label" style={{ margin: 0 }}>
-                        {tr.tour === 1 ? t('account.tour1Results') : t('account.tour2Results')}
-                      </span>
-                      <span className={`account-app-card__status account-app-card__status--review-${tr.outcome === 'eliminated' ? 'in_review' : 'reviewed'}`}>
-                        {tr.outcome === 'advanced'
-                          ? t('account.outcomeAdvanced')
-                          : tr.outcome === 'winner'
-                          ? `${medal(tr.place)} #${tr.place}`
-                          : t('account.outcomeEliminated')}
-                      </span>
-                    </div>
+                    <span className="account-section-label" style={{ marginTop: 0 }}>
+                      {tr.tour === 1 ? t('account.tour1Results') : t('account.tour2Results')}
+                    </span>
+                    {(() => {
+                      const kind = tr.outcome === 'advanced' ? 'ok' : tr.outcome === 'winner' ? 'win' : 'neutral';
+                      const icon = tr.outcome === 'advanced' ? '✓' : tr.outcome === 'winner' ? medal(tr.place) : '·';
+                      const text = tr.outcome === 'advanced'
+                        ? t('account.outcomeAdvanced')
+                        : tr.outcome === 'winner'
+                        ? t('account.placeN', { n: tr.place })
+                        : t('account.outcomeEliminated');
+                      return (
+                        <div className={`artist-outcome artist-outcome--${kind}`}>
+                          <span className="artist-outcome__icon">{icon}</span>
+                          <span className="artist-outcome__text">{text}</span>
+                        </div>
+                      );
+                    })()}
                     {tr.feedback.length > 0 && (
                       <div className="artist-result__fb">
                         <span className="account-section-label">{t('account.juryFeedback')}</span>
