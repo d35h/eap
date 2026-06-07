@@ -2,14 +2,9 @@ import { makeAdmin } from './_lib/supabaseAdmin.js';
 import { sendEmail, tourResultEmail } from './_lib/email.js';
 import { json } from './_lib/json.js';
 
-// Mirror of src/lib/reviewCriteria.js (titles used in the feedback section).
-const CRITERIA = [
-  { key: 'craft', title: 'Идея важнее техники' },
-  { key: 'originality', title: 'Оригинальность' },
-];
-
 // Email each participant of a tour their OWN result: a congratulations/decline
-// line + the jury's written feedback (no scores). Admin-authorized.
+// line + a link to their cabinet (detailed feedback/scores live there).
+// Admin-authorized.
 export async function handleSendResults({ admin, env }, { token, tour, force }) {
   if (!token) return json(401, { error: 'unauthorized' });
   const { data: caller, error: authErr } = await admin.auth.getUser(token);
@@ -27,25 +22,13 @@ export async function handleSendResults({ admin, env }, { token, tour, force }) 
   // Tour 1: everyone participated. Tour 2: those who advanced (tour >= 2).
   const participants = (apps || []).filter((a) => (t === 1 ? true : (a.tour || 1) >= 2));
 
-  const { data: reviews } = await admin
-    .from('application_reviews').select('application_id, scores, status').eq('tour', t);
-  const byApp = {};
-  (reviews || []).filter((r) => r.status === 'finished').forEach((r) => {
-    (byApp[r.application_id] ||= []).push(r);
-  });
+  const loginUrl = `${env.PUBLIC_SITE_URL || ''}/login`;
 
   let count = 0;
   for (const a of participants) {
     if (!a.email) continue;
     const advanced = t === 1 ? (a.tour || 1) >= 2 : a.standing === 'winner';
-    const feedback = CRITERIA.map((c) => ({
-      title: c.title,
-      comments: (byApp[a.id] || [])
-        .map((r) => (r.scores?.[c.key]?.text || '').trim())
-        .filter(Boolean),
-    })).filter((c) => c.comments.length);
-
-    const { subject, html } = tourResultEmail({ lang: a.lang || 'ru', tour: t, advanced, feedback });
+    const { subject, html } = tourResultEmail({ lang: a.lang || 'ru', tour: t, advanced, loginUrl });
     try {
       const ok = await sendEmail(env, { to: a.email, subject, html });
       if (ok) count++;

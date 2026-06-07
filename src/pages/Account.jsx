@@ -30,6 +30,8 @@ export default function Account() {
   const [jurors, setJurors] = useState([]);
   // Artist's own published results: app.id → [{ tour, outcome, feedback }].
   const [myResults, setMyResults] = useState({});
+  // Which tour tab the artist is viewing, per application.
+  const [artistTab, setArtistTab] = useState({});
   // Cycle (submissions + tours); active tour is derived from it. Single source
   // of truth shared by both admin panels so they never go out of sync.
   const [cycle, setCycle] = useState(null);
@@ -420,36 +422,57 @@ export default function Account() {
               </ul>
               </>
             )}
-            {!isStaff && (myResults[app.id] || []).map((tr) => (
-              <div className="artist-result" key={tr.tour}>
-                <div className="artist-result__head">
-                  <span className="account-section-label" style={{ margin: 0 }}>
-                    {tr.tour === 1 ? t('account.tour1Results') : t('account.tour2Results')}
-                  </span>
-                  <span className={`account-app-card__status account-app-card__status--review-${tr.outcome === 'eliminated' ? 'in_review' : 'reviewed'}`}>
-                    {tr.outcome === 'advanced'
-                      ? t('account.outcomeAdvanced')
-                      : tr.outcome === 'winner'
-                      ? t('account.outcomeWinner')
-                      : t('account.outcomeEliminated')}
-                  </span>
-                </div>
-                {tr.feedback.length > 0 && (
-                  <div className="artist-result__fb">
-                    <span className="account-section-label">{t('account.juryFeedback')}</span>
-                    {tr.feedback.map((f, i) => (
-                      <div className="artist-result__crit" key={i}>
-                        <strong>{f.title}{f.avg != null ? `: ${f.avg} / 10` : ''}</strong>
-                        {f.comments.map((c, j) => <p key={j}>{c}</p>)}
+            {!isStaff && myResults[app.id]?.length > 0 && (() => {
+              const tours = myResults[app.id];
+              const sel = artistTab[app.id] ?? tours[tours.length - 1].tour;
+              const tr = tours.find((x) => x.tour === sel) || tours[0];
+              return (
+                <div className="artist-results">
+                  {tours.length > 1 && (
+                    <div className="tours-tabs">
+                      {tours.map((x) => (
+                        <button
+                          key={x.tour}
+                          type="button"
+                          className={`tours-tab ${tr.tour === x.tour ? 'is-active' : ''}`}
+                          onClick={() => setArtistTab((p) => ({ ...p, [app.id]: x.tour }))}
+                        >
+                          {x.tour === 1 ? t('account.tour1Results') : t('account.tour2Results')}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  <div className="artist-result">
+                    <div className="artist-result__head">
+                      <span className="account-section-label" style={{ margin: 0 }}>
+                        {tr.tour === 1 ? t('account.tour1Results') : t('account.tour2Results')}
+                      </span>
+                      <span className={`account-app-card__status account-app-card__status--review-${tr.outcome === 'eliminated' ? 'in_review' : 'reviewed'}`}>
+                        {tr.outcome === 'advanced'
+                          ? t('account.outcomeAdvanced')
+                          : tr.outcome === 'winner'
+                          ? t('account.outcomeWinner')
+                          : t('account.outcomeEliminated')}
+                      </span>
+                    </div>
+                    {tr.feedback.length > 0 && (
+                      <div className="artist-result__fb">
+                        <span className="account-section-label">{t('account.juryFeedback')}</span>
+                        {tr.feedback.map((f, i) => (
+                          <div className="artist-result__crit" key={i}>
+                            <strong>{f.title}{f.avg != null ? `: ${f.avg} / 10` : ''}</strong>
+                            {f.comments.map((c, j) => <p key={j}>{c}</p>)}
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
-                )}
-              </div>
-            ))}
+                </div>
+              );
+            })()}
             {isAdmin && app.payment_status === 'paid' && (
               <>
-              <span className="account-section-label">Жюри</span>
+              <span className="account-section-label">Жюри · тур {shownTour}</span>
               <div className="account-app-card__reviews">
                 {sortedJurors.length === 0 && (
                   <span className="account-app-card__not-reviewed">Нет приглашённых жюри</span>

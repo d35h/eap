@@ -91,6 +91,8 @@ const TOUR_COPY = {
       ? 'Спасибо за участие. К сожалению, в этот раз ваша работа не прошла во второй тур.'
       : 'Спасибо за участие. К сожалению, ваша работа не вошла в число победителей.'),
     feedbackLabel: 'Комментарии жюри',
+    loginCta: 'Войти и посмотреть результаты',
+    detailsNote: 'Подробные результаты доступны в вашем личном кабинете.',
   },
   en: {
     subject: (t) => `Eurasian Art Platform · ${t === 1 ? 'First' : 'Second'} round results`,
@@ -102,6 +104,8 @@ const TOUR_COPY = {
       ? 'Thank you for taking part. Unfortunately your work did not advance to the second round this time.'
       : 'Thank you for taking part. Unfortunately your work is not among the winners.'),
     feedbackLabel: 'Jury feedback',
+    loginCta: 'Log in to see your results',
+    detailsNote: 'Detailed results are available in your account.',
   },
   kz: {
     subject: (t) => `Eurasian Art Platform · ${t === 1 ? 'Бірінші' : 'Екінші'} тур нәтижелері`,
@@ -113,6 +117,8 @@ const TOUR_COPY = {
       ? 'Қатысқаныңызға рақмет. Өкінішке орай, жұмысыңыз бұл жолы екінші турға өтпеді.'
       : 'Қатысқаныңызға рақмет. Өкінішке орай, жұмысыңыз жеңімпаздар қатарына енбеді.'),
     feedbackLabel: 'Қазылар алқасының пікірлері',
+    loginCta: 'Нәтижелерді көру үшін кіріңіз',
+    detailsNote: 'Толық нәтижелер жеке кабинетіңізде қолжетімді.',
   },
   zh: {
     subject: (t) => `Eurasian Art Platform · ${t === 1 ? '第一轮' : '第二轮'}结果`,
@@ -124,31 +130,27 @@ const TOUR_COPY = {
       ? '感谢您的参与。很遗憾，您的作品本次未能晋级第二轮。'
       : '感谢您的参与。很遗憾，您的作品未能入选获奖名单。'),
     feedbackLabel: '评委意见',
+    loginCta: '登录查看您的结果',
+    detailsNote: '详细结果可在您的账户中查看。',
   },
 };
 
-// Tour-result email: outcome line + jury written feedback (no scores).
-// `feedback` = [{ title, comments: [text] }].
-export function tourResultEmail({ lang, tour, advanced, feedback }) {
+// Tour-result email: outcome line + "see details in your cabinet" + a login
+// button. Detailed feedback/scores live in the cabinet, not the email.
+export function tourResultEmail({ lang, tour, advanced, loginUrl }) {
   const c = TOUR_COPY[lang] || TOUR_COPY.en;
   const outcome = advanced ? c.advanced(tour) : c.notAdvanced(tour);
-  const fb = (feedback || []).filter((f) => f.comments && f.comments.length);
-  const fbHtml = fb.length
-    ? `<tr><td style="font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#c2a063;padding:8px 0 4px;">${c.feedbackLabel}</td></tr>` +
-      fb.map((f) =>
-        `<tr><td style="font-family:Arial,sans-serif;font-size:14px;color:#f0ece4;padding:14px 0 4px;font-weight:bold;">${escapeHtml(f.title)}</td></tr>` +
-        f.comments.map((t) =>
-          `<tr><td style="font-family:Arial,sans-serif;font-size:14px;line-height:1.6;color:#b9b2a6;padding:0 0 8px;">${escapeHtml(t)}</td></tr>`
-        ).join('')
-      ).join('')
+  const loginHtml = loginUrl
+    ? `<tr><td style="padding-top:28px;"><a href="${loginUrl}" style="display:inline-block;background:#c2a063;color:#121417;text-decoration:none;padding:14px 30px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;">${c.loginCta}</a></td></tr>`
     : '';
   const html = `<!doctype html><html><body style="margin:0;background:#121417;font-family:Georgia,'Times New Roman',serif;color:#f0ece4;padding:40px 16px;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
     <table role="presentation" width="520" cellpadding="0" cellspacing="0" style="max-width:520px;background:#16181d;border:1px solid #2a2d33;padding:40px;">
       <tr><td style="font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#c2a063;padding-bottom:24px;">Eurasian Art Platform</td></tr>
       <tr><td style="font-size:24px;line-height:1.3;padding-bottom:14px;">${c.title(tour)}</td></tr>
-      <tr><td style="font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#b9b2a6;padding-bottom:20px;">${outcome}</td></tr>
-      ${fbHtml}
+      <tr><td style="font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#b9b2a6;padding-bottom:8px;">${outcome}</td></tr>
+      <tr><td style="font-family:Arial,sans-serif;font-size:14px;line-height:1.7;color:#8a8270;">${c.detailsNote}</td></tr>
+      ${loginHtml}
     </table>
   </td></tr></table></body></html>`;
   return { subject: c.subject(tour), html };
