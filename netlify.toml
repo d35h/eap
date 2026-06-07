@@ -6,6 +6,10 @@
 [functions]
   node_bundler = "esbuild"
 
+# Daily Instagram auto-publish (12:00 UTC).
+[functions."ig-publish"]
+  schedule = "0 12 * * *"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
