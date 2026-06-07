@@ -991,16 +991,20 @@ input, textarea, select { font-family: inherit; }
 /* ── Account cabinet ── */
 .account-app-card {
   border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 20px 24px;
-  margin-bottom: 16px;
+  border-radius: 10px;
+  padding: 24px 28px;
+  margin-bottom: 20px;
+  background: hsla(36, 30%, 99%, 0.6);
+  box-shadow: 0 1px 2px hsla(30, 10%, 20%, 0.04);
 }
 .account-app-card__meta {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 10px 12px;
-  margin-bottom: 8px;
+  padding-bottom: 16px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--border);
 }
 .account-app-card__ref {
   font-family: var(--mono);
@@ -1055,9 +1059,9 @@ input, textarea, select { font-family: inherit; }
 }
 .account-work__thumb {
   flex: 0 0 auto;
-  width: 56px;
-  height: 56px;
-  border-radius: 6px;
+  width: 76px;
+  height: 76px;
+  border-radius: 8px;
   overflow: hidden;
   background: rgba(0, 0, 0, 0.06);
   display: block;
@@ -1076,32 +1080,38 @@ input, textarea, select { font-family: inherit; }
   overflow-wrap: anywhere;
 }
 .account-app-card__applicant {
-  font-size: 14px;
-  font-weight: 500;
-  margin-bottom: 12px;
   overflow-wrap: anywhere;
+  display: flex;
+  flex-direction: column;
+}
+.account-applicant__name {
+  font-size: 1.15rem;
+  font-weight: 600;
+  font-family: var(--font-display);
+  line-height: 1.2;
+}
+.account-applicant__email {
+  font-size: 13px;
+  color: var(--ink-soft);
+  opacity: 0.75;
+  margin-top: 4px;
 }
 .account-section-label {
   display: block;
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--ink-soft);
-  opacity: 0.65;
-  font-weight: 600;
-  margin: 18px 0 8px;
+  letter-spacing: 0.22em;
+  color: var(--accent-deep);
+  opacity: 0.8;
+  font-weight: 700;
+  margin: 22px 0 10px;
 }
-.account-app-card__applicant .account-section-label { margin-top: 0; }
+.account-app-card__applicant .account-section-label { margin-top: 16px; }
 .account-app-card__action {
   margin-top: 16px;
   font-size: 13px;
   padding: 10px 18px;
   letter-spacing: 0.08em;
-}
-.account-app-card__reviews {
-  margin-top: 14px;
-  font-size: 13px;
-  line-height: 1.5;
 }
 .account-app-card__reviewed-by { color: hsl(140, 50%, 45%); }
 .account-app-card__not-reviewed { color: var(--ink-soft); opacity: 0.7; }
@@ -1115,13 +1125,19 @@ input, textarea, select { font-family: inherit; }
 .account-app-card__status--juror-draft    { background: hsl(40, 40%, 18%);  color: hsl(40, 60%, 60%); }
 .account-app-card__status--juror-none     { background: hsl(0, 0%, 22%);    color: hsl(0, 0%, 70%); }
 /* Admin per-juror review breakdown */
+.account-app-card__reviews {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px 16px;
+  background: hsla(36, 24%, 97%, 0.7);
+}
 .review-row {
   display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px;
-  border-top: 1px solid var(--border); padding: 14px 0;
+  border-top: 1px solid var(--border); padding: 14px 2px;
 }
 .review-row:first-child { border-top: 0; }
 .review-row__email {
-  font-size: 14px; font-weight: 500; flex: 1 1 200px; min-width: 0; overflow-wrap: anywhere;
+  font-size: 15px; font-weight: 500; flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere;
 }
 .review-chip {
   font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 20px;

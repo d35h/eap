@@ -310,8 +310,10 @@ export default function Account() {
             {isStaff && (
               <div className="account-app-card__applicant">
                 <span className="account-section-label">Художник</span>
-                {[app.first_name, app.last_name].filter(Boolean).join(' ')}
-                {app.email ? ` · ${app.email}` : ''}
+                <span className="account-applicant__name">
+                  {[app.first_name, app.last_name].filter(Boolean).join(' ') || '—'}
+                </span>
+                {app.email && <span className="account-applicant__email">{app.email}</span>}
               </div>
             )}
             {app.works && app.works.length > 0 && (
@@ -339,8 +341,9 @@ export default function Account() {
               </>
             )}
             {isAdmin && app.payment_status === 'paid' && (
+              <>
+              <span className="account-section-label">Жюри</span>
               <div className="account-app-card__reviews">
-                <span className="account-section-label">Жюри</span>
                 {sortedJurors.length === 0 && (
                   <span className="account-app-card__not-reviewed">Нет приглашённых жюри</span>
                 )}
@@ -379,6 +382,7 @@ export default function Account() {
                   );
                 })}
               </div>
+              </>
             )}
             {isJuror && (
               <Link to={`/account/review/${app.id}`} className="btn-ink account-app-card__action">
