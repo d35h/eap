@@ -52,6 +52,15 @@ function buildCaption(app, c) {
   return lines.join('\n');
 }
 
+// Downscale + JPEG-compress + pad to a 1:1 square (brand-dark canvas) via the
+// free images.weserv.nl CDN, so Instagram always accepts the image (well under
+// the 8 MB limit and within the allowed aspect ratio). Instagram fetches THIS
+// URL, which proxies the (time-limited) signed source URL.
+function igReadyUrl(signedUrl) {
+  const src = 'ssl:' + signedUrl.replace(/^https?:\/\//, '');
+  return `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=1080&h=1080&fit=contain&cbg=121417&output=jpg&q=85`;
+}
+
 async function gp(path, body) {
   const res = await fetch(`${GRAPH}/${path}`, {
     method: 'POST',
@@ -92,16 +101,19 @@ export async function publishApplication(admin, env, app) {
 
   const folder = `applications/${app.id}`;
   const { data: list } = await admin.storage.from('works').list(folder);
-  const jpegs = (list || [])
-    .filter((f) => /\.(jpe?g)$/i.test(f.name))
+  // weserv converts to JPEG, so any common raster format is fine now.
+  const images = (list || [])
+    .filter((f) => /\.(jpe?g|png|webp)$/i.test(f.name))
     .sort((a, b) => a.name.localeCompare(b.name));
-  if (!jpegs.length) {
+  if (!images.length) {
     await admin.from('applications').update({ published_at: new Date().toISOString() }).eq('id', app.id);
-    return { status: 'skipped', reason: 'no jpeg images' };
+    return { status: 'skipped', reason: 'no usable images' };
   }
-  const paths = jpegs.map((f) => `${folder}/${f.name}`);
+  const paths = images.map((f) => `${folder}/${f.name}`);
   const { data: signed } = await admin.storage.from('works').createSignedUrls(paths, 3600);
-  const imageUrls = (signed || []).map((s) => s.signedUrl).filter(Boolean).slice(0, 10);
+  const imageUrls = (signed || [])
+    .map((s) => s.signedUrl).filter(Boolean).slice(0, 10)
+    .map(igReadyUrl);
 
   const caption = buildCaption(app, cfg(env));
   const postId = await igPublish(igUserId, token, { imageUrls, caption });
