@@ -103,25 +103,26 @@ export default function ApplicationDetail() {
 
   const publishIG = async () => {
     setPublishing(true);
-    setPubMsg(null);
+    setPubMsg({ type: 'ok', text: 'Публикуется… это может занять до минуты.' });
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch('/.netlify/functions/ig-publish-one', {
+      // Background function: returns immediately; we poll for published_at.
+      await fetch('/.netlify/functions/ig-publish-one-background', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token || ''}` },
         body: JSON.stringify({ applicationId: id }),
       });
-      const d = await res.json().catch(() => ({}));
-      if (d.status === 'published' || d.status === 'already_published') {
-        setPubMsg({ type: 'ok', text: d.status === 'published' ? 'Опубликовано в Instagram.' : 'Уже опубликовано.' });
+      let done = false;
+      for (let i = 0; i < 30 && !done; i++) {
+        await new Promise((r) => setTimeout(r, 3000));
+        const { data: row } = await supabase.from('applications').select('published_at').eq('id', id).maybeSingle();
+        if (row?.published_at) done = true;
+      }
+      if (done) {
+        setPubMsg({ type: 'ok', text: 'Опубликовано в Instagram.' });
         setRefresh((r) => r + 1);
-      } else if (d.status === 'skipped') {
-        setPubMsg({ type: 'error', text: 'Пропущено: нет JPEG-изображений.' });
-        setRefresh((r) => r + 1);
-      } else if (d.status === 'no_token') {
-        setPubMsg({ type: 'error', text: 'Instagram не настроен.' });
       } else {
-        setPubMsg({ type: 'error', text: 'Ошибка публикации.' });
+        setPubMsg({ type: 'error', text: 'Публикация занимает дольше обычного. Обновите страницу через минуту.' });
       }
     } catch {
       setPubMsg({ type: 'error', text: 'Ошибка публикации.' });

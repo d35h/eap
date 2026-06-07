@@ -120,8 +120,12 @@ export default function Account() {
     if (isStaff) {
       query = query.eq('edition', shownEdition);
       if (debouncedQ) {
-        const s = debouncedQ.replace(/[%,()]/g, ' ');
-        query = query.or(`first_name.ilike.%${s}%,last_name.ilike.%${s}%,email.ilike.%${s}%`);
+        // Each word must appear in name or email (so "Daniil Zaru" matches
+        // first_name "Daniil" + last_name "Zaru"). Repeated .or() calls AND together.
+        debouncedQ.split(/\s+/).filter(Boolean).forEach((word) => {
+          const w = word.replace(/[%,()]/g, ' ');
+          query = query.or(`first_name.ilike.%${w}%,last_name.ilike.%${w}%,email.ilike.%${w}%`);
+        });
       }
       if (payFilter !== 'all') query = query.eq('payment_status', payFilter);
       if (evalFilter !== 'all') query = query.eq('review_status', evalFilter);
@@ -473,16 +477,31 @@ export default function Account() {
               value={searchQ}
               onChange={(e) => setSearchQ(e.target.value)}
             />
-            <select className="app-filters__select" value={payFilter} onChange={(e) => setPayFilter(e.target.value)}>
-              <option value="all">Оплата: все</option>
-              <option value="paid">Оплаченные</option>
-              <option value="pending">Не оплаченные</option>
-            </select>
-            <select className="app-filters__select" value={evalFilter} onChange={(e) => setEvalFilter(e.target.value)}>
-              <option value="all">Оценка: все</option>
-              <option value="reviewed">Оценённые</option>
-              <option value="in_review">Не оценённые</option>
-            </select>
+            <div className="app-filters__tags">
+              {[
+                { label: 'Оплаченные', group: 'pay', val: 'paid' },
+                { label: 'Не оплаченные', group: 'pay', val: 'pending' },
+                { label: 'Оценённые', group: 'eval', val: 'reviewed' },
+                { label: 'Не оценённые', group: 'eval', val: 'in_review' },
+              ].map((tag) => {
+                const active = tag.group === 'pay' ? payFilter === tag.val : evalFilter === tag.val;
+                const toggle = () => {
+                  const set = tag.group === 'pay' ? setPayFilter : setEvalFilter;
+                  set(active ? 'all' : tag.val);
+                };
+                return (
+                  <button
+                    key={tag.label}
+                    type="button"
+                    className={`filter-tag ${active ? 'is-active' : ''}`}
+                    onClick={toggle}
+                  >
+                    {tag.label}
+                    {active && <span className="filter-tag__x">✕</span>}
+                  </button>
+                );
+              })}
+            </div>
             {(searchQ || payFilter !== 'all' || evalFilter !== 'all') && (
               <button
                 type="button"
