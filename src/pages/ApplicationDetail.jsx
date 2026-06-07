@@ -119,7 +119,7 @@ export default function ApplicationDetail() {
         if (row?.published_at) done = true;
       }
       if (done) {
-        setPubMsg({ type: 'ok', text: 'Опубликовано в Instagram.' });
+        setPubMsg(null);
         setRefresh((r) => r + 1);
       } else {
         setPubMsg({ type: 'error', text: 'Публикация занимает дольше обычного. Обновите страницу через минуту.' });

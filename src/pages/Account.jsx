@@ -35,6 +35,8 @@ export default function Account() {
   const [debouncedQ, setDebouncedQ] = useState('');
   const [payFilter, setPayFilter] = useState('all');
   const [evalFilter, setEvalFilter] = useState('all');
+  // App ids fully evaluated in the active tour (all jurors finished).
+  const [evaluatedIds, setEvaluatedIds] = useState([]);
   // app.id → { <workNumber>: signedUrl } for the uploaded work files.
   const [filesByApp, setFilesByApp] = useState({});
   // app.id → [{ reviewer_id, reviewer_email, status, ... }] (review rows).
@@ -128,7 +130,12 @@ export default function Account() {
         });
       }
       if (payFilter !== 'all') query = query.eq('payment_status', payFilter);
-      if (evalFilter !== 'all') query = query.eq('review_status', evalFilter);
+      // Reviewed = fully reviewed in the active tour (all jurors finished).
+      if (evalFilter === 'reviewed') {
+        query = query.in('id', evaluatedIds.length ? evaluatedIds : ['00000000-0000-0000-0000-000000000000']);
+      } else if (evalFilter === 'in_review' && evaluatedIds.length) {
+        query = query.not('id', 'in', `(${evaluatedIds.join(',')})`);
+      }
     }
     query
       .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1)
@@ -140,7 +147,26 @@ export default function Account() {
       })
       .catch(() => { if (!cancelled) setAppsLoading(false); });
     return () => { cancelled = true; };
-  }, [user, isStaff, isJuror, isAdmin, cycle, activeTour, shownEdition, evaluationsOpen, refreshKey, page, debouncedQ, payFilter, evalFilter]);
+  }, [user, isStaff, isJuror, isAdmin, cycle, activeTour, shownEdition, evaluationsOpen, refreshKey, page, debouncedQ, payFilter, evalFilter, evaluatedIds]);
+
+  // Which applications are fully reviewed in the active tour (all jurors finished).
+  useEffect(() => {
+    if (!isAdmin || !supabase) return;
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from('application_reviews')
+        .select('application_id, reviewer_id')
+        .eq('tour', activeTour)
+        .eq('status', 'finished');
+      if (cancelled) return;
+      const byApp = {};
+      (data || []).forEach((r) => { (byApp[r.application_id] ||= new Set()).add(r.reviewer_id); });
+      const jc = jurors.length;
+      setEvaluatedIds(Object.entries(byApp).filter(([, s]) => jc > 0 && s.size >= jc).map(([id]) => id));
+    })();
+    return () => { cancelled = true; };
+  }, [isAdmin, activeTour, jurors.length, refreshKey]);
 
   // Debounce the search box.
   useEffect(() => {
@@ -481,8 +507,8 @@ export default function Account() {
               {[
                 { label: 'Оплаченные', group: 'pay', val: 'paid' },
                 { label: 'Не оплаченные', group: 'pay', val: 'pending' },
-                { label: 'Оценённые', group: 'eval', val: 'reviewed' },
-                { label: 'Не оценённые', group: 'eval', val: 'in_review' },
+                { label: 'Рассмотренные', group: 'eval', val: 'reviewed' },
+                { label: 'Не рассмотренные', group: 'eval', val: 'in_review' },
               ].map((tag) => {
                 const active = tag.group === 'pay' ? payFilter === tag.val : evalFilter === tag.val;
                 const toggle = () => {
@@ -553,6 +579,11 @@ export default function Account() {
                 {isCurrentEdition && (
                   <span className={`account-app-card__status account-app-card__status--${app.payment_status}`}>
                     {app.payment_status === 'paid' ? 'Оплачено' : 'Ожидает оплаты'}
+                  </span>
+                )}
+                {isCurrentEdition && (
+                  <span className={`review-chip review-chip--${jurors.length > 0 && finished >= jurors.length ? 'finished' : 'none'}`}>
+                    {jurors.length > 0 && finished >= jurors.length ? 'Рассмотрено' : 'Не рассмотрено'}
                   </span>
                 )}
                 {isCurrentEdition && <span className="app-row__jury">Жюри: {finished}/{jurors.length}</span>}

@@ -71,22 +71,25 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
   const rankedActive = [...activeApps].sort((a, b) => (scoreOf(b.id) ?? -1) - (scoreOf(a.id) ?? -1));
   const defaultN = activeTour === 1 ? Math.ceil(activeApps.length / 2) : Math.min(3, activeApps.length);
 
-  // "Идёт оценка" only once evaluations are open; otherwise it's not started yet.
-  const ongoing = tourOpen
-    ? { label: 'Идёт оценка', cls: 'draft' }
-    : { label: 'Оценка не открыта', cls: 'none' };
+  // Before a decision is made, show whether all jurors have reviewed the app.
+  const reviewed = (a) => {
+    const fin = (reviewsByApp[a.id] || []).filter((r) => r.status === 'finished').length;
+    return jurors.length > 0 && fin >= jurors.length
+      ? { label: 'Рассмотрено', cls: 'draft' }
+      : { label: 'Не рассмотрено', cls: 'none' };
+  };
   const outcome = (a) => {
     if (viewTour === 1) {
       if ((a.tour || 1) >= 2) return { label: 'Прошёл', cls: 'finished' };
       if (a.standing === 'eliminated') return { label: 'Выбыл', cls: 'none' };
-      return ongoing;
+      return reviewed(a);
     }
     if (a.standing === 'winner') {
       const p = placeByApp.get(a.id);
       return { label: `${medal(p)} #${p}`, cls: 'finished' };
     }
     if (a.standing === 'eliminated') return { label: 'Выбыл', cls: 'none' };
-    return ongoing;
+    return reviewed(a);
   };
 
   const setOpen = async (open) => {
