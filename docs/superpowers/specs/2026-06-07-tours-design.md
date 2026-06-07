@@ -35,10 +35,19 @@ Rejected alternatives: (a) pure auto-cutoff with no manual override — too rigi
 | column | type | notes |
 |---|---|---|
 | `id` | int primary key default 1 | enforced single row (`check (id = 1)`) |
+| `submissions_open` | bool default true | accepting new applications |
+| `submissions_deadline` | timestamptz | auto-close after this moment (the open-call deadline) |
 | `active_tour` | int default 1 | 1 or 2 |
 | `tour1_open` | bool default false | jurors can evaluate tour 1 |
 | `tour2_open` | bool default false | jurors can evaluate tour 2 |
 | `updated_at` | timestamptz | |
+
+### Submission control
+
+- **Effective state:** `submissions_open()` (SECURITY DEFINER, callable by anon) returns `submissions_open AND (submissions_deadline IS NULL OR now() < submissions_deadline)`.
+- **Server enforcement:** the anon insert policy on `applications` becomes `with check (payment_status = 'pending' AND public.submissions_open())` — closed call → DB rejects the insert, not bypassable via the API.
+- **Client:** the Apply form calls the RPC on load; if closed, it shows «Приём заявок закрыт» and hides the wizard/submit.
+- **Automation (all three):** (1) manual admin toggle «Остановить приём» / «Открыть приём»; (2) auto-close at `submissions_deadline`; (3) starting Tour 1 sets `submissions_open=false`.
 
 **`applications`** gains:
 - `tour` int default 1 — current tour the application sits in.
