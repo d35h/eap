@@ -11,8 +11,12 @@ export default function AdminCyclePanel({ cycle, onChanged }) {
   const open = cycle.submissions_open;
   const deadlinePassed = cycle.submissions_deadline && new Date(cycle.submissions_deadline) < new Date();
   const effectiveOpen = open && !deadlinePassed;
+  // Can't re-open submissions while jury evaluations are running.
+  const evaluationsOpen = cycle.tour1_open || cycle.tour2_open;
+  const reopenBlocked = !open && evaluationsOpen;
 
   const toggle = async () => {
+    if (reopenBlocked) return; // guard: close evaluations first
     setBusy(true);
     try {
       await setSubmissionsOpen(!open);
@@ -33,8 +37,15 @@ export default function AdminCyclePanel({ cycle, onChanged }) {
             {effectiveOpen ? 'Открыт' : 'Закрыт'}
           </span>
           {deadlinePassed && <span className="cycle-note">дедлайн прошёл — закрыто автоматически</span>}
+          {reopenBlocked && <span className="cycle-note">Сначала закройте приём оценок</span>}
         </div>
-        <button type="button" className="btn-ink cycle-panel__btn" onClick={toggle} disabled={busy}>
+        <button
+          type="button"
+          className="btn-ink cycle-panel__btn"
+          onClick={toggle}
+          disabled={busy || reopenBlocked}
+          title={reopenBlocked ? 'Сначала закройте приём оценок' : ''}
+        >
           {open ? 'Остановить приём' : 'Открыть приём'}
         </button>
       </div>
