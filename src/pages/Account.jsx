@@ -12,6 +12,8 @@ import { getCycle } from '../lib/cycleRepo.js';
 // Medal for top-3 placements.
 const medal = (p) => (p === 1 ? '🥇' : p === 2 ? '🥈' : p === 3 ? '🥉' : '🏆');
 
+const PAGE_SIZE = 25;
+
 export default function Account() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -25,6 +27,8 @@ export default function Account() {
 
   const [applications, setApplications] = useState([]);
   const [appsLoading, setAppsLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
   // app.id → { <workNumber>: signedUrl } for the uploaded work files.
   const [filesByApp, setFilesByApp] = useState({});
   // app.id → [{ reviewer_id, reviewer_email, status, ... }] (review rows).
@@ -71,7 +75,10 @@ export default function Account() {
     setAppsLoading(true);
     // Staff read every application; regular users only their own.
     // RLS enforces this server-side too - the filter is just intent.
-    let query = supabase.from('applications').select('*').order('created_at', { ascending: false });
+    let query = supabase
+      .from('applications')
+      .select('*', { count: 'exact' })
+      .order('created_at', { ascending: false });
     // Admin: all (the Tours panel needs every standing/tour).
     // Juror: only paid + still-active applications in the current tour.
     // Artist: only their own.
@@ -84,12 +91,19 @@ export default function Account() {
       query = query.eq('user_id', user.id);
     }
     query
-      .then(({ data }) => {
+      .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1)
+      .then(({ data, count }) => {
         setApplications(data || []);
+        setTotal(count || 0);
         setAppsLoading(false);
       })
       .catch(() => setAppsLoading(false));
-  }, [user, isStaff, isJuror, isAdmin, activeTour, evaluationsOpen, refreshKey]);
+  }, [user, isStaff, isJuror, isAdmin, activeTour, evaluationsOpen, refreshKey, page]);
+
+  // Reset to the first page when the filter context changes.
+  useEffect(() => {
+    setPage(0);
+  }, [isJuror, isAdmin, activeTour, evaluationsOpen, refreshKey]);
 
   // Staff: load the cycle (submissions + active tour).
   useEffect(() => {
@@ -547,6 +561,30 @@ export default function Account() {
           </div>
           );
         })}
+
+        {total > PAGE_SIZE && (
+          <div className="pager">
+            <button
+              type="button"
+              className="btn-ink pager__btn"
+              disabled={page === 0 || appsLoading}
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+            >
+              ← Назад
+            </button>
+            <span className="pager__info">
+              {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, total)} из {total}
+            </span>
+            <button
+              type="button"
+              className="btn-ink pager__btn"
+              disabled={(page + 1) * PAGE_SIZE >= total || appsLoading}
+              onClick={() => setPage((p) => p + 1)}
+            >
+              Вперёд →
+            </button>
+          </div>
+        )}
         </>
         )}
       </div>

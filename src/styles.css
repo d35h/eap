@@ -1241,6 +1241,9 @@ input, textarea, select { font-family: inherit; }
 }
 .account-app-card__result-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
 .account-app-card__result-links .account-app-card__action { margin-top: 0; }
+.pager { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 24px 0 8px; }
+.pager__btn { font-size: 13px; padding: 10px 18px; letter-spacing: 0.06em; }
+.pager__info { font-size: 14px; color: var(--ink-soft); }
 .account-app-card__reviewed-by { color: hsl(140, 50%, 45%); }
 .account-app-card__not-reviewed { color: var(--ink-soft); opacity: 0.7; }
 .account-app-card__you-reviewed {
