@@ -390,6 +390,30 @@ export default function Account() {
             return !r ? 0 : r.status === 'finished' && !r.unlocked ? 2 : 1;
           };
           const sortedJurors = [...jurors].sort((a, b) => rankOf(b.id) - rankOf(a.id));
+
+          // Admin sees a compact, clickable row → the full application page.
+          if (isAdmin) {
+            const thumb = filesByApp[app.id]?.[1];
+            const finished = reviewers.filter((r) => r.status === 'finished').length;
+            return (
+              <Link key={app.id} to={`/account/application/${app.id}`} className="app-row">
+                <span className="app-row__thumb">
+                  {thumb ? <img src={thumb} alt="" loading="lazy" /> : <span className="app-row__thumb--empty" />}
+                </span>
+                <span className="app-row__main">
+                  <span className="app-row__name">
+                    {[app.first_name, app.last_name].filter(Boolean).join(' ') || '—'}
+                  </span>
+                  <span className="app-row__email">{app.email}</span>
+                </span>
+                <span className={`account-app-card__status account-app-card__status--${app.payment_status}`}>
+                  {app.payment_status === 'paid' ? 'Оплачено' : 'Ожидает оплаты'}
+                </span>
+                <span className="app-row__jury">Жюри: {finished}/{jurors.length}</span>
+              </Link>
+            );
+          }
+
           return (
           <div key={app.id} className="account-app-card">
             <div className="account-app-card__meta">
