@@ -1515,3 +1515,25 @@ input, textarea, select { font-family: inherit; }
 .invite-jury__msg--ok { color: hsl(140, 60%, 60%); }
 .invite-jury__msg--exists { color: hsl(40, 70%, 62%); }
 .invite-jury__msg--error { color: hsl(2, 70%, 64%); }
+
+/* ── Admin UI on small screens ── */
+@media (max-width: 640px) {
+  .admin-panel { padding: 18px 18px; }
+  .admin-row { flex-direction: column; align-items: stretch; gap: 12px; }
+  .admin-row__control { justify-content: stretch; }
+  .admin-row__control .tours-btn { flex: 1; justify-content: center; }
+  .admin-panel__head { gap: 10px; }
+
+  .tours-result--head { display: none; }
+  .tours-result {
+    grid-template-columns: 28px minmax(0, 1fr) auto;
+    gap: 10px; padding: 12px 8px;
+  }
+  .tours-result__rank { width: 26px; height: 26px; }
+  .tours-result .review-chip { grid-column: 2 / -1; justify-self: start; margin-top: 2px; }
+
+  .app-filters__search { flex: 1 1 100%; }
+  .tours-confirm { flex-direction: column; align-items: stretch; }
+  .tours-confirm .tours-panel__actions { justify-content: stretch; }
+  .tours-confirm .tours-btn { flex: 1; justify-content: center; }
+}
