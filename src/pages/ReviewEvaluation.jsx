@@ -28,6 +28,7 @@ export default function ReviewEvaluation() {
   const [msg, setMsg] = useState(null); // { type, text }
   const [ready, setReady] = useState(false);
   const [tour, setTour] = useState(1);
+  const [evalsOpen, setEvalsOpen] = useState(true);
 
   // Only jurors evaluate.
   useEffect(() => {
@@ -43,11 +44,13 @@ export default function ReviewEvaluation() {
     (async () => {
       const cycle = await getCycle();
       const activeTour = cycle?.active_tour || 1;
+      const open = activeTour === 1 ? !!cycle?.tour1_open : !!cycle?.tour2_open;
       const { data: appRow } = await supabase
         .from('applications').select('*').eq('id', id).maybeSingle();
       const review = await getMyReview(id, user.id, activeTour);
       if (cancelled) return;
       setTour(activeTour);
+      setEvalsOpen(open);
       setApp(appRow || null);
       const base = {};
       REVIEW_CRITERIA.forEach((c) => {
@@ -84,6 +87,20 @@ export default function ReviewEvaluation() {
   }, [app]);
 
   if (!isSupabaseConfigured() || loading || !user || !isJuror) return null;
+
+  if (ready && !evalsOpen) {
+    return (
+      <main className="apply-page">
+        <div className="container">
+          <Link to="/account" className="review-back">← Назад</Link>
+          <div className="jury-waiting">
+            <h2 className="panel-title">Оценивание ещё не открыто</h2>
+            <p>Как только организаторы откроют приём оценок, заявки появятся здесь.</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   const locked = status === 'finished' && !unlocked;
   const complete = isEvaluationComplete(scores);

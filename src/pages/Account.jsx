@@ -228,6 +228,8 @@ export default function Account() {
   const headEyebrow = isAdmin ? 'Администратор' : isJuror ? 'Жюри' : t('account.nav');
   const headTitle = isAdmin ? 'Панель управления' : isJuror ? 'Кабинет жюри' : t('account.cabinetTitle');
   const identityLine = isJuror && jurorName ? `${jurorName} <${user.email}>` : user.email;
+  // Jurors can only see/evaluate applications once the tour's evaluations open.
+  const evaluationsOpen = activeTour === 1 ? !!cycle?.tour1_open : !!cycle?.tour2_open;
 
   return (
     <main className="apply-page">
@@ -297,6 +299,17 @@ export default function Account() {
           />
         )}
 
+        {isJuror && !cycle && <p>…</p>}
+
+        {isJuror && cycle && !evaluationsOpen && (
+          <div className="jury-waiting">
+            <h2 className="panel-title">Оценивание ещё не открыто</h2>
+            <p>Как только организаторы откроют приём оценок, заявки появятся здесь.</p>
+          </div>
+        )}
+
+        {(!isJuror || (cycle && evaluationsOpen)) && (
+        <>
         <h2 style={{ margin: '40px 0 24px' }}>
           {isStaff ? 'Все заявки' : t('account.yourApplications')}
         </h2>
@@ -431,6 +444,8 @@ export default function Account() {
           </div>
           );
         })}
+        </>
+        )}
       </div>
     </main>
   );
