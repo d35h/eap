@@ -1239,6 +1239,8 @@ input, textarea, select { font-family: inherit; }
   padding: 10px 18px;
   letter-spacing: 0.08em;
 }
+.account-app-card__result-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.account-app-card__result-links .account-app-card__action { margin-top: 0; }
 .account-app-card__reviewed-by { color: hsl(140, 50%, 45%); }
 .account-app-card__not-reviewed { color: var(--ink-soft); opacity: 0.7; }
 .account-app-card__you-reviewed {

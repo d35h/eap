@@ -523,11 +523,16 @@ export default function Account() {
                   );
                 })}
               </div>
-              {reviewers.length > 0 && (
-                <Link to={`/account/results/${app.id}/${shownTour}`} className="btn-ink account-app-card__action">
-                  Смотреть оценки жюри
+              <div className="account-app-card__result-links">
+                <Link to={`/account/results/${app.id}/1`} className="btn-ink account-app-card__action">
+                  Оценки жюри · тур 1
                 </Link>
-              )}
+                {(app.tour || 1) >= 2 && (
+                  <Link to={`/account/results/${app.id}/2`} className="btn-ink account-app-card__action">
+                    Оценки жюри · тур 2
+                  </Link>
+                )}
+              </div>
               </>
             )}
             {isJuror && (
