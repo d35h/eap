@@ -184,48 +184,48 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
               </button>
             </div>
           </div>
+        ) : !tourOpen ? (
+          <div className="tours-open">
+            <button
+              type="button"
+              className="btn-ink tours-btn"
+              disabled={busy || !submissionsClosed}
+              onClick={() => setOpen(true)}
+            >
+              Открыть приём оценок
+            </button>
+            {!submissionsClosed && (
+              <p className="tours-hint">
+                Чтобы открыть приём оценок, сначала закройте приём заявок — в блоке «Приём заявок» выше.
+              </p>
+            )}
+          </div>
         ) : (
-          <>
           <div className="tours-panel__row">
             <div className="tours-panel__state">
-              {tourOpen && <span className="cycle-state cycle-state--open">Оценки открыты</span>}
-              {tourOpen && (
-                <span className="cycle-note">
-                  оценили {done}/{expected || 0}
-                  {quorumMet
-                    ? ' · можно подводить итоги'
-                    : ' · отбор станет доступен, когда все жюри оценят все заявки'}
-                </span>
-              )}
+              <span className="cycle-state cycle-state--open">Оценки открыты</span>
+              <span className="cycle-note">
+                оценили {done}/{expected || 0}
+                {quorumMet
+                  ? ' · можно подводить итоги'
+                  : ' · отбор станет доступен, когда все жюри оценят все заявки'}
+              </span>
             </div>
             <div className="tours-panel__actions">
+              <button type="button" className="btn-ink tours-btn" disabled={busy} onClick={() => setOpen(false)}>
+                Закрыть приём оценок
+              </button>
               <button
                 type="button"
-                className="btn-ink tours-btn"
-                disabled={busy || (!tourOpen && !submissionsClosed)}
-                onClick={() => setOpen(!tourOpen)}
+                className="btn-gold tours-btn"
+                disabled={busy || !quorumMet}
+                title={quorumMet ? '' : 'Доступно, когда все жюри оценят все заявки'}
+                onClick={startSelection}
               >
-                {tourOpen ? 'Закрыть приём оценок' : 'Открыть приём оценок'}
+                {activeTour === 1 ? 'Перейти к отбору' : 'Выбрать топ-3'}
               </button>
-              {tourOpen && (
-                <button
-                  type="button"
-                  className="btn-gold tours-btn"
-                  disabled={busy || !quorumMet}
-                  title={quorumMet ? '' : 'Доступно, когда все жюри оценят все заявки'}
-                  onClick={startSelection}
-                >
-                  {activeTour === 1 ? 'Перейти к отбору' : 'Выбрать топ-3'}
-                </button>
-              )}
             </div>
           </div>
-          {!tourOpen && !submissionsClosed && (
-            <p className="tours-hint">
-              Чтобы открыть приём оценок, сначала закройте приём заявок — в блоке «Приём заявок» выше.
-            </p>
-          )}
-          </>
         )
       )}
 

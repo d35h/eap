@@ -99,13 +99,18 @@ export default function Header() {
                     onClick={() => setAccountMenuOpen((o) => !o)}
                     aria-label={t('account.nav')}
                     aria-expanded={accountMenuOpen}
-                    title={user.email}
+                    title={user.app_metadata?.name || user.email}
                   >
-                    {(user.email || '?').charAt(0).toUpperCase()}
+                    {(user.app_metadata?.name || user.email || '?').charAt(0).toUpperCase()}
                   </button>
                   {accountMenuOpen && (
                     <div className="account-dropdown">
-                      <div className="account-dropdown-email">{user.email}</div>
+                      <div className="account-dropdown-id">
+                        {user.app_metadata?.name && (
+                          <span className="account-dropdown-name">{user.app_metadata.name}</span>
+                        )}
+                        <span className="account-dropdown-email">{user.email}</span>
+                      </div>
                       <Link to="/account" className="account-dropdown-item" onClick={() => setAccountMenuOpen(false)}>
                         {t('account.nav')}
                       </Link>
