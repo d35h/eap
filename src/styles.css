@@ -1056,6 +1056,9 @@ input, textarea, select { font-family: inherit; }
 .tours-select__name { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; font-weight: 500; }
 .tours-select__score { font-family: var(--mono); color: var(--accent-deep); white-space: nowrap; }
 /* Artist's own results in their card */
+.artist-results { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 18px; }
+.artist-results .tours-tabs { margin-top: 0; }
+.artist-results .artist-result { border-top: 0; margin-top: 0; padding-top: 0; }
 .artist-result { border-top: 1px solid var(--border); margin-top: 16px; padding-top: 14px; }
 .artist-result__head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
 .artist-result__crit { margin: 8px 0; }
