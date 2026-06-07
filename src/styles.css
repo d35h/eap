@@ -1055,6 +1055,13 @@ input, textarea, select { font-family: inherit; }
 .tours-select__rank { font-family: var(--mono); font-size: 13px; opacity: 0.6; width: 22px; }
 .tours-select__name { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; font-weight: 500; }
 .tours-select__score { font-family: var(--mono); color: var(--accent-deep); white-space: nowrap; }
+/* Artist's own results in their card */
+.artist-result { border-top: 1px solid var(--border); margin-top: 16px; padding-top: 14px; }
+.artist-result__head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.artist-result__crit { margin: 8px 0; }
+.artist-result__crit strong { display: block; }
+.artist-result__crit p { margin: 4px 0 0; line-height: 1.55; opacity: 0.85; overflow-wrap: anywhere; white-space: pre-wrap; }
+
 /* Tour tabs */
 .tours-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
 .tours-tab {
@@ -1062,7 +1069,9 @@ input, textarea, select { font-family: inherit; }
   border: 1px solid var(--border); border-radius: 999px; background: transparent;
   color: var(--ink-soft); cursor: pointer; transition: all 0.2s;
 }
-.tours-tab.is-active { border-color: var(--accent-deep); color: var(--ink); background: hsla(36, 40%, 96%, 0.9); }
+.tours-tab.is-active {
+  border-color: var(--accent-deep); color: var(--bg); background: var(--accent-deep); font-weight: 500;
+}
 /* Tour results list */
 .tours-results { margin-top: 18px; }
 .tours-send { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 4px 0 16px; }
@@ -1072,9 +1081,24 @@ input, textarea, select { font-family: inherit; }
   border-top: 1px solid var(--border);
 }
 .tours-result:first-of-type { border-top: 0; }
-.tours-result__rank { font-family: var(--mono); font-size: 13px; opacity: 0.6; width: 22px; }
-.tours-result__name { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; font-weight: 500; }
+.tours-result {
+  text-decoration: none; color: var(--ink); transition: background 0.15s; border-radius: 6px;
+}
+.tours-result:hover { background: hsla(36, 40%, 94%, 0.8); }
+.tours-result__rank { font-family: var(--mono); font-size: 13px; opacity: 0.6; width: 22px; padding-left: 4px; }
+.tours-result__name { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; display: flex; flex-direction: column; }
+.tours-result__title { font-weight: 500; }
+.tours-result__sub { font-size: 12px; opacity: 0.6; margin-top: 1px; }
 .tours-result__score { font-family: var(--mono); color: var(--accent-deep); white-space: nowrap; }
+/* Admin per-application detailed results */
+.appresults-juror {
+  border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 16px;
+  background: hsla(36, 30%, 99%, 0.7);
+}
+.appresults-crit { margin: 12px 0; }
+.appresults-crit__head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.appresults-crit__score { font-family: var(--mono); color: var(--accent-deep); white-space: nowrap; }
+.appresults-crit__text { margin: 6px 0 0; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
 
 /* ── Account cabinet ── */
 .account-app-card { margin-bottom: 16px; }

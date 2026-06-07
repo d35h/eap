@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase.js';
 import { updateCycle } from '../lib/cycleRepo.js';
 import { REVIEW_CRITERIA } from '../lib/reviewCriteria.js';
@@ -119,8 +120,8 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
   const resultsSent = viewTour === 1 ? cycle.tour1_results_sent : cycle.tour2_results_sent;
   const viewTourFinalized = viewTour === 1 ? tour2Exists : winnersExist;
 
-  const sendResults = async () => {
-    if (resultsSent && !window.confirm('Результаты уже отправлены. Отправить ещё раз?')) return;
+  const sendResults = async (force) => {
+    if (force && !window.confirm('Отправить результаты повторно всем участникам этого тура?')) return;
     setSending(true);
     setSendMsg(null);
     try {
@@ -128,7 +129,7 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
       const res = await fetch('/.netlify/functions/send-tour-results', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token || ''}` },
-        body: JSON.stringify({ tour: viewTour, force: !!resultsSent }),
+        body: JSON.stringify({ tour: viewTour, force: !!force }),
       });
       const d = await res.json().catch(() => ({}));
       if (d.status === 'sent') {
@@ -152,7 +153,7 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
             key={tn}
             type="button"
             className={`tours-tab ${viewTour === tn ? 'is-active' : ''}`}
-            onClick={() => setViewTour?.(tn)}
+            onClick={() => { setSendMsg(null); setViewTour?.(tn); }}
           >
             Тур {tn}
           </button>
@@ -254,10 +255,18 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
           <span className="account-section-label">Результаты · тур {viewTour}</span>
           {viewTourFinalized && (
             <div className="tours-send">
-              <button type="button" className="btn-gold tours-btn" disabled={sending} onClick={sendResults}>
-                {resultsSent ? 'Отправить результаты повторно' : 'Отправить результаты участникам'}
-              </button>
-              {resultsSent && !sendMsg && <span className="cycle-note">Результаты уже отправлены</span>}
+              {!resultsSent ? (
+                <button type="button" className="btn-gold tours-btn" disabled={sending} onClick={() => sendResults(false)}>
+                  Отправить результаты участникам
+                </button>
+              ) : (
+                <>
+                  <span className="cycle-state cycle-state--open">Результаты отправлены</span>
+                  <button type="button" className="btn-ink tours-btn" disabled={sending} onClick={() => sendResults(true)}>
+                    Отправить повторно
+                  </button>
+                </>
+              )}
               {sendMsg && (
                 <span className={`cycle-note ${sendMsg.type === 'error' ? 'cycle-note--error' : ''}`}>{sendMsg.text}</span>
               )}
@@ -268,12 +277,15 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
             const sc = scoreOf(a.id);
             const o = outcome(a);
             return (
-              <div key={a.id} className="tours-result">
+              <Link key={a.id} to={`/account/results/${a.id}/${viewTour}`} className="tours-result">
                 <span className="tours-result__rank">{i + 1}</span>
-                <span className="tours-result__name">{applicant(a)}</span>
+                <span className="tours-result__name">
+                  <span className="tours-result__title">{applicant(a)}</span>
+                  {a.email && <span className="tours-result__sub">{a.email}</span>}
+                </span>
                 <span className="tours-result__score">{sc == null ? '—' : sc.toFixed(1)}</span>
                 <span className={`review-chip review-chip--${o.cls}`}>{o.label}</span>
-              </div>
+              </Link>
             );
           })}
         </div>

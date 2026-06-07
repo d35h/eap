@@ -13,6 +13,7 @@ import SetPassword from './pages/SetPassword.jsx';
 import Account from './pages/Account.jsx';
 import ReviewEvaluation from './pages/ReviewEvaluation.jsx';
 import ReviewView from './pages/ReviewView.jsx';
+import AppResults from './pages/AppResults.jsx';
 
 // Прокрутка наверх при смене страницы
 function ScrollToTop() {
@@ -39,6 +40,7 @@ export default function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/account/review/:id" element={<ReviewEvaluation />} />
         <Route path="/account/review/:id/:reviewerId" element={<ReviewView />} />
+        <Route path="/account/results/:id/:tour" element={<AppResults />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

@@ -28,6 +28,8 @@ export default function Account() {
   const [reviewsByApp, setReviewsByApp] = useState({});
   // All jurors in the system [{ id, email }] (admin only).
   const [jurors, setJurors] = useState([]);
+  // Artist's own published results: app.id → [{ tour, outcome, feedback }].
+  const [myResults, setMyResults] = useState({});
   // Cycle (submissions + tours); active tour is derived from it. Single source
   // of truth shared by both admin panels so they never go out of sync.
   const [cycle, setCycle] = useState(null);
@@ -111,6 +113,25 @@ export default function Account() {
       cancelled = true;
     };
   }, [applications, isStaff, shownTour]);
+
+  // Artist: load their own published tour results.
+  useEffect(() => {
+    if (isStaff || !user || !supabase) return;
+    let cancelled = false;
+    (async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch('/.netlify/functions/my-results', {
+        headers: { Authorization: `Bearer ${session?.access_token || ''}` },
+      });
+      const d = await res.json().catch(() => ({}));
+      if (!cancelled && Array.isArray(d.results)) {
+        const map = {};
+        d.results.forEach((r) => { map[r.application_id] = r.tours; });
+        setMyResults(map);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [isStaff, user, refreshKey]);
 
   // Admin: fetch every juror so we can show review status per juror per app.
   useEffect(() => {
@@ -399,6 +420,33 @@ export default function Account() {
               </ul>
               </>
             )}
+            {!isStaff && (myResults[app.id] || []).map((tr) => (
+              <div className="artist-result" key={tr.tour}>
+                <div className="artist-result__head">
+                  <span className="account-section-label" style={{ margin: 0 }}>
+                    {tr.tour === 1 ? t('account.tour1Results') : t('account.tour2Results')}
+                  </span>
+                  <span className={`account-app-card__status account-app-card__status--review-${tr.outcome === 'eliminated' ? 'in_review' : 'reviewed'}`}>
+                    {tr.outcome === 'advanced'
+                      ? t('account.outcomeAdvanced')
+                      : tr.outcome === 'winner'
+                      ? t('account.outcomeWinner')
+                      : t('account.outcomeEliminated')}
+                  </span>
+                </div>
+                {tr.feedback.length > 0 && (
+                  <div className="artist-result__fb">
+                    <span className="account-section-label">{t('account.juryFeedback')}</span>
+                    {tr.feedback.map((f, i) => (
+                      <div className="artist-result__crit" key={i}>
+                        <strong>{f.title}{f.avg != null ? `: ${f.avg} / 10` : ''}</strong>
+                        {f.comments.map((c, j) => <p key={j}>{c}</p>)}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
             {isAdmin && app.payment_status === 'paid' && (
               <>
               <span className="account-section-label">Жюри</span>
