@@ -1315,6 +1315,7 @@ input, textarea, select { font-family: inherit; }
   display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
 }
 .jurors-list { margin-top: 4px; }
+.edition-switch { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 16px 0 4px; }
 
 /* ── Juror evaluation page ── */
 .review-back { display: inline-block; margin-bottom: 24px; color: var(--accent-deep); text-decoration: none; }

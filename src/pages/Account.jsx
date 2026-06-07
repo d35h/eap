@@ -49,8 +49,14 @@ export default function Account() {
   // Admin can switch which tour's results they're viewing; defaults to active.
   const [viewTour, setViewTour] = useState(null);
   const shownTour = viewTour ?? activeTour;
+  // Admin can browse past editions; defaults to the current one.
+  const [viewEdition, setViewEdition] = useState(null);
+  const shownEdition = viewEdition ?? currentEdition;
+  const isCurrentEdition = shownEdition === currentEdition;
   // Bumped after any change to refetch cycle/applications/reviews.
   const [refreshKey, setRefreshKey] = useState(0);
+  // True once the current edition has winners (cycle finished).
+  const [cycleFinished, setCycleFinished] = useState(false);
 
   // Invite jury (admin only).
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -91,8 +97,8 @@ export default function Account() {
     } else if (!isAdmin) {
       query = query.eq('user_id', user.id);
     }
-    // Staff see only the current edition; past editions are archived.
-    if (isStaff) query = query.eq('edition', currentEdition);
+    // Staff see the selected edition (current by default; past = archive).
+    if (isStaff) query = query.eq('edition', shownEdition);
     query
       .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1)
       .then(({ data, count }) => {
@@ -101,18 +107,31 @@ export default function Account() {
         setAppsLoading(false);
       })
       .catch(() => setAppsLoading(false));
-  }, [user, isStaff, isJuror, isAdmin, activeTour, currentEdition, evaluationsOpen, refreshKey, page]);
+  }, [user, isStaff, isJuror, isAdmin, activeTour, shownEdition, evaluationsOpen, refreshKey, page]);
 
   // Reset to the first page when the filter context changes.
   useEffect(() => {
     setPage(0);
-  }, [isJuror, isAdmin, activeTour, evaluationsOpen, refreshKey]);
+  }, [isJuror, isAdmin, activeTour, shownEdition, evaluationsOpen, refreshKey]);
 
   // Staff: load the cycle (submissions + active tour).
   useEffect(() => {
     if (!isStaff || !supabase) return;
     getCycle().then(setCycle);
   }, [isStaff, refreshKey]);
+
+  // Admin: is the current edition finished (winners chosen)?
+  useEffect(() => {
+    if (!isAdmin || !supabase) return;
+    let cancelled = false;
+    supabase
+      .from('applications')
+      .select('id', { count: 'exact', head: true })
+      .eq('edition', currentEdition)
+      .eq('standing', 'winner')
+      .then(({ count }) => { if (!cancelled) setCycleFinished((count || 0) > 0); });
+    return () => { cancelled = true; };
+  }, [isAdmin, currentEdition, refreshKey]);
 
   // Load which jurors have reviewed each visible application in the active tour.
   useEffect(() => {
@@ -306,8 +325,24 @@ export default function Account() {
           )}
         </div>
 
-        {isAdmin && <AdminCyclePanel cycle={cycle} onChanged={() => setRefreshKey((k) => k + 1)} />}
-        {isAdmin && (
+        {isAdmin && currentEdition > 1 && (
+          <div className="edition-switch">
+            <span className="cycle-note">Цикл:</span>
+            {Array.from({ length: currentEdition }, (_, i) => currentEdition - i).map((ed) => (
+              <button
+                key={ed}
+                type="button"
+                className={`tours-tab ${shownEdition === ed ? 'is-active' : ''}`}
+                onClick={() => setViewEdition(ed)}
+              >
+                №{ed}{ed === currentEdition ? ' · текущий' : ''}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {isAdmin && isCurrentEdition && <AdminCyclePanel cycle={cycle} canStartNew={cycleFinished} onChanged={() => setRefreshKey((k) => k + 1)} />}
+        {isAdmin && isCurrentEdition && (
           <AdminToursPanel
             cycle={cycle}
             applications={applications}
@@ -317,6 +352,11 @@ export default function Account() {
             setViewTour={setViewTour}
             onChanged={() => setRefreshKey((k) => k + 1)}
           />
+        )}
+        {isAdmin && !isCurrentEdition && (
+          <p className="cycle-note" style={{ margin: '8px 0 0' }}>
+            Архив · цикл №{shownEdition} (только просмотр)
+          </p>
         )}
 
         {isJuror && !cycle && <p>…</p>}

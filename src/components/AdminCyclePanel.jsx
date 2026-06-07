@@ -4,7 +4,7 @@ import { setSubmissionsOpen } from '../lib/cycleRepo.js';
 
 // Admin submission control + new-cycle reset. `cycle` + `onChanged` come from
 // the parent so the cycle panel and tours panel share one source of truth.
-export default function AdminCyclePanel({ cycle, onChanged }) {
+export default function AdminCyclePanel({ cycle, canStartNew, onChanged }) {
   const [busy, setBusy] = useState(false);
   const [confirmNew, setConfirmNew] = useState(false);
   const [newMsg, setNewMsg] = useState(null);
@@ -94,9 +94,18 @@ export default function AdminCyclePanel({ cycle, onChanged }) {
             </div>
           </div>
         ) : (
-          <button type="button" className="btn-ink cycle-panel__btn" disabled={busy} onClick={() => setConfirmNew(true)}>
+          <button
+            type="button"
+            className="btn-ink cycle-panel__btn"
+            disabled={busy || !canStartNew}
+            title={canStartNew ? '' : 'Доступно после завершения цикла (выбора победителей)'}
+            onClick={() => setConfirmNew(true)}
+          >
             Начать новый цикл
           </button>
+        )}
+        {!canStartNew && !confirmNew && (
+          <span className="cycle-note">Доступно после выбора победителей</span>
         )}
         {newMsg && (
           <span className={`cycle-note ${newMsg.type === 'error' ? 'cycle-note--error' : ''}`}>{newMsg.text}</span>

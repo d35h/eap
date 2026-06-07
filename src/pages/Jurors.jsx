@@ -111,8 +111,14 @@ export default function Jurors() {
                 {j.name && <span className="review-row__sub">{j.email}</span>}
               </span>
               <div className="review-row__actions">
-                <button type="button" className="review-row__btn review-row__btn--ghost" disabled={busy} onClick={() => activate(j)}>
-                  Активировать
+                <button
+                  type="button"
+                  className="review-row__btn review-row__btn--ghost"
+                  disabled={busy}
+                  title="Отправит письмо со ссылкой для установки пароля"
+                  onClick={() => activate(j)}
+                >
+                  Сбросить пароль
                 </button>
                 <button type="button" className="review-row__btn review-row__btn--danger" disabled={busy} onClick={() => remove(j)}>
                   Удалить
