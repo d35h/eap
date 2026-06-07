@@ -357,7 +357,7 @@ export default function Account() {
                   return (
                     <div key={j.id} className="review-row">
                       <span className="review-row__email">
-                        {j.name || j.email}
+                        {j.name ? `${j.name} <${j.email}>` : j.email}
                       </span>
                       <span className={`review-chip review-chip--${state}`}>
                         {state === 'finished' ? 'Рассмотрено' : state === 'draft' ? 'Черновик' : 'Не рассмотрено'}
