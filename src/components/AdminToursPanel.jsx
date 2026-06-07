@@ -17,6 +17,8 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
   const [selecting, setSelecting] = useState(false);
   const [picked, setPicked] = useState(() => new Set());
   const [busy, setBusy] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sendMsg, setSendMsg] = useState(null);
 
   if (!cycle) return null;
 
@@ -112,6 +114,34 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
     setBusy(true);
     try { await updateCycle({ active_tour: 2 }); setViewTour?.(2); onChanged?.(); }
     finally { setBusy(false); }
+  };
+
+  const resultsSent = viewTour === 1 ? cycle.tour1_results_sent : cycle.tour2_results_sent;
+  const viewTourFinalized = viewTour === 1 ? tour2Exists : winnersExist;
+
+  const sendResults = async () => {
+    if (resultsSent && !window.confirm('Результаты уже отправлены. Отправить ещё раз?')) return;
+    setSending(true);
+    setSendMsg(null);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch('/.netlify/functions/send-tour-results', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token || ''}` },
+        body: JSON.stringify({ tour: viewTour, force: !!resultsSent }),
+      });
+      const d = await res.json().catch(() => ({}));
+      if (d.status === 'sent') {
+        setSendMsg({ type: 'ok', text: `Отправлено писем: ${d.count}` });
+        onChanged?.();
+      } else {
+        setSendMsg({ type: 'error', text: 'Не удалось отправить.' });
+      }
+    } catch {
+      setSendMsg({ type: 'error', text: 'Не удалось отправить.' });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -222,6 +252,17 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
       {!selecting && (
         <div className="tours-results">
           <span className="account-section-label">Результаты · тур {viewTour}</span>
+          {viewTourFinalized && (
+            <div className="tours-send">
+              <button type="button" className="btn-gold tours-btn" disabled={sending} onClick={sendResults}>
+                {resultsSent ? 'Отправить результаты повторно' : 'Отправить результаты участникам'}
+              </button>
+              {resultsSent && !sendMsg && <span className="cycle-note">Результаты уже отправлены</span>}
+              {sendMsg && (
+                <span className={`cycle-note ${sendMsg.type === 'error' ? 'cycle-note--error' : ''}`}>{sendMsg.text}</span>
+              )}
+            </div>
+          )}
           {rankedResults.length === 0 && <p className="cycle-note">Нет заявок</p>}
           {rankedResults.map((a, i) => {
             const sc = scoreOf(a.id);

@@ -73,6 +73,87 @@ function brandedEmail({ title, body, button, link, fallback }) {
   </td></tr></table></body></html>`;
 }
 
+function escapeHtml(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// Localised copy for tour-result emails.
+const TOUR_COPY = {
+  ru: {
+    subject: (t) => `Eurasian Art Platform · Результаты ${t === 1 ? 'первого' : 'второго'} тура`,
+    title: (t) => `Результаты ${t === 1 ? 'первого' : 'второго'} тура`,
+    advanced: (t) => (t === 1
+      ? 'Поздравляем! Ваша работа прошла во второй тур.'
+      : 'Поздравляем! Ваша работа вошла в число победителей.'),
+    notAdvanced: (t) => (t === 1
+      ? 'Спасибо за участие. К сожалению, в этот раз ваша работа не прошла во второй тур.'
+      : 'Спасибо за участие. К сожалению, ваша работа не вошла в число победителей.'),
+    feedbackLabel: 'Комментарии жюри',
+  },
+  en: {
+    subject: (t) => `Eurasian Art Platform · ${t === 1 ? 'First' : 'Second'} round results`,
+    title: (t) => `${t === 1 ? 'First' : 'Second'} round results`,
+    advanced: (t) => (t === 1
+      ? 'Congratulations! Your work has advanced to the second round.'
+      : 'Congratulations! Your work is among the winners.'),
+    notAdvanced: (t) => (t === 1
+      ? 'Thank you for taking part. Unfortunately your work did not advance to the second round this time.'
+      : 'Thank you for taking part. Unfortunately your work is not among the winners.'),
+    feedbackLabel: 'Jury feedback',
+  },
+  kz: {
+    subject: (t) => `Eurasian Art Platform · ${t === 1 ? 'Бірінші' : 'Екінші'} тур нәтижелері`,
+    title: (t) => `${t === 1 ? 'Бірінші' : 'Екінші'} тур нәтижелері`,
+    advanced: (t) => (t === 1
+      ? 'Құттықтаймыз! Жұмысыңыз екінші турға өтті.'
+      : 'Құттықтаймыз! Жұмысыңыз жеңімпаздар қатарына енді.'),
+    notAdvanced: (t) => (t === 1
+      ? 'Қатысқаныңызға рақмет. Өкінішке орай, жұмысыңыз бұл жолы екінші турға өтпеді.'
+      : 'Қатысқаныңызға рақмет. Өкінішке орай, жұмысыңыз жеңімпаздар қатарына енбеді.'),
+    feedbackLabel: 'Қазылар алқасының пікірлері',
+  },
+  zh: {
+    subject: (t) => `Eurasian Art Platform · ${t === 1 ? '第一轮' : '第二轮'}结果`,
+    title: (t) => `${t === 1 ? '第一轮' : '第二轮'}结果`,
+    advanced: (t) => (t === 1
+      ? '恭喜！您的作品已晋级第二轮。'
+      : '恭喜！您的作品入选获奖名单。'),
+    notAdvanced: (t) => (t === 1
+      ? '感谢您的参与。很遗憾，您的作品本次未能晋级第二轮。'
+      : '感谢您的参与。很遗憾，您的作品未能入选获奖名单。'),
+    feedbackLabel: '评委意见',
+  },
+};
+
+// Tour-result email: outcome line + jury written feedback (no scores).
+// `feedback` = [{ title, comments: [text] }].
+export function tourResultEmail({ lang, tour, advanced, feedback }) {
+  const c = TOUR_COPY[lang] || TOUR_COPY.en;
+  const outcome = advanced ? c.advanced(tour) : c.notAdvanced(tour);
+  const fb = (feedback || []).filter((f) => f.comments && f.comments.length);
+  const fbHtml = fb.length
+    ? `<tr><td style="font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#c2a063;padding:8px 0 4px;">${c.feedbackLabel}</td></tr>` +
+      fb.map((f) =>
+        `<tr><td style="font-family:Arial,sans-serif;font-size:14px;color:#f0ece4;padding:14px 0 4px;font-weight:bold;">${escapeHtml(f.title)}</td></tr>` +
+        f.comments.map((t) =>
+          `<tr><td style="font-family:Arial,sans-serif;font-size:14px;line-height:1.6;color:#b9b2a6;padding:0 0 8px;">${escapeHtml(t)}</td></tr>`
+        ).join('')
+      ).join('')
+    : '';
+  const html = `<!doctype html><html><body style="margin:0;background:#121417;font-family:Georgia,'Times New Roman',serif;color:#f0ece4;padding:40px 16px;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
+    <table role="presentation" width="520" cellpadding="0" cellspacing="0" style="max-width:520px;background:#16181d;border:1px solid #2a2d33;padding:40px;">
+      <tr><td style="font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#c2a063;padding-bottom:24px;">Eurasian Art Platform</td></tr>
+      <tr><td style="font-size:24px;line-height:1.3;padding-bottom:14px;">${c.title(tour)}</td></tr>
+      <tr><td style="font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#b9b2a6;padding-bottom:20px;">${outcome}</td></tr>
+      ${fbHtml}
+    </table>
+  </td></tr></table></body></html>`;
+  return { subject: c.subject(tour), html };
+}
+
 // Jury invitation (always Russian - jurors are invited by the RU admin).
 export function juryInviteEmail(link) {
   return {

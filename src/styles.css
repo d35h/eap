@@ -1065,6 +1065,8 @@ input, textarea, select { font-family: inherit; }
 .tours-tab.is-active { border-color: var(--accent-deep); color: var(--ink); background: hsla(36, 40%, 96%, 0.9); }
 /* Tour results list */
 .tours-results { margin-top: 18px; }
+.tours-send { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 4px 0 16px; }
+.cycle-note--error { color: hsl(2, 60%, 55%); }
 .tours-result {
   display: flex; align-items: center; gap: 12px; padding: 10px 2px;
   border-top: 1px solid var(--border);
