@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react';
-import { getCycle, setSubmissionsOpen } from '../lib/cycleRepo.js';
+import { useState } from 'react';
+import { setSubmissionsOpen } from '../lib/cycleRepo.js';
 
-// Admin control panel for the open call (submission control; tours later).
-export default function AdminCyclePanel() {
-  const [cycle, setCycle] = useState(null);
+// Admin submission control. `cycle` + `onChanged` come from the parent so the
+// cycle panel and tours panel share one source of truth.
+export default function AdminCyclePanel({ cycle, onChanged }) {
   const [busy, setBusy] = useState(false);
-
-  useEffect(() => { getCycle().then(setCycle); }, []);
 
   if (!cycle) return null;
 
@@ -18,7 +16,7 @@ export default function AdminCyclePanel() {
     setBusy(true);
     try {
       await setSubmissionsOpen(!open);
-      setCycle({ ...cycle, submissions_open: !open });
+      onChanged?.();
     } catch {
       /* RLS / network */
     } finally {

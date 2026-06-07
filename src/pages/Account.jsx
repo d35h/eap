@@ -28,9 +28,11 @@ export default function Account() {
   const [reviewsByApp, setReviewsByApp] = useState({});
   // All jurors in the system [{ id, email }] (admin only).
   const [jurors, setJurors] = useState([]);
-  // Active tour (drives which tour's reviews the cabinet shows).
-  const [activeTour, setActiveTour] = useState(1);
-  // Bumped after a tour transition to refetch applications/cycle.
+  // Cycle (submissions + tours); active tour is derived from it. Single source
+  // of truth shared by both admin panels so they never go out of sync.
+  const [cycle, setCycle] = useState(null);
+  const activeTour = cycle?.active_tour || 1;
+  // Bumped after any change to refetch cycle/applications/reviews.
   const [refreshKey, setRefreshKey] = useState(0);
 
   // Invite jury (admin only).
@@ -71,10 +73,10 @@ export default function Account() {
       .catch(() => setAppsLoading(false));
   }, [user, isStaff, isJuror, isAdmin, activeTour, refreshKey]);
 
-  // Staff: learn the active tour (drives which tour's reviews we show).
+  // Staff: load the cycle (submissions + active tour).
   useEffect(() => {
     if (!isStaff || !supabase) return;
-    getCycle().then((c) => setActiveTour(c?.active_tour || 1));
+    getCycle().then(setCycle);
   }, [isStaff, refreshKey]);
 
   // Load which jurors have reviewed each visible application in the active tour.
@@ -284,9 +286,10 @@ export default function Account() {
           </p>
         )}
 
-        {isAdmin && <AdminCyclePanel />}
+        {isAdmin && <AdminCyclePanel cycle={cycle} onChanged={() => setRefreshKey((k) => k + 1)} />}
         {isAdmin && (
           <AdminToursPanel
+            cycle={cycle}
             applications={applications}
             reviewsByApp={reviewsByApp}
             jurors={jurors}

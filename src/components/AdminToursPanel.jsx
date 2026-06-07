@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { supabase } from '../lib/supabase.js';
-import { getCycle, updateCycle } from '../lib/cycleRepo.js';
+import { updateCycle } from '../lib/cycleRepo.js';
 import { REVIEW_CRITERIA } from '../lib/reviewCriteria.js';
 
 // Sum of a review's criterion ratings.
@@ -8,15 +8,11 @@ const reviewTotal = (scores) =>
   REVIEW_CRITERIA.reduce((s, c) => s + (Number(scores?.[c.key]?.rating) || 0), 0);
 
 // Admin Tours panel: open/close evaluations, then rank + select to advance.
-// Props: applications (all), reviewsByApp (active tour), jurors, onChanged().
-export default function AdminToursPanel({ applications, reviewsByApp, jurors, onChanged }) {
-  const [cycle, setCycle] = useState(null);
+// `cycle` + `onChanged` come from the parent (shared with the cycle panel).
+export default function AdminToursPanel({ cycle, applications, reviewsByApp, jurors, onChanged }) {
   const [selecting, setSelecting] = useState(false);
   const [picked, setPicked] = useState(() => new Set());
   const [busy, setBusy] = useState(false);
-
-  const loadCycle = () => getCycle().then(setCycle);
-  useEffect(() => { loadCycle(); }, []);
 
   if (!cycle) return null;
 
@@ -57,7 +53,6 @@ export default function AdminToursPanel({ applications, reviewsByApp, jurors, on
     setBusy(true);
     try {
       await updateCycle({ [openField]: open });
-      await loadCycle();
       onChanged?.();
     } finally { setBusy(false); }
   };
@@ -89,7 +84,6 @@ export default function AdminToursPanel({ applications, reviewsByApp, jurors, on
       });
       await updateCycle({ [openField]: false });
       setSelecting(false);
-      await loadCycle();
       onChanged?.();
     } finally { setBusy(false); }
   };
@@ -98,7 +92,6 @@ export default function AdminToursPanel({ applications, reviewsByApp, jurors, on
     setBusy(true);
     try {
       await updateCycle({ active_tour: 2 });
-      await loadCycle();
       onChanged?.();
     } finally { setBusy(false); }
   };
