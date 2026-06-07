@@ -65,6 +65,20 @@ async function gp(path, body) {
   return data;
 }
 
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Wait until a media container has finished processing, or publish will fail.
+async function waitReady(containerId, token) {
+  for (let i = 0; i < 8; i++) {
+    const res = await fetch(`${GRAPH}/${containerId}?fields=status_code&access_token=${token}`);
+    const d = await res.json().catch(() => ({}));
+    if (d.status_code === 'FINISHED') return;
+    if (d.status_code === 'ERROR') throw new Error('container processing error');
+    await sleep(1500);
+  }
+  throw new Error('container not ready (timeout)');
+}
+
 async function igPublish(igUserId, token, { imageUrls, caption }) {
   let containerId;
   if (imageUrls.length === 1) {
@@ -81,6 +95,7 @@ async function igPublish(igUserId, token, { imageUrls, caption }) {
     });
     containerId = carousel.id;
   }
+  await waitReady(containerId, token);
   const pub = await gp(`${igUserId}/media_publish`, { creation_id: containerId, access_token: token });
   return pub.id;
 }
