@@ -131,6 +131,7 @@ export default function ApplicationDetail() {
   };
 
   const applicant = [app.first_name, app.last_name].filter(Boolean).join(' ') || '—';
+  const isCurrentEdition = (app.edition || 1) === (cycle?.current_edition || 1);
   const metaParts = [];
   if (app.country) metaParts.push(app.country);
   if (app.city) metaParts.push(app.city);
@@ -198,24 +199,29 @@ export default function ApplicationDetail() {
 
         {app.payment_status === 'paid' && tours.map((t) => {
           const tReviews = reviews.filter((r) => (r.tour || 1) === t);
+          const reviewedIds = new Set(tReviews.map((r) => r.reviewer_id).filter(Boolean));
+          // Pending = current jurors who haven't reviewed (only for the current edition;
+          // past editions' jurors are gone, so we rely on the snapshotted review rows).
+          const pending = isCurrentEdition ? jurors.filter((j) => !reviewedIds.has(j.id)) : [];
           return (
             <div className="detail-tour" key={t}>
               <span className="account-section-label">Жюри · тур {t}</span>
               <div className="account-app-card__reviews">
-                {jurors.length === 0 && <span className="account-app-card__not-reviewed">Нет приглашённых жюри</span>}
-                {jurors.map((j) => {
-                  const r = tReviews.find((x) => x.reviewer_id === j.id) || null;
-                  const state = !r ? 'none' : r.status === 'finished' && !r.unlocked ? 'finished' : 'draft';
+                {tReviews.length === 0 && pending.length === 0 && (
+                  <span className="account-app-card__not-reviewed">Нет данных</span>
+                )}
+                {tReviews.map((r) => {
+                  const state = r.status === 'finished' && !r.unlocked ? 'finished' : 'draft';
                   return (
-                    <div key={j.id} className="review-row">
+                    <div key={r.id} className="review-row">
                       <span className="review-row__email">
-                        <span className="review-row__name">{j.name || j.email}</span>
-                        {j.name && <span className="review-row__sub">{j.email}</span>}
+                        <span className="review-row__name">{r.reviewer_name || r.reviewer_email}</span>
+                        {r.reviewer_name && <span className="review-row__sub">{r.reviewer_email}</span>}
                       </span>
                       <span className={`review-chip review-chip--${state}`}>
-                        {state === 'finished' ? 'Рассмотрено' : state === 'draft' ? 'Черновик' : 'Не рассмотрено'}
+                        {state === 'finished' ? 'Рассмотрено' : 'Черновик'}
                       </span>
-                      {r && r.status === 'finished' && !r.unlocked && tourOngoing(t) && (
+                      {state === 'finished' && tourOngoing(t) && (
                         <div className="review-row__actions">
                           <button type="button" className="review-row__btn review-row__btn--ghost" onClick={() => handleUnlock(r.id)}>
                             Разрешить редактирование
@@ -225,6 +231,15 @@ export default function ApplicationDetail() {
                     </div>
                   );
                 })}
+                {pending.map((j) => (
+                  <div key={j.id} className="review-row">
+                    <span className="review-row__email">
+                      <span className="review-row__name">{j.name || j.email}</span>
+                      {j.name && <span className="review-row__sub">{j.email}</span>}
+                    </span>
+                    <span className="review-chip review-chip--none">Не рассмотрено</span>
+                  </div>
+                ))}
               </div>
               <Link to={`/account/results/${app.id}/${t}`} className="btn-ink account-app-card__action">
                 Оценки жюри · тур {t}
