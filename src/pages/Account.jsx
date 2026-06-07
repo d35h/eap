@@ -481,7 +481,7 @@ export default function Account() {
             })()}
             {isAdmin && app.payment_status === 'paid' && (
               <>
-              <span className="account-section-label">Жюри · тур {shownTour}</span>
+              <span className="account-section-label">Жюри</span>
               <div className="account-app-card__reviews">
                 {sortedJurors.length === 0 && (
                   <span className="account-app-card__not-reviewed">Нет приглашённых жюри</span>
