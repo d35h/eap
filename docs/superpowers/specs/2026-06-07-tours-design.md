@@ -111,10 +111,10 @@ A panel at the top of the admin cabinet (above the applications list):
 
 ---
 
-## 9. Open questions for confirmation
+## 9. Resolved decisions (confirmed 2026-06-07)
 
-1. **Selection basis** — average sum-of-ratings as proposed, or a different aggregation (e.g. average per-criterion, or median to resist outliers)?
-2. **Who counts toward a score** — only jurors who **finished**, or include drafts? (Proposal: finished only.)
-3. **Quorum** — should advancing require a minimum number of jurors to have reviewed (e.g. ≥ half), or can the admin advance regardless?
-4. **Manual override depth** — is "toggle any application in the ranked list" enough, or do you also want the admin to add a non-top application directly?
-5. **Tour 2 default** — fixed top-3, or also a percentage like Tour 1?
+1. **Selection basis** — **mean** of jurors' totals (each juror's total = sum of their criterion ratings; max 20 with 2 criteria), averaged across jurors who finished.
+2. **Who counts** — **finished reviews only**; drafts are ignored.
+3. **Quorum** — advancing requires **all jurors to have finished** reviewing **every active application** in the tour. The Tours panel shows progress (e.g. «оценили 3/4 жюри»); the finalize button is disabled until 100%. (`expected = jurors × active applications`, `done = finished reviews`; enable when `done === expected && expected > 0`.)
+4. **Manual override** — the selection step lists **all** active applications ranked by score with a checkbox each; admin toggles any on/off (covers adding a non-top one), then confirms.
+5. **Tour 2 default** — fixed **top-3** (still overridable via the N input).
