@@ -32,6 +32,8 @@ export default function Account() {
   // of truth shared by both admin panels so they never go out of sync.
   const [cycle, setCycle] = useState(null);
   const activeTour = cycle?.active_tour || 1;
+  // Jurors can only see/evaluate once the active tour's evaluations are open.
+  const evaluationsOpen = activeTour === 1 ? !!cycle?.tour1_open : !!cycle?.tour2_open;
   // Bumped after any change to refetch cycle/applications/reviews.
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -50,6 +52,12 @@ export default function Account() {
 
   useEffect(() => {
     if (!user || !supabase) return;
+    // Jurors get nothing until their tour's evaluations are open.
+    if (isJuror && !evaluationsOpen) {
+      setApplications([]);
+      setAppsLoading(false);
+      return;
+    }
     setAppsLoading(true);
     // Staff read every application; regular users only their own.
     // RLS enforces this server-side too - the filter is just intent.
@@ -71,7 +79,7 @@ export default function Account() {
         setAppsLoading(false);
       })
       .catch(() => setAppsLoading(false));
-  }, [user, isStaff, isJuror, isAdmin, activeTour, refreshKey]);
+  }, [user, isStaff, isJuror, isAdmin, activeTour, evaluationsOpen, refreshKey]);
 
   // Staff: load the cycle (submissions + active tour).
   useEffect(() => {
@@ -228,8 +236,6 @@ export default function Account() {
   const headEyebrow = isAdmin ? 'Администратор' : isJuror ? 'Жюри' : t('account.nav');
   const headTitle = isAdmin ? 'Панель управления' : isJuror ? 'Кабинет жюри' : t('account.cabinetTitle');
   const identityLine = isJuror && jurorName ? `${jurorName} <${user.email}>` : user.email;
-  // Jurors can only see/evaluate applications once the tour's evaluations open.
-  const evaluationsOpen = activeTour === 1 ? !!cycle?.tour1_open : !!cycle?.tour2_open;
 
   return (
     <main className="apply-page">
