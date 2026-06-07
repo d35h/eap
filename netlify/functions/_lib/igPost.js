@@ -4,11 +4,7 @@ import { getIgToken } from './igToken.js';
 const GRAPH = 'https://graph.instagram.com/v21.0';
 
 const cfg = (env) => ({
-  biennale: env.IG_BIENNALE_NAME || 'Chianciano Biennale',
-  museum: env.IG_MUSEUM || 'Chianciano Art Museum',
-  year: env.IG_BIENNALE_YEAR || String(new Date().getFullYear()),
-  hashtags: env.IG_HASHTAGS || '#ChiancianoBiennale #CallForArtists #ContemporaryArt #InternationalExhibition',
-  site: env.PUBLIC_SITE_URL || '',
+  hashtags: env.IG_HASHTAGS || '#EAP #CallForArtists #ContemporaryArt #EurasianExhibition',
 });
 
 function igHandle(raw) {
@@ -20,34 +16,31 @@ function igHandle(raw) {
     .split(/[/?]/)[0];
 }
 
+// Caption:
+//   Name @instagram | website
+//
+//   <title>, <year> — <media>. <size>   (one line per work)
+//
+//   #EAP #CallForArtists #ContemporaryArt #EurasianExhibition
 function buildCaption(app, c) {
   const name = [app.first_name, app.last_name].filter(Boolean).join(' ') || 'Artist';
-  const country = (app.country || '').trim();
-  const lines = [];
-  lines.push(country ? `${name} #${country.replace(/\s+/g, '')}` : name);
   const handle = igHandle(app.instagram);
-  if (handle) lines.push(`@${handle}`);
-  lines.push('');
-  lines.push(`Work presented during the open submission phase for the ${c.year} edition of the ${c.biennale}, organised by the ${c.museum}.`);
-  lines.push('');
-  lines.push('The curatorial review process is currently ongoing.');
-  lines.push('');
-  const works = (app.works || []).filter((w) => w.title || w.media || w.size);
-  if (works.length) {
-    lines.push(works.length > 1 ? 'Artworks:' : 'Artwork:');
-    works.forEach((w) => {
-      let l = w.title || '';
-      if (w.year) l += `, ${w.year}`;
-      if (w.media) l += ` — ${w.media}`;
-      if (w.size) l += `. ${w.size}`;
-      lines.push(l.trim());
-    });
-    lines.push('');
-  }
-  lines.push(`🎨 Submissions for ${c.biennale} ${c.year} remain open.`);
-  lines.push('');
-  lines.push('🔗 Further details via link in bio.');
-  if (c.site) lines.push(c.site);
+  const extras = [];
+  if (handle) extras.push(`@${handle}`);
+  if (app.website) extras.push(String(app.website).trim());
+
+  const lines = [name + (extras.length ? ` ${extras.join(' | ')}` : ''), ''];
+
+  const works = (app.works || []).filter((w) => w.title || w.year || w.media || w.size);
+  works.forEach((w) => {
+    let l = w.title || '';
+    if (w.year) l += (l ? ', ' : '') + w.year;
+    if (w.media) l += (l ? ' — ' : '') + w.media;
+    if (w.size) l += (l ? '. ' : '') + w.size;
+    if (l) lines.push(l);
+  });
+  if (works.length) lines.push('');
+
   lines.push(c.hashtags);
   return lines.join('\n');
 }
