@@ -19,6 +19,8 @@ export default function ApplicationDetail() {
   const [reviews, setReviews] = useState([]);
   const [files, setFiles] = useState({});
   const [refresh, setRefresh] = useState(0);
+  const [publishing, setPublishing] = useState(false);
+  const [pubMsg, setPubMsg] = useState(null);
 
   useEffect(() => {
     if (loading || !isSupabaseConfigured()) return;
@@ -95,6 +97,35 @@ export default function ApplicationDetail() {
     try { await unlockReview(reviewId); setRefresh((r) => r + 1); } catch { /* */ }
   };
 
+  const publishIG = async () => {
+    setPublishing(true);
+    setPubMsg(null);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch('/.netlify/functions/ig-publish-one', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token || ''}` },
+        body: JSON.stringify({ applicationId: id }),
+      });
+      const d = await res.json().catch(() => ({}));
+      if (d.status === 'published' || d.status === 'already_published') {
+        setPubMsg({ type: 'ok', text: d.status === 'published' ? 'Опубликовано в Instagram.' : 'Уже опубликовано.' });
+        setRefresh((r) => r + 1);
+      } else if (d.status === 'skipped') {
+        setPubMsg({ type: 'error', text: 'Пропущено: нет JPEG-изображений.' });
+        setRefresh((r) => r + 1);
+      } else if (d.status === 'no_token') {
+        setPubMsg({ type: 'error', text: 'Instagram не настроен.' });
+      } else {
+        setPubMsg({ type: 'error', text: 'Ошибка публикации.' });
+      }
+    } catch {
+      setPubMsg({ type: 'error', text: 'Ошибка публикации.' });
+    } finally {
+      setPublishing(false);
+    }
+  };
+
   const applicant = [app.first_name, app.last_name].filter(Boolean).join(' ') || '—';
   const info = [
     app.country, app.city, app.website, app.instagram,
@@ -115,6 +146,19 @@ export default function ApplicationDetail() {
           </span>
         </p>
         {info && <p style={{ opacity: 0.6, fontSize: '14px' }}>{info}</p>}
+
+        {app.payment_status === 'paid' && (
+          <div className="detail-ig">
+            {app.published_at ? (
+              <span className="cycle-state cycle-state--open">Опубликовано в Instagram</span>
+            ) : (
+              <button type="button" className="btn-gold tours-btn" disabled={publishing} onClick={publishIG}>
+                {publishing ? '…' : 'Опубликовать в Instagram'}
+              </button>
+            )}
+            {pubMsg && <span className={`cycle-note ${pubMsg.type === 'error' ? 'cycle-note--error' : ''}`}>{pubMsg.text}</span>}
+          </div>
+        )}
 
         {app.works?.length > 0 && (
           <div className="review-works" style={{ marginTop: '24px' }}>

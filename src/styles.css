@@ -1139,6 +1139,7 @@ input, textarea, select { font-family: inherit; }
 .app-row__email { font-size: 13px; color: var(--ink-soft); opacity: 0.75; overflow-wrap: anywhere; }
 .app-row__jury { font-size: 13px; color: var(--ink-soft); white-space: nowrap; }
 .detail-tour { margin-top: 24px; }
+.detail-ig { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 20px; }
 @media (max-width: 600px) { .app-row__jury { display: none; } }
 .account-app-card__meta {
   display: flex;

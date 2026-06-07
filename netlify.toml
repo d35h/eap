@@ -10,6 +10,10 @@
 [functions."ig-publish"]
   schedule = "0 12 * * *"
 
+# Weekly Instagram token refresh (Sun 03:00 UTC) so it never expires.
+[functions."ig-refresh-token"]
+  schedule = "0 3 * * 0"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
