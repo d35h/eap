@@ -265,6 +265,11 @@ export default function Account() {
   const headEyebrow = isAdmin ? 'Администратор' : isJuror ? 'Жюри' : t('account.nav');
   const headTitle = isAdmin ? 'Панель управления' : isJuror ? 'Кабинет жюри' : t('account.cabinetTitle');
   const identityLine = isJuror && jurorName ? `${jurorName} <${user.email}>` : user.email;
+  // Unlocking a juror's review is only allowed while the (active) tour is still
+  // running - not once it's been finalized (advanced / winners chosen).
+  const tour2Exists = applications.some((a) => (a.tour || 1) === 2);
+  const hasWinners = applications.some((a) => a.standing === 'winner');
+  const tourOngoing = shownTour === activeTour && !(activeTour === 1 ? tour2Exists : hasWinners);
 
   return (
     <main className="apply-page">
@@ -503,26 +508,26 @@ export default function Account() {
                       <span className={`review-chip review-chip--${state}`}>
                         {state === 'finished' ? 'Рассмотрено' : state === 'draft' ? 'Черновик' : 'Не рассмотрено'}
                       </span>
-                      {r && (
+                      {r && r.status === 'finished' && !r.unlocked && tourOngoing && (
                         <div className="review-row__actions">
-                          <Link to={`/account/review/${app.id}/${j.id}/${shownTour}`} className="review-row__btn">
-                            Открыть оценку
-                          </Link>
-                          {r.status === 'finished' && !r.unlocked && (
-                            <button
-                              type="button"
-                              className="review-row__btn review-row__btn--ghost"
-                              onClick={() => handleUnlock(r)}
-                            >
-                              Разрешить редактирование
-                            </button>
-                          )}
+                          <button
+                            type="button"
+                            className="review-row__btn review-row__btn--ghost"
+                            onClick={() => handleUnlock(r)}
+                          >
+                            Разрешить редактирование
+                          </button>
                         </div>
                       )}
                     </div>
                   );
                 })}
               </div>
+              {reviewers.length > 0 && (
+                <Link to={`/account/results/${app.id}/${shownTour}`} className="btn-ink account-app-card__action">
+                  Смотреть оценки жюри
+                </Link>
+              )}
               </>
             )}
             {isJuror && (
