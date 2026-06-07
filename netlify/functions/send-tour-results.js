@@ -47,8 +47,8 @@ export async function handleSendResults({ admin, env }, { token, tour, force }) 
 
     const { subject, html } = tourResultEmail({ lang: a.lang || 'ru', tour: t, advanced, feedback });
     try {
-      await sendEmail(env, { to: a.email, subject, html });
-      count++;
+      const ok = await sendEmail(env, { to: a.email, subject, html });
+      if (ok) count++;
     } catch (e) {
       console.error('result email failed:', a.email, e?.message || e);
     }
