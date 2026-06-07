@@ -256,6 +256,8 @@ export const translations = {
       successTitle: 'Заявка отправлена',
       successDesc: 'Спасибо! Ваша заявка успешно отправлена и оплачена. Мы пришлём подтверждение на email в течение нескольких минут. Результаты отбора - апрель–июнь 2027.',
       successBack: 'Вернуться на главную',
+      closedTitle: 'Приём заявок закрыт',
+      closedDesc: 'Сейчас мы не принимаем новые заявки. Следите за новостями о следующем приёме.',
     },
     processPage: {
       titlePart1: 'Как ',
@@ -561,6 +563,8 @@ export const translations = {
       successTitle: 'Application submitted',
       successDesc: 'Thank you! Your application has been successfully submitted and paid. We will send confirmation to your email within a few minutes. Selection results - April–June 2027.',
       successBack: 'Back to home',
+      closedTitle: 'Submissions are closed',
+      closedDesc: 'We are not accepting new applications right now. Stay tuned for the next open call.',
     },
     processPage: {
       titlePart1: 'How to ',
@@ -866,6 +870,8 @@ export const translations = {
       successTitle: 'Өтінім жіберілді',
       successDesc: 'Рахмет! Өтініміңіз сәтті жіберілді. Растауды email арқылы жібереміз.',
       successBack: 'Басты бетке',
+      closedTitle: 'Өтінім қабылдау жабық',
+      closedDesc: 'Қазір біз жаңа өтінімдерді қабылдамаймыз. Келесі қабылдау туралы жаңалықтарды бақылаңыз.',
     },
     processPage: {
       titlePart1: 'Қалай ',
@@ -1170,6 +1176,8 @@ export const translations = {
       successTitle: '申请已提交',
       successDesc: '谢谢！您的申请已成功提交并付款。我们将在几分钟内向您的邮箱发送确认。评选结果--2027 年 4 月至 6 月。',
       successBack: '返回首页',
+      closedTitle: '申请通道已关闭',
+      closedDesc: '我们目前暂不接受新的申请。请关注下一次征集的消息。',
     },
     processPage: {
       titlePart1: '如何',

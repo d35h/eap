@@ -5,6 +5,7 @@ import { useFormPersist } from '../hooks/useFormPersist.js';
 import { submitApplication, uploadWorkFiles } from '../lib/applicationsRepo.js';
 import { startPayment } from '../lib/payments.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
+import { submissionsOpen } from '../lib/cycleRepo.js';
 
 const emptyWork = () => ({ title: '', year: '', media: '', size: '', desc: '' });
 
@@ -39,11 +40,16 @@ export default function Apply() {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [closed, setClosed] = useState(false);
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
     if (p.get('status') === 'success') { clearForm(); setSuccess(true); }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    submissionsOpen().then((open) => setClosed(!open));
+  }, []);
 
   const update = (k, v) => {
     setForm((f) => ({ ...f, [k]: v }));
@@ -152,6 +158,20 @@ export default function Apply() {
             <div className="ok">{t('apply.successOk')}</div>
             <h2>{t('apply.successTitle')}</h2>
             <p>{t('apply.successDesc')}</p>
+            <Link to="/" className="btn-ink">{t('apply.successBack')}</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (closed) {
+    return (
+      <div className="apply-page">
+        <div className="container">
+          <div className="success-screen">
+            <h2>{t('apply.closedTitle')}</h2>
+            <p>{t('apply.closedDesc')}</p>
             <Link to="/" className="btn-ink">{t('apply.successBack')}</Link>
           </div>
         </div>

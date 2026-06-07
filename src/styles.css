@@ -988,6 +988,27 @@ input, textarea, select { font-family: inherit; }
   .apply-page { padding: 120px 0 80px; }
 }
 
+/* ── Admin cycle panel ── */
+.cycle-panel {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 24px;
+  margin: 8px 0 8px;
+  background: hsla(36, 30%, 99%, 0.7);
+}
+.cycle-panel__row {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+}
+.cycle-panel__state { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.cycle-state {
+  font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.cycle-state--open { background: hsl(140, 40%, 18%); color: hsl(140, 60%, 60%); }
+.cycle-state--closed { background: hsl(2, 45%, 22%); color: hsl(2, 70%, 70%); }
+.cycle-note { font-size: 12px; color: var(--ink-soft); opacity: 0.75; }
+.cycle-panel__btn { font-size: 13px; padding: 10px 18px; letter-spacing: 0.06em; }
+
 /* ── Account cabinet ── */
 .account-app-card {
   border: 1px solid var(--border);

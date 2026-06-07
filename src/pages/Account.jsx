@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth.jsx';
 import { isSupabaseConfigured, supabase } from '../lib/supabase.js';
 import { signOut } from '../lib/auth.js';
 import { unlockReview } from '../lib/reviewsRepo.js';
+import AdminCyclePanel from '../components/AdminCyclePanel.jsx';
 
 export default function Account() {
   const { t } = useTranslation();
@@ -261,6 +262,8 @@ export default function Account() {
             {inviteMsg.text}
           </p>
         )}
+
+        {isAdmin && <AdminCyclePanel />}
 
         <h2 style={{ margin: '40px 0 24px' }}>
           {isStaff ? 'Все заявки' : t('account.yourApplications')}
