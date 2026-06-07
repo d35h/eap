@@ -9,6 +9,9 @@ import AdminCyclePanel from '../components/AdminCyclePanel.jsx';
 import AdminToursPanel from '../components/AdminToursPanel.jsx';
 import { getCycle } from '../lib/cycleRepo.js';
 
+// Medal for top-3 placements.
+const medal = (p) => (p === 1 ? '🥇' : p === 2 ? '🥈' : p === 3 ? '🥉' : '🏆');
+
 export default function Account() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -378,11 +381,6 @@ export default function Account() {
                   {app.payment_status === 'paid' ? L('statusPaid', 'Оплачено') : L('statusPending', 'Ожидает оплаты')}
                 </span>
               )}
-              {!isStaff && app.payment_status === 'paid' && (
-                <span className={`account-app-card__status account-app-card__status--review-${app.review_status === 'reviewed' ? 'reviewed' : 'in_review'}`}>
-                  {app.review_status === 'reviewed' ? t('account.statusReviewed') : t('account.statusInReview')}
-                </span>
-              )}
               {isJuror && (
                 <span className={`account-app-card__status account-app-card__status--juror-${jurorState}`}>
                   {jurorState === 'finished' ? 'Завершено' : jurorState === 'draft' ? 'Черновик' : 'Не оценено'}
@@ -437,7 +435,7 @@ export default function Account() {
                           className={`tours-tab ${tr.tour === x.tour ? 'is-active' : ''}`}
                           onClick={() => setArtistTab((p) => ({ ...p, [app.id]: x.tour }))}
                         >
-                          {x.tour === 1 ? t('account.tour1Results') : t('account.tour2Results')}
+                          {t('account.roundN', { n: x.tour })}
                         </button>
                       ))}
                     </div>
@@ -451,7 +449,7 @@ export default function Account() {
                         {tr.outcome === 'advanced'
                           ? t('account.outcomeAdvanced')
                           : tr.outcome === 'winner'
-                          ? t('account.outcomeWinner')
+                          ? `${medal(tr.place)} #${tr.place}`
                           : t('account.outcomeEliminated')}
                       </span>
                     </div>

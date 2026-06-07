@@ -11,6 +11,8 @@ const reviewTotal = (scores) =>
 const applicant = (a) =>
   [a.first_name, a.last_name].filter(Boolean).join(' ') || a.email || a.id.slice(0, 8);
 
+const medal = (p) => (p === 1 ? '🥇' : p === 2 ? '🥈' : p === 3 ? '🥉' : '🏆');
+
 // Admin Tours panel: switch between tours to see results; run the active tour's
 // open/close + selection. `cycle`, `reviewsByApp` (for viewTour) and the
 // view-tour state come from the parent.
@@ -52,6 +54,12 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
   );
   const rankedResults = [...participants].sort((a, b) => (scoreOf(b.id) ?? -1) - (scoreOf(a.id) ?? -1));
 
+  // Winner placements (rank among winners by score).
+  const winnersSorted = participants
+    .filter((a) => a.standing === 'winner')
+    .sort((a, b) => (scoreOf(b.id) ?? -1) - (scoreOf(a.id) ?? -1));
+  const placeByApp = new Map(winnersSorted.map((a, i) => [a.id, i + 1]));
+
   // Active-tour set (for quorum + selection). Valid because controls only show
   // when viewing the active tour, where reviewsByApp is that tour's reviews.
   const activeApps = applications.filter(
@@ -69,7 +77,10 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
       if (a.standing === 'eliminated') return { label: 'Выбыл', cls: 'none' };
       return { label: 'Идёт оценка', cls: 'draft' };
     }
-    if (a.standing === 'winner') return { label: 'Победитель', cls: 'finished' };
+    if (a.standing === 'winner') {
+      const p = placeByApp.get(a.id);
+      return { label: `${medal(p)} #${p}`, cls: 'finished' };
+    }
     if (a.standing === 'eliminated') return { label: 'Выбыл', cls: 'none' };
     return { label: 'Идёт оценка', cls: 'draft' };
   };

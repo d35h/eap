@@ -6,6 +6,9 @@ const CRITERIA = [
   { key: 'originality', title: 'Оригинальность' },
 ];
 
+const reviewTotal = (scores) =>
+  CRITERIA.reduce((s, c) => s + (Number(scores?.[c.key]?.rating) || 0), 0);
+
 // Return the caller's own published tour results. Tour 1: jury feedback only
 // (no scores). Tour 2: feedback + per-criterion average score. Only tours whose
 // results the admin has sent/published are included.
@@ -18,6 +21,26 @@ export async function handleMyResults({ admin }, { token }) {
   const { data: cyc } = await admin.from('cycle_state').select('*').eq('id', 1).maybeSingle();
   const { data: apps } = await admin
     .from('applications').select('*').eq('user_id', uid).eq('payment_status', 'paid');
+
+  // Winner places: rank among all winners by tour-2 mean total score.
+  const { data: allWinners } = await admin.from('applications').select('id').eq('standing', 'winner');
+  const winnerIds = (allWinners || []).map((w) => w.id);
+  let placeByApp = new Map();
+  if (winnerIds.length) {
+    const { data: wrevs } = await admin
+      .from('application_reviews').select('application_id, scores, status')
+      .eq('tour', 2).in('application_id', winnerIds);
+    const totals = {};
+    (wrevs || []).filter((r) => r.status === 'finished').forEach((r) => {
+      (totals[r.application_id] ||= []).push(reviewTotal(r.scores));
+    });
+    const scored = winnerIds.map((wid) => ({
+      id: wid,
+      score: totals[wid]?.length ? totals[wid].reduce((a, b) => a + b, 0) / totals[wid].length : -1,
+    }));
+    scored.sort((a, b) => b.score - a.score);
+    placeByApp = new Map(scored.map((s, i) => [s.id, i + 1]));
+  }
 
   const out = [];
   for (const app of apps || []) {
@@ -50,8 +73,9 @@ export async function handleMyResults({ admin }, { token }) {
       const outcome = t === 1
         ? ((app.tour || 1) >= 2 ? 'advanced' : 'eliminated')
         : (app.standing === 'winner' ? 'winner' : 'eliminated');
+      const place = t === 2 && app.standing === 'winner' ? (placeByApp.get(app.id) || null) : null;
 
-      tours.push({ tour: t, outcome, feedback });
+      tours.push({ tour: t, outcome, place, feedback });
     }
     if (tours.length) out.push({ application_id: app.id, tours });
   }
