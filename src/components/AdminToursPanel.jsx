@@ -24,6 +24,11 @@ export default function AdminToursPanel({ applications, reviewsByApp, jurors, on
   const tourOpen = activeTour === 1 ? cycle.tour1_open : cycle.tour2_open;
   const openField = activeTour === 1 ? 'tour1_open' : 'tour2_open';
 
+  // Evaluations can only be opened once the call is closed (no judging while
+  // still accepting applications).
+  const deadlinePassed = cycle.submissions_deadline && new Date(cycle.submissions_deadline) < new Date();
+  const submissionsClosed = !cycle.submissions_open || deadlinePassed;
+
   // Paid applications still in contention in this tour.
   const activeApps = applications.filter(
     (a) => a.payment_status === 'paid' && a.standing === 'active' && (a.tour || 1) === activeTour
@@ -48,12 +53,10 @@ export default function AdminToursPanel({ applications, reviewsByApp, jurors, on
   const winnersExist = applications.some((a) => a.standing === 'winner');
 
   const setOpen = async (open) => {
+    if (open && !submissionsClosed) return; // guard: close submissions first
     setBusy(true);
     try {
-      // Opening tour 1 evaluations auto-closes submissions.
-      const patch = { [openField]: open };
-      if (activeTour === 1 && open) patch.submissions_open = false;
-      await updateCycle(patch);
+      await updateCycle({ [openField]: open });
       await loadCycle();
       onChanged?.();
     } finally { setBusy(false); }
@@ -121,9 +124,18 @@ export default function AdminToursPanel({ applications, reviewsByApp, jurors, on
                 оценили {done}/{expected || 0} {quorumMet ? '· можно подводить итоги' : ''}
               </span>
             )}
+            {!tourOpen && !submissionsClosed && (
+              <span className="cycle-note">Сначала закройте приём заявок</span>
+            )}
           </div>
           <div className="tours-panel__actions">
-            <button type="button" className="btn-ink tours-btn" disabled={busy} onClick={() => setOpen(!tourOpen)}>
+            <button
+              type="button"
+              className="btn-ink tours-btn"
+              disabled={busy || (!tourOpen && !submissionsClosed)}
+              title={!tourOpen && !submissionsClosed ? 'Сначала закройте приём заявок' : ''}
+              onClick={() => setOpen(!tourOpen)}
+            >
               {tourOpen ? 'Закрыть приём оценок' : 'Открыть приём оценок'}
             </button>
             {tourOpen && (
