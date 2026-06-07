@@ -52,17 +52,24 @@ export default function Account() {
     // Staff read every application; regular users only their own.
     // RLS enforces this server-side too - the filter is just intent.
     let query = supabase.from('applications').select('*').order('created_at', { ascending: false });
-    // Admin: all. Juror: only paid (they never see payment status at all).
+    // Admin: all (the Tours panel needs every standing/tour).
+    // Juror: only paid + still-active applications in the current tour.
     // Artist: only their own.
-    if (isJuror) query = query.eq('payment_status', 'paid');
-    else if (!isAdmin) query = query.eq('user_id', user.id);
+    if (isJuror) {
+      query = query
+        .eq('payment_status', 'paid')
+        .eq('standing', 'active')
+        .eq('tour', activeTour);
+    } else if (!isAdmin) {
+      query = query.eq('user_id', user.id);
+    }
     query
       .then(({ data }) => {
         setApplications(data || []);
         setAppsLoading(false);
       })
       .catch(() => setAppsLoading(false));
-  }, [user, isStaff, refreshKey]);
+  }, [user, isStaff, isJuror, isAdmin, activeTour, refreshKey]);
 
   // Staff: learn the active tour (drives which tour's reviews we show).
   useEffect(() => {
