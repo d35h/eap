@@ -29,6 +29,7 @@ export default function Account() {
   // Invite jury (admin only).
   const [inviteOpen, setInviteOpen] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteName, setInviteName] = useState('');
   const [inviting, setInviting] = useState(false);
   const [inviteMsg, setInviteMsg] = useState(null); // { type, text }
 
@@ -111,6 +112,7 @@ export default function Account() {
     e.preventDefault();
     setInviteMsg(null);
     const email = inviteEmail.trim();
+    const name = inviteName.trim();
     if (!email) return;
     setInviting(true);
     try {
@@ -121,12 +123,13 @@ export default function Account() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${session?.access_token || ''}`,
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, name }),
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.status === 'invited') {
         setInviteMsg({ type: 'ok', text: 'Приглашение отправлено.' });
         setInviteEmail('');
+        setInviteName('');
         setInviteOpen(false); // collapse the form; the confirmation stays below
       } else if (data.status === 'exists') {
         setInviteMsg({ type: 'exists', text: 'Пользователь с таким email уже существует.' });
@@ -198,13 +201,15 @@ export default function Account() {
     navigate('/login');
   };
 
-  const headTitle = isAdmin ? 'Администратор' : isJuror ? 'Жюри' : t('account.cabinetTitle');
+  const jurorName = user?.app_metadata?.name || '';
+  const headTitle = isAdmin ? 'Администратор' : isJuror ? (jurorName || 'Жюри') : t('account.cabinetTitle');
+  const headEyebrow = isAdmin ? 'Администратор' : isJuror ? 'Жюри' : headTitle;
 
   return (
     <main className="apply-page">
       <div className="container">
         <div className="apply-head">
-          <span className="eyebrow">- {headTitle}</span>
+          <span className="eyebrow">- {headEyebrow}</span>
           <h1>{headTitle}</h1>
         </div>
         <p style={{ marginBottom: '16px', opacity: 0.7 }}>{user.email}</p>
@@ -228,6 +233,13 @@ export default function Account() {
 
         {isAdmin && inviteOpen && (
           <form className="invite-jury" onSubmit={inviteJury}>
+            <input
+              type="text"
+              placeholder="Имя жюри"
+              value={inviteName}
+              onChange={(e) => setInviteName(e.target.value)}
+              autoComplete="off"
+            />
             <input
               type="email"
               placeholder="email@example.com"
@@ -268,6 +280,12 @@ export default function Account() {
             : myReview.status === 'finished' && !myReview.unlocked
             ? 'finished'
             : 'draft';
+          // Jurors who reviewed float to the top (finished, then draft, then none).
+          const rankOf = (jid) => {
+            const r = reviewers.find((x) => x.reviewer_id === jid);
+            return !r ? 0 : r.status === 'finished' && !r.unlocked ? 2 : 1;
+          };
+          const sortedJurors = [...jurors].sort((a, b) => rankOf(b.id) - rankOf(a.id));
           return (
           <div key={app.id} className="account-app-card">
             <div className="account-app-card__meta">
@@ -318,10 +336,10 @@ export default function Account() {
             )}
             {isAdmin && app.payment_status === 'paid' && (
               <div className="account-app-card__reviews">
-                {jurors.length === 0 && (
+                {sortedJurors.length === 0 && (
                   <span className="account-app-card__not-reviewed">Нет приглашённых жюри</span>
                 )}
-                {jurors.map((j) => {
+                {sortedJurors.map((j) => {
                   const r = reviewers.find((x) => x.reviewer_id === j.id) || null;
                   const state = !r
                     ? 'none'
@@ -330,7 +348,9 @@ export default function Account() {
                     : 'draft';
                   return (
                     <div key={j.id} className="review-row">
-                      <span className="review-row__email">{j.email}</span>
+                      <span className="review-row__email">
+                        {j.name ? <><strong>{j.name}</strong> · {j.email}</> : j.email}
+                      </span>
                       <span className={`review-chip review-chip--${state}`}>
                         {state === 'finished' ? 'Рассмотрено' : state === 'draft' ? 'Черновик' : 'Не рассмотрено'}
                       </span>

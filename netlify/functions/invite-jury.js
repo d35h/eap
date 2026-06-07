@@ -4,9 +4,9 @@ import { json } from './_lib/json.js';
 
 // Pure core (testable): deps injected.
 //   token = the caller's access token (must belong to an admin)
-//   email = the invitee
+//   email = the invitee, name = display name the admin assigns
 // Returns { status: 'invited' | 'exists' } or an error envelope.
-export async function handleInviteJury({ admin, env }, { token, email }) {
+export async function handleInviteJury({ admin, env }, { token, email, name }) {
   // 1. Authorize: only an admin may invite jurors.
   if (!token) return json(401, { error: 'unauthorized' });
   const { data: caller, error: authErr } = await admin.auth.getUser(token);
@@ -18,6 +18,7 @@ export async function handleInviteJury({ admin, env }, { token, email }) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lower)) {
     return json(400, { error: 'invalid email' });
   }
+  const displayName = (name || '').trim();
 
   const site = env.PUBLIC_SITE_URL || '';
 
@@ -32,10 +33,13 @@ export async function handleInviteJury({ admin, env }, { token, email }) {
     return json(200, { status: 'exists' });
   }
 
-  // 3. Stamp the juror role into app_metadata (tamper-proof, rides in the JWT).
+  // 3. Stamp the juror role + admin-assigned name into app_metadata
+  //    (tamper-proof, rides in the JWT).
   const userId = gen.data?.user?.id;
   if (userId) {
-    await admin.auth.admin.updateUserById(userId, { app_metadata: { role: 'juror' } });
+    await admin.auth.admin.updateUserById(userId, {
+      app_metadata: { role: 'juror', name: displayName },
+    });
   }
 
   // 4. Email the invite (Russian) via Resend.
@@ -59,5 +63,5 @@ export async function handler(event) {
   const auth = event.headers?.authorization || event.headers?.Authorization || '';
   const token = auth.replace(/^Bearer\s+/i, '') || null;
   const body = JSON.parse(event.body || '{}');
-  return handleInviteJury({ admin, env }, { token, email: body.email });
+  return handleInviteJury({ admin, env }, { token, email: body.email, name: body.name });
 }

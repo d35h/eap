@@ -79,7 +79,8 @@ export default function ReviewView() {
         <Link to="/account" className="review-back">← Назад</Link>
         <div className="apply-head">
           <span className="eyebrow">- Оценка жюри</span>
-          <h1>{review?.reviewer_email || 'Жюри'}</h1>
+          <h1>{review?.reviewer_name || review?.reviewer_email || 'Жюри'}</h1>
+          {review?.reviewer_name && <p style={{ opacity: 0.6, marginTop: '-8px' }}>{review.reviewer_email}</p>}
         </div>
 
         {app && (

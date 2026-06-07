@@ -13,7 +13,7 @@ export async function handleListJurors({ admin }, { token }) {
   if (error) return json(500, { error: 'list failed' });
   const jurors = (data?.users || [])
     .filter((u) => (u.app_metadata || {}).role === 'juror')
-    .map((u) => ({ id: u.id, email: u.email }));
+    .map((u) => ({ id: u.id, email: u.email, name: (u.app_metadata || {}).name || '' }));
   return json(200, { jurors });
 }
 
