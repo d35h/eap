@@ -363,14 +363,14 @@ export default function Account() {
 
         {isAdmin && showArchive && currentEdition > 1 && (
           <div className="edition-switch">
-            {Array.from({ length: currentEdition }, (_, i) => currentEdition - i).map((ed) => (
+            {Array.from({ length: currentEdition - 1 }, (_, i) => currentEdition - 1 - i).map((ed) => (
               <button
                 key={ed}
                 type="button"
                 className={`tours-tab ${shownEdition === ed ? 'is-active' : ''}`}
                 onClick={() => { setViewEdition(ed); setArchiveTab('apps'); }}
               >
-                Биеннале {editionYears[ed] || `№${ed}`}
+                Биеннале {editionYears[ed] || `№${ed}`} (Архив)
               </button>
             ))}
           </div>

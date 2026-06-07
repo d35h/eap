@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000">
+  <rect width="1000" height="1000" fill="#121417"/>
+  <circle cx="500" cy="500" r="430" fill="none" stroke="#c2a063" stroke-width="2" opacity="0.5"/>
+  <text x="500" y="510" text-anchor="middle"
+        font-family="Georgia, 'Times New Roman', serif" font-size="300" font-style="italic"
+        fill="#c2a063">EAP</text>
+  <text x="500" y="640" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="42" letter-spacing="14"
+        fill="#f0ece4" opacity="0.85">EURASIAN ART</text>
+  <text x="500" y="700" text-anchor="middle"
+        font-family="Arial, sans-serif" font-size="42" letter-spacing="14"
+        fill="#f0ece4" opacity="0.85">PLATFORM</text>
+</svg>

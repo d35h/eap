@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1640" height="1640" viewBox="0 0 1640 1640">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#16181d"/>
+      <stop offset="1" stop-color="#121417"/>
+    </linearGradient>
+  </defs>
+  <rect width="1640" height="1640" fill="url(#g)"/>
+  <text x="120" y="775" font-family="Arial, sans-serif" font-size="28" letter-spacing="12" fill="#c2a063">EAP</text>
+  <text x="116" y="880" font-family="Georgia, 'Times New Roman', serif" font-size="110" fill="#f0ece4">
+    <tspan font-style="italic" fill="#c2a063">Eurasian</tspan><tspan> Art Platform</tspan>
+  </text>
+</svg>
