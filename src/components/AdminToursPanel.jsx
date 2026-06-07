@@ -168,7 +168,11 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
     <div className="admin-panel">
       <div className="admin-panel__head">
         <h3 className="panel-title">Результаты туров</h3>
-        {isActiveView && tourOpen && <span className="cycle-state cycle-state--open">Оценки открыты</span>}
+        {isActiveView && (
+          <span className={`cycle-state cycle-state--${tourOpen ? 'open' : 'closed'}`}>
+            {tourOpen ? 'Открыт' : 'Закрыт'}
+          </span>
+        )}
       </div>
       <div className="tours-tabs">
         {tours.map((tn) => (
