@@ -481,9 +481,11 @@ export default function Account() {
                   </span>
                   <span className="app-row__email">{app.email}</span>
                 </span>
-                <span className={`account-app-card__status account-app-card__status--${app.payment_status}`}>
-                  {app.payment_status === 'paid' ? 'Оплачено' : 'Ожидает оплаты'}
-                </span>
+                {isCurrentEdition && (
+                  <span className={`account-app-card__status account-app-card__status--${app.payment_status}`}>
+                    {app.payment_status === 'paid' ? 'Оплачено' : 'Ожидает оплаты'}
+                  </span>
+                )}
                 {isCurrentEdition && <span className="app-row__jury">Жюри: {finished}/{jurors.length}</span>}
               </Link>
             );
