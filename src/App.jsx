@@ -40,6 +40,7 @@ export default function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/account/review/:id" element={<ReviewEvaluation />} />
         <Route path="/account/review/:id/:reviewerId" element={<ReviewView />} />
+        <Route path="/account/review/:id/:reviewerId/:tour" element={<ReviewView />} />
         <Route path="/account/results/:id/:tour" element={<AppResults />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

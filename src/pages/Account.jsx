@@ -501,7 +501,7 @@ export default function Account() {
                       </span>
                       {r && (
                         <div className="review-row__actions">
-                          <Link to={`/account/review/${app.id}/${j.id}`} className="review-row__btn">
+                          <Link to={`/account/review/${app.id}/${j.id}/${shownTour}`} className="review-row__btn">
                             Открыть оценку
                           </Link>
                           {r.status === 'finished' && !r.unlocked && (

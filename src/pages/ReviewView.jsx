@@ -7,7 +7,7 @@ import { getCycle } from '../lib/cycleRepo.js';
 
 // Admin-only, read-only view of one juror's evaluation of one application.
 export default function ReviewView() {
-  const { id, reviewerId } = useParams();
+  const { id, reviewerId, tour } = useParams();
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const isAdmin = user?.app_metadata?.role === 'admin';
@@ -27,8 +27,11 @@ export default function ReviewView() {
     if (!isAdmin || !supabase) return;
     let cancelled = false;
     (async () => {
-      const cycle = await getCycle();
-      const activeTour = cycle?.active_tour || 1;
+      let reviewTour = Number(tour);
+      if (!Number.isInteger(reviewTour) || reviewTour < 1) {
+        const cycle = await getCycle();
+        reviewTour = cycle?.active_tour || 1;
+      }
       const { data: appRow } = await supabase
         .from('applications').select('*').eq('id', id).maybeSingle();
       const { data: reviewRow } = await supabase
@@ -36,7 +39,7 @@ export default function ReviewView() {
         .select('*')
         .eq('application_id', id)
         .eq('reviewer_id', reviewerId)
-        .eq('tour', activeTour)
+        .eq('tour', reviewTour)
         .maybeSingle();
       if (cancelled) return;
       setApp(appRow || null);
@@ -44,7 +47,7 @@ export default function ReviewView() {
       setReady(true);
     })();
     return () => { cancelled = true; };
-  }, [id, reviewerId, isAdmin]);
+  }, [id, reviewerId, tour, isAdmin]);
 
   useEffect(() => {
     if (!app || !supabase) return;
