@@ -16,12 +16,16 @@ export async function handleTransition({ admin }, { token, action, tour, advance
   const t = Number(tour) || 1;
   const ids = new Set(Array.isArray(advanceIds) ? advanceIds : []);
 
+  const { data: cyc } = await admin.from('cycle_state').select('current_edition').eq('id', 1).maybeSingle();
+  const edition = cyc?.current_edition || 1;
+
   const { data: apps, error } = await admin
     .from('applications')
     .select('id')
     .eq('payment_status', 'paid')
     .eq('standing', 'active')
-    .eq('tour', t);
+    .eq('tour', t)
+    .eq('edition', edition);
   if (error) return json(500, { error: 'load failed' });
 
   let advanced = 0;

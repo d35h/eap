@@ -1308,6 +1308,13 @@ input, textarea, select { font-family: inherit; }
   background: transparent; color: var(--accent-deep); border: 1px solid var(--accent-deep);
 }
 .review-row__btn--ghost:hover { background: transparent; color: var(--ink); border-color: var(--ink); }
+.review-row__btn--danger { background: transparent; color: hsl(2, 60%, 48%); border: 1px solid hsl(2, 50%, 62%); }
+.review-row__btn--danger:hover { background: hsl(2, 60%, 48%); color: #fff; }
+.cycle-panel__newcycle {
+  margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+}
+.jurors-list { margin-top: 4px; }
 
 /* ── Juror evaluation page ── */
 .review-back { display: inline-block; margin-bottom: 24px; color: var(--accent-deep); text-decoration: none; }

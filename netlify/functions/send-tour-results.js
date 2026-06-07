@@ -18,7 +18,9 @@ export async function handleSendResults({ admin, env }, { token, tour, force }) 
   if (cyc?.[sentField] && !force) return json(200, { status: 'already_sent' });
 
   const { data: apps } = await admin
-    .from('applications').select('*').eq('payment_status', 'paid');
+    .from('applications').select('*')
+    .eq('payment_status', 'paid')
+    .eq('edition', cyc?.current_edition || 1);
   // Tour 1: everyone participated. Tour 2: those who advanced (tour >= 2).
   const participants = (apps || []).filter((a) => (t === 1 ? true : (a.tour || 1) >= 2));
 

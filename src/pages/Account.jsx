@@ -43,6 +43,7 @@ export default function Account() {
   // of truth shared by both admin panels so they never go out of sync.
   const [cycle, setCycle] = useState(null);
   const activeTour = cycle?.active_tour || 1;
+  const currentEdition = cycle?.current_edition || 1;
   // Jurors can only see/evaluate once the active tour's evaluations are open.
   const evaluationsOpen = activeTour === 1 ? !!cycle?.tour1_open : !!cycle?.tour2_open;
   // Admin can switch which tour's results they're viewing; defaults to active.
@@ -90,6 +91,8 @@ export default function Account() {
     } else if (!isAdmin) {
       query = query.eq('user_id', user.id);
     }
+    // Staff see only the current edition; past editions are archived.
+    if (isStaff) query = query.eq('edition', currentEdition);
     query
       .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1)
       .then(({ data, count }) => {
@@ -98,7 +101,7 @@ export default function Account() {
         setAppsLoading(false);
       })
       .catch(() => setAppsLoading(false));
-  }, [user, isStaff, isJuror, isAdmin, activeTour, evaluationsOpen, refreshKey, page]);
+  }, [user, isStaff, isJuror, isAdmin, activeTour, currentEdition, evaluationsOpen, refreshKey, page]);
 
   // Reset to the first page when the filter context changes.
   useEffect(() => {
@@ -299,48 +302,9 @@ export default function Account() {
             {L('signOut', 'Выйти')}
           </button>
           {isAdmin && (
-            <button
-              className="btn-ink"
-              onClick={() => {
-                setInviteMsg(null);
-                setInviteOpen((o) => !o);
-              }}
-            >
-              Пригласить жюри
-            </button>
+            <Link to="/account/jurors" className="btn-ink">Жюри</Link>
           )}
         </div>
-
-        {isAdmin && inviteOpen && (
-          <form className="invite-jury" onSubmit={inviteJury}>
-            <input
-              type="text"
-              placeholder="Имя жюри"
-              value={inviteName}
-              onChange={(e) => setInviteName(e.target.value)}
-              autoComplete="off"
-            />
-            <input
-              type="email"
-              placeholder="email@example.com"
-              value={inviteEmail}
-              onChange={(e) => setInviteEmail(e.target.value)}
-              required
-              autoComplete="off"
-            />
-            <button type="submit" className="btn-gold" disabled={inviting}>
-              {inviting ? '…' : 'Пригласить'}
-            </button>
-            {(inviteMsg?.type === 'exists' || inviteMsg?.type === 'error') && (
-              <p className={`invite-jury__msg invite-jury__msg--${inviteMsg.type}`}>{inviteMsg.text}</p>
-            )}
-          </form>
-        )}
-        {isAdmin && inviteMsg?.type === 'ok' && (
-          <p className="invite-jury__msg invite-jury__msg--ok" style={{ marginTop: '12px' }}>
-            {inviteMsg.text}
-          </p>
-        )}
 
         {isAdmin && <AdminCyclePanel cycle={cycle} onChanged={() => setRefreshKey((k) => k + 1)} />}
         {isAdmin && (
