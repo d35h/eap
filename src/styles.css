@@ -1075,6 +1075,15 @@ input, textarea, select { font-family: inherit; }
 /* Tour results list */
 .tours-results { margin-top: 18px; }
 .tours-send { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 4px 0 16px; }
+.tours-confirm {
+  width: 100%;
+  border: 1px solid var(--accent-deep);
+  border-radius: 8px;
+  padding: 16px 18px;
+  background: hsla(40, 50%, 96%, 0.9);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+}
+.tours-confirm__text { font-size: 14px; color: var(--ink); }
 .cycle-note--error { color: hsl(2, 60%, 55%); }
 .tours-result {
   display: flex; align-items: center; gap: 12px; padding: 10px 2px;

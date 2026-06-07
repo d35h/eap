@@ -20,6 +20,7 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
   const [busy, setBusy] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendMsg, setSendMsg] = useState(null);
+  const [confirmResend, setConfirmResend] = useState(false);
 
   if (!cycle) return null;
 
@@ -121,9 +122,9 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
   const viewTourFinalized = viewTour === 1 ? tour2Exists : winnersExist;
 
   const sendResults = async (force) => {
-    if (force && !window.confirm('Отправить результаты повторно всем участникам этого тура?')) return;
     setSending(true);
     setSendMsg(null);
+    setConfirmResend(false);
     try {
       const { data: { session } } = await supabase.auth.getSession();
       const res = await fetch('/.netlify/functions/send-tour-results', {
@@ -153,7 +154,7 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
             key={tn}
             type="button"
             className={`tours-tab ${viewTour === tn ? 'is-active' : ''}`}
-            onClick={() => { setSendMsg(null); setViewTour?.(tn); }}
+            onClick={() => { setSendMsg(null); setConfirmResend(false); setViewTour?.(tn); }}
           >
             Тур {tn}
           </button>
@@ -259,10 +260,22 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
                 <button type="button" className="btn-gold tours-btn" disabled={sending} onClick={() => sendResults(false)}>
                   Отправить результаты участникам
                 </button>
+              ) : confirmResend ? (
+                <div className="tours-confirm">
+                  <span className="tours-confirm__text">Отправить результаты повторно всем участникам тура {viewTour}?</span>
+                  <div className="tours-panel__actions">
+                    <button type="button" className="btn-ink tours-btn" disabled={sending} onClick={() => setConfirmResend(false)}>
+                      Отмена
+                    </button>
+                    <button type="button" className="btn-gold tours-btn" disabled={sending} onClick={() => sendResults(true)}>
+                      Подтвердить отправку
+                    </button>
+                  </div>
+                </div>
               ) : (
                 <>
                   <span className="cycle-state cycle-state--open">Результаты отправлены</span>
-                  <button type="button" className="btn-ink tours-btn" disabled={sending} onClick={() => sendResults(true)}>
+                  <button type="button" className="btn-ink tours-btn" disabled={sending} onClick={() => setConfirmResend(true)}>
                     Отправить повторно
                   </button>
                 </>
