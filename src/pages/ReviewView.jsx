@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.jsx';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { REVIEW_CRITERIA, MAX_RATING } from '../lib/reviewCriteria.js';
+import { getCycle } from '../lib/cycleRepo.js';
 
 // Admin-only, read-only view of one juror's evaluation of one application.
 export default function ReviewView() {
@@ -26,6 +27,8 @@ export default function ReviewView() {
     if (!isAdmin || !supabase) return;
     let cancelled = false;
     (async () => {
+      const cycle = await getCycle();
+      const activeTour = cycle?.active_tour || 1;
       const { data: appRow } = await supabase
         .from('applications').select('*').eq('id', id).maybeSingle();
       const { data: reviewRow } = await supabase
@@ -33,6 +36,7 @@ export default function ReviewView() {
         .select('*')
         .eq('application_id', id)
         .eq('reviewer_id', reviewerId)
+        .eq('tour', activeTour)
         .maybeSingle();
       if (cancelled) return;
       setApp(appRow || null);

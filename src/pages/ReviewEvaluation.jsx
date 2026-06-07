@@ -10,6 +10,7 @@ import {
   isEvaluationComplete,
 } from '../lib/reviewCriteria.js';
 import { getMyReview, saveDraft, finishReview } from '../lib/reviewsRepo.js';
+import { getCycle } from '../lib/cycleRepo.js';
 
 export default function ReviewEvaluation() {
   const { id } = useParams();
@@ -26,6 +27,7 @@ export default function ReviewEvaluation() {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState(null); // { type, text }
   const [ready, setReady] = useState(false);
+  const [tour, setTour] = useState(1);
 
   // Only jurors evaluate.
   useEffect(() => {
@@ -39,10 +41,13 @@ export default function ReviewEvaluation() {
     if (!user || !isJuror || !supabase) return;
     let cancelled = false;
     (async () => {
+      const cycle = await getCycle();
+      const activeTour = cycle?.active_tour || 1;
       const { data: appRow } = await supabase
         .from('applications').select('*').eq('id', id).maybeSingle();
-      const review = await getMyReview(id, user.id);
+      const review = await getMyReview(id, user.id, activeTour);
       if (cancelled) return;
+      setTour(activeTour);
       setApp(appRow || null);
       const base = {};
       REVIEW_CRITERIA.forEach((c) => {
@@ -90,7 +95,7 @@ export default function ReviewEvaluation() {
     setBusy(true);
     setMsg(null);
     try {
-      const args = { applicationId: id, userId: user.id, email: user.email, scores };
+      const args = { applicationId: id, userId: user.id, email: user.email, scores, tour };
       if (finish) {
         await finishReview(args);
         setStatus('finished');

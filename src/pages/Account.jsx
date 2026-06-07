@@ -6,6 +6,7 @@ import { isSupabaseConfigured, supabase } from '../lib/supabase.js';
 import { signOut } from '../lib/auth.js';
 import { unlockReview } from '../lib/reviewsRepo.js';
 import AdminCyclePanel from '../components/AdminCyclePanel.jsx';
+import { getCycle } from '../lib/cycleRepo.js';
 
 export default function Account() {
   const { t } = useTranslation();
@@ -26,6 +27,8 @@ export default function Account() {
   const [reviewsByApp, setReviewsByApp] = useState({});
   // All jurors in the system [{ id, email }] (admin only).
   const [jurors, setJurors] = useState([]);
+  // Active tour (drives which tour's reviews the cabinet shows).
+  const [activeTour, setActiveTour] = useState(1);
 
   // Invite jury (admin only).
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -58,13 +61,20 @@ export default function Account() {
       .catch(() => setAppsLoading(false));
   }, [user, isStaff]);
 
-  // Load which jurors have reviewed each visible application (staff only).
+  // Staff: learn the active tour (drives which tour's reviews we show).
+  useEffect(() => {
+    if (!isStaff || !supabase) return;
+    getCycle().then((c) => setActiveTour(c?.active_tour || 1));
+  }, [isStaff]);
+
+  // Load which jurors have reviewed each visible application in the active tour.
   useEffect(() => {
     if (!isStaff || !supabase || applications.length === 0) return;
     let cancelled = false;
     supabase
       .from('application_reviews')
-      .select('id, application_id, reviewer_id, reviewer_email, status, unlocked, scores')
+      .select('id, application_id, reviewer_id, reviewer_email, status, unlocked, scores, tour')
+      .eq('tour', activeTour)
       .in('application_id', applications.map((a) => a.id))
       .then(({ data }) => {
         if (cancelled) return;
@@ -77,7 +87,7 @@ export default function Account() {
     return () => {
       cancelled = true;
     };
-  }, [applications, isStaff]);
+  }, [applications, isStaff, activeTour]);
 
   // Admin: fetch every juror so we can show review status per juror per app.
   useEffect(() => {
