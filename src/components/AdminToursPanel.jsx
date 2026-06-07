@@ -186,6 +186,11 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
           </div>
         ) : !tourOpen ? (
           <div className="tours-open">
+            {!submissionsClosed && (
+              <p className="tours-hint">
+                Чтобы открыть приём оценок, сначала закройте приём заявок — в блоке «Приём заявок» выше.
+              </p>
+            )}
             <button
               type="button"
               className="btn-ink tours-btn"
@@ -194,11 +199,6 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
             >
               Открыть приём оценок
             </button>
-            {!submissionsClosed && (
-              <p className="tours-hint">
-                Чтобы открыть приём оценок, сначала закройте приём заявок — в блоке «Приём заявок» выше.
-              </p>
-            )}
           </div>
         ) : (
           <div className="tours-panel__row">
