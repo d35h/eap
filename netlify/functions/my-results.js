@@ -79,7 +79,7 @@ export async function handleMyResults({ admin }, { token }) {
     }
     if (tours.length) out.push({ application_id: app.id, tours });
   }
-  return json(200, { results: out });
+  return json(200, { results: out, currentEdition: cyc?.current_edition || 1 });
 }
 
 export async function handler(event) {

@@ -73,7 +73,7 @@ export default function EditionTourResults({ edition, tour }) {
         const sc = scoreOf(a.id);
         const o = outcome(a);
         return (
-          <Link key={a.id} to={`/account/results/${a.id}/${tour}`} className="tours-result">
+          <Link key={a.id} to={`/account/application/${a.id}`} className="tours-result">
             <span className="tours-result__rank">{i + 1}</span>
             <span className="tours-result__name">
               <span className="tours-result__title">{applicant(a)}</span>

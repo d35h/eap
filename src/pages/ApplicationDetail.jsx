@@ -5,6 +5,10 @@ import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { getCycle } from '../lib/cycleRepo.js';
 import { unlockReview } from '../lib/reviewsRepo.js';
 
+const igHandle = (raw) => (!raw ? '' : String(raw).trim()
+  .replace(/^@/, '').replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/\/+$/, '').split(/[/?]/)[0]);
+const normUrl = (u) => (/^https?:\/\//i.test(u) ? u : `https://${u}`);
+
 // Admin: full detail for one application - applicant, works (large), and the
 // jury status per tour with links to the detailed juror evaluations.
 export default function ApplicationDetail() {
@@ -127,9 +131,14 @@ export default function ApplicationDetail() {
   };
 
   const applicant = [app.first_name, app.last_name].filter(Boolean).join(' ') || '—';
-  const info = [
-    app.country, app.city, app.website, app.instagram,
-  ].filter(Boolean).join(' · ');
+  const metaParts = [];
+  if (app.country) metaParts.push(app.country);
+  if (app.city) metaParts.push(app.city);
+  if (app.website) metaParts.push(<a key="w" href={normUrl(app.website)} target="_blank" rel="noreferrer">{app.website}</a>);
+  if (app.instagram) {
+    const h = igHandle(app.instagram);
+    metaParts.push(<a key="i" href={`https://instagram.com/${h}`} target="_blank" rel="noreferrer">@{h}</a>);
+  }
 
   return (
     <main className="apply-page">
@@ -145,7 +154,11 @@ export default function ApplicationDetail() {
             {app.payment_status === 'paid' ? 'Оплачено' : 'Ожидает оплаты'}
           </span>
         </p>
-        {info && <p style={{ opacity: 0.6, fontSize: '14px' }}>{info}</p>}
+        {metaParts.length > 0 && (
+          <p className="detail-meta">
+            {metaParts.map((p, i) => <span key={i}>{i > 0 && ' · '}{p}</span>)}
+          </p>
+        )}
 
         {app.payment_status === 'paid' && (
           <div className="detail-ig">
@@ -172,6 +185,7 @@ export default function ApplicationDetail() {
                     <div className="review-work__noimg">Нет изображения</div>
                   )}
                   <figcaption>
+                    <span className="work-num">Работа {i + 1}</span>
                     <strong>{w.title || '-'}</strong>
                     {w.year ? `, ${w.year}` : ''}{w.media ? ` · ${w.media}` : ''}{w.size ? ` · ${w.size}` : ''}
                     {w.desc ? <p>{w.desc}</p> : null}

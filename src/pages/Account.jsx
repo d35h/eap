@@ -38,6 +38,8 @@ export default function Account() {
   const [jurors, setJurors] = useState([]);
   // Artist's own published results: app.id → [{ tour, outcome, feedback }].
   const [myResults, setMyResults] = useState({});
+  // Current edition as seen by the artist (to split current vs past applications).
+  const [artistEdition, setArtistEdition] = useState(null);
   // Which tour tab the artist is viewing, per application.
   const [artistTab, setArtistTab] = useState({});
   // Cycle (submissions + tours); active tour is derived from it. Single source
@@ -191,6 +193,7 @@ export default function Account() {
         const map = {};
         d.results.forEach((r) => { map[r.application_id] = r.tours; });
         setMyResults(map);
+        if (d.currentEdition) setArtistEdition(d.currentEdition);
       }
     })();
     return () => { cancelled = true; };

@@ -98,14 +98,14 @@ export default function AdminCyclePanel({ cycle, canStartNew, onChanged }) {
             type="button"
             className="btn-ink cycle-panel__btn"
             disabled={busy || !canStartNew}
-            title={canStartNew ? '' : 'Доступно после завершения цикла (выбора победителей)'}
+            title={canStartNew ? '' : 'Доступно после окончания второго тура и выбора победителей биеннале'}
             onClick={() => setConfirmNew(true)}
           >
             Начать новый цикл
           </button>
         )}
         {!canStartNew && !confirmNew && (
-          <span className="cycle-note">Доступно после выбора победителей</span>
+          <span className="cycle-note">Доступно после окончания второго тура и выбора победителей биеннале</span>
         )}
         {newMsg && (
           <span className={`cycle-note ${newMsg.type === 'error' ? 'cycle-note--error' : ''}`}>{newMsg.text}</span>
