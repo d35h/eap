@@ -200,7 +200,7 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
         ) : (
           <div className="admin-row">
             <div className="admin-row__label">
-              <span className="admin-row__title">Статус приёма оценок</span>
+              <span className="admin-row__title">Приём оценок</span>
               <span className="admin-row__desc">
                 {tourOpen
                   ? (quorumMet
