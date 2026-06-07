@@ -128,7 +128,7 @@ export default function Account() {
     let cancelled = false;
     (async () => {
       const map = {};
-      for (let ed = 1; ed < currentEdition; ed++) {
+      for (let ed = 1; ed <= currentEdition; ed++) {
         const { data } = await supabase
           .from('applications').select('created_at')
           .eq('edition', ed).order('created_at', { ascending: true }).limit(1);
@@ -366,9 +366,7 @@ export default function Account() {
                 className={`tours-tab ${shownEdition === ed ? 'is-active' : ''}`}
                 onClick={() => setViewEdition(ed)}
               >
-                {ed === currentEdition
-                  ? 'Текущий'
-                  : `Биеннале ${editionYears[ed] || `№${ed}`}`}
+                Биеннале {editionYears[ed] || `№${ed}`}
               </button>
             ))}
           </div>
