@@ -1087,6 +1087,11 @@ input, textarea, select { font-family: inherit; }
 /* Tour results list */
 .tours-results { margin-top: 18px; }
 .tours-send { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 4px 0 16px; }
+.tours-hint {
+  margin: 12px 0 0; font-size: 13px; line-height: 1.5; color: hsl(30, 25%, 32%);
+  background: hsla(40, 50%, 95%, 0.8); border-left: 3px solid hsl(40, 60%, 52%);
+  padding: 10px 14px; border-radius: 6px;
+}
 .tours-confirm {
   width: 100%;
   border: 1px solid var(--accent-deep);
@@ -1358,14 +1363,21 @@ input, textarea, select { font-family: inherit; }
 .review-actions { grid-column: 1 / -1; display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
 .review-actions .btn-ink, .review-actions .btn-gold { letter-spacing: 0.08em; }
 /* Big works display so jurors can actually see the artwork */
-.review-works { display: flex; flex-direction: column; gap: 36px; margin-bottom: 8px; }
+.review-works { display: flex; flex-direction: column; gap: 40px; margin-bottom: 8px; }
 .review-work { margin: 0; }
+.review-work + .review-work { border-top: 1px solid var(--border); padding-top: 40px; }
 .review-work img {
   width: 100%; max-height: 80vh; object-fit: contain; display: block;
   border-radius: 4px; background: rgba(0, 0, 0, 0.04);
 }
-.review-work figcaption { margin-top: 12px; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
+/* Caption sits above the image. */
+.review-work figcaption { margin: 0 0 14px; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
 .review-work figcaption p { margin: 8px 0 0; opacity: 0.8; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* Consistent identity block (name on top, email smaller below). */
+.identity { display: flex; flex-direction: column; margin-bottom: 16px; }
+.identity__name { font-weight: 500; font-size: 1.05rem; }
+.identity__email { font-size: 13px; opacity: 0.6; margin-top: 2px; }
 .review-work__noimg {
   padding: 48px; text-align: center; border: 1px dashed #cec4b6;
   color: var(--ink-soft); border-radius: 4px;

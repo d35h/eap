@@ -179,17 +179,17 @@ export default function ApplicationDetail() {
               const url = files[i + 1];
               return (
                 <figure className="review-work" key={i}>
-                  {url ? (
-                    <a href={url} target="_blank" rel="noreferrer"><img src={url} alt={w.title || ''} loading="lazy" /></a>
-                  ) : (
-                    <div className="review-work__noimg">Нет изображения</div>
-                  )}
                   <figcaption>
                     <span className="work-num">Работа {i + 1}</span>
                     <strong>{w.title || '-'}</strong>
                     {w.year ? `, ${w.year}` : ''}{w.media ? ` · ${w.media}` : ''}{w.size ? ` · ${w.size}` : ''}
                     {w.desc ? <p>{w.desc}</p> : null}
                   </figcaption>
+                  {url ? (
+                    <a href={url} target="_blank" rel="noreferrer"><img src={url} alt={w.title || ''} loading="lazy" /></a>
+                  ) : (
+                    <div className="review-work__noimg">Нет изображения</div>
+                  )}
                 </figure>
               );
             })}

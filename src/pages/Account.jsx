@@ -325,7 +325,6 @@ export default function Account() {
   const jurorName = user?.app_metadata?.name || '';
   const headEyebrow = isAdmin ? 'Администратор' : isJuror ? 'Жюри' : t('account.nav');
   const headTitle = isAdmin ? 'Панель управления' : isJuror ? 'Кабинет жюри' : t('account.cabinetTitle');
-  const identityLine = isJuror && jurorName ? `${jurorName} <${user.email}>` : user.email;
   // Unlocking a juror's review is only allowed while the (active) tour is still
   // running - not once it's been finalized (advanced / winners chosen).
   const tour2Exists = applications.some((a) => (a.tour || 1) === 2);
@@ -339,7 +338,14 @@ export default function Account() {
           <span className="eyebrow">- {headEyebrow}</span>
           <h1>{headTitle}</h1>
         </div>
-        <p style={{ marginBottom: '16px', opacity: 0.7 }}>{identityLine}</p>
+        {isJuror && jurorName ? (
+          <div className="identity">
+            <span className="identity__name">{jurorName}</span>
+            <span className="identity__email">{user.email}</span>
+          </div>
+        ) : (
+          <p style={{ marginBottom: '16px', opacity: 0.7 }}>{user.email}</p>
+        )}
 
         <div className="account-actions">
           <button className="btn-ink" onClick={handleSignOut}>

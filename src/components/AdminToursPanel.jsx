@@ -185,11 +185,10 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
             </div>
           </div>
         ) : (
+          <>
           <div className="tours-panel__row">
             <div className="tours-panel__state">
-              <span className={`cycle-state cycle-state--${tourOpen ? 'open' : 'closed'}`}>
-                Оценки {tourOpen ? 'открыты' : 'закрыты'}
-              </span>
+              {tourOpen && <span className="cycle-state cycle-state--open">Оценки открыты</span>}
               {tourOpen && (
                 <span className="cycle-note">
                   оценили {done}/{expected || 0}
@@ -198,16 +197,12 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
                     : ' · отбор станет доступен, когда все жюри оценят все заявки'}
                 </span>
               )}
-              {!tourOpen && !submissionsClosed && (
-                <span className="cycle-note">Сначала закройте приём заявок</span>
-              )}
             </div>
             <div className="tours-panel__actions">
               <button
                 type="button"
                 className="btn-ink tours-btn"
                 disabled={busy || (!tourOpen && !submissionsClosed)}
-                title={!tourOpen && !submissionsClosed ? 'Сначала закройте приём заявок' : ''}
                 onClick={() => setOpen(!tourOpen)}
               >
                 {tourOpen ? 'Закрыть приём оценок' : 'Открыть приём оценок'}
@@ -225,6 +220,12 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
               )}
             </div>
           </div>
+          {!tourOpen && !submissionsClosed && (
+            <p className="tours-hint">
+              Чтобы открыть приём оценок, сначала закройте приём заявок — в блоке «Приём заявок» выше.
+            </p>
+          )}
+          </>
         )
       )}
 
