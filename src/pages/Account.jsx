@@ -80,12 +80,19 @@ export default function Account() {
 
   useEffect(() => {
     if (!user || !supabase) return;
+    // Staff: wait for the cycle so the edition filter is correct (avoids a
+    // race where the default edition=1 query lands after the real one).
+    if (isStaff && !cycle) {
+      setAppsLoading(true);
+      return;
+    }
     // Jurors get nothing until their tour's evaluations are open.
     if (isJuror && !evaluationsOpen) {
       setApplications([]);
       setAppsLoading(false);
       return;
     }
+    let cancelled = false;
     setAppsLoading(true);
     // Staff read every application; regular users only their own.
     // RLS enforces this server-side too - the filter is just intent.
@@ -109,12 +116,14 @@ export default function Account() {
     query
       .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1)
       .then(({ data, count }) => {
+        if (cancelled) return;
         setApplications(data || []);
         setTotal(count || 0);
         setAppsLoading(false);
       })
-      .catch(() => setAppsLoading(false));
-  }, [user, isStaff, isJuror, isAdmin, activeTour, shownEdition, evaluationsOpen, refreshKey, page]);
+      .catch(() => { if (!cancelled) setAppsLoading(false); });
+    return () => { cancelled = true; };
+  }, [user, isStaff, isJuror, isAdmin, cycle, activeTour, shownEdition, evaluationsOpen, refreshKey, page]);
 
   // Reset to the first page when the filter context changes.
   useEffect(() => {
