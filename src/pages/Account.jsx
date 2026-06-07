@@ -6,6 +6,7 @@ import { isSupabaseConfigured, supabase } from '../lib/supabase.js';
 import { signOut } from '../lib/auth.js';
 import { unlockReview } from '../lib/reviewsRepo.js';
 import AdminCyclePanel from '../components/AdminCyclePanel.jsx';
+import AdminToursPanel from '../components/AdminToursPanel.jsx';
 import { getCycle } from '../lib/cycleRepo.js';
 
 export default function Account() {
@@ -29,6 +30,8 @@ export default function Account() {
   const [jurors, setJurors] = useState([]);
   // Active tour (drives which tour's reviews the cabinet shows).
   const [activeTour, setActiveTour] = useState(1);
+  // Bumped after a tour transition to refetch applications/cycle.
+  const [refreshKey, setRefreshKey] = useState(0);
 
   // Invite jury (admin only).
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -59,13 +62,13 @@ export default function Account() {
         setAppsLoading(false);
       })
       .catch(() => setAppsLoading(false));
-  }, [user, isStaff]);
+  }, [user, isStaff, refreshKey]);
 
   // Staff: learn the active tour (drives which tour's reviews we show).
   useEffect(() => {
     if (!isStaff || !supabase) return;
     getCycle().then((c) => setActiveTour(c?.active_tour || 1));
-  }, [isStaff]);
+  }, [isStaff, refreshKey]);
 
   // Load which jurors have reviewed each visible application in the active tour.
   useEffect(() => {
@@ -274,6 +277,14 @@ export default function Account() {
         )}
 
         {isAdmin && <AdminCyclePanel />}
+        {isAdmin && (
+          <AdminToursPanel
+            applications={applications}
+            reviewsByApp={reviewsByApp}
+            jurors={jurors}
+            onChanged={() => setRefreshKey((k) => k + 1)}
+          />
+        )}
 
         <h2 style={{ margin: '40px 0 24px' }}>
           {isStaff ? 'Все заявки' : t('account.yourApplications')}

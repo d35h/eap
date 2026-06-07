@@ -9,10 +9,15 @@ export async function getCycle() {
 
 // Admin toggles whether new applications are accepted.
 export async function setSubmissionsOpen(open) {
+  return updateCycle({ submissions_open: open });
+}
+
+// Admin updates any cycle field(s) (RLS: admin only).
+export async function updateCycle(patch) {
   if (!supabase) throw new Error('Supabase is not configured');
   const { error } = await supabase
     .from('cycle_state')
-    .update({ submissions_open: open, updated_at: new Date().toISOString() })
+    .update({ ...patch, updated_at: new Date().toISOString() })
     .eq('id', 1);
   if (error) throw new Error(error.message);
 }
