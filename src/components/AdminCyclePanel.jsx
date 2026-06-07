@@ -56,61 +56,65 @@ export default function AdminCyclePanel({ cycle, canStartNew, onChanged }) {
   };
 
   return (
-    <div className="cycle-panel">
+    <div className="admin-panel">
       <h3 className="panel-title">Приём заявок</h3>
-      <div className="cycle-panel__row">
-        <div className="cycle-panel__state">
+
+      <div className="admin-row">
+        <div className="admin-row__label">
+          <span className="admin-row__title">Статус приёма заявок</span>
+          <span className="admin-row__desc">
+            {effectiveOpen
+              ? 'Художники могут подавать заявки.'
+              : deadlinePassed
+              ? 'Дедлайн прошёл — приём закрыт автоматически.'
+              : reopenBlocked
+              ? 'Чтобы снова открыть приём, сначала закройте приём оценок.'
+              : 'Приём заявок остановлен.'}
+          </span>
+        </div>
+        <div className="admin-row__control">
           <span className={`cycle-state cycle-state--${effectiveOpen ? 'open' : 'closed'}`}>
             {effectiveOpen ? 'Открыт' : 'Закрыт'}
           </span>
-          {deadlinePassed && <span className="cycle-note">дедлайн прошёл — закрыто автоматически</span>}
-          {reopenBlocked && <span className="cycle-note">Сначала закройте приём оценок</span>}
+          <button type="button" className="btn-ink tours-btn" onClick={toggle} disabled={busy || reopenBlocked}>
+            {open ? 'Остановить приём заявок' : 'Открыть приём заявок'}
+          </button>
         </div>
-        <button
-          type="button"
-          className="btn-ink cycle-panel__btn"
-          onClick={toggle}
-          disabled={busy || reopenBlocked}
-          title={reopenBlocked ? 'Сначала закройте приём оценок' : ''}
-        >
-          {open ? 'Остановить приём' : 'Открыть приём'}
-        </button>
       </div>
 
-      <div className="cycle-panel__newcycle">
-        <span className="cycle-note">Цикл №{cycle.current_edition || 1}</span>
-        {confirmNew ? (
-          <div className="tours-confirm">
-            <span className="tours-confirm__text">
-              Начать новый цикл? Текущие заявки архивируются, все жюри будут отозваны, приём откроется заново.
-            </span>
-            <div className="tours-panel__actions">
-              <button type="button" className="btn-ink tours-btn" disabled={busy} onClick={() => setConfirmNew(false)}>
-                Отмена
-              </button>
-              <button type="button" className="btn-gold tours-btn" disabled={busy} onClick={startNewCycle}>
-                Подтвердить
-              </button>
-            </div>
+      <div className="admin-row">
+        <div className="admin-row__label">
+          <span className="admin-row__title">Новый цикл биеннале</span>
+          <span className="admin-row__desc">
+            Текущий: Биеннале №{cycle.current_edition || 1}.
+            {!canStartNew && ' Начать новый можно после окончания второго тура и выбора победителей.'}
+          </span>
+        </div>
+        {canStartNew && !confirmNew && (
+          <div className="admin-row__control">
+            <button type="button" className="btn-ink tours-btn" disabled={busy} onClick={() => setConfirmNew(true)}>
+              Начать новый цикл
+            </button>
           </div>
-        ) : (
-          <button
-            type="button"
-            className="btn-ink cycle-panel__btn"
-            disabled={busy || !canStartNew}
-            title={canStartNew ? '' : 'Доступно после окончания второго тура и выбора победителей биеннале'}
-            onClick={() => setConfirmNew(true)}
-          >
-            Начать новый цикл
-          </button>
-        )}
-        {!canStartNew && !confirmNew && (
-          <span className="cycle-note">Доступно после окончания второго тура и выбора победителей биеннале</span>
-        )}
-        {newMsg && (
-          <span className={`cycle-note ${newMsg.type === 'error' ? 'cycle-note--error' : ''}`}>{newMsg.text}</span>
         )}
       </div>
+
+      {confirmNew && (
+        <div className="tours-confirm admin-confirm">
+          <span className="tours-confirm__text">
+            Начать новый цикл? Текущие заявки архивируются, все жюри будут отозваны, приём откроется заново.
+          </span>
+          <div className="tours-panel__actions">
+            <button type="button" className="btn-ink tours-btn" disabled={busy} onClick={() => setConfirmNew(false)}>
+              Отмена
+            </button>
+            <button type="button" className="btn-gold tours-btn" disabled={busy} onClick={startNewCycle}>
+              Подтвердить
+            </button>
+          </div>
+        </div>
+      )}
+      {newMsg && <p className={`admin-note ${newMsg.type === 'error' ? 'cycle-note--error' : ''}`}>{newMsg.text}</p>}
     </div>
   );
 }
