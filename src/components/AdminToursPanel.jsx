@@ -159,6 +159,7 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
 
   return (
     <div className="tours-panel">
+      <h3 className="panel-title">Результаты туров</h3>
       <div className="tours-tabs">
         {tours.map((tn) => (
           <button
