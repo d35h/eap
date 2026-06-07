@@ -53,6 +53,8 @@ export default function Account() {
   const [viewEdition, setViewEdition] = useState(null);
   const shownEdition = viewEdition ?? currentEdition;
   const isCurrentEdition = shownEdition === currentEdition;
+  const [showArchive, setShowArchive] = useState(false);
+  const [editionYears, setEditionYears] = useState({}); // edition → year
   // Bumped after any change to refetch cycle/applications/reviews.
   const [refreshKey, setRefreshKey] = useState(0);
   // True once the current edition has winners (cycle finished).
@@ -119,6 +121,23 @@ export default function Account() {
     if (!isStaff || !supabase) return;
     getCycle().then(setCycle);
   }, [isStaff, refreshKey]);
+
+  // Admin: derive each past edition's year (earliest application) for labels.
+  useEffect(() => {
+    if (!isAdmin || !supabase || currentEdition <= 1) return;
+    let cancelled = false;
+    (async () => {
+      const map = {};
+      for (let ed = 1; ed < currentEdition; ed++) {
+        const { data } = await supabase
+          .from('applications').select('created_at')
+          .eq('edition', ed).order('created_at', { ascending: true }).limit(1);
+        if (data && data[0]) map[ed] = new Date(data[0].created_at).getFullYear();
+      }
+      if (!cancelled) setEditionYears(map);
+    })();
+    return () => { cancelled = true; };
+  }, [isAdmin, currentEdition]);
 
   // Admin: is the current edition finished (winners chosen)?
   useEffect(() => {
@@ -323,11 +342,23 @@ export default function Account() {
           {isAdmin && (
             <Link to="/account/jurors" className="btn-ink">Жюри</Link>
           )}
+          {isAdmin && currentEdition > 1 && (
+            <button
+              type="button"
+              className="btn-ink"
+              onClick={() => {
+                const next = !showArchive;
+                setShowArchive(next);
+                setViewEdition(next ? currentEdition - 1 : null);
+              }}
+            >
+              {showArchive ? 'Закрыть архив' : 'Архив биеннале'}
+            </button>
+          )}
         </div>
 
-        {isAdmin && currentEdition > 1 && (
+        {isAdmin && showArchive && currentEdition > 1 && (
           <div className="edition-switch">
-            <span className="cycle-note">Цикл:</span>
             {Array.from({ length: currentEdition }, (_, i) => currentEdition - i).map((ed) => (
               <button
                 key={ed}
@@ -335,7 +366,9 @@ export default function Account() {
                 className={`tours-tab ${shownEdition === ed ? 'is-active' : ''}`}
                 onClick={() => setViewEdition(ed)}
               >
-                №{ed}{ed === currentEdition ? ' · текущий' : ''}
+                {ed === currentEdition
+                  ? 'Текущий'
+                  : `Биеннале ${editionYears[ed] || `№${ed}`}`}
               </button>
             ))}
           </div>
