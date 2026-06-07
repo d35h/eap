@@ -195,14 +195,26 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
                 Чтобы открыть приём оценок, сначала закройте приём заявок — в блоке «Приём заявок» выше.
               </p>
             )}
-            <button
-              type="button"
-              className="btn-ink tours-btn"
-              disabled={busy || !submissionsClosed}
-              onClick={() => setOpen(true)}
-            >
-              Открыть приём оценок
-            </button>
+            {quorumMet && (
+              <p className="tours-hint">
+                Все жюри завершили оценку — можно переходить к отбору.
+              </p>
+            )}
+            <div className="tours-panel__actions">
+              <button
+                type="button"
+                className="btn-ink tours-btn"
+                disabled={busy || !submissionsClosed}
+                onClick={() => setOpen(true)}
+              >
+                Открыть приём оценок
+              </button>
+              {quorumMet && (
+                <button type="button" className="btn-gold tours-btn" disabled={busy} onClick={startSelection}>
+                  {activeTour === 1 ? 'Перейти к отбору' : 'Выбрать топ-3'}
+                </button>
+              )}
+            </div>
           </div>
         ) : (
           <div className="tours-panel__row">
@@ -211,22 +223,13 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
               <span className="cycle-note">
                 оценили {done}/{expected || 0}
                 {quorumMet
-                  ? ' · можно подводить итоги'
-                  : ' · отбор станет доступен, когда все жюри оценят все заявки'}
+                  ? ' · закройте приём оценок, чтобы перейти к отбору'
+                  : ' · идёт оценка'}
               </span>
             </div>
             <div className="tours-panel__actions">
               <button type="button" className="btn-ink tours-btn" disabled={busy} onClick={() => setOpen(false)}>
                 Закрыть приём оценок
-              </button>
-              <button
-                type="button"
-                className="btn-gold tours-btn"
-                disabled={busy || !quorumMet}
-                title={quorumMet ? '' : 'Доступно, когда все жюри оценят все заявки'}
-                onClick={startSelection}
-              >
-                {activeTour === 1 ? 'Перейти к отбору' : 'Выбрать топ-3'}
               </button>
             </div>
           </div>
