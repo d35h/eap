@@ -57,7 +57,12 @@ export default function AdminCyclePanel({ cycle, canStartNew, onChanged }) {
 
   return (
     <div className="admin-panel">
-      <h3 className="panel-title">Приём заявок</h3>
+      <div className="admin-panel__head">
+        <h3 className="panel-title">Приём заявок</h3>
+        <span className={`cycle-state cycle-state--${effectiveOpen ? 'open' : 'closed'}`}>
+          {effectiveOpen ? 'Открыт' : 'Закрыт'}
+        </span>
+      </div>
 
       <div className="admin-row">
         <div className="admin-row__label">
@@ -73,9 +78,6 @@ export default function AdminCyclePanel({ cycle, canStartNew, onChanged }) {
           </span>
         </div>
         <div className="admin-row__control">
-          <span className={`cycle-state cycle-state--${effectiveOpen ? 'open' : 'closed'}`}>
-            {effectiveOpen ? 'Открыт' : 'Закрыт'}
-          </span>
           <button type="button" className="btn-ink tours-btn" onClick={toggle} disabled={busy || reopenBlocked}>
             {open ? 'Остановить приём заявок' : 'Открыть приём заявок'}
           </button>

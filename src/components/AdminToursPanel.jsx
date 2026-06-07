@@ -166,7 +166,10 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
 
   return (
     <div className="admin-panel">
-      <h3 className="panel-title">Результаты туров</h3>
+      <div className="admin-panel__head">
+        <h3 className="panel-title">Результаты туров</h3>
+        {isActiveView && tourOpen && <span className="cycle-state cycle-state--open">Оценки открыты</span>}
+      </div>
       <div className="tours-tabs">
         {tours.map((tn) => (
           <button
@@ -209,7 +212,6 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
               </span>
             </div>
             <div className="admin-row__control">
-              {tourOpen && <span className="cycle-state cycle-state--open">Открыт</span>}
               <button
                 type="button"
                 className="btn-ink tours-btn"

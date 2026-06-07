@@ -129,12 +129,15 @@ export default function Account() {
           query = query.or(`first_name.ilike.%${w}%,last_name.ilike.%${w}%,email.ilike.%${w}%`);
         });
       }
-      if (payFilter !== 'all') query = query.eq('payment_status', payFilter);
-      // Reviewed = fully reviewed in the active tour (all jurors finished).
-      if (evalFilter === 'reviewed') {
-        query = query.in('id', evaluatedIds.length ? evaluatedIds : ['00000000-0000-0000-0000-000000000000']);
-      } else if (evalFilter === 'in_review' && evaluatedIds.length) {
-        query = query.not('id', 'in', `(${evaluatedIds.join(',')})`);
+      // Payment + review filters apply only to the current edition (archive = search only).
+      if (isCurrentEdition) {
+        if (payFilter !== 'all') query = query.eq('payment_status', payFilter);
+        // Reviewed = fully reviewed in the active tour (all jurors finished).
+        if (evalFilter === 'reviewed') {
+          query = query.in('id', evaluatedIds.length ? evaluatedIds : ['00000000-0000-0000-0000-000000000000']);
+        } else if (evalFilter === 'in_review' && evaluatedIds.length) {
+          query = query.not('id', 'in', `(${evaluatedIds.join(',')})`);
+        }
       }
     }
     query
@@ -503,31 +506,33 @@ export default function Account() {
               value={searchQ}
               onChange={(e) => setSearchQ(e.target.value)}
             />
-            <div className="app-filters__tags">
-              {[
-                { label: 'Оплаченные', group: 'pay', val: 'paid' },
-                { label: 'Не оплаченные', group: 'pay', val: 'pending' },
-                { label: 'Рассмотренные', group: 'eval', val: 'reviewed' },
-                { label: 'Не рассмотренные', group: 'eval', val: 'in_review' },
-              ].map((tag) => {
-                const active = tag.group === 'pay' ? payFilter === tag.val : evalFilter === tag.val;
-                const toggle = () => {
-                  const set = tag.group === 'pay' ? setPayFilter : setEvalFilter;
-                  set(active ? 'all' : tag.val);
-                };
-                return (
-                  <button
-                    key={tag.label}
-                    type="button"
-                    className={`filter-tag ${active ? 'is-active' : ''}`}
-                    onClick={toggle}
-                  >
-                    {tag.label}
-                    {active && <span className="filter-tag__x">✕</span>}
-                  </button>
-                );
-              })}
-            </div>
+            {isCurrentEdition && (
+              <div className="app-filters__tags">
+                {[
+                  { label: 'Оплаченные', group: 'pay', val: 'paid', tone: 'paid' },
+                  { label: 'Не оплаченные', group: 'pay', val: 'pending', tone: 'pending' },
+                  { label: 'Рассмотренные', group: 'eval', val: 'reviewed', tone: 'reviewed' },
+                  { label: 'Не рассмотренные', group: 'eval', val: 'in_review', tone: 'unreviewed' },
+                ].map((tag) => {
+                  const active = tag.group === 'pay' ? payFilter === tag.val : evalFilter === tag.val;
+                  const toggle = () => {
+                    const set = tag.group === 'pay' ? setPayFilter : setEvalFilter;
+                    set(active ? 'all' : tag.val);
+                  };
+                  return (
+                    <button
+                      key={tag.label}
+                      type="button"
+                      className={`filter-tag filter-tag--${tag.tone} ${active ? 'is-active' : ''}`}
+                      onClick={toggle}
+                    >
+                      {tag.label}
+                      {active && <span className="filter-tag__x">✕</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
             {(searchQ || payFilter !== 'all' || evalFilter !== 'all') && (
               <button
                 type="button"
