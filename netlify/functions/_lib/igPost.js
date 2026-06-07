@@ -29,7 +29,8 @@ function buildCaption(app, c) {
   if (handle) extras.push(`@${handle}`);
   if (app.website) extras.push(String(app.website).trim());
 
-  const lines = [name + (extras.length ? ` ${extras.join(' | ')}` : ''), ''];
+  // Leading blank line so the caption starts below the username on Instagram.
+  const lines = ['', name + (extras.length ? ` ${extras.join(' | ')}` : ''), ''];
 
   const works = (app.works || []).filter((w) => w.title || w.year || w.media || w.size);
   works.forEach((w) => {

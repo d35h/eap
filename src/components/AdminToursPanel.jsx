@@ -306,11 +306,23 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
             </div>
           )}
           {rankedResults.length === 0 && <p className="cycle-note">Нет заявок</p>}
+          {rankedResults.length > 0 && (
+            <div className="tours-result tours-result--head">
+              <span className="tours-result__rank">#</span>
+              <span className="tours-result__name">Художник</span>
+              <span className="tours-result__score">Балл</span>
+              <span>Статус</span>
+            </div>
+          )}
           {rankedResults.map((a, i) => {
             const sc = scoreOf(a.id);
             const o = outcome(a);
             return (
-              <Link key={a.id} to={`/account/application/${a.id}`} className="tours-result">
+              <Link
+                key={a.id}
+                to={`/account/application/${a.id}`}
+                className={`tours-result ${a.standing === 'winner' ? 'tours-result--winner' : ''}`}
+              >
                 <span className="tours-result__rank">{i + 1}</span>
                 <span className="tours-result__name">
                   <span className="tours-result__title">{applicant(a)}</span>

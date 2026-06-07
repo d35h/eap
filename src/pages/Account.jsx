@@ -30,6 +30,11 @@ export default function Account() {
   const [appsLoading, setAppsLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
+  // Admin "Все заявки" filters.
+  const [searchQ, setSearchQ] = useState('');
+  const [debouncedQ, setDebouncedQ] = useState('');
+  const [payFilter, setPayFilter] = useState('all');
+  const [evalFilter, setEvalFilter] = useState('all');
   // app.id → { <workNumber>: signedUrl } for the uploaded work files.
   const [filesByApp, setFilesByApp] = useState({});
   // app.id → [{ reviewer_id, reviewer_email, status, ... }] (review rows).
@@ -112,7 +117,15 @@ export default function Account() {
       query = query.eq('user_id', user.id);
     }
     // Staff see the selected edition (current by default; past = archive).
-    if (isStaff) query = query.eq('edition', shownEdition);
+    if (isStaff) {
+      query = query.eq('edition', shownEdition);
+      if (debouncedQ) {
+        const s = debouncedQ.replace(/[%,()]/g, ' ');
+        query = query.or(`first_name.ilike.%${s}%,last_name.ilike.%${s}%,email.ilike.%${s}%`);
+      }
+      if (payFilter !== 'all') query = query.eq('payment_status', payFilter);
+      if (evalFilter !== 'all') query = query.eq('review_status', evalFilter);
+    }
     query
       .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE - 1)
       .then(({ data, count }) => {
@@ -123,12 +136,18 @@ export default function Account() {
       })
       .catch(() => { if (!cancelled) setAppsLoading(false); });
     return () => { cancelled = true; };
-  }, [user, isStaff, isJuror, isAdmin, cycle, activeTour, shownEdition, evaluationsOpen, refreshKey, page]);
+  }, [user, isStaff, isJuror, isAdmin, cycle, activeTour, shownEdition, evaluationsOpen, refreshKey, page, debouncedQ, payFilter, evalFilter]);
+
+  // Debounce the search box.
+  useEffect(() => {
+    const id = setTimeout(() => setDebouncedQ(searchQ.trim()), 300);
+    return () => clearTimeout(id);
+  }, [searchQ]);
 
   // Reset to the first page when the filter context changes.
   useEffect(() => {
     setPage(0);
-  }, [isJuror, isAdmin, activeTour, shownEdition, evaluationsOpen, refreshKey]);
+  }, [isJuror, isAdmin, activeTour, shownEdition, evaluationsOpen, refreshKey, debouncedQ, payFilter, evalFilter]);
 
   // Staff: load the cycle (submissions + active tour).
   useEffect(() => {
@@ -422,7 +441,7 @@ export default function Account() {
 
         {isJuror && cycle && !evaluationsOpen && (
           <div className="jury-waiting">
-            <h2 className="panel-title">Оценивание ещё не открыто</h2>
+            <h2 className="panel-title">Оценка ещё не началась</h2>
             <p>Как только организаторы откроют приём оценок, заявки появятся здесь.</p>
           </div>
         )}
@@ -444,6 +463,37 @@ export default function Account() {
         <h2 style={{ margin: '40px 0 24px' }}>
           {isStaff ? 'Все заявки' : (pastApps.length ? t('account.currentApplication') : t('account.yourApplications'))}
         </h2>
+
+        {isAdmin && (
+          <div className="app-filters">
+            <input
+              className="app-filters__search"
+              type="search"
+              placeholder="Поиск по имени или email"
+              value={searchQ}
+              onChange={(e) => setSearchQ(e.target.value)}
+            />
+            <select className="app-filters__select" value={payFilter} onChange={(e) => setPayFilter(e.target.value)}>
+              <option value="all">Оплата: все</option>
+              <option value="paid">Оплаченные</option>
+              <option value="pending">Не оплаченные</option>
+            </select>
+            <select className="app-filters__select" value={evalFilter} onChange={(e) => setEvalFilter(e.target.value)}>
+              <option value="all">Оценка: все</option>
+              <option value="reviewed">Оценённые</option>
+              <option value="in_review">Не оценённые</option>
+            </select>
+            {(searchQ || payFilter !== 'all' || evalFilter !== 'all') && (
+              <button
+                type="button"
+                className="app-filters__clear"
+                onClick={() => { setSearchQ(''); setPayFilter('all'); setEvalFilter('all'); }}
+              >
+                Сбросить
+              </button>
+            )}
+          </div>
+        )}
 
         {appsLoading && <p>…</p>}
 

@@ -94,7 +94,7 @@ export default function ReviewEvaluation() {
         <div className="container">
           <Link to="/account" className="review-back">← Назад</Link>
           <div className="jury-waiting">
-            <h2 className="panel-title">Оценивание ещё не открыто</h2>
+            <h2 className="panel-title">Оценка ещё не началась</h2>
             <p>Как только организаторы откроют приём оценок, заявки появятся здесь.</p>
           </div>
         </div>
