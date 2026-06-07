@@ -189,7 +189,7 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
           <div className="admin-row">
             <div className="admin-row__label">
               <span className="admin-row__title">Тур 1 завершён</span>
-              <span className="admin-row__desc">Прошедшие заявки ждут второго тура.</span>
+              <span className="admin-row__desc">Нажмите «Начать тур 2», чтобы продолжить.</span>
             </div>
             <div className="admin-row__control">
               <button type="button" className="btn-gold tours-btn" disabled={busy} onClick={startTour2}>
@@ -200,14 +200,16 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
         ) : (
           <div className="admin-row">
             <div className="admin-row__label">
-              <span className="admin-row__title">Приём оценок</span>
+              <span className="admin-row__title">Статус приёма оценок</span>
               <span className="admin-row__desc">
                 {tourOpen
-                  ? `Жюри оценивает заявки${quorumMet ? ' · все завершили — можно закрывать' : ''}.`
+                  ? (quorumMet
+                    ? 'Все жюри завершили оценку. Нажмите «Остановить приём оценок», чтобы продолжить.'
+                    : 'Жюри оценивает заявки. Нажмите «Остановить приём оценок», когда все завершат.')
                   : submissionsClosed
                   ? (quorumMet
-                    ? 'Все жюри завершили оценку — можно переходить к отбору.'
-                    : 'Откройте приём оценок, чтобы жюри начали оценивать заявки.')
+                    ? 'Все жюри завершили оценку. Нажмите «Перейти к отбору», чтобы выбрать прошедших.'
+                    : 'Нажмите «Начать приём оценок», чтобы жюри могли начать оценивать заявки.')
                   : 'Сначала нажмите «Остановить приём заявок» в блоке «Приём заявок».'}
               </span>
             </div>
@@ -218,7 +220,7 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
                 disabled={busy || (!tourOpen && !submissionsClosed)}
                 onClick={() => setOpen(!tourOpen)}
               >
-                {tourOpen ? 'Закрыть приём оценок' : 'Открыть приём оценок'}
+                {tourOpen ? 'Остановить приём оценок' : 'Начать приём оценок'}
               </button>
               {!tourOpen && quorumMet && (
                 <button type="button" className="btn-gold tours-btn" disabled={busy} onClick={startSelection}>

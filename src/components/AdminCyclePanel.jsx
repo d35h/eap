@@ -69,17 +69,17 @@ export default function AdminCyclePanel({ cycle, canStartNew, onChanged }) {
           <span className="admin-row__title">Статус приёма заявок</span>
           <span className="admin-row__desc">
             {effectiveOpen
-              ? 'Художники могут подавать заявки.'
+              ? 'Художники могут подавать заявки. Нажмите «Остановить приём заявок», чтобы завершить приём.'
               : deadlinePassed
               ? 'Дедлайн прошёл — приём закрыт автоматически.'
               : reopenBlocked
-              ? 'Чтобы снова открыть приём, сначала закройте приём оценок.'
-              : 'Приём заявок остановлен.'}
+              ? 'Нажмите «Остановить приём оценок» в блоке «Результаты туров», чтобы снова начать приём заявок.'
+              : 'Нажмите «Начать приём заявок», чтобы снова начать приём.'}
           </span>
         </div>
         <div className="admin-row__control">
           <button type="button" className="btn-ink tours-btn" onClick={toggle} disabled={busy || reopenBlocked}>
-            {open ? 'Остановить приём заявок' : 'Открыть приём заявок'}
+            {open ? 'Остановить приём заявок' : 'Начать приём заявок'}
           </button>
         </div>
       </div>
