@@ -28,9 +28,9 @@ export default function AdminCyclePanel() {
 
   return (
     <div className="cycle-panel">
+      <h3 className="panel-title">Приём заявок</h3>
       <div className="cycle-panel__row">
         <div className="cycle-panel__state">
-          <span className="account-section-label" style={{ margin: 0 }}>Приём заявок</span>
           <span className={`cycle-state cycle-state--${effectiveOpen ? 'open' : 'closed'}`}>
             {effectiveOpen ? 'Открыт' : 'Закрыт'}
           </span>

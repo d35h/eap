@@ -223,14 +223,15 @@ export default function Account() {
   };
 
   const jurorName = user?.app_metadata?.name || '';
-  const headTitle = isAdmin ? 'Администратор' : isJuror ? 'Жюри' : t('account.cabinetTitle');
+  const headEyebrow = isAdmin ? 'Администратор' : isJuror ? 'Жюри' : t('account.nav');
+  const headTitle = isAdmin ? 'Панель управления' : isJuror ? 'Кабинет жюри' : t('account.cabinetTitle');
   const identityLine = isJuror && jurorName ? `${jurorName} <${user.email}>` : user.email;
 
   return (
     <main className="apply-page">
       <div className="container">
         <div className="apply-head">
-          <span className="eyebrow">- {headTitle}</span>
+          <span className="eyebrow">- {headEyebrow}</span>
           <h1>{headTitle}</h1>
         </div>
         <p style={{ marginBottom: '16px', opacity: 0.7 }}>{identityLine}</p>

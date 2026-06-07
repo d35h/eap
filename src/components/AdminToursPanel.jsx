@@ -109,7 +109,7 @@ export default function AdminToursPanel({ applications, reviewsByApp, jurors, on
   return (
     <div className="tours-panel">
       <div className="tours-panel__head">
-        <h3 className="tours-panel__title">Тур {activeTour}</h3>
+        <h3 className="panel-title">Тур {activeTour}</h3>
         {winnersExist && <span className="cycle-state cycle-state--open">Победители выбраны</span>}
       </div>
 
