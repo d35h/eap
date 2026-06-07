@@ -7,9 +7,13 @@ import { REVIEW_CRITERIA } from '../lib/reviewCriteria.js';
 const reviewTotal = (scores) =>
   REVIEW_CRITERIA.reduce((s, c) => s + (Number(scores?.[c.key]?.rating) || 0), 0);
 
-// Admin Tours panel: open/close evaluations, then rank + select to advance.
-// `cycle` + `onChanged` come from the parent (shared with the cycle panel).
-export default function AdminToursPanel({ cycle, applications, reviewsByApp, jurors, onChanged }) {
+const applicant = (a) =>
+  [a.first_name, a.last_name].filter(Boolean).join(' ') || a.email || a.id.slice(0, 8);
+
+// Admin Tours panel: switch between tours to see results; run the active tour's
+// open/close + selection. `cycle`, `reviewsByApp` (for viewTour) and the
+// view-tour state come from the parent.
+export default function AdminToursPanel({ cycle, applications, reviewsByApp, jurors, viewTour, setViewTour, onChanged }) {
   const [selecting, setSelecting] = useState(false);
   const [picked, setPicked] = useState(() => new Set());
   const [busy, setBusy] = useState(false);
@@ -17,19 +21,14 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
   if (!cycle) return null;
 
   const activeTour = cycle.active_tour || 1;
+  const isActiveView = viewTour === activeTour;
   const tourOpen = activeTour === 1 ? cycle.tour1_open : cycle.tour2_open;
   const openField = activeTour === 1 ? 'tour1_open' : 'tour2_open';
 
-  // Evaluations can only be opened once the call is closed (no judging while
-  // still accepting applications).
   const deadlinePassed = cycle.submissions_deadline && new Date(cycle.submissions_deadline) < new Date();
   const submissionsClosed = !cycle.submissions_open || deadlinePassed;
 
-  // Paid applications still in contention in this tour.
-  const activeApps = applications.filter(
-    (a) => a.payment_status === 'paid' && a.standing === 'active' && (a.tour || 1) === activeTour
-  );
-
+  // Scores come from reviewsByApp, which the parent loads for the VIEWED tour.
   const scoreOf = (id) => {
     const finished = (reviewsByApp[id] || []).filter((r) => r.status === 'finished');
     if (!finished.length) return null;
@@ -37,28 +36,49 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
   };
   const finishedCount = (id) => (reviewsByApp[id] || []).filter((r) => r.status === 'finished').length;
 
-  // Quorum: every juror finished every active application.
+  // Tabs: tour 1 always; tour 2 once anything reached it.
+  const tour2Exists = activeTour === 2 || applications.some((a) => (a.tour || 1) === 2);
+  const tours = tour2Exists ? [1, 2] : [1];
+  const winnersExist = applications.some((a) => a.standing === 'winner');
+  const tour1Finalized = activeTour === 1 && tour2Exists;
+
+  // Participants of the VIEWED tour (everyone started tour 1; tour 2 = advanced).
+  const participants = applications.filter(
+    (a) => a.payment_status === 'paid' && (viewTour === 1 || (a.tour || 1) === 2)
+  );
+  const rankedResults = [...participants].sort((a, b) => (scoreOf(b.id) ?? -1) - (scoreOf(a.id) ?? -1));
+
+  // Active-tour set (for quorum + selection). Valid because controls only show
+  // when viewing the active tour, where reviewsByApp is that tour's reviews.
+  const activeApps = applications.filter(
+    (a) => a.payment_status === 'paid' && a.standing === 'active' && (a.tour || 1) === activeTour
+  );
   const expected = jurors.length * activeApps.length;
   const done = activeApps.reduce((s, a) => s + finishedCount(a.id), 0);
   const quorumMet = expected > 0 && done >= expected;
-
-  const ranked = [...activeApps].sort((a, b) => (scoreOf(b.id) ?? -1) - (scoreOf(a.id) ?? -1));
+  const rankedActive = [...activeApps].sort((a, b) => (scoreOf(b.id) ?? -1) - (scoreOf(a.id) ?? -1));
   const defaultN = activeTour === 1 ? Math.ceil(activeApps.length / 2) : Math.min(3, activeApps.length);
 
-  const tour1Finalized = activeTour === 1 && applications.some((a) => (a.tour || 1) === 2);
-  const winnersExist = applications.some((a) => a.standing === 'winner');
+  const outcome = (a) => {
+    if (viewTour === 1) {
+      if ((a.tour || 1) >= 2) return { label: 'Прошёл', cls: 'finished' };
+      if (a.standing === 'eliminated') return { label: 'Выбыл', cls: 'none' };
+      return { label: 'Идёт оценка', cls: 'draft' };
+    }
+    if (a.standing === 'winner') return { label: 'Победитель', cls: 'finished' };
+    if (a.standing === 'eliminated') return { label: 'Выбыл', cls: 'none' };
+    return { label: 'Идёт оценка', cls: 'draft' };
+  };
 
   const setOpen = async (open) => {
-    if (open && !submissionsClosed) return; // guard: close submissions first
+    if (open && !submissionsClosed) return;
     setBusy(true);
-    try {
-      await updateCycle({ [openField]: open });
-      onChanged?.();
-    } finally { setBusy(false); }
+    try { await updateCycle({ [openField]: open }); onChanged?.(); }
+    finally { setBusy(false); }
   };
 
   const startSelection = () => {
-    setPicked(new Set(ranked.slice(0, defaultN).map((a) => a.id)));
+    setPicked(new Set(rankedActive.slice(0, defaultN).map((a) => a.id)));
     setSelecting(true);
   };
 
@@ -90,71 +110,82 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
 
   const startTour2 = async () => {
     setBusy(true);
-    try {
-      await updateCycle({ active_tour: 2 });
-      onChanged?.();
-    } finally { setBusy(false); }
+    try { await updateCycle({ active_tour: 2 }); setViewTour?.(2); onChanged?.(); }
+    finally { setBusy(false); }
   };
-
-  const applicant = (a) =>
-    [a.first_name, a.last_name].filter(Boolean).join(' ') || a.email || a.id.slice(0, 8);
 
   return (
     <div className="tours-panel">
-      <div className="tours-panel__head">
-        <h3 className="panel-title">Тур {activeTour}</h3>
-        {winnersExist && <span className="cycle-state cycle-state--open">Победители выбраны</span>}
+      <div className="tours-tabs">
+        {tours.map((tn) => (
+          <button
+            key={tn}
+            type="button"
+            className={`tours-tab ${viewTour === tn ? 'is-active' : ''}`}
+            onClick={() => setViewTour?.(tn)}
+          >
+            Тур {tn}
+          </button>
+        ))}
       </div>
 
-      {!winnersExist && !selecting && (
-        <div className="tours-panel__row">
-          <div className="tours-panel__state">
-            <span className={`cycle-state cycle-state--${tourOpen ? 'open' : 'closed'}`}>
-              Оценки {tourOpen ? 'открыты' : 'закрыты'}
-            </span>
-            {tourOpen && (
-              <span className="cycle-note">
-                оценили {done}/{expected || 0}
-                {quorumMet
-                  ? ' · можно подводить итоги'
-                  : ' · отбор станет доступен, когда все жюри оценят все заявки'}
-              </span>
-            )}
-            {!tourOpen && !submissionsClosed && (
-              <span className="cycle-note">Сначала закройте приём заявок</span>
-            )}
-          </div>
-          <div className="tours-panel__actions">
-            <button
-              type="button"
-              className="btn-ink tours-btn"
-              disabled={busy || (!tourOpen && !submissionsClosed)}
-              title={!tourOpen && !submissionsClosed ? 'Сначала закройте приём заявок' : ''}
-              onClick={() => setOpen(!tourOpen)}
-            >
-              {tourOpen ? 'Закрыть приём оценок' : 'Открыть приём оценок'}
-            </button>
-            {tourOpen && (
-              <button
-                type="button"
-                className="btn-gold tours-btn"
-                disabled={busy || !quorumMet}
-                title={quorumMet ? '' : 'Доступно, когда все жюри оценят все заявки'}
-                onClick={startSelection}
-              >
-                {activeTour === 1 ? 'Перейти к отбору' : 'Выбрать топ-3'}
-              </button>
-            )}
-            {tour1Finalized && (
+      {/* Controls — only for the active tour, and not while selecting. */}
+      {isActiveView && !selecting && !winnersExist && (
+        tour1Finalized ? (
+          <div className="tours-panel__row">
+            <span className="cycle-note">Тур 1 завершён — прошедшие заявки ждут второго тура.</span>
+            <div className="tours-panel__actions">
               <button type="button" className="btn-gold tours-btn" disabled={busy} onClick={startTour2}>
                 Начать тур 2
               </button>
-            )}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="tours-panel__row">
+            <div className="tours-panel__state">
+              <span className={`cycle-state cycle-state--${tourOpen ? 'open' : 'closed'}`}>
+                Оценки {tourOpen ? 'открыты' : 'закрыты'}
+              </span>
+              {tourOpen && (
+                <span className="cycle-note">
+                  оценили {done}/{expected || 0}
+                  {quorumMet
+                    ? ' · можно подводить итоги'
+                    : ' · отбор станет доступен, когда все жюри оценят все заявки'}
+                </span>
+              )}
+              {!tourOpen && !submissionsClosed && (
+                <span className="cycle-note">Сначала закройте приём заявок</span>
+              )}
+            </div>
+            <div className="tours-panel__actions">
+              <button
+                type="button"
+                className="btn-ink tours-btn"
+                disabled={busy || (!tourOpen && !submissionsClosed)}
+                title={!tourOpen && !submissionsClosed ? 'Сначала закройте приём заявок' : ''}
+                onClick={() => setOpen(!tourOpen)}
+              >
+                {tourOpen ? 'Закрыть приём оценок' : 'Открыть приём оценок'}
+              </button>
+              {tourOpen && (
+                <button
+                  type="button"
+                  className="btn-gold tours-btn"
+                  disabled={busy || !quorumMet}
+                  title={quorumMet ? '' : 'Доступно, когда все жюри оценят все заявки'}
+                  onClick={startSelection}
+                >
+                  {activeTour === 1 ? 'Перейти к отбору' : 'Выбрать топ-3'}
+                </button>
+              )}
+            </div>
+          </div>
+        )
       )}
 
-      {selecting && (
+      {/* Selection (active tour). */}
+      {isActiveView && selecting && (
         <div className="tours-select">
           <p className="tours-select__hint">
             {activeTour === 1
@@ -162,7 +193,7 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
               : `Отметьте победителей (по умолчанию топ-${defaultN}).`}
           </p>
           <ul className="tours-select__list">
-            {ranked.map((a, i) => {
+            {rankedActive.map((a, i) => {
               const sc = scoreOf(a.id);
               return (
                 <li key={a.id} className="tours-select__item">
@@ -184,6 +215,26 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
               Подтвердить отбор ({picked.size})
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Results for the viewed tour. */}
+      {!selecting && (
+        <div className="tours-results">
+          <span className="account-section-label">Результаты · тур {viewTour}</span>
+          {rankedResults.length === 0 && <p className="cycle-note">Нет заявок</p>}
+          {rankedResults.map((a, i) => {
+            const sc = scoreOf(a.id);
+            const o = outcome(a);
+            return (
+              <div key={a.id} className="tours-result">
+                <span className="tours-result__rank">{i + 1}</span>
+                <span className="tours-result__name">{applicant(a)}</span>
+                <span className="tours-result__score">{sc == null ? '—' : sc.toFixed(1)}</span>
+                <span className={`review-chip review-chip--${o.cls}`}>{o.label}</span>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

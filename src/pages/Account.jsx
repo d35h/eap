@@ -34,6 +34,9 @@ export default function Account() {
   const activeTour = cycle?.active_tour || 1;
   // Jurors can only see/evaluate once the active tour's evaluations are open.
   const evaluationsOpen = activeTour === 1 ? !!cycle?.tour1_open : !!cycle?.tour2_open;
+  // Admin can switch which tour's results they're viewing; defaults to active.
+  const [viewTour, setViewTour] = useState(null);
+  const shownTour = viewTour ?? activeTour;
   // Bumped after any change to refetch cycle/applications/reviews.
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -94,7 +97,7 @@ export default function Account() {
     supabase
       .from('application_reviews')
       .select('id, application_id, reviewer_id, reviewer_email, status, unlocked, scores, tour')
-      .eq('tour', activeTour)
+      .eq('tour', shownTour)
       .in('application_id', applications.map((a) => a.id))
       .then(({ data }) => {
         if (cancelled) return;
@@ -107,7 +110,7 @@ export default function Account() {
     return () => {
       cancelled = true;
     };
-  }, [applications, isStaff, activeTour]);
+  }, [applications, isStaff, shownTour]);
 
   // Admin: fetch every juror so we can show review status per juror per app.
   useEffect(() => {
@@ -301,6 +304,8 @@ export default function Account() {
             applications={applications}
             reviewsByApp={reviewsByApp}
             jurors={jurors}
+            viewTour={shownTour}
+            setViewTour={setViewTour}
             onChanged={() => setRefreshKey((k) => k + 1)}
           />
         )}
@@ -411,7 +416,14 @@ export default function Account() {
                   return (
                     <div key={j.id} className="review-row">
                       <span className="review-row__email">
-                        {j.name ? `${j.name} <${j.email}>` : j.email}
+                        {j.name ? (
+                          <>
+                            <span className="review-row__name">{j.name}</span>
+                            <span className="review-row__sub">{j.email}</span>
+                          </>
+                        ) : (
+                          <span className="review-row__name">{j.email}</span>
+                        )}
                       </span>
                       <span className={`review-chip review-chip--${state}`}>
                         {state === 'finished' ? 'Рассмотрено' : state === 'draft' ? 'Черновик' : 'Не рассмотрено'}

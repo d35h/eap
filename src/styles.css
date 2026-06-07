@@ -1055,6 +1055,24 @@ input, textarea, select { font-family: inherit; }
 .tours-select__rank { font-family: var(--mono); font-size: 13px; opacity: 0.6; width: 22px; }
 .tours-select__name { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; font-weight: 500; }
 .tours-select__score { font-family: var(--mono); color: var(--accent-deep); white-space: nowrap; }
+/* Tour tabs */
+.tours-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.tours-tab {
+  font-family: var(--font-display); font-size: 1.05rem; padding: 6px 16px;
+  border: 1px solid var(--border); border-radius: 999px; background: transparent;
+  color: var(--ink-soft); cursor: pointer; transition: all 0.2s;
+}
+.tours-tab.is-active { border-color: var(--accent-deep); color: var(--ink); background: hsla(36, 40%, 96%, 0.9); }
+/* Tour results list */
+.tours-results { margin-top: 18px; }
+.tours-result {
+  display: flex; align-items: center; gap: 12px; padding: 10px 2px;
+  border-top: 1px solid var(--border);
+}
+.tours-result:first-of-type { border-top: 0; }
+.tours-result__rank { font-family: var(--mono); font-size: 13px; opacity: 0.6; width: 22px; }
+.tours-result__name { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; font-weight: 500; }
+.tours-result__score { font-family: var(--mono); color: var(--accent-deep); white-space: nowrap; }
 
 /* ── Account cabinet ── */
 .account-app-card { margin-bottom: 16px; }
@@ -1198,8 +1216,11 @@ input, textarea, select { font-family: inherit; }
 }
 .review-row:first-child { border-top: 0; }
 .review-row__email {
-  font-size: 15px; font-weight: 500; flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere;
+  font-size: 15px; flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere;
+  display: flex; flex-direction: column;
 }
+.review-row__name { font-weight: 500; }
+.review-row__sub { font-size: 12px; opacity: 0.6; margin-top: 1px; }
 .review-chip {
   font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 20px;
   text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap;
