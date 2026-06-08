@@ -1,0 +1,11 @@
+{
+  "name": "nextlevelbuilder/ui-ux-pro-max-skill",
+  "version": "b7e3af80f6e331f6fb456667b82b12cade7c9d35",
+  "summary": "Auto-generated tile from GitHub (1 skill)",
+  "private": true,
+  "skills": {
+    "ui-ux-pro-max": {
+      "path": ".claude/skills/ui-ux-pro-max/SKILL.md"
+    }
+  }
+}

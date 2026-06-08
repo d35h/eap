@@ -12,6 +12,7 @@ import {
 import { getMyReview, saveDraft, finishReview } from '../lib/reviewsRepo.js';
 import { imgScaled } from '../lib/img.js';
 import SmartImg from '../components/SmartImg.jsx';
+import RatingMeter from '../components/RatingMeter.jsx';
 import { getCycle } from '../lib/cycleRepo.js';
 
 export default function ReviewEvaluation() {
@@ -106,7 +107,6 @@ export default function ReviewEvaluation() {
   const locked = status === 'finished' && !unlocked;
   const complete = isEvaluationComplete(scores);
   const doneCount = REVIEW_CRITERIA.filter((c) => isCriterionValid(scores[c.key])).length;
-  const incomplete = REVIEW_CRITERIA.filter((c) => !isCriterionValid(scores[c.key]));
 
   const setEntry = (key, patch) =>
     setScores((prev) => ({ ...prev, [key]: { ...prev[key], ...patch } }));
@@ -134,38 +134,37 @@ export default function ReviewEvaluation() {
 
   return (
     <main className="apply-page account-page">
-      <div className="container">
+      <div className="container review-page">
         <Link to="/account" className="review-back">← Назад</Link>
         <div className="apply-head">
           <span className="eyebrow">- Рассмотрение</span>
           <h1>Оценка заявки</h1>
         </div>
 
+        {/* Jurors see the works only — no artist name, contact, or status. */}
         {app && app.works && app.works.length > 0 && (
-          <div className="review-app">
-            {/* Jurors see the works only - no artist name, contact, or status. */}
-            <div className="review-works">
-              {app.works.map((w, i) => {
-                const url = files[i + 1];
-                return (
-                  <figure className="review-work" key={i}>
-                    <figcaption>
-                      <span className="work-num">Работа {i + 1}</span>
-                      <strong>{w.title || '-'}</strong>
-                      {w.year ? `, ${w.year}` : ''}{w.media ? ` · ${w.media}` : ''}{w.size ? ` · ${w.size}` : ''}
-                      {w.desc ? <p>{w.desc}</p> : null}
-                    </figcaption>
-                    {url ? (
-                      <a href={url} target="_blank" rel="noreferrer">
-                        <SmartImg src={imgScaled(url, 1400)} alt={w.title || ''} />
-                      </a>
-                    ) : (
-                      <div className="review-work__noimg">Нет изображения</div>
-                    )}
-                  </figure>
-                );
-              })}
-            </div>
+          <div className="review-works">
+            {app.works.map((w, i) => {
+              const url = files[i + 1];
+              const meta = [w.year, w.media, w.size].filter(Boolean).join(' · ');
+              return (
+                <figure className="work" key={i}>
+                  <div className="work__plate">
+                    <span className="work__index">Работа {i + 1}</span>
+                    <h2 className="work__title">{w.title || 'Без названия'}</h2>
+                    {meta && <p className="work__meta">{meta}</p>}
+                    {w.desc && <p className="work__desc">{w.desc}</p>}
+                  </div>
+                  {url ? (
+                    <a className="work__frame" href={url} target="_blank" rel="noreferrer">
+                      <SmartImg src={imgScaled(url, 1400)} alt={w.title || ''} />
+                    </a>
+                  ) : (
+                    <div className="review-work__noimg">Нет изображения</div>
+                  )}
+                </figure>
+              );
+            })}
           </div>
         )}
 
@@ -173,89 +172,83 @@ export default function ReviewEvaluation() {
           <div className="review-done">
             <span className="review-done__icon" aria-hidden="true">✓</span>
             <div>
-              <strong>Вы завершили оценку этой заявки.</strong>
-              <p>Чтобы изменить оценку, обратитесь к администратору.</p>
+              <strong>Оценка завершена</strong>
+              <p>Вы оценили эту заявку. Чтобы внести изменения, обратитесь к организаторам.</p>
             </div>
           </div>
         )}
 
         {ready && (
-          <div className="review-eval">
+          <div className="scorecard">
             {!locked && (
-              <div className="review-intro">
-                <p>
-                  Оцените заявку по <strong>двум критериям</strong>. По каждому поставьте оценку (0–{MAX_RATING})
-                  и напишите комментарий не короче <strong>{MIN_REVIEW_CHARS} символов</strong>.
-                  Когда оба критерия заполнены — нажмите «Завершить оценку».
-                </p>
-                <p className="review-progress">
-                  Заполнено критериев: <strong>{doneCount}</strong> из {REVIEW_CRITERIA.length}
-                </p>
-              </div>
+              <p className="scorecard__lead">
+                Оцените работу по двум критериям — поставьте оценку от 1 до {MAX_RATING}
+                и напишите развёрнутый комментарий (не короче {MIN_REVIEW_CHARS} символов).
+              </p>
             )}
+
             {REVIEW_CRITERIA.map((c, i) => {
               const e = scores[c.key] || { rating: 0, text: '' };
               const len = (e.text || '').trim().length;
               const ok = isCriterionValid(e);
               return (
-                <div key={c.key} className={`review-crit ${ok ? 'is-done' : ''}`}>
-                  <div className="review-crit__head">
-                    <span className="review-crit__num">Критерий {i + 1} из {REVIEW_CRITERIA.length}</span>
-                    {ok && <span className="review-crit__done">✓ Заполнено</span>}
-                  </div>
-                  <h2 className="review-panel__title">{c.title}</h2>
-                  <p className="review-panel__hint">{c.hint}</p>
-
-                  <div className="review-rating">
-                    <label>Оценка: <strong>{e.rating}</strong> / {MAX_RATING}</label>
-                    <input
-                      type="range" min="0" max={MAX_RATING} step="1"
-                      value={e.rating} disabled={locked}
-                      onChange={(ev) => setEntry(c.key, { rating: Number(ev.target.value) })}
-                    />
-                  </div>
-
-                  <div className="review-text">
-                    <textarea
-                      value={e.text} disabled={locked}
-                      placeholder="Развёрнутый комментарий по этому критерию…"
-                      onChange={(ev) => setEntry(c.key, { text: ev.target.value })}
-                    />
-                    <div className={`review-counter ${len >= MIN_REVIEW_CHARS ? 'is-ok' : ''}`}>
-                      {len >= MIN_REVIEW_CHARS
-                        ? '✓ Комментарий достаточной длины'
-                        : `Ещё ${MIN_REVIEW_CHARS - len} символов (минимум ${MIN_REVIEW_CHARS})`}
+                <section key={c.key} className={`crit ${ok ? 'is-done' : ''}`}>
+                  <header className="crit__head">
+                    <span className="crit__index" aria-hidden="true">{ok ? '✓' : i + 1}</span>
+                    <div className="crit__heading">
+                      <h2 className="crit__title">{c.title}</h2>
+                      <p className="crit__hint">{c.hint}</p>
                     </div>
+                  </header>
+
+                  <div className="crit__field">
+                    <span className="crit__label">Оценка</span>
+                    <RatingMeter value={e.rating} disabled={locked} onChange={(v) => setEntry(c.key, { rating: v })} />
                   </div>
-                </div>
+
+                  <div className="crit__field">
+                    <span className="crit__label">Комментарий</span>
+                    {locked ? (
+                      <p className="crit__comment">{e.text || '—'}</p>
+                    ) : (
+                      <>
+                        <textarea
+                          className="crit__textarea"
+                          value={e.text}
+                          placeholder="Что в этой работе убеждает или не убеждает? Поделитесь развёрнутым мнением…"
+                          onChange={(ev) => setEntry(c.key, { text: ev.target.value })}
+                        />
+                        <div className={`crit__counter ${len >= MIN_REVIEW_CHARS ? 'is-ok' : ''}`}>
+                          {len >= MIN_REVIEW_CHARS ? '✓ Достаточно подробно' : `ещё ${MIN_REVIEW_CHARS - len} симв.`}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </section>
               );
             })}
+          </div>
+        )}
 
-            {!locked && (
-              <>
-                {!complete && (
-                  <p className="review-finish-hint">
-                    Чтобы завершить оценку, добавьте комментарий (≥{MIN_REVIEW_CHARS} символов)
-                    {incomplete.length === REVIEW_CRITERIA.length ? ' по обоим критериям' : ` по критерию: ${incomplete.map((c) => c.title).join(', ')}`}.
-                  </p>
-                )}
-                <div className="review-actions">
-                  <button type="button" className="btn-ink" onClick={() => persist(false)} disabled={busy}>
-                    Сохранить черновик
-                  </button>
-                  <button
-                    type="button"
-                    className="btn-gold"
-                    onClick={() => persist(true)}
-                    disabled={busy || !complete}
-                  >
-                    {complete ? 'Завершить оценку' : `Завершить оценку (${doneCount}/${REVIEW_CRITERIA.length})`}
-                  </button>
-                </div>
-              </>
-            )}
-
-            {msg && <p className={`review-msg review-msg--${msg.type}`}>{msg.text}</p>}
+        {ready && !locked && (
+          <div className="review-bar">
+            <div className="review-bar__status">
+              <div className="review-bar__track">
+                <span style={{ width: `${(doneCount / REVIEW_CRITERIA.length) * 100}%` }} />
+              </div>
+              <span className="review-bar__count">
+                {complete ? 'Готово к завершению' : `${doneCount} из ${REVIEW_CRITERIA.length} критериев заполнено`}
+              </span>
+            </div>
+            <div className="review-bar__actions">
+              {msg && <span className={`review-msg review-msg--${msg.type}`}>{msg.text}</span>}
+              <button type="button" className="btn-ink tours-btn" onClick={() => persist(false)} disabled={busy}>
+                Сохранить черновик
+              </button>
+              <button type="button" className="btn-gold tours-btn" onClick={() => persist(true)} disabled={busy || !complete}>
+                {complete ? 'Завершить оценку' : `Завершить (${doneCount}/${REVIEW_CRITERIA.length})`}
+              </button>
+            </div>
           </div>
         )}
       </div>

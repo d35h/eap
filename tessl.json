@@ -28,6 +28,15 @@
           "react-component-performance"
         ]
       }
+    },
+    "nextlevelbuilder/ui-ux-pro-max-skill": {
+      "version": "b7e3af80f6e331f6fb456667b82b12cade7c9d35",
+      "source": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
+      "include": {
+        "skills": [
+          "ui-ux-pro-max"
+        ]
+      }
     }
   }
 }
