@@ -12,6 +12,7 @@ import EditionTourResults from '../components/EditionTourResults.jsx';
 import EditionSummary from '../components/EditionSummary.jsx';
 import JurorReviewList from '../components/JurorReviewList.jsx';
 import EditionGallery from '../components/EditionGallery.jsx';
+import { imgThumb } from '../lib/img.js';
 
 // Medal for top-3 placements.
 const medal = (p) => (p === 1 ? '🥇' : p === 2 ? '🥈' : p === 3 ? '🥉' : '🏆');
@@ -635,7 +636,7 @@ export default function Account() {
               <Link key={app.id} to={`/account/application/${app.id}`} className={`pl-row ${isCurrentEdition ? '' : 'pl-row--archive'}`}>
                 <span className="pl-row__artist">
                   <span className="pl-row__thumb">
-                    {thumb ? <img src={thumb} alt="" loading="lazy" /> : <span className="pl-row__thumb--empty" />}
+                    {thumb ? <img src={imgThumb(thumb, 96)} alt="" loading="lazy" /> : <span className="pl-row__thumb--empty" />}
                   </span>
                   <span className="pl-row__id">
                     <span className="pl-row__name">{[app.first_name, app.last_name].filter(Boolean).join(' ') || '—'}</span>
@@ -699,7 +700,7 @@ export default function Account() {
                     <li key={i} className="account-work">
                       {url ? (
                         <a href={url} target="_blank" rel="noreferrer" className="account-work__thumb">
-                          <img src={url} alt={w.title || ''} loading="lazy" />
+                          <img src={imgThumb(url, 400)} alt={w.title || ''} loading="lazy" />
                         </a>
                       ) : (
                         <span className="account-work__thumb account-work__thumb--empty" aria-hidden="true" />

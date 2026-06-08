@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { imgThumb } from '../lib/img.js';
 
 const STATE = {
   none: { label: 'Не оценено', dot: 'none' },
@@ -67,7 +68,7 @@ export default function JurorReviewList({ applications, reviewsByApp, userId, fi
             return (
               <Link key={app.id} to={`/account/review/${app.id}`} className="jrl__row">
                 <span className="jrl__thumb">
-                  {thumb ? <img src={thumb} alt="" loading="lazy" /> : <span className="jrl__thumb--empty" />}
+                  {thumb ? <img src={imgThumb(thumb, 96)} alt="" loading="lazy" /> : <span className="jrl__thumb--empty" />}
                 </span>
                 <span className="jrl__main">
                   <span className="jrl__title">{title}</span>

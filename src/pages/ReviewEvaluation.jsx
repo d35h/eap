@@ -10,6 +10,7 @@ import {
   isEvaluationComplete,
 } from '../lib/reviewCriteria.js';
 import { getMyReview, saveDraft, finishReview } from '../lib/reviewsRepo.js';
+import { imgScaled } from '../lib/img.js';
 import { getCycle } from '../lib/cycleRepo.js';
 
 export default function ReviewEvaluation() {
@@ -160,7 +161,7 @@ export default function ReviewEvaluation() {
                     </figcaption>
                     {url ? (
                       <a href={url} target="_blank" rel="noreferrer">
-                        <img src={url} alt={w.title || ''} loading="lazy" />
+                        <img src={imgScaled(url, 1400)} alt={w.title || ''} loading="lazy" />
                       </a>
                     ) : (
                       <div className="review-work__noimg">Нет изображения</div>
