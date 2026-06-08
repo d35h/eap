@@ -55,6 +55,12 @@ function igReadyUrl(signedUrl) {
   return `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=1080&h=1080&fit=contain&cbg=121417&output=jpg&q=85`;
 }
 
+// Story frame: 9:16 (1080×1920), padded on the brand-dark canvas.
+function storyReadyUrl(signedUrl) {
+  const src = 'ssl:' + signedUrl.replace(/^https?:\/\//, '');
+  return `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=1080&h=1920&fit=contain&cbg=121417&output=jpg&q=85`;
+}
+
 async function gp(path, body) {
   const res = await fetch(`${GRAPH}/${path}`, {
     method: 'POST',
@@ -98,6 +104,17 @@ async function igPublish(igUserId, token, { imageUrls, caption }) {
   }
   await waitReady(containerId, token);
   const pub = await gp(`${igUserId}/media_publish`, { creation_id: containerId, access_token: token });
+  return finalizePost(igUserId, token, pub);
+}
+
+// Publish a single image as a 24h story.
+async function igPublishStory(igUserId, token, imageUrl) {
+  const c = await gp(`${igUserId}/media`, { image_url: imageUrl, media_type: 'STORIES', access_token: token });
+  await waitReady(c.id, token);
+  await gp(`${igUserId}/media_publish`, { creation_id: c.id, access_token: token });
+}
+
+async function finalizePost(igUserId, token, pub) {
   // Fetch the public permalink for the new post (best-effort).
   let permalink = null;
   try {
@@ -127,14 +144,19 @@ export async function publishApplication(admin, env, app) {
   }
   const paths = images.map((f) => `${folder}/${f.name}`);
   const { data: signed } = await admin.storage.from('works').createSignedUrls(paths, 3600);
-  const imageUrls = (signed || [])
-    .map((s) => s.signedUrl).filter(Boolean).slice(0, 10)
-    .map(igReadyUrl);
+  const rawUrls = (signed || []).map((s) => s.signedUrl).filter(Boolean).slice(0, 10);
 
+  // 1) Feed carousel post (caption @-mentions the artist).
   const caption = buildCaption(app, cfg(env));
-  const post = await igPublish(igUserId, token, { imageUrls, caption });
+  const post = await igPublish(igUserId, token, { imageUrls: rawUrls.map(igReadyUrl), caption });
   await admin.from('applications')
     .update({ published_at: new Date().toISOString(), instagram_url: post.permalink })
     .eq('id', app.id);
+
+  // 2) One 24h story (first work). Best-effort — never fails the feed post.
+  if (env.IG_PUBLISH_STORIES !== 'false' && rawUrls[0]) {
+    try { await igPublishStory(igUserId, token, storyReadyUrl(rawUrls[0])); }
+    catch (e) { console.error('IG story failed:', e?.message || e); }
+  }
   return { status: 'published', postId: post.id, permalink: post.permalink };
 }
