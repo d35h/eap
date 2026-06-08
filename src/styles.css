@@ -1090,7 +1090,6 @@ input, textarea, select { font-family: inherit; }
 /* Tour results list */
 .tours-results { margin-top: 18px; }
 .tours-send { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 4px 0 16px; }
-.tours-open { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
 /* ── Admin panels: structured settings-row layout ── */
 .admin-panel {
   border: 1px solid var(--border); border-radius: 12px; padding: 20px 26px; margin: 0 0 18px;
@@ -1110,11 +1109,6 @@ input, textarea, select { font-family: inherit; }
 .admin-row__control { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
 .admin-note { margin: -4px 0 0; font-size: 13px; color: var(--ink-soft); }
 .admin-confirm { margin-top: 8px; }
-.tours-hint {
-  margin: 0; font-size: 13px; line-height: 1.5; color: hsl(30, 25%, 32%); max-width: 480px;
-  background: hsla(40, 50%, 95%, 0.8); border-left: 3px solid hsl(40, 60%, 52%);
-  padding: 10px 14px; border-radius: 6px;
-}
 .tours-confirm {
   width: 100%;
   border: 1px solid var(--accent-deep);
