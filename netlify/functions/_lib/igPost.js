@@ -86,15 +86,22 @@ async function waitReady(containerId, token) {
   throw new Error('container not ready (timeout)');
 }
 
-async function igPublish(igUserId, token, { imageUrls, caption }) {
+async function igPublish(igUserId, token, { imageUrls, caption, userTag }) {
+  // Photo tag on the feed post → notifies the artist + gives them the
+  // "Add to your story" repost option.
+  const tags = userTag ? [{ username: userTag, x: 0.5, y: 0.92 }] : null;
   let containerId;
   if (imageUrls.length === 1) {
-    const c = await gp(`${igUserId}/media`, { image_url: imageUrls[0], caption, access_token: token });
+    const body = { image_url: imageUrls[0], caption, access_token: token };
+    if (tags) body.user_tags = tags;
+    const c = await gp(`${igUserId}/media`, body);
     containerId = c.id;
   } else {
     const children = [];
     for (const url of imageUrls) {
-      const c = await gp(`${igUserId}/media`, { image_url: url, is_carousel_item: true, access_token: token });
+      const body = { image_url: url, is_carousel_item: true, access_token: token };
+      if (tags) body.user_tags = tags;
+      const c = await gp(`${igUserId}/media`, body);
       children.push(c.id);
     }
     const carousel = await gp(`${igUserId}/media`, {
@@ -146,9 +153,18 @@ export async function publishApplication(admin, env, app) {
   const { data: signed } = await admin.storage.from('works').createSignedUrls(paths, 3600);
   const rawUrls = (signed || []).map((s) => s.signedUrl).filter(Boolean).slice(0, 10);
 
-  // 1) Feed carousel post (caption @-mentions the artist).
+  // 1) Feed carousel post — caption @-mentions + photo-tags the artist.
   const caption = buildCaption(app, cfg(env));
-  const post = await igPublish(igUserId, token, { imageUrls: rawUrls.map(igReadyUrl), caption });
+  const handle = igHandle(app.instagram) || undefined;
+  const feedImages = rawUrls.map(igReadyUrl);
+  let post;
+  try {
+    post = await igPublish(igUserId, token, { imageUrls: feedImages, caption, userTag: handle });
+  } catch (e) {
+    // A bad/private handle would be rejected — publish without the tag.
+    console.error('IG publish with tag failed, retrying without tag:', e?.message || e);
+    post = await igPublish(igUserId, token, { imageUrls: feedImages, caption });
+  }
   await admin.from('applications')
     .update({ published_at: new Date().toISOString(), instagram_url: post.permalink })
     .eq('id', app.id);
