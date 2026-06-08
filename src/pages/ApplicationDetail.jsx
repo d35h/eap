@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.jsx';
 import { imgScaled } from '../lib/img.js';
+import SmartImg from '../components/SmartImg.jsx';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { getCycle } from '../lib/cycleRepo.js';
 import { unlockReview } from '../lib/reviewsRepo.js';
@@ -201,7 +202,7 @@ export default function ApplicationDetail() {
                     {w.desc ? <p>{w.desc}</p> : null}
                   </figcaption>
                   {url ? (
-                    <a href={url} target="_blank" rel="noreferrer"><img src={imgScaled(url, 1400)} alt={w.title || ''} loading="lazy" /></a>
+                    <a href={url} target="_blank" rel="noreferrer"><SmartImg src={imgScaled(url, 1400)} alt={w.title || ''} /></a>
                   ) : (
                     <div className="review-work__noimg">Нет изображения</div>
                   )}

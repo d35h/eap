@@ -1746,3 +1746,13 @@ input, textarea, select { font-family: inherit; }
 .jury-progress__count { font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); text-align: right; white-space: nowrap; }
 .jury-progress__count.is-done { color: hsl(140, 45%, 38%); }
 @media (max-width: 640px) { .jury-progress__row { grid-template-columns: minmax(0, 1fr) 48px; } .jury-progress__bar { display: none; } }
+
+/* ── Image loading: shimmer placeholder + fade-in (no white flash) ── */
+.smartimg { background-color: var(--ivory-soft); transition: opacity 0.3s ease; }
+.smartimg[data-loaded="0"] {
+  background-image: linear-gradient(100deg, transparent 20%, hsla(0, 0%, 100%, 0.55) 50%, transparent 80%);
+  background-size: 200% 100%; background-repeat: no-repeat;
+  animation: img-shimmer 1.3s ease-in-out infinite;
+}
+@keyframes img-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .smartimg[data-loaded="0"] { animation: none; } }

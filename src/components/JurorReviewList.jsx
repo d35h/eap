@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { imgThumb } from '../lib/img.js';
+import SmartImg from './SmartImg.jsx';
 
 const STATE = {
   none: { label: 'Не оценено', dot: 'none' },
@@ -17,7 +18,7 @@ const plural = (n, one, few, many) => {
 
 // Compact, scannable review queue for jurors. Unreviewed float to the top;
 // a progress meter + filter make a long list manageable. No artist identity.
-export default function JurorReviewList({ applications, reviewsByApp, userId, filesByApp, tour }) {
+export default function JurorReviewList({ applications, reviewsByApp, userId, filesByApp, tour, total = 0, pageStart = 0 }) {
   const [filter, setFilter] = useState('all');
 
   const stateOf = (app) => {
@@ -40,7 +41,11 @@ export default function JurorReviewList({ applications, reviewsByApp, userId, fi
     <div className="jrl">
       <div className="jrl__head">
         <h2 className="jrl__heading">Оценка · Тур {tour}</h2>
-        <span className="jrl__progress">Оценено: <strong>{doneCount}</strong> из {rows.length}</span>
+        <span className="jrl__progress">
+          {total > rows.length
+            ? <>Заявки <strong>{pageStart + 1}–{pageStart + rows.length}</strong> из {total} · оценено на странице: {doneCount}</>
+            : <>Оценено: <strong>{doneCount}</strong> из {rows.length}</>}
+        </span>
       </div>
 
       <div className="jrl__filters">
@@ -68,7 +73,7 @@ export default function JurorReviewList({ applications, reviewsByApp, userId, fi
             return (
               <Link key={app.id} to={`/account/review/${app.id}`} className="jrl__row">
                 <span className="jrl__thumb">
-                  {thumb ? <img src={imgThumb(thumb, 96)} alt="" loading="lazy" /> : <span className="jrl__thumb--empty" />}
+                  {thumb ? <SmartImg src={imgThumb(thumb, 96)} alt="" /> : <span className="jrl__thumb--empty" />}
                 </span>
                 <span className="jrl__main">
                   <span className="jrl__title">{title}</span>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { imgThumb } from '../lib/img.js';
+import SmartImg from './SmartImg.jsx';
 
 const medal = (p) => (p === 1 ? '🥇' : p === 2 ? '🥈' : p === 3 ? '🥉' : '🏆');
 
@@ -45,7 +46,7 @@ export default function ArtistArchive({ apps, myResults, filesByApp }) {
                   <div className="art-arch__works">
                     {app.works.map((w, i) => {
                       const url = filesByApp[app.id]?.[i + 1];
-                      return url ? <img key={i} src={imgThumb(url, 320)} alt={w.title || ''} loading="lazy" /> : null;
+                      return url ? <SmartImg key={i} src={imgThumb(url, 320)} alt={w.title || ''} /> : null;
                     })}
                   </div>
                 )}

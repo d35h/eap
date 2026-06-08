@@ -14,6 +14,7 @@ import JurorReviewList from '../components/JurorReviewList.jsx';
 import EditionGallery from '../components/EditionGallery.jsx';
 import ArtistArchive from '../components/ArtistArchive.jsx';
 import SearchInput from '../components/SearchInput.jsx';
+import SmartImg from '../components/SmartImg.jsx';
 import { imgThumb } from '../lib/img.js';
 
 // Medal for top-3 placements.
@@ -446,6 +447,16 @@ export default function Account() {
   const pastApps = applications.filter(isPast);
   const orderedApps = [...currentApps, ...pastApps];
 
+  // Shared pager — keeps every role (admin pipeline, juror queue) bounded to one
+  // page of results so we never load thousands of rows at once.
+  const renderPager = () => (total > PAGE_SIZE && !appsLoading ? (
+    <div className="pager">
+      <button type="button" className="btn-ink pager__btn" disabled={page === 0} onClick={() => setPage((p) => Math.max(0, p - 1))}>← Назад</button>
+      <span className="pager__info">{page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, total)} из {total}</span>
+      <button type="button" className="btn-ink pager__btn" disabled={(page + 1) * PAGE_SIZE >= total} onClick={() => setPage((p) => p + 1)}>Вперёд →</button>
+    </div>
+  ) : null);
+
   return (
     <main className="apply-page">
       <div className="container">
@@ -538,13 +549,18 @@ export default function Account() {
         )}
 
         {isJuror && cycle && evaluationsOpen && !appsLoading && (
-          <JurorReviewList
-            applications={applications}
-            reviewsByApp={reviewsByApp}
-            userId={user.id}
-            filesByApp={filesByApp}
-            tour={activeTour}
-          />
+          <>
+            <JurorReviewList
+              applications={applications}
+              reviewsByApp={reviewsByApp}
+              userId={user.id}
+              filesByApp={filesByApp}
+              tour={activeTour}
+              total={total}
+              pageStart={page * PAGE_SIZE}
+            />
+            {renderPager()}
+          </>
         )}
 
         {(!isJuror) && (showArchive ? (archiveMode && archiveTab === 'apps') : true) && (
@@ -632,7 +648,7 @@ export default function Account() {
               <Link key={app.id} to={`/account/application/${app.id}`} className={`pl-row ${isCurrentEdition ? '' : 'pl-row--archive'}`}>
                 <span className="pl-row__artist">
                   <span className="pl-row__thumb">
-                    {thumb ? <img src={imgThumb(thumb, 96)} alt="" loading="lazy" /> : <span className="pl-row__thumb--empty" />}
+                    {thumb ? <SmartImg src={imgThumb(thumb, 96)} alt="" /> : <span className="pl-row__thumb--empty" />}
                   </span>
                   <span className="pl-row__id">
                     <span className="pl-row__name">{[app.first_name, app.last_name].filter(Boolean).join(' ') || '—'}</span>
@@ -696,7 +712,7 @@ export default function Account() {
                     <li key={i} className="account-work">
                       {url ? (
                         <a href={url} target="_blank" rel="noreferrer" className="account-work__thumb">
-                          <img src={imgThumb(url, 400)} alt={w.title || ''} loading="lazy" />
+                          <SmartImg src={imgThumb(url, 400)} alt={w.title || ''} />
                         </a>
                       ) : (
                         <span className="account-work__thumb account-work__thumb--empty" aria-hidden="true" />
@@ -834,29 +850,7 @@ export default function Account() {
           );
         })}
 
-        {total > PAGE_SIZE && (
-          <div className="pager">
-            <button
-              type="button"
-              className="btn-ink pager__btn"
-              disabled={page === 0 || appsLoading}
-              onClick={() => setPage((p) => Math.max(0, p - 1))}
-            >
-              ← Назад
-            </button>
-            <span className="pager__info">
-              {page * PAGE_SIZE + 1}–{Math.min((page + 1) * PAGE_SIZE, total)} из {total}
-            </span>
-            <button
-              type="button"
-              className="btn-ink pager__btn"
-              disabled={(page + 1) * PAGE_SIZE >= total || appsLoading}
-              onClick={() => setPage((p) => p + 1)}
-            >
-              Вперёд →
-            </button>
-          </div>
-        )}
+        {renderPager()}
 
         {!isStaff && pastApps.length > 0 && (
           <ArtistArchive apps={pastApps} myResults={myResults} filesByApp={filesByApp} />
