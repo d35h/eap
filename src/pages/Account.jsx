@@ -12,6 +12,7 @@ import EditionTourResults from '../components/EditionTourResults.jsx';
 import EditionSummary from '../components/EditionSummary.jsx';
 import JurorReviewList from '../components/JurorReviewList.jsx';
 import EditionGallery from '../components/EditionGallery.jsx';
+import ArtistArchive from '../components/ArtistArchive.jsx';
 import { imgThumb } from '../lib/img.js';
 
 // Medal for top-3 placements.
@@ -542,9 +543,11 @@ export default function Account() {
 
         {(!isJuror) && (showArchive ? (archiveMode && archiveTab === 'apps') : true) && (
         <>
-        <h2 style={{ margin: '40px 0 24px' }}>
-          {isStaff ? 'Все заявки' : (pastApps.length ? t('account.currentApplication') : t('account.yourApplications'))}
-        </h2>
+        {(isStaff || currentApps.length > 0) && (
+          <h2 style={{ margin: '40px 0 24px' }}>
+            {isStaff ? 'Все заявки' : (pastApps.length ? t('account.currentApplication') : t('account.yourApplications'))}
+          </h2>
+        )}
 
         {isAdmin && (
           <div className="app-filters">
@@ -609,7 +612,7 @@ export default function Account() {
           </div>
         )}
 
-        {!appsLoading && orderedApps.map((app, idx) => {
+        {!appsLoading && currentApps.map((app, idx) => {
           const reviewers = reviewsByApp[app.id] || [];
           const myReview = reviewers.find((r) => r.reviewer_id === user.id) || null;
           const jurorState = !myReview
@@ -860,6 +863,10 @@ export default function Account() {
               Вперёд →
             </button>
           </div>
+        )}
+
+        {!isStaff && pastApps.length > 0 && (
+          <ArtistArchive apps={pastApps} myResults={myResults} filesByApp={filesByApp} />
         )}
         </>
         )}

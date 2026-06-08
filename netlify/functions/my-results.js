@@ -42,11 +42,15 @@ export async function handleMyResults({ admin }, { token }) {
     placeByApp = new Map(scored.map((s, i) => [s.id, i + 1]));
   }
 
+  const currentEdition = cyc?.current_edition || 1;
   const out = [];
   for (const app of apps || []) {
+    // Past editions are final history — show all tours. Current edition only
+    // reveals a tour once the admin has sent its results.
+    const archived = (app.edition || 1) < currentEdition;
     const tours = [];
     for (const t of [1, 2]) {
-      const sent = t === 1 ? cyc?.tour1_results_sent : cyc?.tour2_results_sent;
+      const sent = archived || (t === 1 ? cyc?.tour1_results_sent : cyc?.tour2_results_sent);
       if (!sent) continue;
       if (t === 2 && (app.tour || 1) < 2) continue; // never reached tour 2
 
