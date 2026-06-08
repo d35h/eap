@@ -169,8 +169,8 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
       <div className="admin-panel__head">
         <h3 className="panel-title">Результаты туров</h3>
         {isActiveView && (
-          <span className={`cycle-state cycle-state--${tourOpen ? 'open' : 'closed'}`}>
-            {tourOpen ? 'Открыт' : 'Закрыт'}
+          <span className={`cycle-state cycle-state--${tourOpen || quorumMet ? 'open' : 'closed'}`}>
+            {tourOpen ? 'Идёт оценка жюри' : quorumMet ? 'Оценка завершена' : 'Оценка не начата'}
           </span>
         )}
       </div>
