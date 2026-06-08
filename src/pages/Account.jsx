@@ -5,8 +5,7 @@ import { useAuth } from '../hooks/useAuth.jsx';
 import { isSupabaseConfigured, supabase } from '../lib/supabase.js';
 import { signOut } from '../lib/auth.js';
 import { unlockReview } from '../lib/reviewsRepo.js';
-import AdminCyclePanel from '../components/AdminCyclePanel.jsx';
-import AdminToursPanel from '../components/AdminToursPanel.jsx';
+import AdminFlowPanel from '../components/AdminFlowPanel.jsx';
 import AdminStageTracker from '../components/AdminStageTracker.jsx';
 import { getCycle, submissionsOpen } from '../lib/cycleRepo.js';
 import EditionTourResults from '../components/EditionTourResults.jsx';
@@ -498,15 +497,13 @@ export default function Account() {
         )}
 
         {isAdmin && isCurrentEdition && cycle && <AdminStageTracker phase={cyclePhase} />}
-        {isAdmin && isCurrentEdition && <AdminCyclePanel cycle={cycle} canStartNew={cycleFinished} onChanged={() => setRefreshKey((k) => k + 1)} />}
         {isAdmin && isCurrentEdition && (
-          <AdminToursPanel
+          <AdminFlowPanel
             cycle={cycle}
             applications={applications}
             reviewsByApp={reviewsByApp}
             jurors={jurors}
-            viewTour={shownTour}
-            setViewTour={setViewTour}
+            canStartNew={cycleFinished}
             onChanged={() => setRefreshKey((k) => k + 1)}
           />
         )}

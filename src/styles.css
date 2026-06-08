@@ -1586,3 +1586,9 @@ input, textarea, select { font-family: inherit; }
   .pl-row--head { display: none; }
   .pl-row { row-gap: 6px; }
 }
+
+.linklike {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  color: var(--accent-deep); text-decoration: underline; font: inherit; font-size: inherit;
+}
+.linklike:hover { color: var(--ink); }
