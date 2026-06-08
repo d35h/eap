@@ -1565,8 +1565,20 @@ input, textarea, select { font-family: inherit; }
 .stage--done .stage__dot { background: hsl(140, 40%, 38%); border-color: hsl(140, 40%, 38%); color: #fff; }
 .stage--done .stage__bar { background: hsl(140, 40%, 42%); }
 .stage--done .stage__label { color: var(--ink); }
-.stage--current .stage__dot { background: var(--accent-deep); border-color: var(--accent-deep); color: var(--ivory); box-shadow: 0 0 0 4px hsla(38, 42%, 42%, 0.15); }
+.stage--current .stage__dot {
+  background: var(--accent-deep); border-color: var(--accent-deep); color: var(--ivory);
+  animation: stage-pulse 1.8s ease-in-out infinite;
+}
 .stage--current .stage__label { color: var(--ink); font-weight: 600; }
+/* "Live" beacon on the current step: a ring that expands and fades. */
+@keyframes stage-pulse {
+  0% { box-shadow: 0 0 0 0 hsla(38, 50%, 45%, 0.45); }
+  70% { box-shadow: 0 0 0 9px hsla(38, 50%, 45%, 0); }
+  100% { box-shadow: 0 0 0 0 hsla(38, 50%, 45%, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage--current .stage__dot { animation: none; box-shadow: 0 0 0 4px hsla(38, 42%, 42%, 0.15); }
+}
 @media (max-width: 640px) { .stage__label { font-size: 11px; } .stage__dot { width: 28px; height: 28px; } .stage__bar { top: 14px; } }
 
 /* ── Admin applications pipeline table ── */
