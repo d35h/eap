@@ -435,7 +435,7 @@ export default function Account() {
   };
   const tour2Cell = (app) => {
     if ((app.tour || 1) < 2) return { label: '—', cls: 'muted' };
-    if (app.standing === 'winner') return { label: '🏆 Победитель', cls: 'finished' };
+    if (app.standing === 'winner') return { label: '🏆 Победитель', cls: 'win' };
     if (app.standing === 'eliminated') return { label: 'Выбыл', cls: 'none' };
     if (activeTour === 2) return reviewedInActive(app) ? { label: 'Рассмотрено', cls: 'draft' } : { label: 'Не рассмотрено', cls: 'none' };
     return { label: '—', cls: 'muted' };
@@ -657,7 +657,7 @@ export default function Account() {
                 </span>
                 {isCurrentEdition && (
                   <span className="pl-cell">
-                    <span className={`account-app-card__status account-app-card__status--${app.payment_status}`}>
+                    <span className={`review-chip review-chip--${app.payment_status === 'paid' ? 'finished' : 'draft'}`}>
                       {app.payment_status === 'paid' ? 'Оплачено' : 'Ожидает'}
                     </span>
                   </span>
