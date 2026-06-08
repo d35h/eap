@@ -1016,11 +1016,16 @@ input, textarea, select { font-family: inherit; }
 }
 .cycle-panel__state { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .cycle-state {
-  font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px;
-  text-transform: uppercase; letter-spacing: 0.04em;
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 999px;
+  letter-spacing: 0.01em; white-space: nowrap;
 }
-.cycle-state--open { background: hsl(140, 40%, 18%); color: hsl(140, 60%, 60%); }
-.cycle-state--closed { background: hsl(2, 45%, 22%); color: hsl(2, 70%, 70%); }
+.cycle-state::before {
+  content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex-shrink: 0;
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 18%, transparent);
+}
+.cycle-state--open { background: hsla(145, 42%, 42%, 0.12); color: hsl(145, 42%, 31%); }
+.cycle-state--closed { background: hsla(30, 30%, 50%, 0.13); color: hsl(30, 18%, 40%); }
 .cycle-note { font-size: 12px; color: var(--ink-soft); opacity: 0.75; }
 .cycle-panel__btn { font-size: 13px; padding: 10px 18px; letter-spacing: 0.06em; }
 
@@ -1048,16 +1053,37 @@ input, textarea, select { font-family: inherit; }
 .tours-panel__state { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .tours-panel__actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .tours-btn { font-size: 13px; padding: 10px 18px; letter-spacing: 0.06em; }
-.tours-select__hint { font-size: 14px; color: var(--ink-soft); margin: 6px 0 14px; }
-.tours-select__list { list-style: none; padding: 0; margin: 0 0 16px; }
-.tours-select__item { border-top: 1px solid var(--border); }
-.tours-select__item:first-child { border-top: 0; }
+.tours-select__hint { font-size: 14px; color: var(--ink-soft); margin: 6px 0 16px; line-height: 1.5; }
+.tours-select__list { list-style: none; padding: 0; margin: 0 0 18px; display: flex; flex-direction: column; gap: 6px; }
 .tours-select__item label {
-  display: flex; align-items: center; gap: 12px; padding: 10px 2px; cursor: pointer;
+  display: grid; grid-template-columns: 22px 30px minmax(0, 1fr) auto; align-items: center; gap: 14px;
+  padding: 12px 16px; cursor: pointer; border-radius: 12px; border: 1px solid var(--border);
+  background: hsla(36, 33%, 99%, 0.6); transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
-.tours-select__rank { font-family: var(--mono); font-size: 13px; opacity: 0.6; width: 22px; }
-.tours-select__name { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; font-weight: 500; }
-.tours-select__score { font-family: var(--mono); color: var(--accent-deep); white-space: nowrap; }
+.tours-select__item label:hover { background: hsla(38, 40%, 93%, 0.6); }
+.tours-select__item label:has(input:checked) {
+  background: hsla(43, 55%, 92%, 0.6); border-color: hsl(43, 52%, 72%); box-shadow: 0 2px 10px hsla(40, 50%, 40%, 0.08);
+}
+/* Custom check: a rounded box that fills gold with a ✓ when picked. */
+.tours-select__item input {
+  appearance: none; -webkit-appearance: none; margin: 0; width: 22px; height: 22px; cursor: pointer;
+  border: 1.5px solid hsl(35, 16%, 70%); border-radius: 7px; background: var(--ivory-soft);
+  position: relative; transition: all 0.15s; flex-shrink: 0;
+}
+.tours-select__item input:hover { border-color: var(--accent); }
+.tours-select__item input:checked { background: var(--accent-deep); border-color: var(--accent-deep); }
+.tours-select__item input:checked::after {
+  content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 13px; font-weight: 700;
+}
+.tours-select__rank {
+  width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 13px; font-weight: 600;
+  background: var(--ivory); border: 1px solid var(--border); color: var(--ink-soft);
+}
+.tours-select__item label:has(input:checked) .tours-select__rank { background: var(--accent-deep); border-color: var(--accent-deep); color: #fff; }
+.tours-select__name { min-width: 0; overflow-wrap: anywhere; font-weight: 500; }
+.tours-select__score { font-family: var(--font-mono); font-size: 1.05rem; font-weight: 600; color: var(--accent-deep); white-space: nowrap; }
 /* Artist's own results in their card */
 .artist-results { margin-top: 0; border-top: 1px solid var(--border); padding-top: 18px; }
 .artist-results .tours-tabs { margin-top: 0; }
@@ -1090,7 +1116,7 @@ input, textarea, select { font-family: inherit; }
   color: var(--ink-soft); cursor: pointer; transition: all 0.2s;
 }
 .tours-tab.is-active {
-  border-color: var(--accent-deep); color: var(--bg); background: var(--accent-deep); font-weight: 500;
+  border-color: var(--ink); color: var(--ivory-soft); background: var(--ink); font-weight: 500;
 }
 /* Tour results list */
 .tours-results { margin-top: 18px; }
@@ -1408,17 +1434,16 @@ input, textarea, select { font-family: inherit; }
 .review-chip--win      { color: hsl(40, 64%, 44%); font-weight: 600; }  /* winner */
 .review-row__actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .review-row__btn {
-  font-size: 12px; padding: 7px 14px; border-radius: 4px; cursor: pointer;
-  background: #16181d; color: #f3f0ec; border: 0; text-decoration: none;
-  display: inline-flex; align-items: center; letter-spacing: 0.04em; transition: background 0.2s;
+  font-size: 12.5px; padding: 7px 16px; border-radius: 999px; cursor: pointer;
+  background: transparent; color: var(--ink); border: 1px solid var(--border); text-decoration: none;
+  display: inline-flex; align-items: center; letter-spacing: 0.01em; transition: all 0.15s;
 }
-.review-row__btn:hover { background: var(--accent-deep); }
-.review-row__btn--ghost {
-  background: transparent; color: var(--accent-deep); border: 1px solid var(--accent-deep);
-}
-.review-row__btn--ghost:hover { background: transparent; color: var(--ink); border-color: var(--ink); }
-.review-row__btn--danger { background: transparent; color: hsl(2, 60%, 48%); border: 1px solid hsl(2, 50%, 62%); }
-.review-row__btn--danger:hover { background: hsl(2, 60%, 48%); color: #fff; }
+.review-row__btn:hover { border-color: var(--accent); background: hsla(38, 34%, 90%, 0.5); }
+.review-row__btn--ghost { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+.review-row__btn--ghost:hover { border-color: var(--accent); color: var(--ink); background: hsla(38, 34%, 90%, 0.5); }
+/* Destructive = quiet text button (Fitts: small + low-emphasis). */
+.review-row__btn--danger { background: transparent; color: hsl(2, 52%, 50%); border: 1px solid transparent; }
+.review-row__btn--danger:hover { background: hsla(2, 60%, 52%, 0.1); border-color: hsla(2, 55%, 55%, 0.4); color: hsl(2, 58%, 42%); }
 .cycle-panel__newcycle {
   margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);
   display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
@@ -1509,36 +1534,42 @@ input, textarea, select { font-family: inherit; }
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
-  margin-top: 20px;
-  padding: 20px;
+  margin-top: 22px;
+  padding: 22px;
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 16px;
+  background: hsla(36, 33%, 99%, 0.6);
 }
 .invite-jury input {
-  flex: 1 1 240px;
+  flex: 1 1 220px;
   min-width: 0;
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid #cec4b6;
-  padding: 10px 0;
+  background: var(--ivory-soft);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 11px 18px;
   color: var(--ink);
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 0.95rem;
   outline: none;
-  transition: border-color 0.3s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
-.invite-jury input::placeholder {
-  color: #c5b9a8; font-style: italic; font-weight: 300;
-}
-.invite-jury input:focus { border-color: var(--accent-deep); }
+.invite-jury input::placeholder { color: var(--ink-soft); opacity: 0.6; }
+.invite-jury input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px hsla(38, 42%, 55%, 0.15); }
 .invite-jury__msg {
   flex: 1 1 100%;
   margin: 0;
   font-size: 14px;
 }
-.invite-jury__msg--ok { color: hsl(140, 60%, 60%); }
-.invite-jury__msg--exists { color: hsl(40, 70%, 62%); }
-.invite-jury__msg--error { color: hsl(2, 70%, 64%); }
+.invite-jury__msg--ok { color: hsl(145, 45%, 38%); }
+.invite-jury__msg--exists { color: hsl(38, 55%, 42%); }
+.invite-jury__msg--error { color: hsl(2, 55%, 48%); }
+
+/* Jury list — each juror is a calm card row. */
+.jurors-list { display: flex; flex-direction: column; gap: 8px; }
+.jurors-list .review-row {
+  border-top: 0; border: 1px solid var(--border); border-radius: 14px;
+  padding: 16px 20px; background: hsla(36, 33%, 99%, 0.6); justify-content: space-between;
+}
 
 /* ── Admin UI on small screens ── */
 @media (max-width: 640px) {
@@ -1662,26 +1693,29 @@ input, textarea, select { font-family: inherit; }
 
 /* ── Archived edition summary + winners podium ── */
 .edition-summary {
-  border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin: 20px 0 8px;
-  background: hsla(36, 30%, 99%, 0.7);
+  border: 1px solid var(--border); border-radius: 18px; padding: 28px 30px; margin: 22px 0 10px;
+  background: linear-gradient(180deg, hsla(40, 42%, 99%, 0.9), hsla(38, 28%, 98%, 0.65));
 }
-.edition-summary__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; }
-.edition-summary__title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 1.5rem; }
-.edition-summary__stats { display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; color: var(--ink-soft); }
-.edition-summary__stats strong { color: var(--ink); font-size: 1.05rem; }
-.podium { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+.edition-summary__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px; }
+.edition-summary__title { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 2.1rem; line-height: 1; }
+.edition-summary__stats { display: flex; flex-wrap: wrap; gap: 28px; }
+.estat { display: flex; flex-direction: column; gap: 2px; }
+.estat strong { font-family: var(--font-display); font-weight: 500; font-size: 1.6rem; color: var(--ink); line-height: 1; }
+.estat em { font-style: normal; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); }
+.podium { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 26px; }
 .podium__item {
-  flex: 1; min-width: 160px; display: flex; flex-direction: column; align-items: center; gap: 4px;
-  padding: 18px 14px; border: 1px solid var(--border); border-radius: 10px;
-  background: var(--ivory-soft); text-decoration: none; color: var(--ink); transition: transform 0.15s, box-shadow 0.15s;
+  flex: 1; min-width: 150px; display: flex; flex-direction: column; align-items: center; gap: 9px;
+  padding: 24px 16px 20px; border: 1px solid var(--border); border-radius: 16px;
+  background: var(--ivory-soft); text-decoration: none; color: var(--ink);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.podium__item:hover { transform: translateY(-2px); box-shadow: 0 6px 18px hsla(30, 20%, 20%, 0.1); }
-.podium__item--1 { background: hsl(43, 72%, 92%); border-color: hsl(43, 60%, 70%); }
-.podium__item--2 { background: hsl(0, 0%, 95%); }
-.podium__item--3 { background: hsl(28, 40%, 92%); }
-.podium__medal { font-size: 2rem; line-height: 1; }
-.podium__name { font-weight: 600; text-align: center; overflow-wrap: anywhere; }
-.podium__score { font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); }
+.podium__item:hover { transform: translateY(-3px); box-shadow: 0 12px 30px hsla(30, 22%, 20%, 0.13); }
+.podium__item--1 { background: linear-gradient(180deg, hsl(43, 76%, 93%), hsl(43, 66%, 87%)); border-color: hsl(43, 58%, 66%); box-shadow: 0 6px 22px hsla(43, 62%, 45%, 0.16); }
+.podium__item--2 { background: linear-gradient(180deg, hsl(40, 12%, 96%), hsl(40, 9%, 91%)); border-color: hsl(40, 10%, 79%); }
+.podium__item--3 { background: linear-gradient(180deg, hsl(28, 46%, 93%), hsl(28, 40%, 88%)); border-color: hsl(28, 38%, 75%); }
+.podium__medal { font-size: 2.5rem; line-height: 1; filter: drop-shadow(0 2px 3px hsla(30, 30%, 30%, 0.22)); }
+.podium__name { font-family: var(--font-display); font-weight: 500; font-size: 1.25rem; text-align: center; overflow-wrap: anywhere; line-height: 1.1; }
+.podium__score { font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); letter-spacing: 0.02em; }
 
 /* ── Juror review queue (compact list) ── */
 .jrl { margin-top: 32px; }
@@ -1714,17 +1748,18 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 640px) { .jrl__row { grid-template-columns: 44px minmax(0, 1fr) auto; } .jrl__arrow { display: none; } }
 
 /* ── Archive: gallery of past biennales ── */
-.edition-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin: 20px 0 8px; }
+.edition-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin: 22px 0 8px; }
 .edition-card {
-  display: flex; flex-direction: column; gap: 6px; text-align: left; cursor: pointer;
-  border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px;
-  background: hsla(36, 30%, 99%, 0.7); transition: transform 0.15s, box-shadow 0.15s; font: inherit;
+  display: flex; flex-direction: column; gap: 10px; text-align: left; cursor: pointer;
+  border: 1px solid var(--border); border-radius: 16px; padding: 24px 26px;
+  background: linear-gradient(180deg, hsla(40, 40%, 99%, 0.85), hsla(38, 28%, 98%, 0.6));
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s; font: inherit;
 }
-.edition-card:hover { transform: translateY(-2px); box-shadow: 0 8px 22px hsla(30, 20%, 20%, 0.1); }
-.edition-card__year { font-family: var(--font-display); font-size: 1.35rem; color: var(--ink); }
-.edition-card__winner { font-size: 14px; color: var(--ink); }
-.edition-card__winner--none { color: var(--ink-soft); font-style: italic; }
-.edition-card__stats { font-size: 12px; color: var(--ink-soft); }
+.edition-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px hsla(30, 22%, 20%, 0.12); border-color: hsl(43, 45%, 75%); }
+.edition-card__year { font-family: var(--font-display); font-weight: 500; font-size: 1.6rem; line-height: 1; color: var(--ink); }
+.edition-card__winner { font-size: 14px; color: var(--ink); font-weight: 500; }
+.edition-card__winner--none { color: var(--ink-soft); font-style: italic; font-weight: 400; }
+.edition-card__stats { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
 
 /* ── Artist archive (accordion of past applications) ── */
 .art-archive { margin-top: 40px; }
@@ -1773,10 +1808,14 @@ input, textarea, select { font-family: inherit; }
 }
 .jcov__row:disabled { cursor: default; }
 .jcov__name { overflow-wrap: anywhere; }
-.jcov__hint { font-size: 12px; color: hsl(30, 45%, 40%); white-space: nowrap; text-align: right; }
-.jcov__pending { list-style: none; margin: 0 0 10px; padding: 4px 0 4px 6px; display: flex; flex-direction: column; gap: 4px; border-left: 2px solid hsl(30, 45%, 70%); }
-.jcov__pending a { color: var(--accent-deep); text-decoration: none; font-size: 14px; }
-.jcov__pending a:hover { text-decoration: underline; }
+.jcov__hint { font-size: 12px; color: hsl(32, 55%, 42%); white-space: nowrap; text-align: right; font-weight: 500; }
+.jcov__pending { margin: 2px 0 14px; padding: 14px 16px; border-radius: 12px; background: hsla(34, 45%, 95%, 0.6); border: 1px solid hsl(35, 35%, 86%); }
+.jcov__pending-label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; color: hsl(32, 45%, 40%); margin-bottom: 10px; }
+.jcov__pending ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.jcov__pending li { display: flex; align-items: center; gap: 10px; }
+.jcov__pending-dot { width: 7px; height: 7px; border-radius: 50%; background: hsl(32, 60%, 52%); box-shadow: 0 0 0 3px hsla(32, 60%, 52%, 0.18); flex-shrink: 0; }
+.jcov__pending a { color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+.jcov__pending a:hover { border-bottom-color: var(--accent); }
 @media (max-width: 640px) {
   .jcov__row { grid-template-columns: minmax(0, 1fr) auto; }
   .jcov__row .jury-progress__bar { display: none; }

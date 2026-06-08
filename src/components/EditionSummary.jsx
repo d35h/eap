@@ -58,9 +58,9 @@ export default function EditionSummary({ edition, year }) {
       <div className="edition-summary__head">
         <h2 className="edition-summary__title">Биеннале {year || `№${edition}`}</h2>
         <div className="edition-summary__stats">
-          <span><strong>{total}</strong> {plural(total, 'заявка', 'заявки', 'заявок')}</span>
-          <span><strong>{advanced}</strong> во втором туре</span>
-          <span><strong>{winners.length}</strong> {plural(winners.length, 'победитель', 'победителя', 'победителей')}</span>
+          <span className="estat"><strong>{total}</strong><em>{plural(total, 'заявка', 'заявки', 'заявок')}</em></span>
+          <span className="estat"><strong>{advanced}</strong><em>во втором туре</em></span>
+          <span className="estat"><strong>{winners.length}</strong><em>{plural(winners.length, 'победитель', 'победителя', 'победителей')}</em></span>
         </div>
       </div>
 

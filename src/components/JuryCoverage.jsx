@@ -66,17 +66,21 @@ export default function JuryCoverage({ jurors, edition, tour }) {
               <span className="jury-progress__bar"><span style={{ width: `${total ? (done / total) * 100 : 0}%` }} /></span>
               <span className={`jury-progress__count ${complete ? 'is-done' : ''}`}>{done}/{total}{complete ? ' ✓' : ''}</span>
               <span className="jcov__hint">
-                {complete ? '' : <>{open ? '▾' : '▸'} не оценил {pending.length}</>}
+                {complete ? '' : <>не оценил {pending.length} {open ? '▾' : '▸'}</>}
               </span>
             </button>
             {open && !complete && (
-              <ul className="jcov__pending">
-                {pending.map((a) => (
-                  <li key={a.id}>
-                    <Link to={`/account/application/${a.id}`}>{applicant(a)}</Link>
-                  </li>
-                ))}
-              </ul>
+              <div className="jcov__pending">
+                <span className="jcov__pending-label">Ещё не оценил этих художников:</span>
+                <ul>
+                  {pending.map((a) => (
+                    <li key={a.id}>
+                      <span className="jcov__pending-dot" aria-hidden="true" />
+                      <Link to={`/account/application/${a.id}`}>{applicant(a)}</Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
           </div>
         );
