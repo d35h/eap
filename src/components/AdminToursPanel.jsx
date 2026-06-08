@@ -204,16 +204,16 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
         ) : (
           <div className="admin-row">
             <div className="admin-row__label">
-              <span className="admin-row__title">Приём оценок</span>
+              <span className="admin-row__title">Оценка жюри · Тур {activeTour}</span>
               <span className="admin-row__desc">
                 {tourOpen
                   ? (quorumMet
-                    ? 'Все жюри завершили оценку. Нажмите «Остановить приём оценок», чтобы продолжить.'
-                    : 'Жюри оценивает заявки. Нажмите «Остановить приём оценок», когда все завершат.')
+                    ? `Все жюри оценили заявки тура ${activeTour}. Нажмите «Завершить оценку жюри», чтобы перейти к отбору.`
+                    : `Жюри сейчас оценивает заявки тура ${activeTour}.`)
                   : submissionsClosed
                   ? (quorumMet
-                    ? 'Все жюри завершили оценку. Нажмите «Перейти к отбору», чтобы выбрать прошедших.'
-                    : 'Нажмите «Начать приём оценок», чтобы жюри могли начать оценивать заявки.')
+                    ? `Все жюри завершили оценку. Нажмите «${activeTour === 1 ? 'Отобрать во второй тур' : 'Выбрать победителей'}».`
+                    : `Нажмите «Отправить заявки жюри на оценку», чтобы жюри оценили заявки в туре ${activeTour}.`)
                   : 'Сначала нажмите «Остановить приём заявок» в блоке «Приём заявок».'}
               </span>
             </div>
@@ -224,11 +224,11 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
                 disabled={busy || (!tourOpen && !submissionsClosed)}
                 onClick={() => setOpen(!tourOpen)}
               >
-                {tourOpen ? 'Остановить приём оценок' : 'Начать приём оценок'}
+                {tourOpen ? 'Завершить оценку жюри' : `Отправить заявки жюри на оценку · Тур ${activeTour}`}
               </button>
               {!tourOpen && quorumMet && (
                 <button type="button" className="btn-gold tours-btn" disabled={busy} onClick={startSelection}>
-                  {activeTour === 1 ? 'Перейти к отбору' : 'Выбрать топ-3'}
+                  {activeTour === 1 ? 'Отобрать во второй тур' : 'Выбрать победителей'}
                 </button>
               )}
             </div>
