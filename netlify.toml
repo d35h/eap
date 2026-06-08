@@ -14,6 +14,10 @@
 [functions."ig-refresh-token"]
   schedule = "0 3 * * 0"
 
+# Daily cleanup of abandoned unpaid applications (04:00 UTC).
+[functions."cleanup-unpaid"]
+  schedule = "0 4 * * *"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
