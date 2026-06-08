@@ -19,6 +19,15 @@
           "product-ux-designer"
         ]
       }
+    },
+    "Dimillian/Skills": {
+      "version": "05ba982bfeb0d77d3c97d4542b0ee15034d05f84",
+      "source": "https://github.com/Dimillian/Skills",
+      "include": {
+        "skills": [
+          "react-component-performance"
+        ]
+      }
     }
   }
 }

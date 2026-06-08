@@ -22,6 +22,18 @@ export async function handleMyResults({ admin }, { token }) {
   const { data: apps } = await admin
     .from('applications').select('*').eq('user_id', uid).eq('payment_status', 'paid');
 
+  // Batch: all finished reviews for the caller's apps in ONE query (was N+1).
+  const appIds = (apps || []).map((a) => a.id);
+  const revsByAppTour = {}; // `${appId}:${tour}` → [reviews]
+  if (appIds.length) {
+    const { data: allRevs } = await admin
+      .from('application_reviews').select('application_id, tour, scores, status')
+      .in('application_id', appIds);
+    (allRevs || []).filter((r) => r.status === 'finished').forEach((r) => {
+      (revsByAppTour[`${r.application_id}:${r.tour || 1}`] ||= []).push(r);
+    });
+  }
+
   // Winner places: rank among all winners by tour-2 mean total score.
   const { data: allWinners } = await admin.from('applications').select('id').eq('standing', 'winner');
   const winnerIds = (allWinners || []).map((w) => w.id);
@@ -54,10 +66,7 @@ export async function handleMyResults({ admin }, { token }) {
       if (!sent) continue;
       if (t === 2 && (app.tour || 1) < 2) continue; // never reached tour 2
 
-      const { data: revs } = await admin
-        .from('application_reviews').select('scores, status')
-        .eq('application_id', app.id).eq('tour', t);
-      const finished = (revs || []).filter((r) => r.status === 'finished');
+      const finished = revsByAppTour[`${app.id}:${t}`] || [];
       const withScores = t === 2;
 
       const feedback = CRITERIA.map((c) => {

@@ -13,12 +13,17 @@ import EditionSummary from '../components/EditionSummary.jsx';
 import JurorReviewList from '../components/JurorReviewList.jsx';
 import EditionGallery from '../components/EditionGallery.jsx';
 import ArtistArchive from '../components/ArtistArchive.jsx';
+import SearchInput from '../components/SearchInput.jsx';
 import { imgThumb } from '../lib/img.js';
 
 // Medal for top-3 placements.
 const medal = (p) => (p === 1 ? '🥇' : p === 2 ? '🥈' : p === 3 ? '🥉' : '🏆');
 
 const PAGE_SIZE = 25;
+// In-session cache of an app's signed work URLs, so navigating away and back
+// reuses the SAME urls (CDN + browser cache hits) and skips re-signing.
+const SIGN_TTL = 3600; // seconds
+const FILE_CACHE = new Map(); // appId → { byNumber, exp }
 
 export default function Account() {
   const { t } = useTranslation();
@@ -35,9 +40,11 @@ export default function Account() {
   const [appsLoading, setAppsLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
-  // Admin "Все заявки" filters.
-  const [searchQ, setSearchQ] = useState('');
+  // Admin "Все заявки" filters. The search keystroke state lives inside
+  // <SearchInput>; only the debounced value reaches here (avoids re-rendering
+  // the whole cabinet on every keystroke). resetKey remounts it on "Сбросить".
   const [debouncedQ, setDebouncedQ] = useState('');
+  const [searchResetKey, setSearchResetKey] = useState(0);
   const [payFilter, setPayFilter] = useState('all');
   const [evalFilter, setEvalFilter] = useState('all');
   // App ids fully evaluated in the active tour (all jurors finished).
@@ -179,12 +186,6 @@ export default function Account() {
     })();
     return () => { cancelled = true; };
   }, [isAdmin, activeTour, jurors.length, refreshKey]);
-
-  // Debounce the search box.
-  useEffect(() => {
-    const id = setTimeout(() => setDebouncedQ(searchQ.trim()), 300);
-    return () => clearTimeout(id);
-  }, [searchQ]);
 
   // Artists: is the open call accepting applications right now?
   useEffect(() => {
@@ -348,24 +349,29 @@ export default function Account() {
     if (!user || !supabase || applications.length === 0) return;
     let cancelled = false;
     (async () => {
-      const map = {};
-      for (const app of applications) {
+      const now = Date.now();
+      // Sign each app's files in parallel (was sequential N+1), reusing cache.
+      const entries = await Promise.all(applications.map(async (app) => {
+        const cached = FILE_CACHE.get(app.id);
+        if (cached && cached.exp > now) return [app.id, cached.byNumber];
         const folder = `applications/${app.id}`;
         const { data: list } = await supabase.storage.from('works').list(folder);
-        if (!list || list.length === 0) continue;
+        if (!list || list.length === 0) return [app.id, null];
         const paths = list.map((f) => `${folder}/${f.name}`);
-        const { data: signed } = await supabase.storage
-          .from('works')
-          .createSignedUrls(paths, 3600);
+        const { data: signed } = await supabase.storage.from('works').createSignedUrls(paths, SIGN_TTL);
         const byNumber = {};
         (signed || []).forEach((s, i) => {
           if (!s?.signedUrl) return;
           const m = /^work(\d+)\./.exec(list[i].name);
           if (m) byNumber[Number(m[1])] = s.signedUrl;
         });
-        map[app.id] = byNumber;
-      }
-      if (!cancelled) setFilesByApp(map);
+        FILE_CACHE.set(app.id, { byNumber, exp: now + (SIGN_TTL - 120) * 1000 });
+        return [app.id, byNumber];
+      }));
+      if (cancelled) return;
+      const map = {};
+      entries.forEach(([id, byNumber]) => { if (byNumber) map[id] = byNumber; });
+      setFilesByApp(map);
     })().catch(() => {});
     return () => {
       cancelled = true;
@@ -551,13 +557,7 @@ export default function Account() {
 
         {isAdmin && (
           <div className="app-filters">
-            <input
-              className="app-filters__search"
-              type="search"
-              placeholder="Поиск по имени или email"
-              value={searchQ}
-              onChange={(e) => setSearchQ(e.target.value)}
-            />
+            <SearchInput key={searchResetKey} onSearch={setDebouncedQ} placeholder="Поиск по имени или email" />
             {isCurrentEdition && (
               <>
                 <div className="app-filters__group">
@@ -574,11 +574,11 @@ export default function Account() {
                 </div>
               </>
             )}
-            {(searchQ || payFilter !== 'all' || evalFilter !== 'all') && (
+            {(debouncedQ || payFilter !== 'all' || evalFilter !== 'all') && (
               <button
                 type="button"
                 className="app-filters__clear"
-                onClick={() => { setSearchQ(''); setPayFilter('all'); setEvalFilter('all'); }}
+                onClick={() => { setDebouncedQ(''); setPayFilter('all'); setEvalFilter('all'); setSearchResetKey((k) => k + 1); }}
               >
                 Сбросить
               </button>
