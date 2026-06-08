@@ -559,31 +559,20 @@ export default function Account() {
               onChange={(e) => setSearchQ(e.target.value)}
             />
             {isCurrentEdition && (
-              <div className="app-filters__tags">
-                {[
-                  { label: 'Оплаченные', group: 'pay', val: 'paid', tone: 'paid' },
-                  { label: 'Не оплаченные', group: 'pay', val: 'pending', tone: 'pending' },
-                  { label: 'Рассмотренные', group: 'eval', val: 'reviewed', tone: 'reviewed' },
-                  { label: 'Не рассмотренные', group: 'eval', val: 'in_review', tone: 'unreviewed' },
-                ].map((tag) => {
-                  const active = tag.group === 'pay' ? payFilter === tag.val : evalFilter === tag.val;
-                  const toggle = () => {
-                    const set = tag.group === 'pay' ? setPayFilter : setEvalFilter;
-                    set(active ? 'all' : tag.val);
-                  };
-                  return (
-                    <button
-                      key={tag.label}
-                      type="button"
-                      className={`filter-tag filter-tag--${tag.tone} ${active ? 'is-active' : ''}`}
-                      onClick={toggle}
-                    >
-                      {tag.label}
-                      {active && <span className="filter-tag__x">✕</span>}
-                    </button>
-                  );
-                })}
-              </div>
+              <>
+                <div className="app-filters__group">
+                  <span className="app-filters__label">Оплата</span>
+                  {[['all', 'Все'], ['paid', 'Оплаченные'], ['pending', 'Не оплаченные']].map(([v, l]) => (
+                    <button key={v} type="button" className={`tours-tab ${payFilter === v ? 'is-active' : ''}`} onClick={() => setPayFilter(v)}>{l}</button>
+                  ))}
+                </div>
+                <div className="app-filters__group">
+                  <span className="app-filters__label">Оценка</span>
+                  {[['all', 'Все'], ['reviewed', 'Рассмотренные'], ['in_review', 'Не рассмотренные']].map(([v, l]) => (
+                    <button key={v} type="button" className={`tours-tab ${evalFilter === v ? 'is-active' : ''}`} onClick={() => setEvalFilter(v)}>{l}</button>
+                  ))}
+                </div>
+              </>
             )}
             {(searchQ || payFilter !== 'all' || evalFilter !== 'all') && (
               <button

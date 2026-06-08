@@ -1706,3 +1706,19 @@ input, textarea, select { font-family: inherit; }
   .art-arch__row { grid-template-columns: 1fr auto; row-gap: 6px; }
   .art-arch__titles { grid-column: 1 / -1; }
 }
+
+/* Admin filter groups (segmented pills, like the juror queue) */
+.app-filters { align-items: center; }
+.app-filters__group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.app-filters__label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-soft); margin-right: 2px; }
+.app-filters__group .tours-tab { font-size: 0.82rem; padding: 5px 12px; }
+
+/* Admin jury progress (who has reviewed) */
+.jury-progress { margin-top: 18px; }
+.jury-progress__row { display: grid; grid-template-columns: minmax(0, 1fr) 120px 56px; align-items: center; gap: 12px; padding: 7px 0; }
+.jury-progress__name { overflow-wrap: anywhere; }
+.jury-progress__bar { height: 7px; border-radius: 4px; background: hsla(38, 26%, 86%, 0.7); overflow: hidden; }
+.jury-progress__bar span { display: block; height: 100%; background: var(--accent-deep); border-radius: 4px; }
+.jury-progress__count { font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); text-align: right; white-space: nowrap; }
+.jury-progress__count.is-done { color: hsl(140, 45%, 38%); }
+@media (max-width: 640px) { .jury-progress__row { grid-template-columns: minmax(0, 1fr) 48px; } .jury-progress__bar { display: none; } }

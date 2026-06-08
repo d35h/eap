@@ -45,6 +45,13 @@ export default function AdminFlowPanel({ cycle, applications, reviewsByApp, juro
   const rankedActive = [...activeApps].sort((a, b) => (scoreOf(b.id) ?? -1) - (scoreOf(a.id) ?? -1));
   const defaultN = activeTour === 1 ? Math.ceil(activeApps.length / 2) : Math.min(3, activeApps.length);
 
+  // Per-juror progress over the active tour (who has reviewed, who hasn't).
+  const jurorProgress = jurors.map((j) => ({
+    j,
+    done: activeApps.filter((a) => (reviewsByApp[a.id] || []).some((r) => r.reviewer_id === j.id && r.status === 'finished')).length,
+    total: activeApps.length,
+  }));
+
   // Phase
   const phase = winnersExist ? 'done'
     : tour1Finalized ? 'tour1done'
@@ -246,6 +253,24 @@ export default function AdminFlowPanel({ cycle, applications, reviewsByApp, juro
               </>
             )}
           </div>
+        </div>
+      )}
+
+      {/* Jury progress — who has reviewed and who hasn't. */}
+      {phase === 'evaluation' && !selecting && jurors.length > 0 && activeApps.length > 0 && (
+        <div className="jury-progress">
+          <span className="account-section-label">Прогресс жюри</span>
+          {jurorProgress.map(({ j, done: d, total }) => (
+            <div key={j.id} className="jury-progress__row">
+              <span className="jury-progress__name">{j.name || j.email}</span>
+              <span className="jury-progress__bar">
+                <span style={{ width: `${total ? (d / total) * 100 : 0}%` }} />
+              </span>
+              <span className={`jury-progress__count ${d >= total ? 'is-done' : ''}`}>
+                {d}/{total}{d >= total ? ' ✓' : ''}
+              </span>
+            </div>
+          ))}
         </div>
       )}
 

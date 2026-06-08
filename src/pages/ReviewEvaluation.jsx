@@ -117,9 +117,9 @@ export default function ReviewEvaluation() {
       const args = { applicationId: id, userId: user.id, email: user.email, scores, tour };
       if (finish) {
         await finishReview(args);
-        setStatus('finished');
-        setUnlocked(false);
-        setMsg({ type: 'ok', text: 'Оценка завершена.' });
+        // Return to the review queue so the juror can pick the next application.
+        navigate('/account', { state: { reviewed: id } });
+        return;
       } else {
         await saveDraft(args);
         setMsg({ type: 'ok', text: 'Черновик сохранён.' });
