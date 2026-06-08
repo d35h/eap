@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { supabase } from '../lib/supabase.js';
 import { setSubmissionsOpen, updateCycle } from '../lib/cycleRepo.js';
 import { REVIEW_CRITERIA } from '../lib/reviewCriteria.js';
+import JuryCoverage from './JuryCoverage.jsx';
 
 const reviewTotal = (s) => REVIEW_CRITERIA.reduce((a, c) => a + (Number(s?.[c.key]?.rating) || 0), 0);
 const applicant = (a) => [a.first_name, a.last_name].filter(Boolean).join(' ') || a.email || a.id.slice(0, 8);
@@ -17,7 +18,6 @@ export default function AdminFlowPanel({ cycle, applications, reviewsByApp, juro
   const [confirmResend, setConfirmResend] = useState(null); // tour number
   const [confirmNew, setConfirmNew] = useState(false);
   const [newMsg, setNewMsg] = useState(null);
-  const [remindState, setRemindState] = useState({}); // jurorId → 'sending' | 'sent' | 'error'
 
   if (!cycle) return null;
 
@@ -45,13 +45,6 @@ export default function AdminFlowPanel({ cycle, applications, reviewsByApp, juro
   const quorumMet = expected > 0 && done >= expected;
   const rankedActive = [...activeApps].sort((a, b) => (scoreOf(b.id) ?? -1) - (scoreOf(a.id) ?? -1));
   const defaultN = activeTour === 1 ? Math.ceil(activeApps.length / 2) : Math.min(3, activeApps.length);
-
-  // Per-juror progress over the active tour (who has reviewed, who hasn't).
-  const jurorProgress = jurors.map((j) => ({
-    j,
-    done: activeApps.filter((a) => (reviewsByApp[a.id] || []).some((r) => r.reviewer_id === j.id && r.status === 'finished')).length,
-    total: activeApps.length,
-  }));
 
   // Phase
   const phase = winnersExist ? 'done'
@@ -110,21 +103,6 @@ export default function AdminFlowPanel({ cycle, applications, reviewsByApp, juro
       else setSendMsg({ type: 'error', text: 'Не удалось отправить.' });
     } catch { setSendMsg({ type: 'error', text: 'Не удалось отправить.' }); }
     finally { setSending(false); }
-  };
-  const remindJuror = async (juror) => {
-    setRemindState((p) => ({ ...p, [juror.id]: 'sending' }));
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const res = await fetch('/.netlify/functions/remind-juror', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token || ''}` },
-        body: JSON.stringify({ jurorId: juror.id, email: juror.email, tour: activeTour }),
-      });
-      const d = await res.json().catch(() => ({}));
-      setRemindState((p) => ({ ...p, [juror.id]: (d.status === 'sent' || d.status === 'none') ? 'sent' : 'error' }));
-    } catch {
-      setRemindState((p) => ({ ...p, [juror.id]: 'error' }));
-    }
   };
   const startNewCycle = async () => {
     setBusy(true); setNewMsg(null);
@@ -272,40 +250,9 @@ export default function AdminFlowPanel({ cycle, applications, reviewsByApp, juro
         </div>
       )}
 
-      {/* Jury progress — who has reviewed and who hasn't. */}
-      {phase === 'evaluation' && !selecting && jurors.length > 0 && activeApps.length > 0 && (
-        <div className="jury-progress">
-          <span className="account-section-label">Прогресс жюри</span>
-          {jurorProgress.map(({ j, done: d, total }) => {
-            const rs = remindState[j.id];
-            const complete = d >= total;
-            return (
-              <div key={j.id} className="jury-progress__row">
-                <span className="jury-progress__name">{j.name || j.email}</span>
-                <span className="jury-progress__bar">
-                  <span style={{ width: `${total ? (d / total) * 100 : 0}%` }} />
-                </span>
-                <span className={`jury-progress__count ${complete ? 'is-done' : ''}`}>
-                  {d}/{total}{complete ? ' ✓' : ''}
-                </span>
-                {complete ? (
-                  <span className="jury-progress__action" />
-                ) : rs === 'sent' ? (
-                  <span className="jury-progress__sent">Напоминание отправлено ✓</span>
-                ) : (
-                  <button
-                    type="button"
-                    className="jury-progress__remind"
-                    disabled={rs === 'sending'}
-                    onClick={() => remindJuror(j)}
-                  >
-                    {rs === 'sending' ? '…' : rs === 'error' ? 'Ошибка — ещё раз' : 'Напомнить'}
-                  </button>
-                )}
-              </div>
-            );
-          })}
-        </div>
+      {/* Jury coverage — who has reviewed, and which artists each one skipped. */}
+      {phase === 'evaluation' && !selecting && (
+        <JuryCoverage jurors={jurors} edition={cycle.current_edition || 1} tour={activeTour} />
       )}
 
       {/* Re-open submissions: only before tour 1 evaluation has begun. */}

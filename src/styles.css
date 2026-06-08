@@ -1739,25 +1739,28 @@ input, textarea, select { font-family: inherit; }
 
 /* Admin jury progress (who has reviewed) */
 .jury-progress { margin-top: 18px; }
-.jury-progress__row { display: grid; grid-template-columns: minmax(0, 1fr) 110px 50px 168px; align-items: center; gap: 12px; padding: 7px 0; }
-.jury-progress__name { overflow-wrap: anywhere; }
 .jury-progress__bar { height: 7px; border-radius: 4px; background: hsla(38, 26%, 86%, 0.7); overflow: hidden; }
 .jury-progress__bar span { display: block; height: 100%; background: var(--accent-deep); border-radius: 4px; transition: width 0.3s; }
 .jury-progress__count { font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); text-align: right; white-space: nowrap; }
 .jury-progress__count.is-done { color: hsl(140, 45%, 38%); }
-.jury-progress__remind {
-  justify-self: end; font: inherit; font-size: 12px; cursor: pointer; white-space: nowrap;
-  background: var(--ivory-soft); color: var(--accent-deep); border: 1px solid var(--border);
-  border-radius: 999px; padding: 5px 14px; transition: border-color 0.15s, color 0.15s;
+/* Jury coverage rows: expandable to reveal the artists a juror hasn't evaluated. */
+.jcov { border-top: 1px solid var(--border); }
+.jcov:first-of-type { border-top: 0; }
+.jcov__row {
+  width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 110px 50px 130px;
+  align-items: center; gap: 12px; padding: 9px 0; background: none; border: 0; font: inherit;
+  text-align: left; color: var(--ink); cursor: pointer;
 }
-.jury-progress__remind:hover:not(:disabled) { border-color: var(--accent-deep); color: var(--ink); }
-.jury-progress__remind:disabled { opacity: 0.6; cursor: default; }
-.jury-progress__sent { justify-self: end; font-size: 12px; color: hsl(140, 45%, 38%); white-space: nowrap; }
+.jcov__row:disabled { cursor: default; }
+.jcov__name { overflow-wrap: anywhere; }
+.jcov__hint { font-size: 12px; color: hsl(30, 45%, 40%); white-space: nowrap; text-align: right; }
+.jcov__pending { list-style: none; margin: 0 0 10px; padding: 4px 0 4px 6px; display: flex; flex-direction: column; gap: 4px; border-left: 2px solid hsl(30, 45%, 70%); }
+.jcov__pending a { color: var(--accent-deep); text-decoration: none; font-size: 14px; }
+.jcov__pending a:hover { text-decoration: underline; }
 @media (max-width: 640px) {
-  .jury-progress__row { grid-template-columns: minmax(0, 1fr) auto auto; }
-  .jury-progress__bar { display: none; }
-  .jury-progress__remind, .jury-progress__sent { grid-column: 1 / -1; justify-self: start; }
-  .jury-progress__action { display: none; }
+  .jcov__row { grid-template-columns: minmax(0, 1fr) auto; }
+  .jcov__row .jury-progress__bar { display: none; }
+  .jcov__hint { grid-column: 1 / -1; text-align: left; }
 }
 
 /* ── Image loading: shimmer placeholder + fade-in (no white flash) ── */
