@@ -1614,3 +1614,26 @@ input, textarea, select { font-family: inherit; }
 }
 .review-done strong { display: block; color: hsl(140, 45%, 24%); }
 .review-done p { margin: 4px 0 0; font-size: 13px; color: var(--ink-soft); }
+
+/* ── Archived edition summary + winners podium ── */
+.edition-summary {
+  border: 1px solid var(--border); border-radius: 12px; padding: 22px 26px; margin: 20px 0 8px;
+  background: hsla(36, 30%, 99%, 0.7);
+}
+.edition-summary__head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; }
+.edition-summary__title { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 1.5rem; }
+.edition-summary__stats { display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; color: var(--ink-soft); }
+.edition-summary__stats strong { color: var(--ink); font-size: 1.05rem; }
+.podium { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+.podium__item {
+  flex: 1; min-width: 160px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 18px 14px; border: 1px solid var(--border); border-radius: 10px;
+  background: var(--ivory-soft); text-decoration: none; color: var(--ink); transition: transform 0.15s, box-shadow 0.15s;
+}
+.podium__item:hover { transform: translateY(-2px); box-shadow: 0 6px 18px hsla(30, 20%, 20%, 0.1); }
+.podium__item--1 { background: hsl(43, 72%, 92%); border-color: hsl(43, 60%, 70%); }
+.podium__item--2 { background: hsl(0, 0%, 95%); }
+.podium__item--3 { background: hsl(28, 40%, 92%); }
+.podium__medal { font-size: 2rem; line-height: 1; }
+.podium__name { font-weight: 600; text-align: center; overflow-wrap: anywhere; }
+.podium__score { font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); }

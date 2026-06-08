@@ -9,6 +9,7 @@ import AdminFlowPanel from '../components/AdminFlowPanel.jsx';
 import AdminStageTracker from '../components/AdminStageTracker.jsx';
 import { getCycle, submissionsOpen } from '../lib/cycleRepo.js';
 import EditionTourResults from '../components/EditionTourResults.jsx';
+import EditionSummary from '../components/EditionSummary.jsx';
 
 // Medal for top-3 placements.
 const medal = (p) => (p === 1 ? '🥇' : p === 2 ? '🥈' : p === 3 ? '🥉' : '🏆');
@@ -507,11 +508,7 @@ export default function Account() {
             onChanged={() => setRefreshKey((k) => k + 1)}
           />
         )}
-        {isAdmin && !isCurrentEdition && (
-          <p className="cycle-note" style={{ margin: '8px 0 0' }}>
-            Архив · цикл №{shownEdition} (только просмотр)
-          </p>
-        )}
+        {archiveMode && <EditionSummary edition={shownEdition} year={editionYears[shownEdition]} />}
 
         {isJuror && !cycle && <p>…</p>}
 
