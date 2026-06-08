@@ -1186,7 +1186,7 @@ input, textarea, select { font-family: inherit; }
 .filterset__label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-soft); }
 .segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; overflow: hidden; background: var(--ivory-soft); }
 .segmented button {
-  border: 0; background: none; font: inherit; font-size: 0.82rem; color: var(--ink-soft);
+  border: 0; background: none; font: inherit; font-size: 0.82rem; font-weight: 500; color: var(--ink-soft);
   padding: 7px 16px; cursor: pointer; transition: background 0.15s, color 0.15s; white-space: nowrap;
 }
 .segmented button + button { border-left: 1px solid var(--border); }
@@ -1196,7 +1196,8 @@ input, textarea, select { font-family: inherit; }
   font: inherit; font-size: 0.88rem; color: var(--ink);
   background: var(--ivory-soft); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px;
 }
-.app-filters__search { flex: 1 1 240px; min-width: 200px; }
+/* Search owns its own row so toggling filters never resizes it. */
+.app-filters__search { flex: 1 1 100%; width: 100%; }
 .app-filters__search::placeholder { color: var(--ink-soft); opacity: 0.7; }
 .app-filters__tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .filter-tag {
