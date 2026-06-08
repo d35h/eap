@@ -58,10 +58,30 @@ function igReadyUrl(signedUrl) {
   return `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=1080&h=1080&fit=contain&cbg=121417&output=jpg&q=85`;
 }
 
-// Story frame: 9:16 (1080×1920), padded on the brand-dark canvas.
-function storyReadyUrl(signedUrl) {
-  const src = 'ssl:' + signedUrl.replace(/^https?:\/\//, '');
-  return `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=1080&h=1920&fit=contain&cbg=121417&output=jpg&q=85`;
+const xmlEsc = (s) => String(s || '').replace(/[<>&'"]/g, (c) =>
+  ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' }[c]));
+
+// Build a 9:16 story frame: artwork on the brand-dark canvas with the artist's
+// name + @handle + footer baked in. We compose an SVG (artwork embedded as a
+// data URI + text), store it, and let the weserv CDN rasterize it to JPEG —
+// so no native image library is needed in the function.
+async function buildStoryUrl(admin, app, signedArtworkUrl) {
+  const res = await fetch(igReadyUrl(signedArtworkUrl));
+  const b64 = Buffer.from(await res.arrayBuffer()).toString('base64');
+  const name = xmlEsc([app.first_name, app.last_name].filter(Boolean).join(' ') || 'Artist');
+  const handle = igHandle(app.instagram);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <rect width="1080" height="1920" fill="#121417"/>
+  <image href="data:image/jpeg;base64,${b64}" x="140" y="300" width="800" height="800" preserveAspectRatio="xMidYMid meet"/>
+  <text x="540" y="1360" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="70" fill="#f0ece4">${name}</text>
+  ${handle ? `<text x="540" y="1440" text-anchor="middle" font-family="sans-serif" font-size="46" fill="#c2a063">@${xmlEsc(handle)}</text>` : ''}
+  <text x="540" y="1540" text-anchor="middle" font-family="sans-serif" font-size="30" fill="#9a9a9a" letter-spacing="2">EURASIAN ART PLATFORM · OPEN CALL</text>
+</svg>`;
+  const path = `applications/${app.id}/_story.svg`;
+  await admin.storage.from('works').upload(path, svg, { contentType: 'image/svg+xml', upsert: true });
+  const { data } = await admin.storage.from('works').createSignedUrl(path, 600);
+  const src = 'ssl:' + data.signedUrl.replace(/^https?:\/\//, '');
+  return `https://images.weserv.nl/?url=${encodeURIComponent(src)}&output=jpg&w=1080&h=1920&q=90`;
 }
 
 async function gp(path, body) {
@@ -193,10 +213,12 @@ export async function publishApplication(admin, env, app) {
     .update({ published_at: new Date().toISOString(), instagram_url: post.permalink })
     .eq('id', app.id);
 
-  // 2) One 24h story (first work). Best-effort — never fails the feed post.
+  // 2) One 24h story (first work) with name + @handle + footer. Best-effort.
   if (env.IG_PUBLISH_STORIES !== 'false' && rawUrls[0]) {
-    try { await igPublishStory(igUserId, token, storyReadyUrl(rawUrls[0])); }
-    catch (e) { console.error('IG story failed:', e?.message || e); }
+    try {
+      const storyUrl = await buildStoryUrl(admin, app, rawUrls[0]);
+      await igPublishStory(igUserId, token, storyUrl);
+    } catch (e) { console.error('IG story failed:', e?.message || e); }
   }
 
   // 3) Mirror the post to the Facebook Page (instagram shown as a URL). Best-effort.
