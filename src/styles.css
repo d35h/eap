@@ -1537,3 +1537,11 @@ input, textarea, select { font-family: inherit; }
   .tours-confirm .tours-panel__actions { justify-content: stretch; }
   .tours-confirm .tours-btn { flex: 1; justify-content: center; }
 }
+
+/* Artist apply prompt in the cabinet */
+.apply-cta {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
+  border: 1px solid var(--border); border-radius: 12px; padding: 20px 24px; margin: 0 0 28px;
+  background: hsla(43, 60%, 92%, 0.5);
+}
+.apply-cta__text { margin: 0; color: var(--ink); font-size: 0.98rem; }

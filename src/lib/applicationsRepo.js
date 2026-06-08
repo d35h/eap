@@ -21,10 +21,11 @@ function newId() {
 // Insert a pending application. `client` is injected for testability.
 // The id is generated client-side so we never need to read the row back
 // (anon has no SELECT policy - INSERT ... RETURNING would be blocked by RLS).
-export async function createApplication(client, form) {
+export async function createApplication(client, form, userId = null) {
   const id = newId();
   const payload = {
     id,
+    ...(userId ? { user_id: userId } : {}),
     email: (form.email || '').trim().toLowerCase(),
     first_name: form.firstName || '',
     last_name: form.lastName || '',
@@ -51,10 +52,12 @@ export async function createApplication(client, form) {
   return payload;
 }
 
-// Bound to the real client for app use.
-export function submitApplication(form) {
+// Bound to the real client for app use. Links the application to the current
+// user when one is logged in (so it shows in their cabinet right away).
+export async function submitApplication(form) {
   if (!supabase) throw new Error('Supabase is not configured');
-  return createApplication(supabase, form);
+  const { data: { user } } = await supabase.auth.getUser();
+  return createApplication(supabase, form, user?.id || null);
 }
 
 const extOf = (file) => {

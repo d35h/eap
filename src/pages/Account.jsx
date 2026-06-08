@@ -7,7 +7,7 @@ import { signOut } from '../lib/auth.js';
 import { unlockReview } from '../lib/reviewsRepo.js';
 import AdminCyclePanel from '../components/AdminCyclePanel.jsx';
 import AdminToursPanel from '../components/AdminToursPanel.jsx';
-import { getCycle } from '../lib/cycleRepo.js';
+import { getCycle, submissionsOpen } from '../lib/cycleRepo.js';
 import EditionTourResults from '../components/EditionTourResults.jsx';
 
 // Medal for top-3 placements.
@@ -47,6 +47,8 @@ export default function Account() {
   const [myResults, setMyResults] = useState({});
   // Current edition as seen by the artist (to split current vs past applications).
   const [artistEdition, setArtistEdition] = useState(null);
+  // Whether submissions are currently open (for the artist apply CTA).
+  const [subsOpen, setSubsOpen] = useState(false);
   // Which tour tab the artist is viewing, per application.
   const [artistTab, setArtistTab] = useState({});
   // Cycle (submissions + tours); active tour is derived from it. Single source
@@ -176,6 +178,14 @@ export default function Account() {
     const id = setTimeout(() => setDebouncedQ(searchQ.trim()), 300);
     return () => clearTimeout(id);
   }, [searchQ]);
+
+  // Artists: is the open call accepting applications right now?
+  useEffect(() => {
+    if (isStaff) return;
+    let cancelled = false;
+    submissionsOpen().then((open) => { if (!cancelled) setSubsOpen(!!open); });
+    return () => { cancelled = true; };
+  }, [isStaff, refreshKey]);
 
   // Reset to the first page when the filter context changes.
   useEffect(() => {
@@ -436,6 +446,13 @@ export default function Account() {
             </button>
           )}
         </div>
+
+        {!isStaff && subsOpen && currentApps.length === 0 && (
+          <div className="apply-cta">
+            <p className="apply-cta__text">{t('account.applyPrompt')}</p>
+            <Link to="/apply" className="btn-gold">{t('nav.apply')}</Link>
+          </div>
+        )}
 
         {isAdmin && showArchive && currentEdition > 1 && (
           <div className="edition-switch">
