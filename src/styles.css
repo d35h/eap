@@ -1739,13 +1739,26 @@ input, textarea, select { font-family: inherit; }
 
 /* Admin jury progress (who has reviewed) */
 .jury-progress { margin-top: 18px; }
-.jury-progress__row { display: grid; grid-template-columns: minmax(0, 1fr) 120px 56px; align-items: center; gap: 12px; padding: 7px 0; }
+.jury-progress__row { display: grid; grid-template-columns: minmax(0, 1fr) 110px 50px 168px; align-items: center; gap: 12px; padding: 7px 0; }
 .jury-progress__name { overflow-wrap: anywhere; }
 .jury-progress__bar { height: 7px; border-radius: 4px; background: hsla(38, 26%, 86%, 0.7); overflow: hidden; }
-.jury-progress__bar span { display: block; height: 100%; background: var(--accent-deep); border-radius: 4px; }
+.jury-progress__bar span { display: block; height: 100%; background: var(--accent-deep); border-radius: 4px; transition: width 0.3s; }
 .jury-progress__count { font-family: var(--font-mono); font-size: 13px; color: var(--ink-soft); text-align: right; white-space: nowrap; }
 .jury-progress__count.is-done { color: hsl(140, 45%, 38%); }
-@media (max-width: 640px) { .jury-progress__row { grid-template-columns: minmax(0, 1fr) 48px; } .jury-progress__bar { display: none; } }
+.jury-progress__remind {
+  justify-self: end; font: inherit; font-size: 12px; cursor: pointer; white-space: nowrap;
+  background: var(--ivory-soft); color: var(--accent-deep); border: 1px solid var(--border);
+  border-radius: 999px; padding: 5px 14px; transition: border-color 0.15s, color 0.15s;
+}
+.jury-progress__remind:hover:not(:disabled) { border-color: var(--accent-deep); color: var(--ink); }
+.jury-progress__remind:disabled { opacity: 0.6; cursor: default; }
+.jury-progress__sent { justify-self: end; font-size: 12px; color: hsl(140, 45%, 38%); white-space: nowrap; }
+@media (max-width: 640px) {
+  .jury-progress__row { grid-template-columns: minmax(0, 1fr) auto auto; }
+  .jury-progress__bar { display: none; }
+  .jury-progress__remind, .jury-progress__sent { grid-column: 1 / -1; justify-self: start; }
+  .jury-progress__action { display: none; }
+}
 
 /* ── Image loading: shimmer placeholder + fade-in (no white flash) ── */
 .smartimg { background-color: var(--ivory-soft); transition: opacity 0.3s ease; }

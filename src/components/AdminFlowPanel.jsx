@@ -17,6 +17,7 @@ export default function AdminFlowPanel({ cycle, applications, reviewsByApp, juro
   const [confirmResend, setConfirmResend] = useState(null); // tour number
   const [confirmNew, setConfirmNew] = useState(false);
   const [newMsg, setNewMsg] = useState(null);
+  const [remindState, setRemindState] = useState({}); // jurorId → 'sending' | 'sent' | 'error'
 
   if (!cycle) return null;
 
@@ -109,6 +110,21 @@ export default function AdminFlowPanel({ cycle, applications, reviewsByApp, juro
       else setSendMsg({ type: 'error', text: 'Не удалось отправить.' });
     } catch { setSendMsg({ type: 'error', text: 'Не удалось отправить.' }); }
     finally { setSending(false); }
+  };
+  const remindJuror = async (juror) => {
+    setRemindState((p) => ({ ...p, [juror.id]: 'sending' }));
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const res = await fetch('/.netlify/functions/remind-juror', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session?.access_token || ''}` },
+        body: JSON.stringify({ jurorId: juror.id, email: juror.email, tour: activeTour }),
+      });
+      const d = await res.json().catch(() => ({}));
+      setRemindState((p) => ({ ...p, [juror.id]: (d.status === 'sent' || d.status === 'none') ? 'sent' : 'error' }));
+    } catch {
+      setRemindState((p) => ({ ...p, [juror.id]: 'error' }));
+    }
   };
   const startNewCycle = async () => {
     setBusy(true); setNewMsg(null);
@@ -260,17 +276,35 @@ export default function AdminFlowPanel({ cycle, applications, reviewsByApp, juro
       {phase === 'evaluation' && !selecting && jurors.length > 0 && activeApps.length > 0 && (
         <div className="jury-progress">
           <span className="account-section-label">Прогресс жюри</span>
-          {jurorProgress.map(({ j, done: d, total }) => (
-            <div key={j.id} className="jury-progress__row">
-              <span className="jury-progress__name">{j.name || j.email}</span>
-              <span className="jury-progress__bar">
-                <span style={{ width: `${total ? (d / total) * 100 : 0}%` }} />
-              </span>
-              <span className={`jury-progress__count ${d >= total ? 'is-done' : ''}`}>
-                {d}/{total}{d >= total ? ' ✓' : ''}
-              </span>
-            </div>
-          ))}
+          {jurorProgress.map(({ j, done: d, total }) => {
+            const rs = remindState[j.id];
+            const complete = d >= total;
+            return (
+              <div key={j.id} className="jury-progress__row">
+                <span className="jury-progress__name">{j.name || j.email}</span>
+                <span className="jury-progress__bar">
+                  <span style={{ width: `${total ? (d / total) * 100 : 0}%` }} />
+                </span>
+                <span className={`jury-progress__count ${complete ? 'is-done' : ''}`}>
+                  {d}/{total}{complete ? ' ✓' : ''}
+                </span>
+                {complete ? (
+                  <span className="jury-progress__action" />
+                ) : rs === 'sent' ? (
+                  <span className="jury-progress__sent">Напоминание отправлено ✓</span>
+                ) : (
+                  <button
+                    type="button"
+                    className="jury-progress__remind"
+                    disabled={rs === 'sending'}
+                    onClick={() => remindJuror(j)}
+                  >
+                    {rs === 'sending' ? '…' : rs === 'error' ? 'Ошибка — ещё раз' : 'Напомнить'}
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 

@@ -156,6 +156,23 @@ export function tourResultEmail({ lang, tour, advanced, loginUrl }) {
   return { subject: c.subject(tour), html };
 }
 
+// Reminder to a juror who still has applications to evaluate (always Russian).
+export function juryReminderEmail(pending, tour, link) {
+  const m10 = pending % 10, m100 = pending % 100;
+  const word = (m10 === 1 && m100 !== 11) ? 'заявку'
+    : (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) ? 'заявки' : 'заявок';
+  return {
+    subject: 'Eurasian Art Platform · Напоминание об оценке',
+    html: brandedEmail({
+      title: 'Остались неоценённые заявки',
+      body: `Напоминаем: в туре ${tour} вам осталось оценить <strong>${pending}</strong> ${word}. Пожалуйста, войдите в кабинет жюри и завершите оценку.`,
+      button: 'Перейти к оценке',
+      link,
+      fallback: 'Если кнопка не работает, откройте ссылку:',
+    }),
+  };
+}
+
 // Jury invitation (always Russian - jurors are invited by the RU admin).
 export function juryInviteEmail(link) {
   return {

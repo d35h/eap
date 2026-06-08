@@ -850,11 +850,11 @@ export default function Account() {
           );
         })}
 
-        {renderPager()}
-
         {!isStaff && pastApps.length > 0 && (
           <ArtistArchive apps={pastApps} myResults={myResults} filesByApp={filesByApp} />
         )}
+
+        {renderPager()}
         </>
         )}
       </div>
