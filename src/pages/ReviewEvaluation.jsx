@@ -91,7 +91,7 @@ export default function ReviewEvaluation() {
 
   if (ready && !evalsOpen) {
     return (
-      <main className="apply-page">
+      <main className="apply-page account-page">
         <div className="container">
           <Link to="/account" className="review-back">← Назад</Link>
           <div className="jury-waiting">
@@ -133,7 +133,7 @@ export default function ReviewEvaluation() {
   };
 
   return (
-    <main className="apply-page">
+    <main className="apply-page account-page">
       <div className="container">
         <Link to="/account" className="review-back">← Назад</Link>
         <div className="apply-head">

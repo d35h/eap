@@ -49,7 +49,7 @@ export default function AppResults() {
     : '';
 
   return (
-    <main className="apply-page">
+    <main className="apply-page account-page">
       <div className="container">
         <Link to="/account" className="review-back">← Назад</Link>
         <div className="apply-head">

@@ -381,7 +381,7 @@ export default function Account() {
 
   if (!isSupabaseConfigured()) {
     return (
-      <main className="apply-page">
+      <main className="apply-page account-page">
         <div className="container">
           <p className="eyebrow">- {t('account.nav')}</p>
           <p>{t('account.notConfigured')}</p>
@@ -392,7 +392,7 @@ export default function Account() {
 
   if (loading) {
     return (
-      <main className="apply-page">
+      <main className="apply-page account-page">
         <div className="container">
           <p>…</p>
         </div>
@@ -458,7 +458,7 @@ export default function Account() {
   ) : null);
 
   return (
-    <main className="apply-page">
+    <main className="apply-page account-page">
       <div className="container">
         <div className="apply-head">
           <span className="eyebrow">- {headEyebrow}</span>

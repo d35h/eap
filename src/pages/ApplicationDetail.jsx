@@ -86,7 +86,7 @@ export default function ApplicationDetail() {
   if (!isSupabaseConfigured() || loading || !user || !isAdmin) return null;
   if (!app) {
     return (
-      <main className="apply-page"><div className="container">
+      <main className="apply-page account-page"><div className="container">
         <Link to="/account" className="review-back">← Назад</Link>
         <p>…</p>
       </div></main>
@@ -145,7 +145,7 @@ export default function ApplicationDetail() {
   }
 
   return (
-    <main className="apply-page">
+    <main className="apply-page account-page">
       <div className="container">
         <Link to="/account" className="review-back">← Назад</Link>
         <div className="apply-head">

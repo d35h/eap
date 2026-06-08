@@ -1787,3 +1787,51 @@ input, textarea, select { font-family: inherit; }
 }
 @keyframes img-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 @media (prefers-reduced-motion: reduce) { .smartimg[data-loaded="0"] { animation: none; } }
+
+/* ════════════════════════════════════════════════════════════════════
+   Admin cabinet — one cohesive premium surface
+   (warm hairlines · rounded pills · gold = the single primary action)
+   ════════════════════════════════════════════════════════════════════ */
+
+/* The global --border is a dark-UI line; on the cream pages it reads harsh.
+   Override it with a soft warm hairline for every light page. */
+.apply-page { --border: hsl(35, 17%, 85%); }
+
+/* One button language: rounded, calm, sentence-case — no shouting caps,
+   no heavy black rectangles. */
+.account-page .btn-gold,
+.account-page .btn-ink,
+.account-page .btn-ink-outline,
+.account-page .tours-btn {
+  border-radius: 999px;
+  text-transform: none;
+  letter-spacing: 0.01em;
+  font-size: 0.84rem;
+  font-weight: 500;
+  padding: 10px 22px;
+  gap: 8px;
+}
+/* Primary action = soft gold pill with ink text — the one element that pops. */
+.account-page .btn-gold {
+  background: var(--accent); border: 1px solid var(--accent); color: var(--ink);
+}
+.account-page .btn-gold:hover:not(:disabled) { background: var(--accent-soft); border-color: var(--accent-soft); color: var(--ink); }
+.account-page .btn-gold:disabled { opacity: 0.45; }
+.account-page .btn-gold:disabled:hover { background: var(--accent); }
+/* Secondary action = quiet outline pill (was the black rectangle). */
+.account-page .btn-ink {
+  background: transparent; color: var(--ink); border: 1px solid var(--border);
+}
+.account-page .btn-ink:hover:not(:disabled) { background: hsla(38, 34%, 90%, 0.55); border-color: var(--accent); color: var(--ink); }
+
+/* Top actions (Выйти · Жюри · Архив) — matching quiet pills, comfortably spaced. */
+.account-page .account-actions { gap: 10px; align-items: center; margin-bottom: 36px; }
+.account-page .account-actions .btn-ink { font-size: 0.82rem; padding: 9px 20px; letter-spacing: 0.01em; }
+
+/* Filter selection = charcoal fill (not the muddy-gold "red oval"). */
+.segmented { background: var(--ivory-soft); border-color: var(--border); }
+.segmented button.is-active { background: var(--ink); color: var(--ivory-soft); font-weight: 500; }
+.segmented button + button { border-left-color: var(--border); }
+
+/* Confirm boxes: warm gold-tinted, soft. */
+.account-page .tours-confirm { border-color: hsl(38, 40%, 78%); border-radius: 14px; }
