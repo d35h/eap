@@ -11,6 +11,7 @@ import { getCycle, submissionsOpen } from '../lib/cycleRepo.js';
 import EditionTourResults from '../components/EditionTourResults.jsx';
 import EditionSummary from '../components/EditionSummary.jsx';
 import JurorReviewList from '../components/JurorReviewList.jsx';
+import EditionGallery from '../components/EditionGallery.jsx';
 
 // Medal for top-3 placements.
 const medal = (p) => (p === 1 ? '🥇' : p === 2 ? '🥈' : p === 3 ? '🥉' : '🏆');
@@ -467,7 +468,7 @@ export default function Account() {
               onClick={() => {
                 const next = !showArchive;
                 setShowArchive(next);
-                setViewEdition(next ? currentEdition - 1 : null);
+                setViewEdition(null); // open to the gallery; close resets to current
                 setArchiveTab('apps');
               }}
             >
@@ -483,23 +484,19 @@ export default function Account() {
           </div>
         )}
 
-        {isAdmin && showArchive && currentEdition > 1 && (
-          <div className="edition-switch">
-            {Array.from({ length: currentEdition - 1 }, (_, i) => currentEdition - 1 - i).map((ed) => (
-              <button
-                key={ed}
-                type="button"
-                className={`tours-tab ${shownEdition === ed ? 'is-active' : ''}`}
-                onClick={() => { setViewEdition(ed); setArchiveTab('apps'); }}
-              >
-                Биеннале {editionYears[ed] || `№${ed}`} (Архив)
-              </button>
-            ))}
-          </div>
+        {isAdmin && showArchive && viewEdition === null && (
+          <EditionGallery
+            currentEdition={currentEdition}
+            editionYears={editionYears}
+            onPick={(ed) => { setViewEdition(ed); setArchiveTab('apps'); }}
+          />
+        )}
+        {archiveMode && (
+          <button type="button" className="review-back" onClick={() => setViewEdition(null)}>← Все биеннале</button>
         )}
 
-        {isAdmin && isCurrentEdition && cycle && <AdminStageTracker phase={cyclePhase} />}
-        {isAdmin && isCurrentEdition && (
+        {isAdmin && isCurrentEdition && !showArchive && cycle && <AdminStageTracker phase={cyclePhase} />}
+        {isAdmin && isCurrentEdition && !showArchive && (
           <AdminFlowPanel
             cycle={cycle}
             applications={applications}
@@ -542,7 +539,7 @@ export default function Account() {
           />
         )}
 
-        {(!isJuror) && (!archiveMode || archiveTab === 'apps') && (
+        {(!isJuror) && (showArchive ? (archiveMode && archiveTab === 'apps') : true) && (
         <>
         <h2 style={{ margin: '40px 0 24px' }}>
           {isStaff ? 'Все заявки' : (pastApps.length ? t('account.currentApplication') : t('account.yourApplications'))}
