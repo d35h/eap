@@ -1,0 +1,11 @@
+{
+  "name": "gorfadvijay/temp-skill",
+  "version": "cdcd1f6bb103e878d2121317216d9d209fb50f47",
+  "summary": "Auto-generated tile from GitHub (1 skill)",
+  "private": true,
+  "skills": {
+    "product-ux-designer": {
+      "path": "claude-skills/skills/product-ux-designer/SKILL.md"
+    }
+  }
+}

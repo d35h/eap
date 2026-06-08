@@ -7,6 +7,7 @@ import { signOut } from '../lib/auth.js';
 import { unlockReview } from '../lib/reviewsRepo.js';
 import AdminCyclePanel from '../components/AdminCyclePanel.jsx';
 import AdminToursPanel from '../components/AdminToursPanel.jsx';
+import AdminStageTracker from '../components/AdminStageTracker.jsx';
 import { getCycle, submissionsOpen } from '../lib/cycleRepo.js';
 import EditionTourResults from '../components/EditionTourResults.jsx';
 
@@ -65,6 +66,8 @@ export default function Account() {
   const [viewEdition, setViewEdition] = useState(null);
   const shownEdition = viewEdition ?? currentEdition;
   const isCurrentEdition = shownEdition === currentEdition;
+  const deadlinePassed = cycle?.submissions_deadline && new Date(cycle.submissions_deadline) < new Date();
+  const submissionsClosed = !cycle?.submissions_open || deadlinePassed;
   const [showArchive, setShowArchive] = useState(false);
   const [editionYears, setEditionYears] = useState({}); // edition → year
   const [archiveTab, setArchiveTab] = useState('apps'); // 'apps' | 1 | 2
@@ -402,6 +405,12 @@ export default function Account() {
   const hasWinners = applications.some((a) => a.standing === 'winner');
   const tourOngoing = shownTour === activeTour && !(activeTour === 1 ? tour2Exists : hasWinners);
 
+  // Lifecycle phase of the current cycle, for the admin stage tracker.
+  const cyclePhase = cycleFinished ? 'done'
+    : activeTour === 2 ? 'tour2'
+    : submissionsClosed ? 'tour1'
+    : 'submissions';
+
   // Artist: split their own applications into the current edition and the archive.
   const isPast = (app) => !isStaff && !!artistEdition && (app.edition || 1) < artistEdition;
   const currentApps = applications.filter((a) => !isPast(a));
@@ -469,6 +478,7 @@ export default function Account() {
           </div>
         )}
 
+        {isAdmin && isCurrentEdition && cycle && <AdminStageTracker phase={cyclePhase} />}
         {isAdmin && isCurrentEdition && <AdminCyclePanel cycle={cycle} canStartNew={cycleFinished} onChanged={() => setRefreshKey((k) => k + 1)} />}
         {isAdmin && isCurrentEdition && (
           <AdminToursPanel

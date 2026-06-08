@@ -1,0 +1,24 @@
+{
+  "name": "eap",
+  "mode": "vendored",
+  "dependencies": {
+    "OpenRoster-ai/awesome-agents": {
+      "version": "010799b3cf0ae350d91f795a75ba6f2759817922",
+      "source": "https://github.com/OpenRoster-ai/awesome-agents",
+      "include": {
+        "skills": [
+          "ui-designer"
+        ]
+      }
+    },
+    "gorfadvijay/temp-skill": {
+      "version": "cdcd1f6bb103e878d2121317216d9d209fb50f47",
+      "source": "https://github.com/gorfadvijay/temp-skill",
+      "include": {
+        "skills": [
+          "product-ux-designer"
+        ]
+      }
+    }
+  }
+}
