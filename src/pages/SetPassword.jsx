@@ -37,26 +37,30 @@ export default function SetPassword() {
   };
 
   return (
-    <main className="apply-page">
-      <div className="container">
-        <div className="apply-head">
-          <span className="eyebrow">- {t('account.nav')}</span>
-          <h1>{t('account.setPasswordTitle')}</h1>
-        </div>
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="field-group">
-            <label>{t('account.password')}</label>
+    <main className="apply-page auth-page">
+      <div className="auth-card">
+        <span className="auth-card__kicker">Eurasian Art Platform</span>
+        <h1 className="auth-card__title">{t('account.setPasswordTitle')}</h1>
+        <p className="auth-card__sub">{t('account.setPasswordSubtitle')}</p>
+
+        <form onSubmit={handleSubmit} className="auth-card__form" noValidate>
+          <div className="auth-field">
+            <label htmlFor="set-password">{t('account.password')}</label>
             <input
+              id="set-password"
               type="password"
               value={password}
               onChange={(e) => setPasswordValue(e.target.value)}
               required
               autoComplete="new-password"
               minLength={6}
+              placeholder="••••••••"
             />
           </div>
-          {error && <p className="auth-error">{error}</p>}
-          <button type="submit" className="btn-ink" disabled={loading}>
+
+          {error && <p className="auth-card__error" role="alert">{error}</p>}
+
+          <button type="submit" className="auth-card__submit" disabled={loading}>
             {loading ? '…' : t('account.setPasswordBtn')}
           </button>
         </form>

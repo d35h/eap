@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { isSupabaseConfigured } from '../lib/supabase.js';
 import { signIn } from '../lib/auth.js';
@@ -31,38 +31,49 @@ export default function Login() {
   };
 
   return (
-    <main className="apply-page">
-      <div className="container">
-        <div className="apply-head">
-          <span className="eyebrow">- {t('account.nav')}</span>
-          <h1>{t('account.loginTitle')}</h1>
-        </div>
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="field-group">
-            <label>{t('account.email')}</label>
+    <main className="apply-page auth-page">
+      <div className="auth-card">
+        <span className="auth-card__kicker">Eurasian Art Platform</span>
+        <h1 className="auth-card__title">{t('account.loginTitle')}</h1>
+        <p className="auth-card__sub">{t('account.loginSubtitle')}</p>
+
+        <form onSubmit={handleSubmit} className="auth-card__form" noValidate>
+          <div className="auth-field">
+            <label htmlFor="login-email">{t('account.email')}</label>
             <input
+              id="login-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
+              placeholder="you@example.com"
             />
           </div>
-          <div className="field-group">
-            <label>{t('account.password')}</label>
+          <div className="auth-field">
+            <label htmlFor="login-password">{t('account.password')}</label>
             <input
+              id="login-password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
+              placeholder="••••••••"
             />
           </div>
-          {error && <p className="auth-error">{error}</p>}
-          <button type="submit" className="btn-ink" disabled={loading}>
+
+          {error && <p className="auth-card__error" role="alert">{error}</p>}
+
+          <button type="submit" className="auth-card__submit" disabled={loading}>
             {loading ? '…' : t('account.signIn')}
           </button>
         </form>
+
+        <p className="auth-card__foot">
+          {t('account.loginNoAccount')}{' '}
+          <Link to="/apply">{t('nav.apply')}</Link>
+        </p>
       </div>
     </main>
   );
