@@ -1397,7 +1397,13 @@ input, textarea, select { font-family: inherit; }
 .edition-switch { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 16px 0 4px; }
 
 /* ── Juror evaluation page ── */
-.review-back { display: inline-block; margin-bottom: 24px; color: var(--accent-deep); text-decoration: none; }
+.review-back {
+  display: inline-flex; align-items: center; gap: 6px; margin-bottom: 28px;
+  color: var(--accent-deep); text-decoration: none; font-size: 0.9rem;
+  padding: 6px 12px 6px 8px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--ivory-soft); transition: border-color 0.15s, color 0.15s;
+}
+.review-back:hover { border-color: var(--accent-deep); color: var(--ink); }
 .review-app { margin-bottom: 32px; }
 .review-app__applicant { font-weight: 500; margin-bottom: 16px; }
 .review-work-desc { display: block; margin-top: 6px; opacity: 0.7; font-size: 0.85em; }
@@ -1405,15 +1411,13 @@ input, textarea, select { font-family: inherit; }
   background: hsl(40, 70%, 95%); border-left: 3px solid hsl(40, 70%, 50%);
   padding: 12px 18px; margin-bottom: 24px; color: hsl(30, 30%, 28%);
 }
-.review-eval { display: grid; grid-template-columns: 240px 1fr; gap: 32px; align-items: start; }
-.review-tabs { display: flex; flex-direction: column; gap: 8px; }
-.review-tab {
-  text-align: left; background: transparent; border: 1px solid var(--border);
-  border-radius: 4px; padding: 12px 14px; color: var(--ink); cursor: pointer;
-  font-size: 14px; display: flex; align-items: center; gap: 8px; transition: border-color 0.2s;
-}
-.review-tab.is-active { border-color: var(--accent-deep); }
-.review-tab__check { color: hsl(140, 50%, 45%); width: 14px; display: inline-block; }
+.review-eval { display: flex; flex-direction: column; }
+/* Each criterion is a stacked block (no tabs) so jurors see both at once. */
+.review-crit { padding: 22px 0; border-top: 1px solid var(--border); }
+.review-crit:first-of-type { border-top: 0; padding-top: 8px; }
+.review-crit__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.review-crit__num { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; color: var(--accent-deep); }
+.review-crit__done { font-size: 13px; color: hsl(140, 45%, 38%); font-weight: 500; }
 .review-panel__title { margin: 0 0 8px; }
 .review-panel__hint { color: var(--ink-soft); line-height: 1.55; margin-bottom: 24px; }
 .review-rating { margin-bottom: 24px; }
@@ -1459,10 +1463,6 @@ input, textarea, select { font-family: inherit; }
 .review-msg { grid-column: 1 / -1; margin: 12px 0 0; font-size: 14px; }
 .review-msg--ok { color: hsl(140, 50%, 45%); }
 .review-msg--error { color: var(--error); }
-@media (max-width: 720px) {
-  .review-eval { grid-template-columns: 1fr; }
-  .review-tabs { flex-direction: row; flex-wrap: wrap; }
-}
 .account-actions {
   display: flex;
   flex-wrap: wrap;

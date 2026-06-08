@@ -23,7 +23,6 @@ export default function ReviewEvaluation() {
   const [scores, setScores] = useState({});
   const [status, setStatus] = useState('draft');
   const [unlocked, setUnlocked] = useState(false);
-  const [active, setActive] = useState(REVIEW_CRITERIA[0].key);
   const [files, setFiles] = useState({});
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState(null); // { type, text }
@@ -132,10 +131,6 @@ export default function ReviewEvaluation() {
     }
   };
 
-  const activeCriterion = REVIEW_CRITERIA.find((c) => c.key === active);
-  const entry = scores[active] || { rating: 0, text: '' };
-  const textLen = (entry.text || '').trim().length;
-
   return (
     <main className="apply-page">
       <div className="container">
@@ -197,54 +192,43 @@ export default function ReviewEvaluation() {
                 </p>
               </div>
             )}
-            <nav className="review-tabs">
-              {REVIEW_CRITERIA.map((c) => {
-                const ok = isCriterionValid(scores[c.key]);
-                return (
-                  <button
-                    key={c.key}
-                    type="button"
-                    className={`review-tab ${active === c.key ? 'is-active' : ''} ${ok ? 'is-done' : ''}`}
-                    onClick={() => setActive(c.key)}
-                  >
-                    <span className="review-tab__check" aria-hidden="true">{ok ? '✓' : ''}</span>
-                    {c.title}
-                  </button>
-                );
-              })}
-            </nav>
+            {REVIEW_CRITERIA.map((c, i) => {
+              const e = scores[c.key] || { rating: 0, text: '' };
+              const len = (e.text || '').trim().length;
+              const ok = isCriterionValid(e);
+              return (
+                <div key={c.key} className={`review-crit ${ok ? 'is-done' : ''}`}>
+                  <div className="review-crit__head">
+                    <span className="review-crit__num">Критерий {i + 1} из {REVIEW_CRITERIA.length}</span>
+                    {ok && <span className="review-crit__done">✓ Заполнено</span>}
+                  </div>
+                  <h2 className="review-panel__title">{c.title}</h2>
+                  <p className="review-panel__hint">{c.hint}</p>
 
-            <div className="review-panel">
-              <h2 className="review-panel__title">{activeCriterion.title}</h2>
-              <p className="review-panel__hint">{activeCriterion.hint}</p>
+                  <div className="review-rating">
+                    <label>Оценка: <strong>{e.rating}</strong> / {MAX_RATING}</label>
+                    <input
+                      type="range" min="0" max={MAX_RATING} step="1"
+                      value={e.rating} disabled={locked}
+                      onChange={(ev) => setEntry(c.key, { rating: Number(ev.target.value) })}
+                    />
+                  </div>
 
-              <div className="review-rating">
-                <label>Оценка: <strong>{entry.rating}</strong> / {MAX_RATING}</label>
-                <input
-                  type="range"
-                  min="0"
-                  max={MAX_RATING}
-                  step="1"
-                  value={entry.rating}
-                  disabled={locked}
-                  onChange={(e) => setEntry(active, { rating: Number(e.target.value) })}
-                />
-              </div>
-
-              <div className="review-text">
-                <textarea
-                  value={entry.text}
-                  disabled={locked}
-                  placeholder="Развёрнутый комментарий по этому критерию…"
-                  onChange={(e) => setEntry(active, { text: e.target.value })}
-                />
-                <div className={`review-counter ${textLen >= MIN_REVIEW_CHARS ? 'is-ok' : ''}`}>
-                  {textLen >= MIN_REVIEW_CHARS
-                    ? '✓ Комментарий достаточной длины'
-                    : `Ещё ${MIN_REVIEW_CHARS - textLen} символов (минимум ${MIN_REVIEW_CHARS})`}
+                  <div className="review-text">
+                    <textarea
+                      value={e.text} disabled={locked}
+                      placeholder="Развёрнутый комментарий по этому критерию…"
+                      onChange={(ev) => setEntry(c.key, { text: ev.target.value })}
+                    />
+                    <div className={`review-counter ${len >= MIN_REVIEW_CHARS ? 'is-ok' : ''}`}>
+                      {len >= MIN_REVIEW_CHARS
+                        ? '✓ Комментарий достаточной длины'
+                        : `Ещё ${MIN_REVIEW_CHARS - len} символов (минимум ${MIN_REVIEW_CHARS})`}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              );
+            })}
 
             {!locked && (
               <>
