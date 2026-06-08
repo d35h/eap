@@ -22,15 +22,18 @@ function igHandle(raw) {
 //   <title>, <year> — <media>. <size>   (one line per work)
 //
 //   #EAP #CallForArtists #ContemporaryArt #EurasianExhibition
-function buildCaption(app, c) {
+function buildCaption(app, c, opts = {}) {
   const name = [app.first_name, app.last_name].filter(Boolean).join(' ') || 'Artist';
   const handle = igHandle(app.instagram);
   const extras = [];
-  if (handle) extras.push(`@${handle}`);
+  // Instagram: @handle mention. Facebook: full instagram.com URL (FB can't link @).
+  if (handle) extras.push(opts.igUrl ? `https://www.instagram.com/${handle}/` : `@${handle}`);
   if (app.website) extras.push(String(app.website).trim());
 
-  // Leading blank line so the caption starts below the username on Instagram.
-  const lines = ['', name + (extras.length ? ` ${extras.join(' | ')}` : ''), ''];
+  const lines = [];
+  if (!opts.igUrl) lines.push(''); // IG: blank first line so the caption starts below the username
+  lines.push(name + (extras.length ? ` ${extras.join(' | ')}` : ''));
+  lines.push('');
 
   const works = (app.works || []).filter((w) => w.title || w.year || w.media || w.size);
   works.forEach((w) => {
@@ -114,6 +117,27 @@ async function igPublish(igUserId, token, { imageUrls, caption, userTag }) {
   return finalizePost(igUserId, token, pub);
 }
 
+// Publish the same images + caption to a Facebook Page (multi-photo feed post).
+async function fbPost(pageId, pageToken, { imageUrls, message }) {
+  const FB = 'https://graph.facebook.com/v21.0';
+  const fbCall = async (path, body) => {
+    const res = await fetch(`${FB}/${path}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+    });
+    const d = await res.json().catch(() => ({}));
+    if (!res.ok || d.error) throw new Error(JSON.stringify(d.error || d));
+    return d;
+  };
+  // Upload each photo unpublished, then attach them to one feed post.
+  const attached = [];
+  for (const url of imageUrls) {
+    const p = await fbCall(`${pageId}/photos`, { url, published: false, access_token: pageToken });
+    attached.push({ media_fbid: p.id });
+  }
+  const post = await fbCall(`${pageId}/feed`, { message, attached_media: attached, access_token: pageToken });
+  return post.id;
+}
+
 // Publish a single image as a 24h story.
 async function igPublishStory(igUserId, token, imageUrl) {
   const c = await gp(`${igUserId}/media`, { image_url: imageUrl, media_type: 'STORIES', access_token: token });
@@ -173,6 +197,14 @@ export async function publishApplication(admin, env, app) {
   if (env.IG_PUBLISH_STORIES !== 'false' && rawUrls[0]) {
     try { await igPublishStory(igUserId, token, storyReadyUrl(rawUrls[0])); }
     catch (e) { console.error('IG story failed:', e?.message || e); }
+  }
+
+  // 3) Mirror the post to the Facebook Page (instagram shown as a URL). Best-effort.
+  if (env.FB_PAGE_ID && env.FB_PAGE_TOKEN) {
+    try {
+      const fbMessage = buildCaption(app, cfg(env), { igUrl: true });
+      await fbPost(env.FB_PAGE_ID, env.FB_PAGE_TOKEN, { imageUrls: feedImages, message: fbMessage });
+    } catch (e) { console.error('FB publish failed:', e?.message || e); }
   }
   return { status: 'published', postId: post.id, permalink: post.permalink };
 }
