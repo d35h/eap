@@ -411,6 +411,25 @@ export default function Account() {
     : submissionsClosed ? 'tour1'
     : 'submissions';
 
+  // Pipeline-table cells: each applicant's status per tour.
+  const reviewedInActive = (app) => {
+    const fin = (reviewsByApp[app.id] || []).filter((r) => r.status === 'finished').length;
+    return jurors.length > 0 && fin >= jurors.length;
+  };
+  const tour1Cell = (app) => {
+    if ((app.tour || 1) >= 2) return { label: 'Прошёл', cls: 'finished' };
+    if (app.standing === 'eliminated') return { label: 'Выбыл', cls: 'none' };
+    if (activeTour === 1) return reviewedInActive(app) ? { label: 'Рассмотрено', cls: 'draft' } : { label: 'Не рассмотрено', cls: 'none' };
+    return { label: '—', cls: 'muted' };
+  };
+  const tour2Cell = (app) => {
+    if ((app.tour || 1) < 2) return { label: '—', cls: 'muted' };
+    if (app.standing === 'winner') return { label: '🏆 Победитель', cls: 'finished' };
+    if (app.standing === 'eliminated') return { label: 'Выбыл', cls: 'none' };
+    if (activeTour === 2) return reviewedInActive(app) ? { label: 'Рассмотрено', cls: 'draft' } : { label: 'Не рассмотрено', cls: 'none' };
+    return { label: '—', cls: 'muted' };
+  };
+
   // Artist: split their own applications into the current edition and the archive.
   const isPast = (app) => !isStaff && !!artistEdition && (app.edition || 1) < artistEdition;
   const currentApps = applications.filter((a) => !isPast(a));
@@ -578,6 +597,15 @@ export default function Account() {
           <p>{L('noApplications', 'Заявок пока нет.')}</p>
         )}
 
+        {!appsLoading && isAdmin && applications.length > 0 && (
+          <div className={`pl-row pl-row--head ${isCurrentEdition ? '' : 'pl-row--archive'}`}>
+            <span className="pl-row__artist">Художник</span>
+            {isCurrentEdition && <span className="pl-cell">Оплата</span>}
+            <span className="pl-cell">Тур 1</span>
+            <span className="pl-cell">Тур 2</span>
+          </div>
+        )}
+
         {!appsLoading && orderedApps.map((app, idx) => {
           const reviewers = reviewsByApp[app.id] || [];
           const myReview = reviewers.find((r) => r.reviewer_id === user.id) || null;
@@ -593,32 +621,34 @@ export default function Account() {
           };
           const sortedJurors = [...jurors].sort((a, b) => rankOf(b.id) - rankOf(a.id));
 
-          // Admin sees a compact, clickable row → the full application page.
+          // Admin sees a pipeline row → the full application page.
           if (isAdmin) {
             const thumb = filesByApp[app.id]?.[1];
-            const finished = reviewers.filter((r) => r.status === 'finished').length;
+            const t1 = tour1Cell(app);
+            const t2 = tour2Cell(app);
+            const cell = (c) => (c.cls === 'muted'
+              ? <span className="pl-dash">—</span>
+              : <span className={`review-chip review-chip--${c.cls}`}>{c.label}</span>);
             return (
-              <Link key={app.id} to={`/account/application/${app.id}`} className="app-row">
-                <span className="app-row__thumb">
-                  {thumb ? <img src={thumb} alt="" loading="lazy" /> : <span className="app-row__thumb--empty" />}
-                </span>
-                <span className="app-row__main">
-                  <span className="app-row__name">
-                    {[app.first_name, app.last_name].filter(Boolean).join(' ') || '—'}
+              <Link key={app.id} to={`/account/application/${app.id}`} className={`pl-row ${isCurrentEdition ? '' : 'pl-row--archive'}`}>
+                <span className="pl-row__artist">
+                  <span className="pl-row__thumb">
+                    {thumb ? <img src={thumb} alt="" loading="lazy" /> : <span className="pl-row__thumb--empty" />}
                   </span>
-                  <span className="app-row__email">{app.email}</span>
+                  <span className="pl-row__id">
+                    <span className="pl-row__name">{[app.first_name, app.last_name].filter(Boolean).join(' ') || '—'}</span>
+                    <span className="pl-row__email">{app.email}</span>
+                  </span>
                 </span>
                 {isCurrentEdition && (
-                  <span className={`account-app-card__status account-app-card__status--${app.payment_status}`}>
-                    {app.payment_status === 'paid' ? 'Оплачено' : 'Ожидает оплаты'}
+                  <span className="pl-cell">
+                    <span className={`account-app-card__status account-app-card__status--${app.payment_status}`}>
+                      {app.payment_status === 'paid' ? 'Оплачено' : 'Ожидает'}
+                    </span>
                   </span>
                 )}
-                {isCurrentEdition && (
-                  <span className={`review-chip review-chip--${jurors.length > 0 && finished >= jurors.length ? 'finished' : 'none'}`}>
-                    {jurors.length > 0 && finished >= jurors.length ? 'Рассмотрено' : 'Не рассмотрено'}
-                  </span>
-                )}
-                {isCurrentEdition && <span className="app-row__jury">Жюри: {finished}/{jurors.length}</span>}
+                <span className="pl-cell">{cell(t1)}</span>
+                <span className="pl-cell">{cell(t2)}</span>
               </Link>
             );
           }

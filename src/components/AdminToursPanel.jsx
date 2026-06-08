@@ -270,69 +270,39 @@ export default function AdminToursPanel({ cycle, applications, reviewsByApp, jur
         </div>
       )}
 
-      {/* Results for the viewed tour. */}
-      {!selecting && (
+      {/* Send results to participants (per tour). The ranked list lives in the
+          pipeline table below; selection (with scores) is the tours-select mode. */}
+      {!selecting && viewTourFinalized && (
         <div className="tours-results">
-          <span className="account-section-label">Результаты · тур {viewTour}</span>
-          {viewTourFinalized && (
-            <div className="tours-send">
-              {!resultsSent ? (
-                <button type="button" className="btn-gold tours-btn" disabled={sending} onClick={() => sendResults(false)}>
-                  Отправить результаты участникам
-                </button>
-              ) : confirmResend ? (
-                <div className="tours-confirm">
-                  <span className="tours-confirm__text">Отправить результаты повторно всем участникам тура {viewTour}?</span>
-                  <div className="tours-panel__actions">
-                    <button type="button" className="btn-ink tours-btn" disabled={sending} onClick={() => setConfirmResend(false)}>
-                      Отмена
-                    </button>
-                    <button type="button" className="btn-gold tours-btn" disabled={sending} onClick={() => sendResults(true)}>
-                      Подтвердить отправку
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <span className="cycle-state cycle-state--open">Результаты отправлены</span>
-                  <button type="button" className="btn-ink tours-btn" disabled={sending} onClick={() => setConfirmResend(true)}>
-                    Отправить повторно
+          <div className="tours-send">
+            {!resultsSent ? (
+              <button type="button" className="btn-gold tours-btn" disabled={sending} onClick={() => sendResults(false)}>
+                Отправить результаты участникам · Тур {viewTour}
+              </button>
+            ) : confirmResend ? (
+              <div className="tours-confirm">
+                <span className="tours-confirm__text">Отправить результаты повторно всем участникам тура {viewTour}?</span>
+                <div className="tours-panel__actions">
+                  <button type="button" className="btn-ink tours-btn" disabled={sending} onClick={() => setConfirmResend(false)}>
+                    Отмена
                   </button>
-                </>
-              )}
-              {sendMsg && (
-                <span className={`cycle-note ${sendMsg.type === 'error' ? 'cycle-note--error' : ''}`}>{sendMsg.text}</span>
-              )}
-            </div>
-          )}
-          {rankedResults.length === 0 && <p className="cycle-note">Нет заявок</p>}
-          {rankedResults.length > 0 && (
-            <div className="tours-result tours-result--head">
-              <span className="tours-result__rank">#</span>
-              <span className="tours-result__name">Художник</span>
-              <span className="tours-result__score">Балл</span>
-              <span>Статус</span>
-            </div>
-          )}
-          {rankedResults.map((a, i) => {
-            const sc = scoreOf(a.id);
-            const o = outcome(a);
-            return (
-              <Link
-                key={a.id}
-                to={`/account/application/${a.id}`}
-                className={`tours-result ${a.standing === 'winner' ? 'tours-result--winner' : ''}`}
-              >
-                <span className="tours-result__rank">{i + 1}</span>
-                <span className="tours-result__name">
-                  <span className="tours-result__title">{applicant(a)}</span>
-                  {a.email && <span className="tours-result__sub">{a.email}</span>}
-                </span>
-                <span className="tours-result__score">{sc == null ? '—' : sc.toFixed(1)}</span>
-                <span className={`review-chip review-chip--${o.cls}`}>{o.label}</span>
-              </Link>
-            );
-          })}
+                  <button type="button" className="btn-gold tours-btn" disabled={sending} onClick={() => sendResults(true)}>
+                    Подтвердить отправку
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <span className="cycle-state cycle-state--open">Результаты отправлены</span>
+                <button type="button" className="btn-ink tours-btn" disabled={sending} onClick={() => setConfirmResend(true)}>
+                  Отправить повторно
+                </button>
+              </>
+            )}
+            {sendMsg && (
+              <span className={`cycle-note ${sendMsg.type === 'error' ? 'cycle-note--error' : ''}`}>{sendMsg.text}</span>
+            )}
+          </div>
         </div>
       )}
     </div>
