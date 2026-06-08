@@ -10,6 +10,7 @@ import AdminStageTracker from '../components/AdminStageTracker.jsx';
 import { getCycle, submissionsOpen } from '../lib/cycleRepo.js';
 import EditionTourResults from '../components/EditionTourResults.jsx';
 import EditionSummary from '../components/EditionSummary.jsx';
+import JurorReviewList from '../components/JurorReviewList.jsx';
 
 // Medal for top-3 placements.
 const medal = (p) => (p === 1 ? '🥇' : p === 2 ? '🥈' : p === 3 ? '🥉' : '🏆');
@@ -531,7 +532,17 @@ export default function Account() {
           <EditionTourResults edition={shownEdition} tour={archiveTab} />
         )}
 
-        {(!isJuror || (cycle && evaluationsOpen)) && (!archiveMode || archiveTab === 'apps') && (
+        {isJuror && cycle && evaluationsOpen && !appsLoading && (
+          <JurorReviewList
+            applications={applications}
+            reviewsByApp={reviewsByApp}
+            userId={user.id}
+            filesByApp={filesByApp}
+            tour={activeTour}
+          />
+        )}
+
+        {(!isJuror) && (!archiveMode || archiveTab === 'apps') && (
         <>
         <h2 style={{ margin: '40px 0 24px' }}>
           {isStaff ? 'Все заявки' : (pastApps.length ? t('account.currentApplication') : t('account.yourApplications'))}
