@@ -146,18 +146,19 @@ export default function ApplicationDetail() {
 
   return (
     <main className="apply-page account-page">
-      <div className="container">
+      <div className="container review-page">
         <Link to="/account" className="review-back">← Назад</Link>
         <div className="apply-head">
           <span className="eyebrow">- Заявка</span>
           <h1>{applicant}</h1>
         </div>
-        <p style={{ opacity: 0.7, marginTop: '-8px' }}>
-          {app.email}
-          <span className={`account-app-card__status account-app-card__status--${app.payment_status}`} style={{ marginLeft: '12px' }}>
+
+        <div className="detail-id">
+          <span className="detail-id__email">{app.email}</span>
+          <span className={`account-app-card__status account-app-card__status--${app.payment_status}`}>
             {app.payment_status === 'paid' ? 'Оплачено' : 'Ожидает оплаты'}
           </span>
-        </p>
+        </div>
         {metaParts.length > 0 && (
           <p className="detail-meta">
             {metaParts.map((p, i) => <span key={i}>{i > 0 && ' · '}{p}</span>)}
@@ -190,19 +191,22 @@ export default function ApplicationDetail() {
         )}
 
         {app.works?.length > 0 && (
-          <div className="review-works" style={{ marginTop: '24px' }}>
+          <div className="review-works">
             {app.works.map((w, i) => {
               const url = files[i + 1];
+              const meta = [w.year, w.media, w.size].filter(Boolean).join(' · ');
               return (
-                <figure className="review-work" key={i}>
-                  <figcaption>
-                    <span className="work-num">Работа {i + 1}</span>
-                    <strong>{w.title || '-'}</strong>
-                    {w.year ? `, ${w.year}` : ''}{w.media ? ` · ${w.media}` : ''}{w.size ? ` · ${w.size}` : ''}
-                    {w.desc ? <p>{w.desc}</p> : null}
-                  </figcaption>
+                <figure className="work" key={i}>
+                  <div className="work__plate">
+                    <span className="work__index">Работа {i + 1}</span>
+                    <h2 className="work__title">{w.title || 'Без названия'}</h2>
+                    {meta && <p className="work__meta">{meta}</p>}
+                    {w.desc && <p className="work__desc">{w.desc}</p>}
+                  </div>
                   {url ? (
-                    <a href={url} target="_blank" rel="noreferrer"><SmartImg src={imgScaled(url, 1400)} alt={w.title || ''} /></a>
+                    <a className="work__frame" href={url} target="_blank" rel="noreferrer">
+                      <SmartImg src={imgScaled(url, 1400)} alt={w.title || ''} />
+                    </a>
                   ) : (
                     <div className="review-work__noimg">Нет изображения</div>
                   )}
@@ -219,9 +223,12 @@ export default function ApplicationDetail() {
           // past editions' jurors are gone, so we rely on the snapshotted review rows).
           const pending = isCurrentEdition ? jurors.filter((j) => !reviewedIds.has(j.id)) : [];
           return (
-            <div className="detail-tour" key={t}>
-              <span className="account-section-label">Жюри · тур {t}</span>
-              <div className="account-app-card__reviews">
+            <section className="detail-tour" key={t}>
+              <div className="detail-tour__head">
+                <span className="account-section-label">Жюри · тур {t}</span>
+                <Link to={`/account/results/${app.id}/${t}`} className="detail-tour__link">Все оценки →</Link>
+              </div>
+              <div className="detail-tour__list">
                 {tReviews.length === 0 && pending.length === 0 && (
                   <span className="account-app-card__not-reviewed">Нет данных</span>
                 )}
@@ -256,10 +263,7 @@ export default function ApplicationDetail() {
                   </div>
                 ))}
               </div>
-              <Link to={`/account/results/${app.id}/${t}`} className="btn-ink account-app-card__action">
-                Оценки жюри · тур {t}
-              </Link>
-            </div>
+            </section>
           );
         })}
       </div>

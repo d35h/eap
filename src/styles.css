@@ -1253,11 +1253,26 @@ input, textarea, select { font-family: inherit; }
 .app-row__name { font-weight: 600; overflow-wrap: anywhere; }
 .app-row__email { font-size: 13px; color: var(--ink-soft); opacity: 0.75; overflow-wrap: anywhere; }
 .app-row__jury { font-size: 13px; color: var(--ink-soft); white-space: nowrap; }
-.detail-tour { margin-top: 24px; }
-.detail-ig { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 20px; }
-.detail-ig__link { color: var(--accent-deep); text-decoration: none; border-bottom: 1px solid var(--accent-deep); font-size: 14px; }
-.detail-meta { opacity: 0.7; font-size: 14px; }
-.detail-meta a { color: var(--accent-deep); text-decoration: none; border-bottom: 1px solid var(--accent-deep); }
+/* Application View — identity, meta, jury cards */
+.detail-id { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: -4px; }
+.detail-id__email { font-size: 0.98rem; color: var(--ink-soft); }
+.detail-meta { font-size: 14px; color: var(--ink-soft); margin: 12px 0 0; }
+.detail-meta a { color: var(--accent-deep); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+.detail-meta a:hover { border-bottom-color: var(--accent); }
+.detail-ig {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 22px;
+  padding: 16px 20px; border: 1px solid var(--border); border-radius: 14px; background: hsla(36, 33%, 99%, 0.6);
+}
+.detail-ig__link { color: var(--accent-deep); text-decoration: none; border-bottom: 1px solid transparent; font-size: 14px; transition: border-color 0.15s; }
+.detail-ig__link:hover { border-bottom-color: var(--accent); }
+.detail-tour {
+  margin-top: 18px; border: 1px solid var(--border); border-radius: 16px;
+  padding: 22px 24px; background: hsla(36, 33%, 99%, 0.7);
+}
+.detail-tour__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+.detail-tour__link { font-size: 13px; color: var(--accent-deep); text-decoration: none; white-space: nowrap; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+.detail-tour__link:hover { border-bottom-color: var(--accent); }
+.detail-tour__list { display: flex; flex-direction: column; }
 .work-num {
   display: block; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.2em;
   color: var(--accent-deep); font-weight: 700; margin-bottom: 4px;
