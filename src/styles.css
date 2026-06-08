@@ -1148,7 +1148,19 @@ input, textarea, select { font-family: inherit; }
 .tours-result--head .tours-result__score { color: var(--ink-soft); }
 
 /* Admin "Все заявки" filter bar */
-.app-filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0 0 22px; }
+.app-filters { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; margin: 0 0 24px; }
+.app-filters__search { border-radius: 999px !important; padding: 9px 16px !important; }
+/* Filter dimension = label + segmented control (connected toggle) */
+.filterset { display: flex; align-items: center; gap: 9px; }
+.filterset__label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-soft); }
+.segmented { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; overflow: hidden; background: var(--ivory-soft); }
+.segmented button {
+  border: 0; background: none; font: inherit; font-size: 0.82rem; color: var(--ink-soft);
+  padding: 7px 16px; cursor: pointer; transition: background 0.15s, color 0.15s; white-space: nowrap;
+}
+.segmented button + button { border-left: 1px solid var(--border); }
+.segmented button:hover:not(.is-active) { color: var(--ink); background: hsla(38, 40%, 90%, 0.6); }
+.segmented button.is-active { background: var(--accent-deep); color: var(--ivory); font-weight: 500; }
 .app-filters__search, .app-filters__select {
   font: inherit; font-size: 0.88rem; color: var(--ink);
   background: var(--ivory-soft); border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px;

@@ -560,17 +560,21 @@ export default function Account() {
             <SearchInput key={searchResetKey} onSearch={setDebouncedQ} placeholder="Поиск по имени или email" />
             {isCurrentEdition && (
               <>
-                <div className="app-filters__group">
-                  <span className="app-filters__label">Оплата</span>
-                  {[['all', 'Все'], ['paid', 'Оплаченные'], ['pending', 'Не оплаченные']].map(([v, l]) => (
-                    <button key={v} type="button" className={`tours-tab ${payFilter === v ? 'is-active' : ''}`} onClick={() => setPayFilter(v)}>{l}</button>
-                  ))}
+                <div className="filterset">
+                  <span className="filterset__label">Оплата</span>
+                  <div className="segmented">
+                    {[['all', 'Все'], ['paid', 'Оплаченные'], ['pending', 'Не оплаченные']].map(([v, l]) => (
+                      <button key={v} type="button" className={payFilter === v ? 'is-active' : ''} onClick={() => setPayFilter(v)}>{l}</button>
+                    ))}
+                  </div>
                 </div>
-                <div className="app-filters__group">
-                  <span className="app-filters__label">Оценка</span>
-                  {[['all', 'Все'], ['reviewed', 'Рассмотренные'], ['in_review', 'Не рассмотренные']].map(([v, l]) => (
-                    <button key={v} type="button" className={`tours-tab ${evalFilter === v ? 'is-active' : ''}`} onClick={() => setEvalFilter(v)}>{l}</button>
-                  ))}
+                <div className="filterset">
+                  <span className="filterset__label">Оценка</span>
+                  <div className="segmented">
+                    {[['all', 'Все'], ['reviewed', 'Рассмотренные'], ['in_review', 'Не рассмотренные']].map(([v, l]) => (
+                      <button key={v} type="button" className={evalFilter === v ? 'is-active' : ''} onClick={() => setEvalFilter(v)}>{l}</button>
+                    ))}
+                  </div>
                 </div>
               </>
             )}
