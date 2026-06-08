@@ -166,7 +166,7 @@ export default function ApplicationDetail() {
           <div className="detail-ig">
             {app.published_at ? (
               <>
-                <span className="cycle-state cycle-state--open">Опубликовано в Instagram</span>
+                <span className="cycle-state cycle-state--open">Опубликовано в Instagram и Facebook</span>
                 {app.instagram_url && (
                   <a href={app.instagram_url} target="_blank" rel="noreferrer" className="detail-ig__link">
                     Открыть пост ↗
@@ -175,7 +175,7 @@ export default function ApplicationDetail() {
               </>
             ) : (
               <button type="button" className="btn-gold tours-btn" disabled={publishing} onClick={publishIG}>
-                {publishing ? '…' : 'Опубликовать в Instagram'}
+                {publishing ? '…' : 'Опубликовать в Instagram и Facebook'}
               </button>
             )}
             {pubMsg && <span className={`cycle-note ${pubMsg.type === 'error' ? 'cycle-note--error' : ''}`}>{pubMsg.text}</span>}
