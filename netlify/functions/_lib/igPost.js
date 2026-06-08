@@ -155,7 +155,13 @@ async function fbPost(pageId, pageToken, { imageUrls, message }) {
     attached.push({ media_fbid: p.id });
   }
   const post = await fbCall(`${pageId}/feed`, { message, attached_media: attached, access_token: pageToken });
-  return post.id;
+  let url = `https://www.facebook.com/${post.id}`;
+  try {
+    const res = await fetch(`${FB}/${post.id}?fields=permalink_url&access_token=${pageToken}`);
+    const d = await res.json().catch(() => ({}));
+    if (d.permalink_url) url = d.permalink_url;
+  } catch { /* ignore */ }
+  return url;
 }
 
 // Publish a single image as a 24h story.
@@ -197,36 +203,46 @@ export async function publishApplication(admin, env, app) {
   const { data: signed } = await admin.storage.from('works').createSignedUrls(paths, 3600);
   const rawUrls = (signed || []).map((s) => s.signedUrl).filter(Boolean).slice(0, 10);
 
-  // 1) Feed carousel post — caption @-mentions + photo-tags the artist.
   const caption = buildCaption(app, cfg(env));
   const handle = igHandle(app.instagram) || undefined;
   const feedImages = rawUrls.map(igReadyUrl);
-  let post;
+  let igUrl = null;
+  let fbUrl = null;
+
+  // 1) Instagram feed carousel (caption @-mentions + photo-tags the artist).
+  //    Best-effort so a block/failure doesn't abort the Facebook post.
   try {
-    post = await igPublish(igUserId, token, { imageUrls: feedImages, caption, userTag: handle });
-  } catch (e) {
-    // A bad/private handle would be rejected — publish without the tag.
-    console.error('IG publish with tag failed, retrying without tag:', e?.message || e);
-    post = await igPublish(igUserId, token, { imageUrls: feedImages, caption });
-  }
-  await admin.from('applications')
-    .update({ published_at: new Date().toISOString(), instagram_url: post.permalink })
-    .eq('id', app.id);
-
-  // 2) One 24h story (first work) with name + @handle + footer. Best-effort.
-  if (env.IG_PUBLISH_STORIES !== 'false' && rawUrls[0]) {
+    let post;
     try {
-      const storyUrl = await buildStoryUrl(admin, app, rawUrls[0]);
-      await igPublishStory(igUserId, token, storyUrl);
-    } catch (e) { console.error('IG story failed:', e?.message || e); }
-  }
+      post = await igPublish(igUserId, token, { imageUrls: feedImages, caption, userTag: handle });
+    } catch (e) {
+      console.error('IG publish with tag failed, retrying without tag:', e?.message || e);
+      post = await igPublish(igUserId, token, { imageUrls: feedImages, caption });
+    }
+    igUrl = post.permalink;
 
-  // 3) Mirror the post to the Facebook Page (instagram shown as a URL). Best-effort.
+    // 2) One 24h story with name + @handle + footer (only if the feed worked).
+    if (env.IG_PUBLISH_STORIES !== 'false' && rawUrls[0]) {
+      try {
+        const storyUrl = await buildStoryUrl(admin, app, rawUrls[0]);
+        await igPublishStory(igUserId, token, storyUrl);
+      } catch (e) { console.error('IG story failed:', e?.message || e); }
+    }
+  } catch (e) { console.error('IG feed failed:', e?.message || e); }
+
+  // 3) Facebook Page post (instagram shown as a URL). Best-effort, independent.
   if (env.FB_PAGE_ID && env.FB_PAGE_TOKEN) {
     try {
       const fbMessage = buildCaption(app, cfg(env), { igUrl: true });
-      await fbPost(env.FB_PAGE_ID, env.FB_PAGE_TOKEN, { imageUrls: feedImages, message: fbMessage });
+      fbUrl = await fbPost(env.FB_PAGE_ID, env.FB_PAGE_TOKEN, { imageUrls: feedImages, message: fbMessage });
     } catch (e) { console.error('FB publish failed:', e?.message || e); }
   }
-  return { status: 'published', postId: post.id, permalink: post.permalink };
+
+  if (igUrl || fbUrl) {
+    await admin.from('applications')
+      .update({ published_at: new Date().toISOString(), instagram_url: igUrl, facebook_url: fbUrl })
+      .eq('id', app.id);
+    return { status: 'published', permalink: igUrl, facebookUrl: fbUrl };
+  }
+  return { status: 'error', error: 'all platforms failed' };
 }
