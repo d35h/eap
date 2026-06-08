@@ -1595,13 +1595,15 @@ input, textarea, select { font-family: inherit; }
 
 /* ── Juror evaluation: clearer requirements + completion ── */
 .review-intro {
+  grid-column: 1 / -1;
   background: hsla(40, 50%, 95%, 0.7); border-left: 3px solid hsl(40, 60%, 52%);
-  border-radius: 6px; padding: 12px 16px; margin: 0 0 18px;
+  border-radius: 6px; padding: 12px 16px; margin: 0 0 6px;
 }
 .review-intro p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--ink); }
 .review-progress { margin-top: 8px !important; color: var(--ink-soft); }
 .review-finish-hint {
-  margin: 16px 0 8px; font-size: 13px; line-height: 1.5; color: hsl(30, 45%, 38%);
+  grid-column: 1 / -1;
+  margin: 8px 0 0; font-size: 13px; line-height: 1.5; color: hsl(30, 45%, 38%);
 }
 .review-done {
   display: flex; align-items: flex-start; gap: 14px;
