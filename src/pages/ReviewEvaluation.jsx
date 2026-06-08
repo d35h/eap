@@ -104,6 +104,8 @@ export default function ReviewEvaluation() {
 
   const locked = status === 'finished' && !unlocked;
   const complete = isEvaluationComplete(scores);
+  const doneCount = REVIEW_CRITERIA.filter((c) => isCriterionValid(scores[c.key])).length;
+  const incomplete = REVIEW_CRITERIA.filter((c) => !isCriterionValid(scores[c.key]));
 
   const setEntry = (key, patch) =>
     setScores((prev) => ({ ...prev, [key]: { ...prev[key], ...patch } }));
@@ -171,11 +173,29 @@ export default function ReviewEvaluation() {
         )}
 
         {locked && (
-          <p className="review-locked">Оценка завершена. Чтобы изменить её, обратитесь к администратору.</p>
+          <div className="review-done">
+            <span className="review-done__icon" aria-hidden="true">✓</span>
+            <div>
+              <strong>Вы завершили оценку этой заявки.</strong>
+              <p>Чтобы изменить оценку, обратитесь к администратору.</p>
+            </div>
+          </div>
         )}
 
         {ready && (
           <div className="review-eval">
+            {!locked && (
+              <div className="review-intro">
+                <p>
+                  Оцените заявку по <strong>двум критериям</strong>. По каждому поставьте оценку (0–{MAX_RATING})
+                  и напишите комментарий не короче <strong>{MIN_REVIEW_CHARS} символов</strong>.
+                  Когда оба критерия заполнены — нажмите «Завершить оценку».
+                </p>
+                <p className="review-progress">
+                  Заполнено критериев: <strong>{doneCount}</strong> из {REVIEW_CRITERIA.length}
+                </p>
+              </div>
+            )}
             <nav className="review-tabs">
               {REVIEW_CRITERIA.map((c) => {
                 const ok = isCriterionValid(scores[c.key]);
@@ -218,26 +238,35 @@ export default function ReviewEvaluation() {
                   onChange={(e) => setEntry(active, { text: e.target.value })}
                 />
                 <div className={`review-counter ${textLen >= MIN_REVIEW_CHARS ? 'is-ok' : ''}`}>
-                  {textLen} / {MIN_REVIEW_CHARS}
+                  {textLen >= MIN_REVIEW_CHARS
+                    ? '✓ Комментарий достаточной длины'
+                    : `Ещё ${MIN_REVIEW_CHARS - textLen} символов (минимум ${MIN_REVIEW_CHARS})`}
                 </div>
               </div>
             </div>
 
             {!locked && (
-              <div className="review-actions">
-                <button type="button" className="btn-ink" onClick={() => persist(false)} disabled={busy}>
-                  Сохранить черновик
-                </button>
-                <button
-                  type="button"
-                  className="btn-gold"
-                  onClick={() => persist(true)}
-                  disabled={busy || !complete}
-                  title={complete ? '' : 'Заполните все критерии (оценка и текст не короче ' + MIN_REVIEW_CHARS + ' символов)'}
-                >
-                  Завершить оценку
-                </button>
-              </div>
+              <>
+                {!complete && (
+                  <p className="review-finish-hint">
+                    Чтобы завершить оценку, добавьте комментарий (≥{MIN_REVIEW_CHARS} символов)
+                    {incomplete.length === REVIEW_CRITERIA.length ? ' по обоим критериям' : ` по критерию: ${incomplete.map((c) => c.title).join(', ')}`}.
+                  </p>
+                )}
+                <div className="review-actions">
+                  <button type="button" className="btn-ink" onClick={() => persist(false)} disabled={busy}>
+                    Сохранить черновик
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-gold"
+                    onClick={() => persist(true)}
+                    disabled={busy || !complete}
+                  >
+                    {complete ? 'Завершить оценку' : `Завершить оценку (${doneCount}/${REVIEW_CRITERIA.length})`}
+                  </button>
+                </div>
+              </>
             )}
 
             {msg && <p className={`review-msg review-msg--${msg.type}`}>{msg.text}</p>}
