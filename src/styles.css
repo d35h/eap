@@ -2486,3 +2486,19 @@ input, textarea, select { font-family: inherit; }
 
 .jurors-view { margin-top: 4px; }
 .jurors-view .review-back { margin-bottom: 16px; }
+
+/* Apply CTA — closed state (open call not accepting applications) */
+.header-apply--closed {
+  display: inline-flex; align-items: center; padding: 11px 22px; border-radius: 999px;
+  border: 1px solid hsla(220, 10%, 55%, 0.32); background: hsla(220, 12%, 34%, 0.22);
+  color: hsla(36, 16%, 84%, 0.55); font-size: 0.66rem; text-transform: uppercase;
+  letter-spacing: 0.18em; white-space: nowrap; cursor: not-allowed; box-shadow: none;
+}
+.header-apply--closed:hover, .header-apply--closed:active {
+  background: hsla(220, 12%, 34%, 0.22); color: hsla(36, 16%, 84%, 0.55);
+  border-color: hsla(220, 10%, 55%, 0.32); box-shadow: none; transform: none;
+}
+.mobile-menu__closed {
+  display: block; font-family: var(--font-display); font-size: 1.15rem;
+  color: hsla(36, 18%, 88%, 0.42); cursor: not-allowed;
+}

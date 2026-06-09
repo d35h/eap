@@ -17,6 +17,7 @@ export const translations = {
       contact: 'Контакты',
       faq: 'Часто задаваемые вопросы',
       apply: 'Подать заявку',
+      applyClosed: 'Приём закрыт',
     },
     faq: {
       eyebrow: '- FAQ',
@@ -358,6 +359,7 @@ export const translations = {
       contact: 'Contact',
       faq: 'FAQ',
       apply: 'Submit',
+      applyClosed: 'Closed',
     },
     faq: {
       eyebrow: '- FAQ',
@@ -692,6 +694,7 @@ export const translations = {
       contact: 'Байланыс',
       faq: 'Жиі қойылатын сұрақтар',
       apply: 'Өтінім беру',
+      applyClosed: 'Жабық',
     },
     faq: {
       eyebrow: '- FAQ',
@@ -1025,6 +1028,7 @@ export const translations = {
       contact: '联系',
       faq: '常见问题',
       apply: '提交',
+      applyClosed: '已关闭',
     },
     faq: {
       eyebrow: '- 常见问题',

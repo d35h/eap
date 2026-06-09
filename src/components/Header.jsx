@@ -5,6 +5,7 @@ import { LANGUAGES } from '../i18n';
 import { isSupabaseConfigured, supabase } from '../lib/supabase.js';
 import { useAuth } from '../hooks/useAuth.jsx';
 import { signOut } from '../lib/auth.js';
+import { submissionsOpen } from '../lib/cycleRepo.js';
 
 export default function Header() {
   const { lang, setLang, t } = useTranslation();
@@ -12,6 +13,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [displayName, setDisplayName] = useState('');
+  const [submOpen, setSubmOpen] = useState(true); // fail-open until known
   const accountRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -33,6 +35,13 @@ export default function Header() {
     })();
     return () => { cancelled = true; };
   }, [user]);
+
+  // Reflect whether the open call is currently accepting applications.
+  useEffect(() => {
+    let cancelled = false;
+    submissionsOpen().then((open) => { if (!cancelled) setSubmOpen(open); });
+    return () => { cancelled = true; };
+  }, []);
 
   // Close the account dropdown on outside click
   useEffect(() => {
@@ -145,9 +154,19 @@ export default function Header() {
             )}
 
             {!user && (
-              <Link to="/apply" className="btn-gold header-apply">
-                {t('nav.apply')}
-              </Link>
+              submOpen ? (
+                <Link to="/apply" className="btn-gold header-apply">
+                  {t('nav.apply')}
+                </Link>
+              ) : (
+                <span
+                  className="header-apply header-apply--closed"
+                  aria-disabled="true"
+                  title={t('opencall.closedTitle')}
+                >
+                  {t('nav.applyClosed')}
+                </span>
+              )
             )}
 
             <button
@@ -185,9 +204,15 @@ export default function Header() {
             )
           )}
           {!user && (
-            <Link to="/apply" onClick={() => setMenuOpen(false)} className="btn-gold" style={{ marginTop: '24px' }}>
-              {t('nav.apply')}
-            </Link>
+            submOpen ? (
+              <Link to="/apply" onClick={() => setMenuOpen(false)} className="btn-gold" style={{ marginTop: '24px' }}>
+                {t('nav.apply')}
+              </Link>
+            ) : (
+              <span className="mobile-menu__closed" aria-disabled="true" style={{ marginTop: '24px' }}>
+                {t('opencall.closedTitle')}
+              </span>
+            )
           )}
           <div className="mobile-menu__lang" role="group" aria-label="Language">
             {LANGUAGES.map((l, i) => (
