@@ -137,7 +137,7 @@ input, textarea, select { font-family: inherit; }
 }
 .account-dropdown-item:hover { color: var(--accent); background: hsla(38, 38%, 56%, 0.1); }
 
-/* Premium "Войти" button on the dark header */
+/* Premium "Войти" button on the dark header — quiet secondary outline */
 .header-login {
   display: inline-flex; align-items: center; padding: 9px 20px; border-radius: 999px;
   border: 1px solid hsla(38, 38%, 56%, 0.45); color: var(--accent-soft);
@@ -145,6 +145,30 @@ input, textarea, select { font-family: inherit; }
   white-space: nowrap; transition: border-color 0.25s, color 0.25s, background 0.25s;
 }
 .header-login:hover, .header-login.active { border-color: var(--accent); color: var(--accent); background: hsla(38, 38%, 56%, 0.1); }
+
+/* "Подать заявку" — the primary CTA: a solid gold pill with a soft glow */
+.header-apply {
+  border-radius: 999px; padding: 11px 24px; border: 1px solid var(--accent);
+  background: linear-gradient(180deg, var(--accent-soft), var(--accent));
+  color: hsl(220, 14%, 9%); font-size: 0.66rem;
+  box-shadow: 0 2px 18px hsla(38, 55%, 52%, 0.28), inset 0 1px 0 hsla(40, 70%, 88%, 0.4);
+  transition: background 0.25s, box-shadow 0.25s, transform 0.12s;
+}
+.header-apply:hover {
+  background: linear-gradient(180deg, hsl(38, 44%, 78%), var(--accent-soft));
+  color: hsl(220, 14%, 9%); border-color: var(--accent-soft);
+  box-shadow: 0 6px 26px hsla(38, 58%, 56%, 0.42), inset 0 1px 0 hsla(40, 70%, 90%, 0.5);
+  transform: translateY(-1px);
+}
+.header-apply:active { transform: translateY(0) scale(0.98); }
+
+/* The apply CTA inside the mobile menu — solid gold to match */
+.mobile-menu .btn-gold {
+  background: linear-gradient(180deg, var(--accent-soft), var(--accent)) !important;
+  color: hsl(220, 14%, 9%) !important; border-color: var(--accent) !important;
+  border-radius: 999px; text-align: center; justify-content: center;
+  box-shadow: 0 4px 22px hsla(38, 55%, 52%, 0.3);
+}
 
 /* ─── Buttons ─── */
 .btn-gold {
