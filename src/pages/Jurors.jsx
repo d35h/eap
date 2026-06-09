@@ -10,6 +10,7 @@ export default function Jurors() {
   const isAdmin = user?.app_metadata?.role === 'admin';
 
   const [jurors, setJurors] = useState([]);
+  const [ready, setReady] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -31,7 +32,9 @@ export default function Jurors() {
         headers: { Authorization: `Bearer ${session?.access_token || ''}` },
       });
       const d = await res.json().catch(() => ({}));
-      if (!cancelled && Array.isArray(d.jurors)) setJurors(d.jurors);
+      if (cancelled) return;
+      if (Array.isArray(d.jurors)) setJurors(d.jurors);
+      setReady(true);
     })();
     return () => { cancelled = true; };
   }, [isAdmin, refresh]);
@@ -88,44 +91,58 @@ export default function Jurors() {
   return (
     <main className="apply-page account-page">
       <div className="container">
-        <Link to="/account" className="review-back">← Назад</Link>
+        <Link to="/account" className="review-back">← Панель управления</Link>
         <div className="apply-head">
           <span className="eyebrow">Администратор</span>
-          <h1>Жюри</h1>
+          <h1>Состав жюри{ready && jurors.length > 0 && <span className="head-count">{jurors.length}</span>}</h1>
         </div>
 
-        <form className="invite-jury" onSubmit={invite}>
-          <input type="text" placeholder="Имя жюри" value={name} onChange={(e) => setName(e.target.value)} autoComplete="off" />
-          <input type="email" placeholder="email@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="off" />
-          <button type="submit" className="btn-gold" disabled={busy}>{busy ? '…' : 'Пригласить'}</button>
-        </form>
-        {msg && <p className={`invite-jury__msg invite-jury__msg--${msg.type === 'ok' ? 'ok' : 'error'}`} style={{ marginTop: '12px' }}>{msg.text}</p>}
-
-        <h2 style={{ margin: '36px 0 16px' }}>Список жюри</h2>
-        {jurors.length === 0 && <p>Жюри пока нет.</p>}
-        <div className="jurors-list">
-          {jurors.map((j) => (
-            <div key={j.id} className="review-row">
-              <span className="review-row__email">
-                <span className="review-row__name">{j.name || j.email}</span>
-                {j.name && <span className="review-row__sub">{j.email}</span>}
-              </span>
-              <div className="review-row__actions">
-                <button
-                  type="button"
-                  className="review-row__btn review-row__btn--ghost"
-                  disabled={busy}
-                  title="Отправит письмо со ссылкой для установки пароля"
-                  onClick={() => activate(j)}
-                >
-                  Сбросить пароль
-                </button>
-                <button type="button" className="review-row__btn review-row__btn--danger" disabled={busy} onClick={() => remove(j)}>
-                  Удалить
-                </button>
+        {/* The jurors, right away */}
+        {!ready ? (
+          <div className="jurors-list" aria-busy="true">
+            {[0, 1, 2].map((i) => <div key={i} className="juror-card juror-card--skeleton" />)}
+          </div>
+        ) : jurors.length === 0 ? (
+          <div className="empty-state">
+            <p className="empty-state__title">В жюри пока никого нет</p>
+            <p className="empty-state__sub">Пригласите первого члена жюри ниже — он получит письмо со ссылкой для входа.</p>
+          </div>
+        ) : (
+          <div className="jurors-list">
+            {jurors.map((j) => (
+              <div key={j.id} className="juror-card">
+                <span className="juror-card__id">
+                  <span className="juror-card__name">{j.name || j.email}</span>
+                  {j.name && <span className="juror-card__email">{j.email}</span>}
+                </span>
+                <div className="juror-card__actions">
+                  <button
+                    type="button"
+                    className="review-row__btn review-row__btn--ghost"
+                    disabled={busy}
+                    title="Отправит письмо со ссылкой для установки пароля"
+                    onClick={() => activate(j)}
+                  >
+                    Сбросить пароль
+                  </button>
+                  <button type="button" className="review-row__btn review-row__btn--danger" disabled={busy} onClick={() => remove(j)}>
+                    Удалить
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        )}
+
+        {/* Invite — secondary action */}
+        <div className="invite-card">
+          <span className="invite-card__label">Пригласить в жюри</span>
+          <form className="invite-jury" onSubmit={invite}>
+            <input type="text" placeholder="Имя" value={name} onChange={(e) => setName(e.target.value)} autoComplete="off" />
+            <input type="email" placeholder="email@example.com" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="off" />
+            <button type="submit" className="btn-gold" disabled={busy}>{busy ? '…' : 'Пригласить'}</button>
+          </form>
+          {msg && <p className={`invite-jury__msg invite-jury__msg--${msg.type === 'ok' ? 'ok' : 'error'}`}>{msg.text}</p>}
         </div>
       </div>
     </main>

@@ -2419,3 +2419,39 @@ input, textarea, select { font-family: inherit; }
 }
 @keyframes ig-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .ig-publish-btn__spin { animation-duration: 1.4s; } }
+
+/* ── Jurors management — list-first, premium ── */
+.apply-head h1 .head-count {
+  display: inline-flex; align-items: center; justify-content: center; vertical-align: middle;
+  margin-left: 14px; min-width: 30px; height: 30px; padding: 0 9px; border-radius: 999px;
+  font-family: var(--font-mono); font-size: 0.82rem; font-weight: 500; font-variant-numeric: lining-nums tabular-nums;
+  background: hsla(38, 40%, 88%, 0.6); color: var(--accent-deep); transform: translateY(-4px);
+}
+.jurors-list { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+.juror-card {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px 20px; flex-wrap: wrap;
+  padding: 16px 22px; border: 1px solid var(--border); border-radius: 14px;
+  background: hsla(36, 33%, 99%, 0.7); transition: border-color 0.2s, box-shadow 0.2s;
+}
+.juror-card:hover { border-color: hsl(35, 17%, 80%); box-shadow: 0 4px 16px hsla(30, 24%, 16%, 0.05); }
+.juror-card__id { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.juror-card__name { font-weight: 500; font-size: 1.02rem; color: var(--ink); line-height: 1.2; }
+.juror-card__email { font-size: 0.84rem; color: var(--ink-soft); }
+.juror-card__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.juror-card--skeleton {
+  height: 66px; border-style: dashed; background: hsla(36, 30%, 97%, 0.5);
+  animation: jcard-pulse 1.3s ease-in-out infinite;
+}
+@keyframes jcard-pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.85; } }
+@media (prefers-reduced-motion: reduce) { .juror-card--skeleton { animation: none; } }
+
+.invite-card {
+  margin-top: 30px; padding: 22px 24px; border: 1px solid var(--border); border-radius: 16px;
+  background: linear-gradient(180deg, hsla(40, 40%, 99%, 0.7), hsla(38, 28%, 98%, 0.45));
+}
+.invite-card__label {
+  display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ink-soft); margin-bottom: 14px;
+}
+.invite-card .invite-jury { margin: 0; padding: 0; border: 0; background: none; border-radius: 0; }
+.invite-card .invite-jury__msg { margin: 12px 0 0; }
