@@ -12,6 +12,7 @@ import EditionTourResults from '../components/EditionTourResults.jsx';
 import EditionSummary from '../components/EditionSummary.jsx';
 import JurorReviewList from '../components/JurorReviewList.jsx';
 import EditionGallery from '../components/EditionGallery.jsx';
+import JuryManager from '../components/JuryManager.jsx';
 import ArtistArchive from '../components/ArtistArchive.jsx';
 import SearchInput from '../components/SearchInput.jsx';
 import SmartImg from '../components/SmartImg.jsx';
@@ -81,6 +82,7 @@ export default function Account() {
   const deadlinePassed = cycle?.submissions_deadline && new Date(cycle.submissions_deadline) < new Date();
   const submissionsClosed = !cycle?.submissions_open || deadlinePassed;
   const [showArchive, setShowArchive] = useState(false);
+  const [showJurors, setShowJurors] = useState(false);
   const [editionYears, setEditionYears] = useState({}); // edition → year
   const [archiveTab, setArchiveTab] = useState('apps'); // 'apps' | 1 | 2
   const archiveMode = isAdmin && showArchive && !isCurrentEdition;
@@ -478,7 +480,14 @@ export default function Account() {
             {L('signOut', 'Выйти')}
           </button>
           {isAdmin && (
-            <Link to="/account/jurors" className="btn-ink">Жюри</Link>
+            <button
+              type="button"
+              className={`btn-ink ${showJurors ? 'is-active' : ''}`}
+              aria-pressed={showJurors}
+              onClick={() => { setShowJurors((s) => !s); setShowArchive(false); }}
+            >
+              Жюри
+            </button>
           )}
           {isAdmin && currentEdition > 1 && (
             <button
@@ -488,6 +497,7 @@ export default function Account() {
               onClick={() => {
                 const next = !showArchive;
                 setShowArchive(next);
+                setShowJurors(false);
                 setViewEdition(null); // open to the gallery; close resets to current
                 setArchiveTab('apps');
               }}
@@ -497,6 +507,16 @@ export default function Account() {
           )}
         </div>
 
+        {isAdmin && showJurors && (
+          <div className="jurors-view">
+            <button type="button" className="review-back" onClick={() => setShowJurors(false)}>
+              ← Панель управления
+            </button>
+            <JuryManager />
+          </div>
+        )}
+
+        {!showJurors && (<>
         {!isStaff && subsOpen && currentApps.length === 0 && (
           <div className="apply-cta">
             <p className="apply-cta__text">{t('account.applyPrompt')}</p>
@@ -887,6 +907,7 @@ export default function Account() {
         {renderPager()}
         </>
         )}
+        </>)}
       </div>
     </main>
   );
