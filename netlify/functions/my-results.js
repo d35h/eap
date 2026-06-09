@@ -34,10 +34,11 @@ export async function handleMyResults({ admin }, { token }) {
     });
   }
 
-  // Winner places: rank among all winners by tour-2 mean total score.
-  const { data: allWinners } = await admin.from('applications').select('id').eq('standing', 'winner');
+  // Winner places: rank winners by tour-2 mean total score, but ONLY against the
+  // other winners of the SAME edition — never pooled across editions.
+  const { data: allWinners } = await admin.from('applications').select('id, edition').eq('standing', 'winner');
   const winnerIds = (allWinners || []).map((w) => w.id);
-  let placeByApp = new Map();
+  const placeByApp = new Map();
   if (winnerIds.length) {
     const { data: wrevs } = await admin
       .from('application_reviews').select('application_id, scores, status')
@@ -46,12 +47,15 @@ export async function handleMyResults({ admin }, { token }) {
     (wrevs || []).filter((r) => r.status === 'finished').forEach((r) => {
       (totals[r.application_id] ||= []).push(reviewTotal(r.scores));
     });
-    const scored = winnerIds.map((wid) => ({
-      id: wid,
-      score: totals[wid]?.length ? totals[wid].reduce((a, b) => a + b, 0) / totals[wid].length : -1,
-    }));
-    scored.sort((a, b) => b.score - a.score);
-    placeByApp = new Map(scored.map((s, i) => [s.id, i + 1]));
+    const meanScore = (wid) => (totals[wid]?.length ? totals[wid].reduce((a, b) => a + b, 0) / totals[wid].length : -1);
+    const byEdition = {};
+    (allWinners || []).forEach((w) => { (byEdition[w.edition || 1] ||= []).push(w.id); });
+    Object.values(byEdition).forEach((ids) => {
+      ids
+        .map((wid) => ({ id: wid, score: meanScore(wid) }))
+        .sort((a, b) => b.score - a.score)
+        .forEach((s, i) => placeByApp.set(s.id, i + 1));
+    });
   }
 
   const currentEdition = cyc?.current_edition || 1;
