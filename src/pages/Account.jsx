@@ -721,9 +721,18 @@ export default function Account() {
                   return (
                     <li key={i} className="account-work">
                       {url ? (
-                        <a href={url} target="_blank" rel="noreferrer" className="account-work__thumb">
-                          <SmartImg src={imgThumb(url, 400)} alt={w.title || ''} />
-                        </a>
+                        isStaff ? (
+                          // Staff inspect works at full size in a new tab.
+                          <a href={url} target="_blank" rel="noreferrer" className="account-work__thumb">
+                            <SmartImg src={imgThumb(url, 400)} alt={w.title || ''} />
+                          </a>
+                        ) : (
+                          // Artists see their own works inline only — no raw image link,
+                          // so the platform can't be used as image hosting.
+                          <span className="account-work__thumb account-work__thumb--static">
+                            <SmartImg src={imgThumb(url, 400)} alt={w.title || ''} />
+                          </span>
+                        )
                       ) : (
                         <span className="account-work__thumb account-work__thumb--empty" aria-hidden="true" />
                       )}

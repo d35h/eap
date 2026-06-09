@@ -2480,3 +2480,5 @@ input, textarea, select { font-family: inherit; }
   display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
 }
 .auth-card__submit--ghost:hover { background: hsla(36, 20%, 92%, 0.55); box-shadow: none; }
+
+.account-work__thumb--static { cursor: default; }
