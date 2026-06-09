@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import Landing from './pages/Landing.jsx';
@@ -18,11 +18,19 @@ import AppResults from './pages/AppResults.jsx';
 import ApplicationDetail from './pages/ApplicationDetail.jsx';
 import Jurors from './pages/Jurors.jsx';
 
-// Прокрутка наверх при смене страницы
+// On route change, jump to the top of the new page INSTANTLY. The global
+// `scroll-behavior: smooth` is for in-page anchor links — for page navigation it
+// would animate the reset (landing you mid-page), so we override it to 'auto'
+// here. useLayoutEffect runs before paint, so there's no flash of the old scroll.
 function ScrollToTop() {
   const { pathname } = useLocation();
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (window.location.hash) return; // let anchor targets handle their own scroll
+    const html = document.documentElement;
+    const prev = html.style.scrollBehavior;
+    html.style.scrollBehavior = 'auto';
     window.scrollTo(0, 0);
+    html.style.scrollBehavior = prev;
   }, [pathname]);
   return null;
 }
