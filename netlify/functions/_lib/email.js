@@ -204,6 +204,53 @@ export function juryInviteEmail(link) {
   };
 }
 
+// Localised copy for the password-reset email (sent by us via Resend, with a
+// recovery link generated server-side — never Supabase's default email).
+const RESET_COPY = {
+  ru: {
+    subject: 'Eurasian Art Platform · Сброс пароля',
+    title: 'Сброс пароля',
+    body: 'Вы запросили сброс пароля для кабинета Eurasian Art Platform. Нажмите кнопку, чтобы задать новый пароль. Если вы не запрашивали сброс — просто игнорируйте это письмо.',
+    button: 'Задать новый пароль',
+    fallback: 'Если кнопка не работает, откройте ссылку:',
+  },
+  en: {
+    subject: 'Eurasian Art Platform · Reset your password',
+    title: 'Reset your password',
+    body: 'You requested a password reset for your Eurasian Art Platform account. Click the button below to set a new password. If you didn’t request this, simply ignore this email.',
+    button: 'Set a new password',
+    fallback: 'If the button does not work, open this link:',
+  },
+  kz: {
+    subject: 'Eurasian Art Platform · Құпиясөзді қалпына келтіру',
+    title: 'Құпиясөзді қалпына келтіру',
+    body: 'Сіз Eurasian Art Platform кабинеті үшін құпиясөзді қалпына келтіруді сұрадыңыз. Жаңа құпиясөз орнату үшін түймені басыңыз. Егер сұрамаған болсаңыз — бұл хатты елемеңіз.',
+    button: 'Жаңа құпиясөз орнату',
+    fallback: 'Түйме жұмыс істемесе, сілтемені ашыңыз:',
+  },
+  zh: {
+    subject: 'Eurasian Art Platform · 重置密码',
+    title: '重置密码',
+    body: '您请求重置 Eurasian Art Platform 账户的密码。点击下方按钮设置新密码。如果这不是您本人操作，请忽略此邮件。',
+    button: '设置新密码',
+    fallback: '如果按钮无法使用，请打开此链接：',
+  },
+};
+
+export function passwordResetEmail(link, lang) {
+  const c = RESET_COPY[lang] || RESET_COPY.en;
+  return {
+    subject: c.subject,
+    html: shell({
+      title: c.title,
+      bodyHtml: para(c.body, { gap: 0 }),
+      button: c.button,
+      link,
+      fallback: c.fallback,
+    }),
+  };
+}
+
 // Branded "application paid" email. mode: 'invite' (new) | 'login' (returning).
 export function paidEmailHtml(link, lang, mode) {
   const c = emailCopy(lang);

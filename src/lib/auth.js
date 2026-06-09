@@ -17,9 +17,12 @@ export async function setPassword(password) {
   if (error) throw new Error(error.message);
 }
 
-export async function requestPasswordReset(email) {
-  if (!supabase) throw new Error('Auth not configured');
-  const redirectTo = `${window.location.origin}/set-password`;
-  const { error } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), { redirectTo });
-  if (error) throw new Error(error.message);
+// Reset is sent by us (Resend, branded) — a Netlify function generates the
+// recovery link server-side. Always resolves; the endpoint is enumeration-safe.
+export async function requestPasswordReset(email, lang) {
+  await fetch('/.netlify/functions/request-password-reset', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email.trim().toLowerCase(), lang }),
+  });
 }

@@ -5,7 +5,7 @@ import { isSupabaseConfigured } from '../lib/supabase.js';
 import { requestPasswordReset } from '../lib/auth.js';
 
 export default function ForgotPassword() {
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ export default function ForgotPassword() {
     if (!isSupabaseConfigured()) { setError(t('account.notConfigured')); return; }
     setLoading(true);
     try {
-      await requestPasswordReset(email);
+      await requestPasswordReset(email, lang);
       setSent(true); // neutral confirmation regardless of whether the email exists
     } catch {
       // Don't leak whether the account exists — show the same confirmation.
