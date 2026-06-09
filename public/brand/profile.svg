@@ -1,13 +1,31 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000">
-  <rect width="1000" height="1000" fill="#121417"/>
-  <circle cx="500" cy="500" r="430" fill="none" stroke="#c2a063" stroke-width="2" opacity="0.5"/>
-  <text x="500" y="510" text-anchor="middle"
-        font-family="Georgia, 'Times New Roman', serif" font-size="300" font-style="italic"
-        fill="#c2a063">EAP</text>
-  <text x="500" y="640" text-anchor="middle"
-        font-family="Arial, sans-serif" font-size="42" letter-spacing="14"
-        fill="#f0ece4" opacity="0.85">EURASIAN ART</text>
-  <text x="500" y="700" text-anchor="middle"
-        font-family="Arial, sans-serif" font-size="42" letter-spacing="14"
-        fill="#f0ece4" opacity="0.85">PLATFORM</text>
+  <defs>
+    <radialGradient id="bg" cx="0.5" cy="0.42" r="0.75">
+      <stop offset="0" stop-color="#16191e"/>
+      <stop offset="1" stop-color="#0c0e10"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.4" r="0.5">
+      <stop offset="0" stop-color="#c2a063" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#c2a063" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0.5">
+      <stop offset="0" stop-color="#ecd49a"/>
+      <stop offset="0.55" stop-color="#cca571"/>
+      <stop offset="1" stop-color="#a8814a"/>
+    </linearGradient>
+    <linearGradient id="ivory" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f1e8"/>
+      <stop offset="1" stop-color="#dad2c3"/>
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="1000" fill="url(#bg)"/>
+  <rect width="1000" height="1000" fill="url(#glow)"/>
+  <circle cx="500" cy="500" r="452" fill="none" stroke="url(#gold)" stroke-width="1.5" opacity="0.55"/>
+  <circle cx="500" cy="500" r="438" fill="none" stroke="#2a2519" stroke-width="1"/>
+
+  <text x="500" y="498" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif"
+        font-weight="400" font-size="300" letter-spacing="-6" fill="url(#ivory)">EAP</text>
+  <rect x="440" y="566" width="120" height="2" fill="url(#gold)"/>
+  <text x="500" y="638" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif"
+        font-size="33" letter-spacing="11" fill="#cca773">EURASIAN ART PLATFORM</text>
 </svg>
