@@ -2390,3 +2390,11 @@ input, textarea, select { font-family: inherit; }
 .cselect__opt.is-current { color: var(--accent-deep); font-weight: 500; }
 .cselect__opt.is-pinned + .cselect__opt:not(.is-pinned) { border-top: 1px solid var(--border); margin-top: 5px; padding-top: 14px; }
 .cselect__check { color: var(--accent-deep); font-size: 13px; }
+
+/* Archive: active nav state + sub-page header */
+.account-page .account-actions .btn-ink.is-active {
+  border-color: var(--accent); color: var(--accent-deep); background: hsla(38, 40%, 90%, 0.55);
+}
+.archive-view { margin-top: 4px; }
+.archive-view .review-back { margin-bottom: 16px; }
+.archive-view .apply-head { margin-bottom: 6px; }

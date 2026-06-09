@@ -483,7 +483,8 @@ export default function Account() {
           {isAdmin && currentEdition > 1 && (
             <button
               type="button"
-              className="btn-ink"
+              className={`btn-ink ${showArchive ? 'is-active' : ''}`}
+              aria-pressed={showArchive}
               onClick={() => {
                 const next = !showArchive;
                 setShowArchive(next);
@@ -491,7 +492,7 @@ export default function Account() {
                 setArchiveTab('apps');
               }}
             >
-              {showArchive ? 'Закрыть архив' : 'Архив биеннале'}
+              Архив биеннале
             </button>
           )}
         </div>
@@ -504,11 +505,20 @@ export default function Account() {
         )}
 
         {isAdmin && showArchive && viewEdition === null && (
-          <EditionGallery
-            currentEdition={currentEdition}
-            editionYears={editionYears}
-            onPick={(ed) => { setViewEdition(ed); setArchiveTab('apps'); }}
-          />
+          <div className="archive-view">
+            <button type="button" className="review-back" onClick={() => { setShowArchive(false); setViewEdition(null); }}>
+              ← Панель управления
+            </button>
+            <div className="apply-head">
+              <span className="eyebrow">Архив</span>
+              <h1>Прошедшие биеннале</h1>
+            </div>
+            <EditionGallery
+              currentEdition={currentEdition}
+              editionYears={editionYears}
+              onPick={(ed) => { setViewEdition(ed); setArchiveTab('apps'); }}
+            />
+          </div>
         )}
         {archiveMode && (
           <button type="button" className="review-back" onClick={() => setViewEdition(null)}>← Все биеннале</button>
