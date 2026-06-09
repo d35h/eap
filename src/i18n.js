@@ -129,7 +129,7 @@ export const translations = {
       member3Bio: 'Международный состав жюри из кураторов и художников будет объявлен до закрытия приёма заявок.',
     },
     contact: {
-      eyebrow: '- Контакты',
+      eyebrow: 'Контакты',
       titlePart1: 'Свяжитесь ',
       titleEm: 'с',
       titlePart2: ' нами.',
@@ -463,7 +463,7 @@ export const translations = {
       member3Bio: 'International jury of curators and artists will be announced before open call closes.',
     },
     contact: {
-      eyebrow: '- Contact',
+      eyebrow: 'Contact',
       titlePart1: 'Get in ',
       titleEm: 'touch.',
       titlePart2: '',
@@ -790,7 +790,7 @@ export const translations = {
       member3Bio: 'Халықаралық жюри құрамы өтінім қабылдау жабылғанға дейін жарияланады.',
     },
     contact: {
-      eyebrow: '- Байланыс',
+      eyebrow: 'Байланыс',
       titlePart1: 'Бізбен ',
       titleEm: 'хабарласыңыз.',
       titlePart2: '',
@@ -1116,7 +1116,7 @@ export const translations = {
       member3Bio: '由策展人和艺术家组成的国际评审团将在公开征集结束前公布。',
     },
     contact: {
-      eyebrow: '- 联系',
+      eyebrow: '联系',
       titlePart1: '与我们',
       titleEm: '联系。',
       titlePart2: '',
