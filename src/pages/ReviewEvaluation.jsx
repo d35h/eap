@@ -137,7 +137,7 @@ export default function ReviewEvaluation() {
       <div className="container review-page">
         <Link to="/account" className="review-back">← Назад</Link>
         <div className="apply-head">
-          <span className="eyebrow">- Рассмотрение</span>
+          <span className="eyebrow">Рассмотрение</span>
           <h1>Оценка заявки</h1>
         </div>
 

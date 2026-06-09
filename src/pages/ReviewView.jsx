@@ -89,7 +89,7 @@ export default function ReviewView() {
       <div className="container review-page">
         <Link to="/account" className="review-back">← Назад</Link>
         <div className="apply-head">
-          <span className="eyebrow">- Оценка жюри</span>
+          <span className="eyebrow">Оценка жюри</span>
           <h1>{review?.reviewer_name || review?.reviewer_email || 'Жюри'}</h1>
         </div>
         <div className="detail-id">

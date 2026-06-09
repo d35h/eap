@@ -90,7 +90,7 @@ export default function Jurors() {
       <div className="container">
         <Link to="/account" className="review-back">← Назад</Link>
         <div className="apply-head">
-          <span className="eyebrow">- Администратор</span>
+          <span className="eyebrow">Администратор</span>
           <h1>Жюри</h1>
         </div>
 

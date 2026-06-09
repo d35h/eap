@@ -149,7 +149,7 @@ export default function ApplicationDetail() {
       <div className="container review-page">
         <Link to="/account" className="review-back">← Назад</Link>
         <div className="apply-head">
-          <span className="eyebrow">- Заявка</span>
+          <span className="eyebrow">Заявка</span>
           <h1>{applicant}</h1>
         </div>
 

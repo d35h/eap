@@ -54,7 +54,7 @@ export default function AppResults() {
       <div className="container review-page">
         <Link to="/account" className="review-back">← Назад</Link>
         <div className="apply-head">
-          <span className="eyebrow">- Оценки жюри · тур {t}</span>
+          <span className="eyebrow">Оценки жюри · тур {t}</span>
           <h1>{applicant}</h1>
         </div>
         {app?.email && <p className="detail-id__email" style={{ marginTop: '-4px' }}>{app.email}</p>}
