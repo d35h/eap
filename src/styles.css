@@ -2191,3 +2191,29 @@ input, textarea, select { font-family: inherit; }
   .wstep { padding: 14px 12px; }
   .wstep .name { font-size: 0.95rem; }
 }
+
+/* Field info tooltip (Website / Instagram "why?") */
+.wizard { overflow: visible; }
+.wizard-progress { border-top-left-radius: 20px; border-top-right-radius: 20px; overflow: hidden; }
+.wizard-nav { border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; }
+.field-tip { position: relative; display: inline-flex; vertical-align: middle; margin-left: 5px; }
+.field-tip__btn {
+  display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px;
+  padding: 0; border: 0; background: none; color: var(--ink-soft); cursor: help; border-radius: 50%; transition: color 0.15s;
+}
+.field-tip__btn:hover, .field-tip__btn:focus-visible { color: var(--accent-deep); outline: none; }
+.field-tip__bubble {
+  position: absolute; bottom: calc(100% + 9px); left: 50%; transform: translateX(-50%) translateY(4px);
+  width: max-content; max-width: 230px; padding: 11px 14px; border-radius: 11px;
+  background: var(--ink); color: var(--ivory-soft);
+  font-family: var(--font-body); font-size: 12.5px; font-weight: 400; line-height: 1.5; letter-spacing: 0; text-transform: none;
+  box-shadow: 0 12px 30px hsla(30, 24%, 14%, 0.3); z-index: 30;
+  opacity: 0; visibility: hidden; transition: opacity 0.16s ease, transform 0.16s ease; pointer-events: none;
+}
+.field-tip__bubble::after {
+  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: var(--ink);
+}
+.field-tip:hover .field-tip__bubble,
+.field-tip__btn:focus-visible + .field-tip__bubble { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+@media (prefers-reduced-motion: reduce) { .field-tip__bubble { transition: none; } }

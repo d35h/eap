@@ -327,9 +327,9 @@ function Step1({ form, update, errors, t }) {
         <Field label={t('apply.city')} value={form.city} ph={t('apply.cityPh')}
                onChange={(v) => update('city', v)} />
         <Field label={t('apply.website')} type="url" value={form.website} ph={t('apply.websitePh')}
-               onChange={(v) => update('website', v)} />
+               hint={t('apply.websiteHint')} onChange={(v) => update('website', v)} />
         <Field label={t('apply.instagram')} value={form.instagram} ph={t('apply.instagramPh')}
-               onChange={(v) => update('instagram', v)} />
+               hint={t('apply.instagramHint')} onChange={(v) => update('instagram', v)} />
       </div>
     </>
   );
@@ -531,11 +531,21 @@ function Step4({ form, workFiles, update, t }) {
 }
 
 // ─── Reusable Field ───
-function Field({ label, required, value, onChange, ph, error, help, type = 'text', textarea, full }) {
+function Field({ label, required, value, onChange, ph, error, help, hint, type = 'text', textarea, full }) {
   return (
     <div className={`field-group ${full ? 'full' : ''}`}>
       <label>
         {label} {required && <span className="req">*</span>}
+        {hint && (
+          <span className="field-tip">
+            <button type="button" className="field-tip__btn" aria-label={hint}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" /><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 3-3 3" /><path d="M12 17h.01" />
+              </svg>
+            </button>
+            <span className="field-tip__bubble" role="tooltip">{hint}</span>
+          </span>
+        )}
       </label>
       {textarea ? (
         <textarea
