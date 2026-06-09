@@ -10,6 +10,7 @@ import NotFound from './pages/NotFound.jsx';
 import MockPay from './pages/MockPay.jsx';
 import Login from './pages/Login.jsx';
 import SetPassword from './pages/SetPassword.jsx';
+import ForgotPassword from './pages/ForgotPassword.jsx';
 import Account from './pages/Account.jsx';
 import ReviewEvaluation from './pages/ReviewEvaluation.jsx';
 import ReviewView from './pages/ReviewView.jsx';
@@ -39,6 +40,7 @@ export default function App() {
         <Route path="/mock-pay" element={<MockPay />} />
         <Route path="/login" element={<Login />} />
         <Route path="/set-password" element={<SetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/account" element={<Account />} />
         <Route path="/account/review/:id" element={<ReviewEvaluation />} />
         <Route path="/account/review/:id/:reviewerId" element={<ReviewView />} />

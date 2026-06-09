@@ -16,3 +16,10 @@ export async function setPassword(password) {
   const { error } = await supabase.auth.updateUser({ password });
   if (error) throw new Error(error.message);
 }
+
+export async function requestPasswordReset(email) {
+  if (!supabase) throw new Error('Auth not configured');
+  const redirectTo = `${window.location.origin}/set-password`;
+  const { error } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), { redirectTo });
+  if (error) throw new Error(error.message);
+}

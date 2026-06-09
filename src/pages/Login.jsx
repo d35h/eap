@@ -51,7 +51,10 @@ export default function Login() {
             />
           </div>
           <div className="auth-field">
-            <label htmlFor="login-password">{t('account.password')}</label>
+            <div className="auth-field__head">
+              <label htmlFor="login-password">{t('account.password')}</label>
+              <Link to="/forgot-password" className="auth-field__link">{t('account.forgotLink')}</Link>
+            </div>
             <input
               id="login-password"
               type="password"

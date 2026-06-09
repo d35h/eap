@@ -2455,3 +2455,28 @@ input, textarea, select { font-family: inherit; }
 }
 .invite-card .invite-jury { margin: 0; padding: 0; border: 0; background: none; border-radius: 0; }
 .invite-card .invite-jury__msg { margin: 12px 0 0; }
+
+/* ── Forgot-password link + reset confirmation ── */
+.auth-field__head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.auth-field__link {
+  font-size: 0.8rem; color: var(--accent-deep); text-decoration: none;
+  border-bottom: 1px solid transparent; transition: border-color 0.15s; white-space: nowrap;
+}
+.auth-field__link:hover { border-bottom-color: var(--accent); }
+
+.auth-card__icon {
+  width: 54px; height: 54px; margin: 2px 0 18px; border-radius: 15px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: hsla(38, 40%, 88%, 0.55); color: var(--accent-deep);
+}
+.auth-card__icon svg { width: 26px; height: 26px; }
+.auth-card__sent-email {
+  margin: 2px 0 22px; font-family: var(--font-mono); font-size: 0.88rem; color: var(--ink);
+  background: hsla(36, 30%, 96%, 0.7); border: 1px solid var(--border); border-radius: 10px;
+  padding: 9px 14px; display: inline-block; word-break: break-all;
+}
+.auth-card__submit--ghost {
+  background: transparent; color: var(--ink); border: 1px solid var(--border);
+  display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
+}
+.auth-card__submit--ghost:hover { background: hsla(36, 20%, 92%, 0.55); box-shadow: none; }
