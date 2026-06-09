@@ -43,7 +43,7 @@ export default function ForgotPassword() {
             <h1 className="auth-card__title">{t('account.forgotSentTitle')}</h1>
             <p className="auth-card__sub">{t('account.forgotSentBody')}</p>
             {email.trim() && <p className="auth-card__sent-email">{email.trim().toLowerCase()}</p>}
-            <Link to="/login" className="auth-card__submit auth-card__submit--ghost" style={{ marginTop: '8px' }}>
+            <Link to="/login" className="auth-card__submit auth-card__submit--ghost">
               ← {t('account.forgotBack')}
             </Link>
           </>
