@@ -1958,16 +1958,24 @@ input, textarea, select { font-family: inherit; }
 .crit__counter.is-ok { color: hsl(145, 45%, 40%); }
 .crit__comment { margin: 0; line-height: 1.7; color: hsl(28, 14%, 28%); white-space: pre-wrap; overflow-wrap: anywhere; }
 
-/* Rating meter (1–10) */
-.rmeter { display: flex; align-items: center; gap: 20px; }
-.rmeter__scale { display: flex; gap: 5px; flex: 1; }
-.rmeter__seg {
-  flex: 1; height: 32px; border: 0; padding: 0; cursor: pointer; border-radius: 6px;
-  background: hsla(35, 18%, 87%, 0.9); transition: background 0.12s, transform 0.1s;
+/* Rating selector (1–10): ten numbered cells, pick one */
+.rmeter { display: flex; align-items: center; gap: 22px; }
+.rmeter__scale { display: flex; gap: 6px; flex: 1; }
+.rmeter__cell {
+  flex: 1; min-width: 0; height: 44px; padding: 0; cursor: pointer;
+  border: 1px solid var(--border); border-radius: 10px; background: var(--ivory-soft);
+  color: var(--ink-soft); font-family: var(--font-display); font-size: 1.05rem; font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums; font-feature-settings: "lnum" 1, "tnum" 1;
+  transition: background 0.13s, color 0.13s, border-color 0.13s, transform 0.1s, box-shadow 0.13s;
 }
-.rmeter__seg:not(:disabled):hover { transform: translateY(-2px); }
-.rmeter__seg.is-on { background: linear-gradient(180deg, var(--accent-soft), var(--accent-deep)); box-shadow: inset 0 1px 0 hsla(40, 60%, 78%, 0.5); }
-.rmeter.is-readonly .rmeter__seg { cursor: default; }
+.rmeter__cell.is-hover { border-color: var(--accent); color: var(--ink); transform: translateY(-2px); }
+.rmeter__cell.is-selected {
+  background: linear-gradient(180deg, var(--accent-soft), var(--accent-deep));
+  border-color: var(--accent-deep); color: #fff; font-weight: 600;
+  box-shadow: 0 5px 16px hsla(38, 50%, 38%, 0.32); transform: translateY(-1px);
+}
+.rmeter.is-readonly .rmeter__cell { cursor: default; }
+.rmeter.is-readonly .rmeter__cell.is-selected { transform: none; }
 .rmeter__readout {
   font-family: var(--font-display); line-height: 1; white-space: nowrap;
   display: flex; align-items: baseline; gap: 2px;
@@ -2011,8 +2019,9 @@ input, textarea, select { font-family: inherit; }
   .review-bar { flex-direction: column; align-items: stretch; bottom: 8px; }
   .review-bar__actions { justify-content: stretch; }
   .review-bar__actions .tours-btn { flex: 1; justify-content: center; }
-  .rmeter { gap: 14px; }
-  .rmeter__seg { height: 26px; }
+  .rmeter { gap: 12px; }
+  .rmeter__scale { gap: 4px; }
+  .rmeter__cell { height: 40px; font-size: 0.95rem; border-radius: 8px; }
   .rmeter__num { font-size: 1.8rem; }
   .crit { padding: 22px 20px; }
 }
