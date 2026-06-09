@@ -32,10 +32,20 @@ const EUR_BY_COUNT = { 1: 30, 2: 45, 3: 50 };
 const eurFor = (n) => `€${EUR_BY_COUNT[Math.min(Math.max(n, 1), 3)]}`;
 
 export default function Apply() {
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
   const navigate = useNavigate();
 
   const [form, setForm, clearForm, justSaved] = useFormPersist('eap-apply-form-v2', INITIAL);
+
+  // Default the country to Belarus (localised) for a fresh form — most applicants
+  // are local. Never overrides a value already entered or restored from a draft.
+  useEffect(() => {
+    if (form.country) return;
+    let name = 'Беларусь';
+    try { name = new Intl.DisplayNames([lang || 'ru'], { type: 'region' }).of('BY') || name; } catch { /* keep fallback */ }
+    setForm((f) => (f.country ? f : { ...f, country: name }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [step, setStep] = useState(1);
   // Файлы не сохраняются в localStorage (File нельзя сериализовать). Параллельно works по индексу.
   const [workFiles, setWorkFiles] = useState(() => form.works.map(() => null));
