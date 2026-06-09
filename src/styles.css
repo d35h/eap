@@ -961,10 +961,8 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 1280px) {
   .nav-primary { display: none; }
   .menu-toggle { display: block; }
-  /* Apply + Login live in the hamburger menu on mobile - keep the bar uncluttered
-     so the menu toggle stays reachable on narrow screens. */
-  .header-right .header-apply,
-  .header-right .header-login { display: none; }
+  /* The nav links collapse into the hamburger, but the auth CTAs stay on the bar
+     so login + apply are always reachable — never buried in a menu. */
 }
 @media (max-width: 1024px) {
   .nav-primary { display: none; }
@@ -993,6 +991,14 @@ input, textarea, select { font-family: inherit; }
 
 @media (max-width: 640px) {
   .container { padding: 0 20px; }
+  /* Compact header so login + apply fit on the bar: shrink the logo, move the
+     language switch into the menu, and tighten the CTAs. */
+  .header-right { gap: 10px; }
+  .logo { font-size: 1.15rem; }
+  .lang-switch { display: none; }
+  .header-login { padding: 8px 13px; font-size: 0.6rem; letter-spacing: 0.12em; }
+  .header-apply { padding: 8px 14px !important; font-size: 0.6rem !important; letter-spacing: 0.12em !important; }
+  .menu-toggle { padding: 4px 4px; margin-left: -2px; }
   .block { padding: 72px 0; }
   .hero { padding-top: 120px; padding-bottom: 56px; }
   .hero-meta { margin-bottom: 56px; flex-direction: column; gap: 8px; }
@@ -2260,3 +2266,13 @@ input, textarea, select { font-family: inherit; }
   font-weight: 400; font-size: clamp(1.9rem, 3vw, 2.7rem);
   letter-spacing: -0.01em; margin: 12px 0 14px;
 }
+
+/* Language switch inside the mobile menu (hidden from the bar on phones) */
+.mobile-menu__lang { display: flex; gap: 10px; align-items: center; margin-top: 36px; flex-wrap: wrap; }
+.mobile-menu__lang button {
+  width: auto !important; text-align: left !important; background: none; border: 0;
+  font-family: var(--font-mono) !important; font-size: 0.72rem !important; padding: 4px 2px !important;
+  text-transform: uppercase; letter-spacing: 0.18em; color: hsla(36, 22%, 92%, 0.55); cursor: pointer;
+}
+.mobile-menu__lang button.active { color: var(--accent); }
+.mobile-menu__lang .sep { color: hsla(36, 22%, 92%, 0.3); }
