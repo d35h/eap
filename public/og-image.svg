@@ -1,9 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#0f1113"/>
-  <rect x="0" y="0" width="1200" height="630" fill="none" stroke="#1d2024" stroke-width="2"/>
-  <text x="90" y="130" font-family="Georgia, serif" font-size="22" letter-spacing="8" fill="#c2a063">— EURASIAN ART PLATFORM</text>
-  <text x="86" y="370" font-family="Georgia, serif" font-size="200" fill="#efe9df">EAP</text>
-  <text x="92" y="455" font-family="Georgia, serif" font-style="italic" font-size="46" fill="#b6ab9b">Современное искусство Евразии</text>
-  <rect x="92" y="500" width="120" height="2" fill="#c2a063"/>
-  <text x="92" y="552" font-family="Georgia, serif" font-size="22" letter-spacing="5" fill="#7c7468">OPEN CALL · ВЫСТАВКИ · КУРАТОРСКИЕ ПРОЕКТЫ</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#15181c"/>
+      <stop offset="0.5" stop-color="#0e1013"/>
+      <stop offset="1" stop-color="#090a0c"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.8" cy="0.16" r="0.6">
+      <stop offset="0" stop-color="#c2a063" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#c2a063" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0.4">
+      <stop offset="0" stop-color="#ecd49a"/>
+      <stop offset="0.55" stop-color="#cca571"/>
+      <stop offset="1" stop-color="#a8814a"/>
+    </linearGradient>
+    <linearGradient id="ivory" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f1e8"/>
+      <stop offset="1" stop-color="#d9d1c2"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- gallery passe-partout frame + gold corner ticks -->
+  <rect x="44" y="44" width="1112" height="542" fill="none" stroke="#272319" stroke-width="1"/>
+  <g stroke="url(#gold)" stroke-width="2" fill="none" stroke-linecap="square">
+    <path d="M44 78 V44 H78"/>
+    <path d="M1156 78 V44 H1122"/>
+    <path d="M44 552 V586 H78"/>
+    <path d="M1156 552 V586 H1122"/>
+  </g>
+
+  <!-- faint monogram watermark for depth -->
+  <text x="1010" y="500" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="560" fill="#c2a063" fill-opacity="0.055" text-anchor="middle">E</text>
+
+  <!-- content -->
+  <g transform="translate(100,0)">
+    <rect x="0" y="158" width="48" height="2" fill="url(#gold)"/>
+    <text x="64" y="166" font-family="Georgia, 'Times New Roman', serif" font-size="21" letter-spacing="7" fill="#cca773">EURASIAN ART PLATFORM</text>
+
+    <text x="-4" y="372" font-family="Georgia, 'Times New Roman', serif" font-weight="400" font-size="158" letter-spacing="-3" fill="url(#ivory)">Open <tspan font-style="italic" fill="url(#gold)">Call</tspan></text>
+
+    <text x="2" y="448" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="42" fill="#b8ad9b">Современное искусство Евразии · 2026</text>
+
+    <rect x="2" y="498" width="128" height="1.5" fill="#3b362c"/>
+    <text x="2" y="546" font-family="Georgia, 'Times New Roman', serif" font-size="20" letter-spacing="4" fill="#8a8072">ВЫСТАВКИ · КУРАТОРСКИЕ ПРОЕКТЫ · МЕЖДУНАРОДНОЕ ЖЮРИ</text>
+  </g>
 </svg>
