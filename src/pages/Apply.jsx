@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useFormPersist } from '../hooks/useFormPersist.js';
 import { submitApplication, uploadWorkFiles } from '../lib/applicationsRepo.js';
+import CountrySelect from '../components/CountrySelect.jsx';
 import { startPayment } from '../lib/payments.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { submissionsOpen } from '../lib/cycleRepo.js';
@@ -322,8 +323,10 @@ function Step1({ form, update, errors, t }) {
                error={errors.email} onChange={(v) => update('email', v)} />
         <Field label={t('contact.phone')} type="tel" value={form.phone} ph={t('contact.phonePh')}
                onChange={(v) => update('phone', v)} />
-        <Field label={t('apply.country')} value={form.country} ph={t('apply.countryPh')}
-               onChange={(v) => update('country', v)} />
+        <div className="field-group">
+          <label>{t('apply.country')}</label>
+          <CountrySelect value={form.country} placeholder={t('apply.countryPh')} onChange={(v) => update('country', v)} />
+        </div>
         <Field label={t('apply.city')} value={form.city} ph={t('apply.cityPh')}
                onChange={(v) => update('city', v)} />
         <Field label={t('apply.website')} type="url" value={form.website} ph={t('apply.websitePh')}
