@@ -1298,8 +1298,8 @@ input, textarea, select { font-family: inherit; }
 .detail-meta a { color: var(--accent-deep); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
 .detail-meta a:hover { border-bottom-color: var(--accent); }
 .detail-ig {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 22px;
-  padding: 16px 20px; border: 1px solid var(--border); border-radius: 14px; background: hsla(36, 33%, 99%, 0.6);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 14px 18px; margin-top: 26px;
+  padding-top: 22px; border-top: 1px solid var(--border);
 }
 .detail-ig__link { color: var(--accent-deep); text-decoration: none; border-bottom: 1px solid transparent; font-size: 14px; transition: border-color 0.15s; }
 .detail-ig__link:hover { border-bottom-color: var(--accent); }
@@ -2399,3 +2399,23 @@ input, textarea, select { font-family: inherit; }
 .archive-view { margin-top: 4px; }
 .archive-view .review-back { margin-bottom: 16px; }
 .archive-view .apply-head { margin-bottom: 6px; }
+
+/* "Опубликовать в Instagram" — confident solid pill with a brand-gradient glyph */
+.ig-publish-btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 10px 20px; border-radius: 999px; border: 1px solid var(--ink);
+  background: var(--ink); color: var(--ivory-soft);
+  font-family: inherit; font-size: 0.85rem; font-weight: 500; cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.08s;
+}
+.ig-publish-btn:hover:not(:disabled) { background: hsl(28, 24%, 15%); box-shadow: 0 6px 20px hsla(30, 24%, 16%, 0.24); }
+.ig-publish-btn:active:not(:disabled) { transform: translateY(1px); }
+.ig-publish-btn:disabled { opacity: 0.62; cursor: default; }
+.ig-publish-btn__icon { width: 17px; height: 17px; flex-shrink: 0; }
+.ig-publish-btn__spin {
+  width: 15px; height: 15px; border-radius: 50%; flex-shrink: 0;
+  border: 2px solid hsla(40, 40%, 90%, 0.32); border-top-color: var(--ivory-soft);
+  animation: ig-spin 0.7s linear infinite;
+}
+@keyframes ig-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .ig-publish-btn__spin { animation-duration: 1.4s; } }

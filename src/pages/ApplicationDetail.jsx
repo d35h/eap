@@ -182,8 +182,27 @@ export default function ApplicationDetail() {
                 )}
               </>
             ) : (
-              <button type="button" className="btn-gold tours-btn" disabled={publishing} onClick={publishIG}>
-                {publishing ? '…' : 'Опубликовать в Instagram'}
+              <button type="button" className="ig-publish-btn" disabled={publishing} onClick={publishIG}>
+                {publishing ? (
+                  <><span className="ig-publish-btn__spin" aria-hidden="true" />Публикуем…</>
+                ) : (
+                  <>
+                    <svg className="ig-publish-btn__icon" viewBox="0 0 24 24" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="igGlyphGrad" x1="0" y1="1" x2="1" y2="0">
+                          <stop offset="0" stopColor="#FEDA75" />
+                          <stop offset="0.35" stopColor="#FA7E1E" />
+                          <stop offset="0.62" stopColor="#D62976" />
+                          <stop offset="1" stopColor="#962FBF" />
+                        </linearGradient>
+                      </defs>
+                      <rect x="2.5" y="2.5" width="19" height="19" rx="5.5" fill="none" stroke="url(#igGlyphGrad)" strokeWidth="2" />
+                      <circle cx="12" cy="12" r="4.2" fill="none" stroke="url(#igGlyphGrad)" strokeWidth="2" />
+                      <circle cx="17.4" cy="6.6" r="1.35" fill="url(#igGlyphGrad)" />
+                    </svg>
+                    Опубликовать в Instagram
+                  </>
+                )}
               </button>
             )}
             {pubMsg && <span className={`cycle-note ${pubMsg.type === 'error' ? 'cycle-note--error' : ''}`}>{pubMsg.text}</span>}
