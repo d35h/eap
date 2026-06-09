@@ -89,6 +89,17 @@ export default function ArtistArchive({ apps, myResults, filesByApp }) {
                             </div>
                           );
                         })()}
+                        {(() => {
+                          const scored = tr.feedback.filter((f) => f.avg != null);
+                          if (!scored.length) return null;
+                          const overall = scored.reduce((s, f) => s + f.avg, 0) / scored.length;
+                          return (
+                            <div className="artist-score">
+                              <span className="artist-score__label">{t('account.juryAvg')}</span>
+                              <span className="artist-score__value">{overall.toFixed(1)}<em>/10</em></span>
+                            </div>
+                          );
+                        })()}
                         {tr.feedback.length > 0 && (
                           <div className="artist-result__fb">
                             <span className="account-section-label">{t('account.juryFeedback')}</span>

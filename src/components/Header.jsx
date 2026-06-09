@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { LANGUAGES } from '../i18n';
-import { isSupabaseConfigured } from '../lib/supabase.js';
+import { isSupabaseConfigured, supabase } from '../lib/supabase.js';
 import { useAuth } from '../hooks/useAuth.jsx';
 import { signOut } from '../lib/auth.js';
 
@@ -11,9 +11,28 @@ export default function Header() {
   const { user } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
+  const [displayName, setDisplayName] = useState('');
   const accountRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Resolve the user's display name: jurors/admin carry it in app_metadata; for
+  // artists it lives on their application, so fetch the most recent one.
+  useEffect(() => {
+    const metaName = user?.app_metadata?.name || user?.user_metadata?.name;
+    if (metaName) { setDisplayName(metaName); return; }
+    if (!user || !supabase) { setDisplayName(''); return; }
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from('applications').select('first_name, last_name')
+        .eq('user_id', user.id).order('created_at', { ascending: false }).limit(1).maybeSingle();
+      if (cancelled) return;
+      const n = [data?.first_name, data?.last_name].filter(Boolean).join(' ');
+      setDisplayName(n);
+    })();
+    return () => { cancelled = true; };
+  }, [user]);
 
   // Close the account dropdown on outside click
   useEffect(() => {
@@ -99,16 +118,14 @@ export default function Header() {
                     onClick={() => setAccountMenuOpen((o) => !o)}
                     aria-label={t('account.nav')}
                     aria-expanded={accountMenuOpen}
-                    title={user.app_metadata?.name || user.email}
+                    title={displayName || user.email}
                   >
-                    {(user.app_metadata?.name || user.email || '?').charAt(0).toUpperCase()}
+                    {(displayName || user.email || '?').charAt(0).toUpperCase()}
                   </button>
                   {accountMenuOpen && (
                     <div className="account-dropdown">
                       <div className="account-dropdown-id">
-                        {user.app_metadata?.name && (
-                          <span className="account-dropdown-name">{user.app_metadata.name}</span>
-                        )}
+                        {displayName && <span className="account-dropdown-name">{displayName}</span>}
                         <span className="account-dropdown-email">{user.email}</span>
                       </div>
                       <Link to="/account" className="account-dropdown-item" onClick={() => setAccountMenuOpen(false)}>
