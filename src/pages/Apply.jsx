@@ -376,6 +376,17 @@ function Step2({ works, workFiles, updateWork, addWork, removeWork, setWorkFile,
 function WorkEntry({ index, work, file, onChange, onFile, onRemove, errors, t }) {
   const inputRef = useRef(null);
   const [dragOver, setDragOver] = useState(false);
+  const [preview, setPreview] = useState(null);
+
+  // Live thumbnail of the uploaded image, so the artist sees exactly what they sent.
+  useEffect(() => {
+    if (file && file.type && file.type.startsWith('image/')) {
+      const url = URL.createObjectURL(file);
+      setPreview(url);
+      return () => URL.revokeObjectURL(url);
+    }
+    setPreview(null);
+  }, [file]);
 
   const handleFiles = (fileList) => {
     const f = fileList && fileList[0];
@@ -386,6 +397,8 @@ function WorkEntry({ index, work, file, onChange, onFile, onRemove, errors, t })
     }
     onFile(f);
   };
+
+  const ext = file ? (file.name.split('.').pop() || '').toUpperCase().slice(0, 4) : '';
 
   return (
     <div className="work-entry">
@@ -420,12 +433,18 @@ function WorkEntry({ index, work, file, onChange, onFile, onRemove, errors, t })
       />
 
       {file ? (
-        <div className="file-list">
-          <div className="file-item">
-            <span className="name">{file.name}</span>
-            <span className="size">{fmtSize(file.size)}</span>
-            <button type="button" onClick={() => onFile(null)} aria-label="Remove">×</button>
-          </div>
+        <div className="work-file">
+          <span className="work-file__thumb">
+            {preview ? <img src={preview} alt={work.title || ''} /> : <span className="work-file__ext">{ext || 'FILE'}</span>}
+          </span>
+          <span className="work-file__meta">
+            <span className="work-file__name">{file.name}</span>
+            <span className="work-file__size">{fmtSize(file.size)}</span>
+          </span>
+          <button type="button" className="work-file__replace" onClick={() => inputRef.current?.click()}>Заменить</button>
+          <button type="button" className="work-file__remove" onClick={() => onFile(null)} aria-label="Удалить файл">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
         </div>
       ) : (
         <div
@@ -438,9 +457,13 @@ function WorkEntry({ index, work, file, onChange, onFile, onRemove, errors, t })
           tabIndex={0}
           onKeyDown={(e) => { if (e.key === 'Enter') inputRef.current?.click(); }}
         >
-          <div className="icon">↑</div>
-          <p><strong>{t('apply.workFile')}</strong></p>
-          <p>{t('apply.workFileSub')}</p>
+          <span className="dropzone__icon" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/>
+            </svg>
+          </span>
+          <p className="dropzone__title"><strong>{t('apply.workFile')}</strong></p>
+          <p className="dropzone__sub">{t('apply.workFileSub')}</p>
         </div>
       )}
     </div>
