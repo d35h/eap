@@ -22,6 +22,64 @@ export async function sendEmail(env, { to, subject, html }) {
   return true;
 }
 
+// ─── Premium branded email shell ────────────────────────────────────────────
+// Editorial identity matching the site: charcoal field, gold accents, serif
+// display headings + clean sans body. Table-based + inline styles for client
+// compatibility (Gmail, Apple Mail, Outlook).
+const C = {
+  bg: '#0e1013',
+  card: '#16191d',
+  border: '#2a2419',
+  rule: '#2d2920',
+  gold: '#c2a063',
+  goldText: '#10120f',
+  ivory: '#f3eee4',
+  muted: '#b4ac9e',
+  faint: '#76705f',
+};
+
+// A body paragraph (sans, readable).
+function para(text, { muted = false, gap = 16 } = {}) {
+  return `<p style="margin:0 0 ${gap}px;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:1.7;color:${muted ? C.faint : C.muted};">${text}</p>`;
+}
+
+function shell({ title, bodyHtml, button, link, fallback }) {
+  const buttonRow = button && link
+    ? `<tr><td style="padding-bottom:4px;">
+         <a href="${link}" style="display:inline-block;background:${C.gold};color:${C.goldText};text-decoration:none;padding:14px 34px;border-radius:999px;font-family:Helvetica,Arial,sans-serif;font-size:12px;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase;">${button}</a>
+       </td></tr>`
+    : '';
+  const fallbackRow = fallback && link
+    ? `<tr><td style="padding-top:26px;font-family:Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:${C.faint};">${fallback}<br/><a href="${link}" style="color:${C.muted};word-break:break-all;text-decoration:none;">${link}</a></td></tr>`
+    : '';
+  return `<!doctype html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
+<body style="margin:0;padding:0;background:${C.bg};">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${C.bg};padding:44px 16px;"><tr><td align="center">
+    <table role="presentation" width="520" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;width:100%;background:${C.card};border:1px solid ${C.border};border-radius:16px;">
+      <tr><td style="padding:46px 46px 42px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr><td style="padding-bottom:32px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+              <td width="44" style="width:44px;height:44px;border:1px solid ${C.gold};border-radius:12px;text-align:center;font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:bold;font-size:23px;line-height:44px;color:${C.gold};">E</td>
+              <td style="padding-left:15px;font-family:Helvetica,Arial,sans-serif;font-size:10px;letter-spacing:3px;line-height:1.55;text-transform:uppercase;color:${C.gold};">Eurasian<br/>Art&nbsp;Platform</td>
+            </tr></table>
+          </td></tr>
+          <tr><td style="font-family:Georgia,'Times New Roman',serif;font-weight:normal;font-size:28px;line-height:1.25;letter-spacing:-0.3px;color:${C.ivory};padding-bottom:18px;">${title}</td></tr>
+          <tr><td style="padding-bottom:${button ? '30px' : '6px'};">${bodyHtml}</td></tr>
+          ${buttonRow}
+          ${fallbackRow}
+          <tr><td style="padding-top:36px;">
+            <div style="border-top:1px solid ${C.rule};padding-top:22px;font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:0.5px;color:${C.faint};">
+              Eurasian Art Platform &middot; <a href="https://myeap.xyz" style="color:${C.gold};text-decoration:none;">myeap.xyz</a>
+            </div>
+          </td></tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr></table>
+</body></html>`;
+}
+
 // Localised copy for the "application paid" email.
 // `invite` = new applicant (set a password); `login` = returning applicant (magic login link).
 const COPY = {
@@ -57,26 +115,6 @@ const COPY = {
 
 export function emailCopy(lang) {
   return COPY[lang] || COPY.en;
-}
-
-// Generic branded email shell (same look as the paid email).
-function brandedEmail({ title, body, button, link, fallback }) {
-  return `<!doctype html><html><body style="margin:0;background:#121417;font-family:Georgia,'Times New Roman',serif;color:#f0ece4;padding:40px 16px;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
-    <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px;background:#16181d;border:1px solid #2a2d33;padding:40px;">
-      <tr><td style="font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#c2a063;padding-bottom:24px;">Eurasian Art Platform</td></tr>
-      <tr><td style="font-size:26px;line-height:1.3;padding-bottom:16px;">${title}</td></tr>
-      <tr><td style="font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#b9b2a6;padding-bottom:28px;">${body}</td></tr>
-      <tr><td><a href="${link}" style="display:inline-block;background:#c2a063;color:#121417;text-decoration:none;padding:14px 30px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;">${button}</a></td></tr>
-      <tr><td style="font-family:Arial,sans-serif;font-size:12px;color:#6a6459;padding-top:28px;line-height:1.6;">${fallback}<br><span style="color:#8a8270;word-break:break-all;">${link}</span></td></tr>
-    </table>
-  </td></tr></table></body></html>`;
-}
-
-function escapeHtml(s) {
-  return String(s || '')
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
 }
 
 // Localised copy for tour-result emails.
@@ -140,29 +178,25 @@ const TOUR_COPY = {
 export function tourResultEmail({ lang, tour, advanced, loginUrl }) {
   const c = TOUR_COPY[lang] || TOUR_COPY.en;
   const outcome = advanced ? c.advanced(tour) : c.notAdvanced(tour);
-  const loginHtml = loginUrl
-    ? `<tr><td style="padding-top:28px;"><a href="${loginUrl}" style="display:inline-block;background:#c2a063;color:#121417;text-decoration:none;padding:14px 30px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;">${c.loginCta}</a></td></tr>`
-    : '';
-  const html = `<!doctype html><html><body style="margin:0;background:#121417;font-family:Georgia,'Times New Roman',serif;color:#f0ece4;padding:40px 16px;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
-    <table role="presentation" width="520" cellpadding="0" cellspacing="0" style="max-width:520px;background:#16181d;border:1px solid #2a2d33;padding:40px;">
-      <tr><td style="font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#c2a063;padding-bottom:24px;">Eurasian Art Platform</td></tr>
-      <tr><td style="font-size:24px;line-height:1.3;padding-bottom:14px;">${c.title(tour)}</td></tr>
-      <tr><td style="font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#b9b2a6;padding-bottom:8px;">${outcome}</td></tr>
-      <tr><td style="font-family:Arial,sans-serif;font-size:14px;line-height:1.7;color:#8a8270;">${c.detailsNote}</td></tr>
-      ${loginHtml}
-    </table>
-  </td></tr></table></body></html>`;
-  return { subject: c.subject(tour), html };
+  return {
+    subject: c.subject(tour),
+    html: shell({
+      title: c.title(tour),
+      bodyHtml: para(outcome) + para(c.detailsNote, { muted: true, gap: 0 }),
+      button: loginUrl ? c.loginCta : null,
+      link: loginUrl || null,
+      fallback: null,
+    }),
+  };
 }
 
 // Jury invitation (always Russian - jurors are invited by the RU admin).
 export function juryInviteEmail(link) {
   return {
     subject: 'Eurasian Art Platform · Приглашение в жюри',
-    html: brandedEmail({
+    html: shell({
       title: 'Приглашение в жюри',
-      body: 'Вас пригласили в жюри Eurasian Art Platform. Создайте пароль, чтобы войти в кабинет и оценивать заявки художников.',
+      bodyHtml: para('Вас пригласили в жюри Eurasian Art Platform. Создайте пароль, чтобы войти в кабинет и оценивать заявки художников.', { gap: 0 }),
       button: 'Создать пароль',
       link,
       fallback: 'Если кнопка не работает, откройте ссылку:',
@@ -174,14 +208,11 @@ export function juryInviteEmail(link) {
 export function paidEmailHtml(link, lang, mode) {
   const c = emailCopy(lang);
   const m = c[mode] || c.invite;
-  return `<!doctype html><html><body style="margin:0;background:#121417;font-family:Georgia,'Times New Roman',serif;color:#f0ece4;padding:40px 16px;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center">
-    <table role="presentation" width="480" cellpadding="0" cellspacing="0" style="max-width:480px;background:#16181d;border:1px solid #2a2d33;padding:40px;">
-      <tr><td style="font-size:12px;letter-spacing:4px;text-transform:uppercase;color:#c2a063;padding-bottom:24px;">Eurasian Art Platform</td></tr>
-      <tr><td style="font-size:26px;line-height:1.3;padding-bottom:16px;">${c.title}</td></tr>
-      <tr><td style="font-family:Arial,sans-serif;font-size:15px;line-height:1.7;color:#b9b2a6;padding-bottom:28px;">${m.body}</td></tr>
-      <tr><td><a href="${link}" style="display:inline-block;background:#c2a063;color:#121417;text-decoration:none;padding:14px 30px;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;">${m.button}</a></td></tr>
-      <tr><td style="font-family:Arial,sans-serif;font-size:12px;color:#6a6459;padding-top:28px;line-height:1.6;">${c.fallback}<br><span style="color:#8a8270;word-break:break-all;">${link}</span></td></tr>
-    </table>
-  </td></tr></table></body></html>`;
+  return shell({
+    title: c.title,
+    bodyHtml: para(m.body, { gap: 0 }),
+    button: m.button,
+    link,
+    fallback: c.fallback,
+  });
 }
