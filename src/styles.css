@@ -2000,9 +2000,10 @@ input, textarea, select { font-family: inherit; }
 }
 .rmeter__cell.is-hover { border-color: var(--accent); color: var(--ink); transform: translateY(-2px); }
 .rmeter__cell.is-selected {
-  background: linear-gradient(180deg, var(--accent-soft), var(--accent-deep));
-  border-color: var(--accent-deep); color: #fff; font-weight: 600;
-  box-shadow: 0 5px 16px hsla(38, 50%, 38%, 0.32); transform: translateY(-1px);
+  background: linear-gradient(180deg, var(--accent-soft), var(--accent));
+  border-color: var(--accent-deep); color: hsl(28, 32%, 16%); font-weight: 700;
+  box-shadow: 0 5px 16px hsla(38, 55%, 46%, 0.34), inset 0 1px 0 hsla(40, 72%, 90%, 0.55);
+  transform: translateY(-1px);
 }
 .rmeter.is-readonly .rmeter__cell { cursor: default; }
 .rmeter.is-readonly .rmeter__cell.is-selected { transform: none; }
