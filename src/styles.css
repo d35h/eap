@@ -999,8 +999,7 @@ input, textarea, select { font-family: inherit; }
   .participants-grid { grid-template-columns: repeat(2, 1fr); }
   .team-grid { grid-template-columns: 1fr; gap: 32px; }
   .jury-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
-  .contact-grid { grid-template-columns: 1fr; gap: 48px; }
-  .contact-aside { border-left: 0; border-top: 1px solid #d6cec2; padding-left: 0; padding-top: 40px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
   .footer-top { grid-template-columns: 1fr; gap: 40px; }
   .wizard-grid { grid-template-columns: 1fr; }
   .wizard-grid .full { grid-column: span 1; }
@@ -2301,3 +2300,70 @@ input, textarea, select { font-family: inherit; }
 }
 .mobile-menu__lang button.active { color: var(--accent); }
 .mobile-menu__lang .sep { color: hsla(36, 22%, 92%, 0.3); }
+
+/* ════════════════════════════════════════════════════════════════════
+   Contact section — premium redesign
+   ════════════════════════════════════════════════════════════════════ */
+.contact-block { border-top: 1px solid hsl(35, 16%, 86%); }
+.contact-block .eyebrow {
+  display: inline-flex; align-items: center; gap: 11px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-deep);
+}
+.contact-block .eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--accent); }
+.contact-block p.lead {
+  font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 3.6vw, 3rem);
+  color: var(--ink); line-height: 1.08; letter-spacing: -0.01em; margin: 14px 0 0; max-width: 14ch;
+}
+.contact-grid { margin-top: 48px; align-items: start; }
+
+/* Form — boxed inputs with focus rings */
+.contact-form .field-group label {
+  font-size: 12px; font-weight: 500; text-transform: none; letter-spacing: 0.01em; color: var(--ink-soft); margin-bottom: 8px;
+}
+.contact-form .field-group .req { color: var(--accent-deep); }
+.contact-form .field-group input,
+.contact-form .field-group textarea {
+  width: 100%; background: var(--ivory-soft); border: 1px solid hsl(35, 16%, 84%); border-radius: 12px;
+  padding: 12px 15px; font-size: 0.98rem; color: var(--ink); font-family: inherit; outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.contact-form .field-group textarea { min-height: 140px; line-height: 1.6; resize: vertical; }
+.contact-form .field-group input::placeholder,
+.contact-form .field-group textarea::placeholder { color: var(--ink-soft); opacity: 0.5; font-style: normal; font-weight: 400; }
+.contact-form .field-group input:focus,
+.contact-form .field-group textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px hsla(38, 42%, 55%, 0.15); }
+.contact-form .field-group input.error,
+.contact-form .field-group textarea.error { border-color: var(--error); }
+
+/* Submit — confident charcoal pill (gold is reserved for the apply CTA) */
+.contact-form .btn-ink {
+  border-radius: 999px; text-transform: none; letter-spacing: 0.01em; font-size: 0.9rem; font-weight: 500;
+  padding: 14px 30px; background: var(--ink); border: 1px solid var(--ink); color: var(--ivory-soft);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.08s;
+}
+.contact-form .btn-ink:hover:not(:disabled) { background: hsl(28, 24%, 15%); box-shadow: 0 6px 20px hsla(30, 24%, 16%, 0.22); }
+.contact-form .btn-ink:active:not(:disabled) { transform: translateY(1px); }
+.form-status { margin-top: 16px; padding: 12px 16px; font-size: 0.9rem; border-radius: 12px; border: 1px solid transparent; }
+.form-status.success { background: hsla(145, 42%, 95%, 0.8); border-color: hsl(145, 32%, 80%); color: hsl(145, 45%, 30%); }
+.form-status.error { background: hsla(2, 60%, 96%, 0.8); border-color: hsl(2, 45%, 84%); color: hsl(2, 52%, 44%); }
+
+/* Aside — refined contact card */
+.contact-aside {
+  border: 1px solid hsl(35, 16%, 84%); border-radius: 18px; padding: 14px 30px;
+  background: linear-gradient(180deg, hsla(40, 40%, 99%, 0.85), hsla(38, 28%, 98%, 0.6));
+}
+.contact-aside .item { margin-bottom: 0; padding: 20px 0; border-top: 1px solid hsl(35, 16%, 88%); }
+.contact-aside .item:first-child { border-top: 0; }
+.contact-aside .item .label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-soft); font-weight: 600; margin-bottom: 7px;
+}
+.contact-aside .item .value a {
+  color: var(--ink); font-size: 1.05rem; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s;
+}
+.contact-aside .item .value a:hover { border-bottom-color: var(--accent); }
+.social-row { gap: 0; margin-top: 0; }
+.social-row a {
+  color: var(--ink); font-size: 1.05rem; text-decoration: none; border: 0; padding: 0;
+  border-bottom: 1px solid transparent; transition: border-color 0.15s;
+}
+.social-row a:hover { border-color: transparent; border-bottom-color: var(--accent); }
