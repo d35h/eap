@@ -4,7 +4,6 @@ import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useFormPersist } from '../hooks/useFormPersist.js';
 import { submitApplication, uploadWorkFiles } from '../lib/applicationsRepo.js';
 import CountrySelect from '../components/CountrySelect.jsx';
-import CitySelect from '../components/CitySelect.jsx';
 import { startPayment } from '../lib/payments.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { submissionsOpen } from '../lib/cycleRepo.js';
@@ -338,10 +337,8 @@ function Step1({ form, update, errors, t }) {
           <label>{t('apply.country')}</label>
           <CountrySelect value={form.country} placeholder={t('apply.countryPh')} onChange={(v) => update('country', v)} />
         </div>
-        <div className="field-group">
-          <label>{t('apply.city')}</label>
-          <CitySelect value={form.city} country={form.country} placeholder={t('apply.cityPh')} onChange={(v) => update('city', v)} />
-        </div>
+        <Field label={t('apply.city')} value={form.city} ph={t('apply.cityPh')}
+               onChange={(v) => update('city', v)} />
         <Field label={t('apply.website')} type="url" value={form.website} ph={t('apply.websitePh')}
                hint={t('apply.websiteHint')} onChange={(v) => update('website', v)} />
         <Field label={t('apply.instagram')} value={form.instagram} ph={t('apply.instagramPh')}
