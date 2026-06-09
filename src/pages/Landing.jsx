@@ -296,9 +296,7 @@ function ContactBlock() {
             <div className="item">
               <div className="label">{t('contact.socialLabel')}</div>
               <div className="social-row">
-                <a href="#" target="_blank" rel="noopener">Instagram</a>
-                <a href="#" target="_blank" rel="noopener">Telegram</a>
-                <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+                <a href="https://www.instagram.com/eurasian_art_platform/" target="_blank" rel="noreferrer">Instagram</a>
               </div>
             </div>
           </aside>
