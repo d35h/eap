@@ -7,7 +7,8 @@ import { signOut } from '../lib/auth.js';
 import { unlockReview } from '../lib/reviewsRepo.js';
 import AdminFlowPanel from '../components/AdminFlowPanel.jsx';
 import AdminStageTracker from '../components/AdminStageTracker.jsx';
-import { getCycle, submissionsOpen } from '../lib/cycleRepo.js';
+import { getCycle } from '../lib/cycleRepo.js';
+import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
 import EditionTourResults from '../components/EditionTourResults.jsx';
 import EditionSummary from '../components/EditionSummary.jsx';
 import JurorReviewList from '../components/JurorReviewList.jsx';
@@ -62,12 +63,13 @@ export default function Account() {
   // Current edition as seen by the artist (to split current vs past applications).
   const [artistEdition, setArtistEdition] = useState(null);
   // Whether submissions are currently open (for the artist apply CTA).
-  const [subsOpen, setSubsOpen] = useState(false);
+  const subsOpen = useSubmissionsOpen() === true; // shared cached fetch; false until known-open
   // Which tour tab the artist is viewing, per application.
   const [artistTab, setArtistTab] = useState({});
   // Cycle (submissions + tours); active tour is derived from it. Single source
   // of truth shared by both admin panels so they never go out of sync.
   const [cycle, setCycle] = useState(null);
+  const [cycleLoaded, setCycleLoaded] = useState(false);
   const activeTour = cycle?.active_tour || 1;
   const currentEdition = cycle?.current_edition || 1;
   // Jurors can only see/evaluate once the active tour's evaluations are open.
@@ -190,13 +192,6 @@ export default function Account() {
     return () => { cancelled = true; };
   }, [isAdmin, activeTour, jurors.length, refreshKey]);
 
-  // Artists: is the open call accepting applications right now?
-  useEffect(() => {
-    if (isStaff) return;
-    let cancelled = false;
-    submissionsOpen().then((open) => { if (!cancelled) setSubsOpen(!!open); });
-    return () => { cancelled = true; };
-  }, [isStaff, refreshKey]);
 
   // Reset to the first page when the filter context changes.
   useEffect(() => {
@@ -206,7 +201,7 @@ export default function Account() {
   // Staff: load the cycle (submissions + active tour).
   useEffect(() => {
     if (!isStaff || !supabase) return;
-    getCycle().then(setCycle);
+    getCycle().then((c) => { setCycle(c); setCycleLoaded(true); });
   }, [isStaff, refreshKey]);
 
   // Admin: derive each past edition's year (earliest application) for labels.
@@ -396,7 +391,7 @@ export default function Account() {
     return (
       <main className="apply-page account-page">
         <div className="container">
-          <p>…</p>
+          <div className="apply-loading" aria-busy="true"><span className="apply-loading__spin" /></div>
         </div>
       </main>
     );
@@ -544,8 +539,14 @@ export default function Account() {
           <button type="button" className="review-back" onClick={() => setViewEdition(null)}>← Все биеннале</button>
         )}
 
-        {isAdmin && isCurrentEdition && !showArchive && cycle && <AdminStageTracker phase={cyclePhase} />}
-        {isAdmin && isCurrentEdition && !showArchive && (
+        {isAdmin && isCurrentEdition && !showArchive && !cycleLoaded && (
+          <div className="dash-skeleton" aria-busy="true" aria-label="Загрузка панели">
+            <div className="dash-skeleton__steps" />
+            <div className="dash-skeleton__card" />
+          </div>
+        )}
+        {isAdmin && isCurrentEdition && !showArchive && cycleLoaded && cycle && <AdminStageTracker phase={cyclePhase} />}
+        {isAdmin && isCurrentEdition && !showArchive && cycleLoaded && (
           <AdminFlowPanel
             cycle={cycle}
             applications={applications}
@@ -636,7 +637,11 @@ export default function Account() {
           </div>
         )}
 
-        {appsLoading && <p>…</p>}
+        {appsLoading && (
+          <div className="list-skeleton" aria-busy="true" aria-label="Загрузка заявок">
+            {[0, 1, 2, 3].map((i) => <div key={i} className="list-skeleton__row" />)}
+          </div>
+        )}
 
         {!appsLoading && applications.length === 0 && (
           <p>{L('noApplications', 'Заявок пока нет.')}</p>

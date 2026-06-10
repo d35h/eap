@@ -9,7 +9,7 @@ import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
 
 export default function Header() {
   const { lang, setLang, t } = useTranslation();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [displayName, setDisplayName] = useState('');
@@ -111,7 +111,7 @@ export default function Header() {
               ))}
             </div>
 
-            {isSupabaseConfigured() && (
+            {isSupabaseConfigured() && !authLoading && (
               user ? (
                 <div className="account-menu" ref={accountRef}>
                   <button
@@ -146,7 +146,7 @@ export default function Header() {
               )
             )}
 
-            {!user && submOpen !== undefined && (
+            {!authLoading && !user && submOpen !== undefined && (
               submOpen ? (
                 <Link to="/apply" className="btn-gold header-apply">
                   {t('nav.apply')}
@@ -186,7 +186,7 @@ export default function Header() {
             {t('nav.faq')}
           </Link>
           <button onClick={() => goToSection('contact')}>{t('nav.contact')}</button>
-          {isSupabaseConfigured() && (
+          {isSupabaseConfigured() && !authLoading && (
             user ? (
               <>
                 <Link to="/account" onClick={() => setMenuOpen(false)}>{t('account.nav')}</Link>
@@ -196,7 +196,7 @@ export default function Header() {
               <Link to="/login" onClick={() => setMenuOpen(false)}>{t('account.signIn')}</Link>
             )
           )}
-          {!user && submOpen !== undefined && (
+          {!authLoading && !user && submOpen !== undefined && (
             submOpen ? (
               <Link to="/apply" onClick={() => setMenuOpen(false)} className="btn-gold" style={{ marginTop: '24px' }}>
                 {t('nav.apply')}
