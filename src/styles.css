@@ -985,8 +985,10 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 1280px) {
   .nav-primary { display: none; }
   .menu-toggle { display: block; }
-  /* The nav links collapse into the hamburger, but the auth CTAs stay on the bar
-     so login + apply are always reachable — never buried in a menu. */
+  /* The nav links + language switch collapse into the hamburger (the lang lives
+     in the menu); the auth CTAs stay on the bar so login + apply are always
+     reachable — never buried in a menu. */
+  .lang-switch { display: none; }
 }
 @media (max-width: 1024px) {
   .nav-primary { display: none; }
@@ -2292,14 +2294,23 @@ input, textarea, select { font-family: inherit; }
 }
 
 /* Language switch inside the mobile menu (hidden from the bar on phones) */
-.mobile-menu__lang { display: flex; gap: 10px; align-items: center; margin-top: 36px; flex-wrap: wrap; }
-.mobile-menu__lang button {
-  width: auto !important; text-align: left !important; background: none; border: 0;
-  font-family: var(--font-mono) !important; font-size: 0.72rem !important; padding: 4px 2px !important;
-  text-transform: uppercase; letter-spacing: 0.18em; color: hsla(36, 22%, 92%, 0.55); cursor: pointer;
+.mobile-menu__lang { display: flex; flex-direction: column; gap: 13px; margin-top: 36px; }
+.mobile-menu__lang-label {
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: hsla(36, 22%, 92%, 0.42);
 }
-.mobile-menu__lang button.active { color: var(--accent); }
-.mobile-menu__lang .sep { color: hsla(36, 22%, 92%, 0.3); }
+.mobile-menu__lang-opts { display: flex; gap: 10px; flex-wrap: wrap; }
+.mobile-menu__lang .mm-lang {
+  width: auto !important; min-width: 54px; text-align: center !important;
+  padding: 11px 18px !important; border-radius: 999px !important;
+  border: 1px solid hsla(36, 22%, 92%, 0.2) !important; background: none !important;
+  font-family: var(--font-mono) !important; font-size: 0.82rem !important; font-weight: 500 !important;
+  letter-spacing: 0.1em; text-transform: uppercase; color: hsla(36, 22%, 92%, 0.7);
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.mobile-menu__lang .mm-lang.active {
+  border-color: var(--accent) !important; color: var(--accent); background: hsla(38, 38%, 56%, 0.12) !important;
+}
 
 /* ════════════════════════════════════════════════════════════════════
    Contact section — premium redesign

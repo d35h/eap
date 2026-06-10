@@ -208,18 +208,20 @@ export default function Header() {
             )
           )}
           <div className="mobile-menu__lang" role="group" aria-label="Language">
-            {LANGUAGES.map((l, i) => (
-              <span key={l.code} style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                {i > 0 && <span className="sep">/</span>}
+            <span className="mobile-menu__lang-label">Язык</span>
+            <div className="mobile-menu__lang-opts">
+              {LANGUAGES.map((l) => (
                 <button
-                  className={lang === l.code ? 'active' : ''}
+                  key={l.code}
+                  type="button"
+                  className={`mm-lang ${lang === l.code ? 'active' : ''}`}
                   onClick={() => setLang(l.code)}
                   aria-pressed={lang === l.code}
                 >
                   {l.label}
                 </button>
-              </span>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       )}
