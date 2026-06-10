@@ -1,10 +1,10 @@
 // Все переводы в одном файле. Чтобы добавить язык - допишите блок и добавьте код в LANGUAGES.
 
 export const LANGUAGES = [
-  { code: 'ru', label: 'RU' },
-  { code: 'kz', label: 'KZ' },
-  { code: 'en', label: 'EN' },
-  { code: 'zh', label: 'ZH' },
+  { code: 'ru', label: 'RU', name: 'Русский' },
+  { code: 'kz', label: 'KZ', name: 'Қазақша' },
+  { code: 'en', label: 'EN', name: 'English' },
+  { code: 'zh', label: 'ZH', name: '中文' },
 ];
 
 export const translations = {
