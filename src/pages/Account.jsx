@@ -223,8 +223,11 @@ export default function Account() {
   }, [isAdmin, currentEdition]);
 
   // Admin: is the current edition finished (winners chosen)?
+  // Wait for the cycle to load first, otherwise currentEdition is still its
+  // default (1) and we'd query the wrong edition — marking the phase "ready"
+  // with a stale value that then jumps once the real edition resolves.
   useEffect(() => {
-    if (!isAdmin || !supabase) return;
+    if (!isAdmin || !supabase || !cycleLoaded) return;
     let cancelled = false;
     supabase
       .from('applications')
@@ -233,7 +236,7 @@ export default function Account() {
       .eq('standing', 'winner')
       .then(({ count }) => { if (!cancelled) { setCycleFinished((count || 0) > 0); setCycleFinishedLoaded(true); } });
     return () => { cancelled = true; };
-  }, [isAdmin, currentEdition, refreshKey]);
+  }, [isAdmin, cycleLoaded, currentEdition, refreshKey]);
 
   // Load which jurors have reviewed each visible application in the active tour.
   useEffect(() => {
