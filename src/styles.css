@@ -992,7 +992,9 @@ input, textarea, select { font-family: inherit; }
      (apply, login, nav) lives in the full-screen menu. Language stays on the bar
      because it's critical for a multilingual audience. */
   .lang-switch { display: none; }
-  .lang-globe { display: inline-flex; }
+  /* !important: the base .lang-globe rule lives later in the file, so without it
+     the base 'display:none' would win and hide the language pill. */
+  .lang-globe { display: inline-flex !important; }
   .header-login, .header-apply, .header-apply--closed { display: none; }
 }
 @media (max-width: 1024px) {
@@ -1029,8 +1031,9 @@ input, textarea, select { font-family: inherit; }
   /* Phone bar: EAP · language · menu — three items, never overflows. */
   .header-right { gap: 8px; }
   .logo { font-size: 1.35rem; letter-spacing: 0.04em; }
-  .logo__full { display: none; }
-  .logo__short { display: inline; }
+  /* !important: base .logo__short rule is later in the file (see lang-globe note). */
+  .logo__full { display: none !important; }
+  .logo__short { display: inline !important; }
   .lang-globe { padding: 8px 11px; gap: 5px; max-width: 46vw; }
   .lang-globe__code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .block { padding: 72px 0; }
