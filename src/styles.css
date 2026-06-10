@@ -164,14 +164,22 @@ input, textarea, select { font-family: inherit; }
 .header-apply:active { transform: translateY(0) scale(0.98); }
 
 /* The apply CTA inside the mobile menu — solid gold to match */
-.mobile-menu .btn-gold {
+/* Premium primary CTA inside the mobile menu */
+.mobile-menu .mm-apply {
   display: flex !important; width: 100%; box-sizing: border-box;
-  background: linear-gradient(180deg, var(--accent-soft), var(--accent)) !important;
-  color: hsl(220, 14%, 9%) !important; border: 1px solid var(--accent) !important;
-  border-radius: 999px; text-align: center; justify-content: center; align-items: center;
-  padding: 17px 24px !important; font-size: 0.72rem;
-  box-shadow: 0 6px 24px hsla(38, 55%, 52%, 0.32);
+  align-items: center; justify-content: center; gap: 11px;
+  background: linear-gradient(180deg, hsl(38, 44%, 80%), var(--accent)) !important;
+  color: hsl(28, 32%, 12%) !important; border: 1px solid var(--accent-deep) !important;
+  border-radius: 16px; padding: 18px 24px !important;
+  font-size: 0.74rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  box-shadow: 0 10px 30px hsla(38, 55%, 50%, 0.34), inset 0 1px 0 hsla(40, 72%, 92%, 0.6);
+  transition: transform 0.1s, box-shadow 0.2s;
 }
+.mobile-menu .mm-apply:active {
+  transform: translateY(1px) scale(0.99);
+  box-shadow: 0 5px 18px hsla(38, 55%, 50%, 0.3), inset 0 1px 0 hsla(40, 72%, 92%, 0.6);
+}
+.mobile-menu .mm-apply svg { flex-shrink: 0; }
 
 /* ─── Buttons ─── */
 .btn-gold {
