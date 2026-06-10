@@ -2525,17 +2525,28 @@ input, textarea, select { font-family: inherit; }
 
 /* Dashboard / list skeletons — cohesive loading instead of piecemeal pop-in */
 @keyframes skel-pulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 0.9; } }
-.dash-skeleton { display: flex; flex-direction: column; gap: 16px; margin-top: 8px; }
-.dash-skeleton__steps,
+.dash-skeleton { display: flex; flex-direction: column; gap: 18px; margin: 4px 0 0; }
 .dash-skeleton__card,
 .list-skeleton__row {
   border-radius: 14px; background: hsla(36, 24%, 90%, 0.6);
   border: 1px solid hsl(35, 17%, 88%); animation: skel-pulse 1.3s ease-in-out infinite;
 }
-.dash-skeleton__steps { height: 64px; }
-.dash-skeleton__card { height: 168px; }
+.dash-skeleton__card { height: 168px; margin-bottom: 4px; }
+/* Stepper-shaped skeleton — mirrors the lifecycle tracker so it reads as "loading the steps" */
+.stage-skeleton { display: flex; align-items: flex-start; margin: 4px 0 4px; }
+.stage-skeleton__step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 9px; }
+.stage-skeleton__dot {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: hsla(36, 24%, 90%, 0.7); border: 1.5px solid hsl(35, 17%, 87%);
+  animation: skel-pulse 1.3s ease-in-out infinite;
+}
+.stage-skeleton__label {
+  width: 56px; height: 9px; border-radius: 5px;
+  background: hsla(36, 24%, 90%, 0.7); animation: skel-pulse 1.3s ease-in-out infinite;
+}
 .list-skeleton { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
 .list-skeleton__row { height: 72px; }
 @media (prefers-reduced-motion: reduce) {
-  .dash-skeleton__steps, .dash-skeleton__card, .list-skeleton__row { animation: none; }
+  .dash-skeleton__card, .list-skeleton__row,
+  .stage-skeleton__dot, .stage-skeleton__label { animation: none; }
 }

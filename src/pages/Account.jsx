@@ -92,6 +92,7 @@ export default function Account() {
   const [refreshKey, setRefreshKey] = useState(0);
   // True once the current edition has winners (cycle finished).
   const [cycleFinished, setCycleFinished] = useState(false);
+  const [cycleFinishedLoaded, setCycleFinishedLoaded] = useState(false);
 
   // Invite jury (admin only).
   const [inviteOpen, setInviteOpen] = useState(false);
@@ -230,7 +231,7 @@ export default function Account() {
       .select('id', { count: 'exact', head: true })
       .eq('edition', currentEdition)
       .eq('standing', 'winner')
-      .then(({ count }) => { if (!cancelled) setCycleFinished((count || 0) > 0); });
+      .then(({ count }) => { if (!cancelled) { setCycleFinished((count || 0) > 0); setCycleFinishedLoaded(true); } });
     return () => { cancelled = true; };
   }, [isAdmin, currentEdition, refreshKey]);
 
@@ -418,6 +419,10 @@ export default function Account() {
     : activeTour === 2 ? 'tour2'
     : submissionsClosed ? 'tour1'
     : 'submissions';
+  // The lifecycle phase is only fully known once BOTH the cycle row and the
+  // "finished?" check have resolved — gate the command area on this so the
+  // stepper never shows a wrong step and then jumps.
+  const phaseReady = cycleLoaded && cycleFinishedLoaded;
 
   // Pipeline-table cells: each applicant's status per tour.
   const reviewedInActive = (app) => {
@@ -539,14 +544,21 @@ export default function Account() {
           <button type="button" className="review-back" onClick={() => setViewEdition(null)}>← Все биеннале</button>
         )}
 
-        {isAdmin && isCurrentEdition && !showArchive && !cycleLoaded && (
+        {isAdmin && isCurrentEdition && !showArchive && !phaseReady && (
           <div className="dash-skeleton" aria-busy="true" aria-label="Загрузка панели">
-            <div className="dash-skeleton__steps" />
+            <div className="stage-skeleton" aria-hidden="true">
+              {[0, 1, 2, 3].map((i) => (
+                <span key={i} className="stage-skeleton__step">
+                  <span className="stage-skeleton__dot" />
+                  <span className="stage-skeleton__label" />
+                </span>
+              ))}
+            </div>
             <div className="dash-skeleton__card" />
           </div>
         )}
-        {isAdmin && isCurrentEdition && !showArchive && cycleLoaded && cycle && <AdminStageTracker phase={cyclePhase} />}
-        {isAdmin && isCurrentEdition && !showArchive && cycleLoaded && (
+        {isAdmin && isCurrentEdition && !showArchive && phaseReady && cycle && <AdminStageTracker phase={cyclePhase} />}
+        {isAdmin && isCurrentEdition && !showArchive && phaseReady && (
           <AdminFlowPanel
             cycle={cycle}
             applications={applications}
