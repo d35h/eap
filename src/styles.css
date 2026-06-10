@@ -2557,3 +2557,17 @@ input, textarea, select { font-family: inherit; }
   background: hsla(36, 24%, 96%, 0.6); animation: skel-pulse 1.3s ease-in-out infinite;
 }
 @media (prefers-reduced-motion: reduce) { .edition-card--skeleton { animation: none; } }
+
+/* Edition retrospective skeleton */
+.edition-summary__skel-head {
+  height: 92px; border-radius: 14px; border: 1px solid hsl(35, 17%, 88%);
+  background: hsla(36, 24%, 96%, 0.6); animation: skel-pulse 1.3s ease-in-out infinite;
+}
+.podium-skeleton { display: flex; gap: 14px; margin-top: 18px; flex-wrap: wrap; }
+.podium-skeleton__item {
+  flex: 1 1 150px; min-height: 110px; border-radius: 14px; border: 1px dashed hsl(35, 17%, 86%);
+  background: hsla(36, 24%, 96%, 0.55); animation: skel-pulse 1.3s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .edition-summary__skel-head, .podium-skeleton__item { animation: none; }
+}

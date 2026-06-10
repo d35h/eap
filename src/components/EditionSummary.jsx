@@ -40,7 +40,16 @@ export default function EditionSummary({ edition, year }) {
     return () => { cancelled = true; };
   }, [edition]);
 
-  if (!ready) return null;
+  if (!ready) {
+    return (
+      <div className="edition-summary" aria-busy="true">
+        <div className="edition-summary__skel-head" />
+        <div className="podium-skeleton">
+          {[0, 1, 2].map((i) => <div key={i} className="podium-skeleton__item" />)}
+        </div>
+      </div>
+    );
+  }
   const total = apps.length;
   const advanced = apps.filter((a) => (a.tour || 1) >= 2).length;
   const winners = apps
