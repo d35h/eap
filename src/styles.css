@@ -2504,3 +2504,21 @@ input, textarea, select { font-family: inherit; }
 }
 
 .dropzone.error { border-color: var(--error); background: hsla(2, 60%, 97%, 0.5); }
+/* Neutral placeholders shown while the submissions state resolves (no wrong-state flash) */
+.hero-loading {
+  min-height: 132px; border-radius: 14px;
+  background: linear-gradient(100deg, hsla(36,18%,90%,0) 30%, hsla(38,30%,80%,0.18) 50%, hsla(36,18%,90%,0) 70%);
+  background-size: 220% 100%; animation: hero-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes hero-shimmer { 0% { background-position: 180% 0; } 100% { background-position: -80% 0; } }
+.apply-loading { min-height: 50vh; display: flex; align-items: center; justify-content: center; }
+.apply-loading__spin {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px solid hsl(35, 17%, 84%); border-top-color: var(--accent);
+  animation: apply-spin 0.7s linear infinite;
+}
+@keyframes apply-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .hero-loading { animation: none; }
+  .apply-loading__spin { animation-duration: 1.5s; }
+}

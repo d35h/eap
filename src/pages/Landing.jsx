@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Countdown from '../components/Countdown.jsx';
 import { useTranslation } from '../hooks/useTranslation.jsx';
-import { submissionsOpen } from '../lib/cycleRepo.js';
+import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
 
 // ── Временный состав жюри (hardcoded). Имена и фото постоянны;
 //    роль и био берутся из переводов (team.jury, по индексу). ──
@@ -14,11 +14,7 @@ const JURY = [
 
 export default function Landing() {
   const { t } = useTranslation();
-  const [closed, setClosed] = useState(false);
-
-  useEffect(() => {
-    submissionsOpen().then((open) => setClosed(!open));
-  }, []);
+  const submOpen = useSubmissionsOpen(); // undefined = loading, then true/false
 
   return (
     <main>
@@ -42,16 +38,18 @@ export default function Landing() {
               <p className="hero-sub">{t('hero.sub')}</p>
             </div>
             <aside className="hero-right">
-              {closed ? (
-                <div className="hero-closed">
-                  <span className="hero-closed__title">{t('opencall.closedTitle')}</span>
-                  <p className="hero-closed__note">{t('opencall.closedNote')}</p>
-                </div>
-              ) : (
+              {submOpen === undefined ? (
+                <div className="hero-loading" aria-hidden="true" />
+              ) : submOpen ? (
                 <>
                   <Countdown />
                   <span className="hero-opening">{t('opencall.opening')}</span>
                 </>
+              ) : (
+                <div className="hero-closed">
+                  <span className="hero-closed__title">{t('opencall.closedTitle')}</span>
+                  <p className="hero-closed__note">{t('opencall.closedNote')}</p>
+                </div>
               )}
             </aside>
           </div>
