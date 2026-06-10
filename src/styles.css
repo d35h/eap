@@ -2502,3 +2502,5 @@ input, textarea, select { font-family: inherit; }
   display: block; font-family: var(--font-display); font-size: 1.15rem;
   color: hsla(36, 18%, 88%, 0.42); cursor: not-allowed;
 }
+
+.dropzone.error { border-color: var(--error); background: hsla(2, 60

@@ -89,6 +89,7 @@ export default function Apply() {
 
   const setWorkFile = (i, file) => {
     setWorkFiles((wf) => wf.map((x, j) => (j === i ? file : x)));
+    if (file && errors[`w${i}File`]) setErrors((e) => ({ ...e, [`w${i}File`]: null }));
   };
 
   // ── Validation per step ──
@@ -104,6 +105,7 @@ export default function Apply() {
       form.works.forEach((w, i) => {
         if (!w.title.trim()) e[`w${i}Title`] = t('apply.required');
         if (!w.desc.trim()) e[`w${i}Desc`] = t('apply.required');
+        if (!workFiles[i]) e[`w${i}File`] = t('apply.imageRequired');
       });
     }
     return e;
@@ -135,6 +137,11 @@ export default function Apply() {
 
   // ── Final submit (simulate payment + send) ──
   const submitFinal = async () => {
+    // Backstop: never submit with an invalid step (e.g. a work missing its image).
+    const e1 = validateStep(1);
+    if (Object.keys(e1).length) { setErrors(e1); setStep(1); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    const e2 = validateStep(2);
+    if (Object.keys(e2).length) { setErrors(e2); setStep(2); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
     setSubmitting(true);
     try {
       if (isSupabaseConfigured()) {
@@ -461,7 +468,7 @@ function WorkEntry({ index, work, file, onChange, onFile, onRemove, errors, t })
         </div>
       ) : (
         <div
-          className={`dropzone ${dragOver ? 'dragover' : ''}`}
+          className={`dropzone ${dragOver ? 'dragover' : ''} ${errors[`w${index}File`] ? 'error' : ''}`}
           onClick={() => inputRef.current?.click()}
           onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
           onDragLeave={() => setDragOver(false)}
@@ -479,6 +486,7 @@ function WorkEntry({ index, work, file, onChange, onFile, onRemove, errors, t })
           <p className="dropzone__sub">{t('apply.workFileSub')}</p>
         </div>
       )}
+      {errors[`w${index}File`] && <span className="field-error" role="alert">{errors[`w${index}File`]}</span>}
     </div>
   );
 }
