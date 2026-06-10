@@ -11,6 +11,7 @@ export default function Header() {
   const { lang, setLang, t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [langSheetOpen, setLangSheetOpen] = useState(false);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [displayName, setDisplayName] = useState('');
   const submOpen = useSubmissionsOpen(); // undefined = loading, then true/false
@@ -35,6 +36,17 @@ export default function Header() {
     })();
     return () => { cancelled = true; };
   }, [user]);
+
+  // Lock body scroll while a full-screen overlay (menu or language sheet) is open,
+  // so the page underneath can't move.
+  useEffect(() => {
+    const locked = menuOpen || langSheetOpen;
+    document.body.style.overflow = locked ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen, langSheetOpen]);
+
+  const chooseLang = (code) => { setLang(code); setLangSheetOpen(false); };
+  const currentLang = LANGUAGES.find((l) => l.code === lang) || LANGUAGES[0];
 
   // Close the account dropdown on outside click
   useEffect(() => {
@@ -80,7 +92,8 @@ export default function Header() {
               if (location.pathname === '/') window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           >
-            <em>Eurasian</em> Art Platform
+            <span className="logo__full"><em>Eurasian</em> Art Platform</span>
+            <span className="logo__short" aria-hidden="true">EAP</span>
           </Link>
 
           <nav className="nav-primary" aria-label="Primary">
@@ -163,6 +176,19 @@ export default function Header() {
             )}
 
             <button
+              type="button"
+              className="lang-globe"
+              onClick={() => setLangSheetOpen(true)}
+              aria-label="Сменить язык · Change language"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
+              </svg>
+              <span className="lang-globe__code">{currentLang.label}</span>
+            </button>
+
+            <button
               className="menu-toggle"
               onClick={() => setMenuOpen(true)}
               aria-label="Open menu"
@@ -207,24 +233,50 @@ export default function Header() {
               </span>
             )
           )}
-          <div className="mobile-menu__lang" role="group" aria-label="Язык / Language">
-            <span className="mobile-menu__lang-label">Язык · Language</span>
-            <div className="mm-lang-list">
+          <button
+            type="button"
+            className="mobile-menu__langbtn"
+            onClick={() => { setMenuOpen(false); setLangSheetOpen(true); }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
+            </svg>
+            <span>Язык · Language</span>
+            <span className="mobile-menu__langbtn-cur">{currentLang.name}</span>
+          </button>
+        </div>
+      )}
+
+      {langSheetOpen && (
+        <div className="lang-sheet-backdrop" onClick={() => setLangSheetOpen(false)}>
+          <div
+            className="lang-sheet"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Выберите язык"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <span className="lang-sheet__handle" aria-hidden="true" />
+            <span className="lang-sheet__title">Выберите язык&ensp;·&ensp;Choose language</span>
+            <div className="lang-sheet__list">
               {LANGUAGES.map((l) => (
                 <button
                   key={l.code}
                   type="button"
-                  className={`mm-lang-row ${lang === l.code ? 'active' : ''}`}
-                  onClick={() => setLang(l.code)}
+                  className={`lang-sheet__row ${lang === l.code ? 'active' : ''}`}
+                  onClick={() => chooseLang(l.code)}
                   aria-pressed={lang === l.code}
                 >
-                  <span className="mm-lang-row__name">{l.name}</span>
-                  <span className="mm-lang-row__code">{l.label}</span>
-                  {lang === l.code && (
-                    <svg className="mm-lang-row__check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="M20 6 9 17l-5-5" />
-                    </svg>
-                  )}
+                  <span className="lang-sheet__name">{l.name}</span>
+                  <span className="lang-sheet__code">{l.label}</span>
+                  <span className="lang-sheet__check" aria-hidden="true">
+                    {lang === l.code && (
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                    )}
+                  </span>
                 </button>
               ))}
             </div>

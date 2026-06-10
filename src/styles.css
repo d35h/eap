@@ -985,10 +985,10 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 1280px) {
   .nav-primary { display: none; }
   .menu-toggle { display: block; }
-  /* The nav links + language switch collapse into the hamburger (the lang lives
-     in the menu); the auth CTAs stay on the bar so login + apply are always
-     reachable — never buried in a menu. */
+  /* The nav links collapse into the hamburger; language moves to an always-visible
+     globe button on the bar (opens a sheet) so it's findable without the menu. */
   .lang-switch { display: none; }
+  .lang-globe { display: inline-flex; }
 }
 @media (max-width: 1024px) {
   .nav-primary { display: none; }
@@ -1018,14 +1018,17 @@ input, textarea, select { font-family: inherit; }
   .container { padding: 0 20px; }
   /* Compact header so login + apply fit on the bar: shrink the logo, move the
      language switch into the menu, and tighten the CTAs. */
-  /* Phone bar: Logo · primary CTA · menu. Login lives in the menu (secondary)
+  /* Phone bar: EAP · apply · globe · menu. Login lives in the menu (secondary)
      so the bar never overflows on narrow screens. */
-  .header-right { gap: 8px; }
-  .logo { font-size: 1.05rem; }
+  .header-right { gap: 7px; }
+  .logo { font-size: 1.3rem; letter-spacing: 0.04em; }
+  .logo__full { display: none; }
+  .logo__short { display: inline; }
   .lang-switch { display: none; }
   .header-login { display: none; }
-  .header-apply { padding: 8px 14px !important; font-size: 0.58rem !important; letter-spacing: 0.08em !important; }
-  .header-apply--closed { padding: 8px 14px; font-size: 0.58rem; letter-spacing: 0.08em; }
+  .header-apply { padding: 8px 13px !important; font-size: 0.56rem !important; letter-spacing: 0.07em !important; }
+  .header-apply--closed { padding: 8px 13px; font-size: 0.56rem; letter-spacing: 0.07em; }
+  .lang-globe { padding: 7px 10px; gap: 5px; }
   .menu-toggle { padding: 4px 4px; margin-left: -2px; }
   .block { padding: 72px 0; }
   .hero { padding-top: 120px; padding-bottom: 56px; }
@@ -2296,30 +2299,76 @@ input, textarea, select { font-family: inherit; }
   letter-spacing: -0.01em; margin: 12px 0 14px;
 }
 
-/* Language switch inside the mobile menu — native-name rows with a checkmark */
-.mobile-menu__lang { display: flex; flex-direction: column; gap: 12px; margin-top: 32px; }
-.mobile-menu__lang-label {
-  font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.2em;
-  text-transform: uppercase; color: hsla(36, 22%, 92%, 0.4);
+/* Responsive logo — full wordmark on desktop, EAP monogram on phones */
+.logo__short { display: none; }
+
+/* Globe language button on the bar (mobile only; opens the language sheet) */
+.lang-globe {
+  display: none; align-items: center; gap: 6px; background: transparent;
+  border: 1px solid hsla(38, 38%, 56%, 0.32); border-radius: 999px;
+  padding: 7px 12px; color: var(--accent-soft); cursor: pointer;
+  font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.06em;
+  transition: border-color 0.2s, color 0.2s;
 }
-.mm-lang-list { display: flex; flex-direction: column; }
-.mobile-menu .mm-lang-row {
-  display: flex !important; align-items: center; gap: 14px;
-  width: 100% !important; text-align: left !important;
-  font-family: var(--font-display) !important; font-size: 1.18rem !important; font-weight: 400 !important;
-  color: hsla(36, 22%, 92%, 0.8) !important; background: none !important;
-  border: 0 !important; border-bottom: 1px solid hsla(36, 22%, 92%, 0.09) !important;
-  padding: 14px 2px !important; transition: color 0.2s;
+.lang-globe:hover { border-color: var(--accent); color: var(--accent); }
+.lang-globe__code { line-height: 1; }
+
+/* Language entry inside the hamburger menu (opens the same sheet) */
+.mobile-menu .mobile-menu__langbtn {
+  display: flex !important; align-items: center; gap: 12px; width: 100% !important;
+  margin-top: 12px; text-align: left !important; cursor: pointer;
+  font-family: var(--font-display) !important; font-size: 1.6rem !important; color: var(--fg) !important;
+  background: none !important; border: 0 !important; border-bottom: 1px solid var(--border) !important;
+  padding: 0 0 16px 0 !important;
 }
-.mobile-menu .mm-lang-row:last-child { border-bottom: 0 !important; }
-.mobile-menu .mm-lang-row.active { color: var(--accent) !important; }
-.mm-lang-row__name { flex: 1; }
-.mm-lang-row__code {
-  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase;
-  color: hsla(36, 22%, 92%, 0.32);
+.mobile-menu__langbtn svg { color: var(--accent); flex-shrink: 0; }
+.mobile-menu__langbtn-cur {
+  margin-left: auto; font-family: var(--font-mono); font-size: 0.8rem;
+  letter-spacing: 0.04em; color: var(--accent-soft);
 }
-.mm-lang-row.active .mm-lang-row__code { color: hsla(38, 38%, 56%, 0.7); }
-.mm-lang-row__check { color: var(--accent); flex-shrink: 0; }
+
+/* Language bottom sheet — clear, big, one-tap (artist-friendly) */
+.lang-sheet-backdrop {
+  position: fixed; inset: 0; z-index: 80; display: flex; align-items: flex-end;
+  background: hsla(220, 30%, 4%, 0.55); animation: lsheet-fade 0.2s ease;
+}
+.lang-sheet {
+  width: 100%; background: var(--bg); border-top: 1px solid hsla(38, 38%, 56%, 0.22);
+  border-radius: 22px 22px 0 0; padding: 12px 22px calc(28px + env(safe-area-inset-bottom));
+  box-shadow: 0 -16px 50px hsla(220, 30%, 4%, 0.5); animation: lsheet-up 0.28s cubic-bezier(.22,1,.36,1);
+}
+.lang-sheet__handle {
+  display: block; width: 42px; height: 4px; border-radius: 999px;
+  background: hsla(36, 22%, 92%, 0.22); margin: 0 auto 18px;
+}
+.lang-sheet__title {
+  display: block; text-align: center; font-family: var(--font-mono);
+  font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: hsla(36, 22%, 92%, 0.5); margin-bottom: 14px;
+}
+.lang-sheet__list { display: flex; flex-direction: column; }
+.lang-sheet__row {
+  display: flex; align-items: center; gap: 14px; width: 100%;
+  background: none; border: 0; border-bottom: 1px solid hsla(36, 22%, 92%, 0.08);
+  padding: 16px 4px; cursor: pointer; text-align: left;
+  font-family: var(--font-display); font-size: 1.4rem; color: hsla(36, 22%, 92%, 0.85);
+  transition: color 0.15s;
+}
+.lang-sheet__row:last-child { border-bottom: 0; }
+.lang-sheet__row.active { color: var(--accent); }
+.lang-sheet__row:active { color: var(--accent); }
+.lang-sheet__name { flex: 1; }
+.lang-sheet__code {
+  font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: hsla(36, 22%, 92%, 0.35);
+}
+.lang-sheet__row.active .lang-sheet__code { color: hsla(38, 38%, 56%, 0.7); }
+.lang-sheet__check { width: 24px; flex-shrink: 0; color: var(--accent); display: inline-flex; justify-content: center; }
+@keyframes lsheet-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes lsheet-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .lang-sheet-backdrop, .lang-sheet { animation: none; }
+}
 
 /* ════════════════════════════════════════════════════════════════════
    Contact section — premium redesign
