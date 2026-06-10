@@ -2571,3 +2571,23 @@ input, textarea, select { font-family: inherit; }
 @media (prefers-reduced-motion: reduce) {
   .edition-summary__skel-head, .podium-skeleton__item { animation: none; }
 }
+
+/* "New version available" nudge */
+.version-toast {
+  position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 1000;
+  display: flex; align-items: center; gap: 16px; max-width: calc(100vw - 32px);
+  padding: 12px 14px 12px 20px; border-radius: 999px;
+  background: hsl(220, 14%, 9%); color: hsl(36, 22%, 92%);
+  border: 1px solid hsla(38, 38%, 56%, 0.3); box-shadow: 0 12px 40px hsla(220, 30%, 4%, 0.4);
+  font-size: 0.9rem; animation: vtoast-in 0.3s cubic-bezier(.22,1,.36,1);
+}
+@keyframes vtoast-in { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+.version-toast__text { white-space: nowrap; }
+.version-toast__btn {
+  flex-shrink: 0; border: 0; cursor: pointer; border-radius: 999px; padding: 8px 18px;
+  background: linear-gradient(180deg, var(--accent-soft), var(--accent)); color: hsl(220, 14%, 9%);
+  font-family: inherit; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.01em;
+  transition: filter 0.2s;
+}
+.version-toast__btn:hover { filter: brightness(1.06); }
+@media (prefers-reduced-motion: reduce) { .version-toast { animation: none; } }

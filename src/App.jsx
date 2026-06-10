@@ -2,6 +2,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect, useLayoutEffect } from 'react';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
+import VersionWatcher from './components/VersionWatcher.jsx';
 import Landing from './pages/Landing.jsx';
 import Apply from './pages/Apply.jsx';
 import Process from './pages/Process.jsx';
@@ -39,6 +40,7 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
+      <VersionWatcher />
       <Header />
       <Routes>
         <Route path="/" element={<Landing />} />
