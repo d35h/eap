@@ -12,6 +12,18 @@ export async function handlePayment({ admin, env }, input) {
     .from('applications').select('*').eq('id', applicationId).single();
   if (error || !app) return json(404, { error: 'application not found' });
 
+  // Guard: every work must have its uploaded file before payment can start.
+  // The client uploads files before calling this, so a legit application always
+  // passes — this rejects bypass attempts that skip the upload step.
+  const works = Array.isArray(app.works) ? app.works : [];
+  if (works.length === 0) return json(400, { error: 'no works', code: 'missing_files' });
+  const { data: list } = await admin.storage.from('works').list(`applications/${applicationId}`);
+  const uploaded = new Set(
+    (list || []).map((f) => (/^work(\d+)\./.exec(f.name) || [])[1]).filter(Boolean),
+  );
+  const allUploaded = works.every((_, i) => uploaded.has(String(i + 1)));
+  if (!allUploaded) return json(400, { error: 'every work must have an uploaded file', code: 'missing_files' });
+
   let provider;
   try { provider = getProvider(channel); }
   catch { return json(400, { error: 'unknown channel' }); }
