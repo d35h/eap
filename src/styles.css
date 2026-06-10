@@ -101,7 +101,7 @@ input, textarea, select { font-family: inherit; }
 .menu-toggle {
   display: none; align-items: center; justify-content: center;
   background: transparent; border: 0; color: var(--fg); padding: 10px;
-  margin-right: -8px; cursor: pointer;
+  margin-right: -8px; cursor: pointer; flex-shrink: 0;
 }
 
 /* Logged-in avatar (email initial) + dropdown */
@@ -1042,8 +1042,8 @@ input, textarea, select { font-family: inherit; }
   /* !important: base .logo__short rule is later in the file (see lang-globe note). */
   .logo__full { display: none !important; }
   .logo__short { display: inline !important; }
-  .lang-globe { padding: 8px 11px; gap: 5px; max-width: 46vw; }
-  .lang-globe__code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lang-globe { padding: 8px 11px; gap: 5px; flex-shrink: 0; }
+  .lang-globe__code { white-space: nowrap; }
   .block { padding: 72px 0; }
   .hero { min-height: auto; justify-content: flex-start; padding: 96px 0 52px; }
   .hero-meta { margin-bottom: 22px; flex-direction: column; gap: 8px; }
