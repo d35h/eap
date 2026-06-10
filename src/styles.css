@@ -2550,3 +2550,10 @@ input, textarea, select { font-family: inherit; }
   .dash-skeleton__card, .list-skeleton__row,
   .stage-skeleton__dot, .stage-skeleton__label { animation: none; }
 }
+
+/* Edition-card skeleton — keeps the gallery grid stable while it loads */
+.edition-card--skeleton {
+  min-height: 116px; cursor: default; border-style: dashed;
+  background: hsla(36, 24%, 96%, 0.6); animation: skel-pulse 1.3s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) { .edition-card--skeleton { animation: none; } }

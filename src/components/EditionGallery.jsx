@@ -9,9 +9,12 @@ const plural = (n, one, few, many) => {
 };
 
 // Gallery of past biennales: one card per archived edition (year + winner +
-// counts). Clicking a card opens that edition's full retrospective.
+// counts). Clicking a card opens that edition's full retrospective. Everything a
+// card shows (year, winner, totals) comes from a single query so the whole card
+// renders complete at once — no fields popping in or numbers jumping.
 export default function EditionGallery({ currentEdition, editionYears, onPick }) {
   const [byEdition, setByEdition] = useState({});
+  const [years, setYears] = useState({});
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -22,23 +25,35 @@ export default function EditionGallery({ currentEdition, editionYears, onPick })
       if (!supabase) return;
       const { data } = await supabase
         .from('applications')
-        .select('id, first_name, last_name, email, edition, standing, payment_status')
+        .select('id, first_name, last_name, email, edition, standing, payment_status, created_at')
         .lt('edition', currentEdition).eq('payment_status', 'paid');
       if (cancelled) return;
       const groups = {};
+      const yrs = {};
       (data || []).forEach((a) => {
         (groups[a.edition] ||= { total: 0, winners: [] }).total += 1;
         if (a.standing === 'winner') groups[a.edition].winners.push(a);
+        const y = new Date(a.created_at).getFullYear();
+        if (!yrs[a.edition] || y < yrs[a.edition]) yrs[a.edition] = y;
       });
       setByEdition(groups);
+      setYears(yrs);
       setReady(true);
     });
     return () => { cancelled = true; };
   }, [currentEdition]);
 
-  const editions = Array.from({ length: currentEdition - 1 }, (_, i) => currentEdition - 1 - i);
+  const editions = Array.from({ length: Math.max(0, currentEdition - 1) }, (_, i) => currentEdition - 1 - i);
 
-  if (!ready) return <p className="cycle-note" style={{ marginTop: 20 }}>…</p>;
+  if (!ready) {
+    return (
+      <div className="edition-gallery" aria-busy="true">
+        {Array.from({ length: Math.min(editions.length || 2, 4) }, (_, i) => (
+          <div key={i} className="edition-card edition-card--skeleton" />
+        ))}
+      </div>
+    );
+  }
   if (editions.length === 0) return <p className="cycle-note" style={{ marginTop: 20 }}>Архив пуст — это первый цикл.</p>;
 
   return (
@@ -46,9 +61,10 @@ export default function EditionGallery({ currentEdition, editionYears, onPick })
       {editions.map((ed) => {
         const g = byEdition[ed] || { total: 0, winners: [] };
         const top = g.winners[0];
+        const year = years[ed] || editionYears[ed];
         return (
           <button key={ed} type="button" className="edition-card" onClick={() => onPick(ed)}>
-            <span className="edition-card__year">Биеннале {editionYears[ed] || `№${ed}`}</span>
+            <span className="edition-card__year">{year ? `Биеннале ${year}` : `Биеннале №${ed}`}</span>
             {top ? (
               <span className="edition-card__winner">🥇 {applicant(top)}</span>
             ) : (
