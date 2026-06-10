@@ -2503,4 +2503,4 @@ input, textarea, select { font-family: inherit; }
   color: hsla(36, 18%, 88%, 0.42); cursor: not-allowed;
 }
 
-.dropzone.error { border-color: var(--error); background: hsla(2, 60
+.dropzone.error { border-color: var(--error); background: hsla(2, 60%, 97%, 0.5); }
