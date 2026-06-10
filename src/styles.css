@@ -993,8 +993,13 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 1024px) {
   .nav-primary { display: none; }
   .menu-toggle { display: block; }
+  /* Mobile hero: top-aligned, natural height (desktop is a tall bottom-aligned
+     editorial hero; on a phone that dumped everything to the bottom). */
+  .hero { min-height: auto; justify-content: flex-start; padding: 104px 0 60px; }
   .hero h1 { white-space: normal; }
-  .hero-grid { grid-template-columns: 1fr; gap: 48px; align-items: start; }
+  .hero-title__full { line-height: 1.06; }
+  .hero-meta { margin-bottom: 28px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; align-items: start; }
   .hero-right { border-left: 0; padding-left: 0; }
   .hero-left .hero-sub { margin-bottom: 0; }
   .manifest .container { grid-template-columns: 1fr; gap: 48px; }
@@ -1031,8 +1036,10 @@ input, textarea, select { font-family: inherit; }
   .lang-globe { padding: 7px 10px; gap: 5px; }
   .menu-toggle { padding: 4px 4px; margin-left: -2px; }
   .block { padding: 72px 0; }
-  .hero { padding-top: 120px; padding-bottom: 56px; }
-  .hero-meta { margin-bottom: 56px; flex-direction: column; gap: 8px; }
+  .hero { min-height: auto; justify-content: flex-start; padding: 96px 0 52px; }
+  .hero-meta { margin-bottom: 22px; flex-direction: column; gap: 8px; }
+  .hero h1 { font-size: clamp(2.1rem, 11vw, 3rem); }
+  .hero-vp { font-size: 1.05rem; }
   .hero-bottom { grid-template-columns: 1fr; gap: 24px; padding-top: 28px; }
   .process-steps { grid-template-columns: 1fr; }
   .step { padding: 28px 24px; min-height: auto; }
@@ -2302,16 +2309,19 @@ input, textarea, select { font-family: inherit; }
 /* Responsive logo — full wordmark on desktop, EAP monogram on phones */
 .logo__short { display: none; }
 
-/* Globe language button on the bar (mobile only; opens the language sheet) */
+/* Globe language button on the bar (mobile only; opens the language sheet).
+   Gold-tinted pill + chevron so it clearly reads as a tappable picker. */
 .lang-globe {
-  display: none; align-items: center; gap: 6px; background: transparent;
-  border: 1px solid hsla(38, 38%, 56%, 0.32); border-radius: 999px;
-  padding: 7px 12px; color: var(--accent-soft); cursor: pointer;
-  font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.06em;
-  transition: border-color 0.2s, color 0.2s;
+  display: none; align-items: center; gap: 5px;
+  background: hsla(38, 38%, 56%, 0.12); border: 1px solid hsla(38, 38%, 56%, 0.42);
+  border-radius: 999px; padding: 7px 11px; color: var(--accent-soft); cursor: pointer;
+  font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.04em;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
 }
-.lang-globe:hover { border-color: var(--accent); color: var(--accent); }
+.lang-globe:hover, .lang-globe:active { border-color: var(--accent); color: var(--accent); background: hsla(38, 38%, 56%, 0.18); }
+.lang-globe__icon { flex-shrink: 0; }
 .lang-globe__code { line-height: 1; }
+.lang-globe__chev { opacity: 0.65; margin-left: -1px; }
 
 /* Language entry inside the hamburger menu (opens the same sheet) */
 .mobile-menu .mobile-menu__langbtn {
