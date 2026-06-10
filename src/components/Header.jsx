@@ -186,7 +186,7 @@ export default function Header() {
                 <circle cx="12" cy="12" r="9" />
                 <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
               </svg>
-              <span className="lang-globe__code">{currentLang.label}</span>
+              <span className="lang-globe__code">{currentLang.name}</span>
               <svg className="lang-globe__chev" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="m6 9 6 6 6-6" />
               </svg>
@@ -195,9 +195,11 @@ export default function Header() {
             <button
               className="menu-toggle"
               onClick={() => setMenuOpen(true)}
-              aria-label="Open menu"
+              aria-label="Меню · Menu"
             >
-              ☰
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                <path d="M3 6h18M3 12h18M3 18h18" />
+              </svg>
             </button>
           </div>
         </div>
@@ -205,8 +207,10 @@ export default function Header() {
 
       {menuOpen && (
         <div className="mobile-menu">
-          <button className="close" onClick={() => setMenuOpen(false)} aria-label="Close menu">
-            ×
+          <button className="close" onClick={() => setMenuOpen(false)} aria-label="Закрыть · Close">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
           </button>
           <Link to="/process" onClick={() => setMenuOpen(false)}>
             {t('nav.process')}

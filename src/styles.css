@@ -99,8 +99,9 @@ input, textarea, select { font-family: inherit; }
 .lang-switch .sep { color: hsla(36, 22%, 92%, 0.3); }
 
 .menu-toggle {
-  display: none; background: transparent; border: 0;
-  color: var(--fg); font-size: 1.5rem; padding: 4px 8px;
+  display: none; align-items: center; justify-content: center;
+  background: transparent; border: 0; color: var(--fg); padding: 10px;
+  margin-right: -8px; cursor: pointer;
 }
 
 /* Logged-in avatar (email initial) + dropdown */
@@ -164,10 +165,12 @@ input, textarea, select { font-family: inherit; }
 
 /* The apply CTA inside the mobile menu — solid gold to match */
 .mobile-menu .btn-gold {
+  display: flex !important; width: 100%; box-sizing: border-box;
   background: linear-gradient(180deg, var(--accent-soft), var(--accent)) !important;
-  color: hsl(220, 14%, 9%) !important; border-color: var(--accent) !important;
-  border-radius: 999px; text-align: center; justify-content: center;
-  box-shadow: 0 4px 22px hsla(38, 55%, 52%, 0.3);
+  color: hsl(220, 14%, 9%) !important; border: 1px solid var(--accent) !important;
+  border-radius: 999px; text-align: center; justify-content: center; align-items: center;
+  padding: 17px 24px !important; font-size: 0.72rem;
+  box-shadow: 0 6px 24px hsla(38, 55%, 52%, 0.32);
 }
 
 /* ─── Buttons ─── */
@@ -960,9 +963,9 @@ input, textarea, select { font-family: inherit; }
   text-align: left; cursor: pointer; font-weight: 400;
 }
 .mobile-menu .close {
-  position: absolute; top: 24px; right: 32px;
-  background: transparent; border: 0; color: var(--fg);
-  font-size: 2rem; line-height: 1; padding: 0;
+  position: absolute; top: 18px; right: 22px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; border: 0; color: var(--fg); padding: 10px; cursor: pointer;
 }
 
 /* ─── NotFound ─── */
@@ -984,11 +987,13 @@ input, textarea, select { font-family: inherit; }
 /* Switch to the hamburger before the long nav labels start to wrap */
 @media (max-width: 1280px) {
   .nav-primary { display: none; }
-  .menu-toggle { display: block; }
-  /* The nav links collapse into the hamburger; language moves to an always-visible
-     globe button on the bar (opens a sheet) so it's findable without the menu. */
+  .menu-toggle { display: inline-flex; }
+  /* Minimal, overflow-proof mobile bar: Logo · Language · Menu. Everything else
+     (apply, login, nav) lives in the full-screen menu. Language stays on the bar
+     because it's critical for a multilingual audience. */
   .lang-switch { display: none; }
   .lang-globe { display: inline-flex; }
+  .header-login, .header-apply, .header-apply--closed { display: none; }
 }
 @media (max-width: 1024px) {
   .nav-primary { display: none; }
@@ -1021,20 +1026,13 @@ input, textarea, select { font-family: inherit; }
 
 @media (max-width: 640px) {
   .container { padding: 0 20px; }
-  /* Compact header so login + apply fit on the bar: shrink the logo, move the
-     language switch into the menu, and tighten the CTAs. */
-  /* Phone bar: EAP · apply · globe · menu. Login lives in the menu (secondary)
-     so the bar never overflows on narrow screens. */
-  .header-right { gap: 7px; }
-  .logo { font-size: 1.3rem; letter-spacing: 0.04em; }
+  /* Phone bar: EAP · language · menu — three items, never overflows. */
+  .header-right { gap: 8px; }
+  .logo { font-size: 1.35rem; letter-spacing: 0.04em; }
   .logo__full { display: none; }
   .logo__short { display: inline; }
-  .lang-switch { display: none; }
-  .header-login { display: none; }
-  .header-apply { padding: 8px 13px !important; font-size: 0.56rem !important; letter-spacing: 0.07em !important; }
-  .header-apply--closed { padding: 8px 13px; font-size: 0.56rem; letter-spacing: 0.07em; }
-  .lang-globe { padding: 7px 10px; gap: 5px; }
-  .menu-toggle { padding: 4px 4px; margin-left: -2px; }
+  .lang-globe { padding: 8px 11px; gap: 5px; max-width: 46vw; }
+  .lang-globe__code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .block { padding: 72px 0; }
   .hero { min-height: auto; justify-content: flex-start; padding: 96px 0 52px; }
   .hero-meta { margin-bottom: 22px; flex-direction: column; gap: 8px; }
