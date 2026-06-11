@@ -708,7 +708,7 @@ export default function Account() {
                 {isCurrentEdition && (
                   <span className="pl-cell">
                     <span className={`review-chip review-chip--${app.payment_status === 'paid' ? 'finished' : 'draft'}`}>
-                      {app.payment_status === 'paid' ? 'Оплачено' : 'Ожидает'}
+                      {app.payment_status === 'paid' ? 'Оплачено' : 'Не оплачено'}
                     </span>
                   </span>
                 )}
