@@ -11,7 +11,7 @@ import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
 const emptyWork = () => ({ title: '', year: '', media: '', size: '', desc: '' });
 
 const INITIAL = {
-  firstName: '', lastName: '', email: '', phone: '', country: '', city: '',
+  firstName: '', lastName: '', email: '', phone: '', country: '', countryCode: '', city: '',
   website: '', instagram: '',
   works: [emptyWork()],
   paymentChannel: 'byn',
@@ -38,13 +38,26 @@ export default function Apply() {
 
   // Default the country to Belarus (localised) for a fresh form — most applicants
   // are local. Never overrides a value already entered or restored from a draft.
+  const regionName = (code, fallback) => {
+    try { return new Intl.DisplayNames([lang || 'ru'], { type: 'region' }).of(code) || fallback; }
+    catch { return fallback; }
+  };
+
   useEffect(() => {
     if (form.country) return;
-    let name = 'Беларусь';
-    try { name = new Intl.DisplayNames([lang || 'ru'], { type: 'region' }).of('BY') || name; } catch { /* keep fallback */ }
-    setForm((f) => (f.country ? f : { ...f, country: name }));
+    setForm((f) => (f.country ? f : { ...f, country: regionName('BY', 'Беларусь'), countryCode: 'BY' }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // When the language changes, re-translate the chosen country so it never
+  // stays in the previous language. Only when picked from the list (has a code);
+  // free-typed text is left as the user wrote it.
+  useEffect(() => {
+    if (!form.countryCode) return;
+    const name = regionName(form.countryCode, form.country);
+    setForm((f) => (f.country === name ? f : { ...f, country: name }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lang]);
   const [step, setStep] = useState(1);
   // Файлы не сохраняются в localStorage (File нельзя сериализовать). Параллельно works по индексу.
   const [workFiles, setWorkFiles] = useState(() => form.works.map(() => null));
@@ -351,7 +364,14 @@ function Step1({ form, update, errors, t }) {
                onChange={(v) => update('phone', v)} />
         <div className="field-group">
           <label>{t('apply.country')}</label>
-          <CountrySelect value={form.country} placeholder={t('apply.countryPh')} onChange={(v) => update('country', v)} />
+          <CountrySelect
+            value={form.country}
+            placeholder={t('apply.countryPh')}
+            onChange={(name, code) => {
+              setForm((f) => ({ ...f, country: name, countryCode: code || '' }));
+              if (errors.country) setErrors((e) => ({ ...e, country: null }));
+            }}
+          />
         </div>
         <Field label={t('apply.city')} value={form.city} ph={t('apply.cityPh')}
                onChange={(v) => update('city', v)} />

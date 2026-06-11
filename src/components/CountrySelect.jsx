@@ -44,12 +44,14 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
     return () => document.removeEventListener('mousedown', onDoc);
   }, [open]);
 
-  const pick = (name) => { onChange(name); setQuery(''); setOpen(false); };
+  // Report both the localised name (stored & submitted) and the stable region
+  // code, so the caller can re-translate the name when the language changes.
+  const pick = (name, code) => { onChange(name, code); setQuery(''); setOpen(false); };
 
   const onKey = (e) => {
     if (e.key === 'ArrowDown') { e.preventDefault(); setOpen(true); setActive((i) => Math.min(i + 1, filtered.length - 1)); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); setActive((i) => Math.max(i - 1, 0)); }
-    else if (e.key === 'Enter' && open && filtered[active]) { e.preventDefault(); pick(filtered[active].name); }
+    else if (e.key === 'Enter' && open && filtered[active]) { e.preventDefault(); pick(filtered[active].name, filtered[active].c); }
     else if (e.key === 'Escape') { setOpen(false); }
   };
 
@@ -70,7 +72,7 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
         className={error ? 'error' : ''}
         placeholder={placeholder}
         value={open ? query : value}
-        onChange={(e) => { setQuery(e.target.value); onChange(e.target.value); setOpen(true); setActive(0); }}
+        onChange={(e) => { setQuery(e.target.value); onChange(e.target.value, ''); setOpen(true); setActive(0); }}
         onFocus={() => { setQuery(''); setOpen(true); setActive(0); }}
         onKeyDown={onKey}
       />
@@ -86,7 +88,7 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
               aria-selected={value === x.name}
               className={`cselect__opt ${i === active ? 'is-active' : ''} ${x.pinned ? 'is-pinned' : ''} ${value === x.name ? 'is-current' : ''}`}
               onMouseEnter={() => setActive(i)}
-              onMouseDown={(e) => { e.preventDefault(); pick(x.name); }}
+              onMouseDown={(e) => { e.preventDefault(); pick(x.name, x.c); }}
             >
               {x.name}
               {value === x.name && <span className="cselect__check" aria-hidden="true">✓</span>}
