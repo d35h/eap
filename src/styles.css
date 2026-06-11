@@ -2679,3 +2679,25 @@ input, textarea, select { font-family: inherit; }
 }
 .version-toast__btn:hover { filter: brightness(1.06); }
 @media (prefers-reduced-motion: reduce) { .version-toast { animation: none; } }
+
+/* ─── Apply CTA: subtle arrow, premium filled button on mobile ─── */
+.btn-gold__arrow { flex-shrink: 0; transition: transform 0.4s cubic-bezier(.22,1,.36,1); }
+.btn-gold:hover .btn-gold__arrow { transform: translateX(3px); }
+
+@media (max-width: 640px) {
+  .process-cta { padding: 34px 22px; margin-top: 56px; border-radius: 20px; }
+  .process-cta h3 { font-size: 1.7rem; margin-bottom: 12px; }
+  .process-cta p { margin-bottom: 26px; }
+  /* On mobile the thin outline reads as weak — promote it to the same premium
+     filled-gold CTA used in the mobile menu (.mm-apply). */
+  .process-cta .btn-gold {
+    display: flex; width: 100%; gap: 10px;
+    padding: 18px 24px; border-radius: 16px;
+    border: 1px solid var(--accent-deep);
+    background: linear-gradient(180deg, hsl(38, 44%, 80%), var(--accent));
+    color: hsl(28, 32%, 12%);
+    font-size: 0.74rem; font-weight: 600; letter-spacing: 0.12em;
+    box-shadow: 0 12px 30px hsla(38, 42%, 30%, 0.35), inset 0 1px 0 hsla(40, 60%, 96%, 0.55);
+  }
+  .process-cta .btn-gold:active { transform: scale(0.985); }
+}
