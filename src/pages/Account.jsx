@@ -688,7 +688,14 @@ export default function Account() {
 
           // Admin sees a pipeline row → the full application page.
           if (isAdmin) {
-            const thumb = filesByApp[app.id]?.[1];
+            // An application can carry up to three works — show every uploaded
+            // thumbnail, in work order, not just the first.
+            const fileMap = filesByApp[app.id] || {};
+            const thumbs = Object.keys(fileMap)
+              .map(Number)
+              .sort((a, b) => a - b)
+              .map((n) => fileMap[n])
+              .filter(Boolean);
             const t1 = tour1Cell(app);
             const t2 = tour2Cell(app);
             const cell = (c) => (c.cls === 'muted'
@@ -697,8 +704,14 @@ export default function Account() {
             return (
               <Link key={app.id} to={`/account/application/${app.id}`} className={`pl-row ${isCurrentEdition ? '' : 'pl-row--archive'}`}>
                 <span className="pl-row__artist">
-                  <span className="pl-row__thumb">
-                    {thumb ? <SmartImg src={imgThumb(thumb, 96)} alt="" /> : <span className="pl-row__thumb--empty" />}
+                  <span className="pl-row__thumbs">
+                    {thumbs.length > 0
+                      ? thumbs.map((url, i) => (
+                          <span key={i} className="pl-row__thumb">
+                            <SmartImg src={imgThumb(url, 96)} alt="" />
+                          </span>
+                        ))
+                      : <span className="pl-row__thumb"><span className="pl-row__thumb--empty" /></span>}
                   </span>
                   <span className="pl-row__id">
                     <span className="pl-row__name">{[app.first_name, app.last_name].filter(Boolean).join(' ') || '—'}</span>
