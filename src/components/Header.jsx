@@ -92,7 +92,7 @@ export default function Header() {
               if (location.pathname === '/') window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           >
-            <span className="logo__full"><em>Eurasian</em> Art Platform</span>
+            <span className="logo__full"><em>Eurasia</em> Art Platform</span>
             <span className="logo__short" aria-hidden="true">EAP</span>
           </Link>
 

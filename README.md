@@ -1,4 +1,4 @@
-# EAP — Eurasian Art Platform
+# EAP — Eurasia Art Platform
 
 ## Backend — Phase 1 (persistence)
 

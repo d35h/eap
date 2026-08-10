@@ -28,7 +28,7 @@ export default function Landing() {
             <div className="hero-left">
               <h1 className="hero-title">
                 <span className="hero-title__acronym">EAP</span>
-                <span className="hero-title__full"><em>Eurasian</em> Art Platform</span>
+                <span className="hero-title__full"><em>Eurasia</em> Art Platform</span>
               </h1>
               <p className="hero-vp">
                 {t('hero.vpStart')}
@@ -294,7 +294,7 @@ function ContactBlock() {
             <div className="item">
               <div className="label">{t('contact.socialLabel')}</div>
               <div className="social-row">
-                <a href="https://www.instagram.com/eurasian_art_platform/" target="_blank" rel="noreferrer">Instagram</a>
+                <a href="https://www.instagram.com/eurasia_art_platform/" target="_blank" rel="noreferrer">Instagram</a>
               </div>
             </div>
           </aside>

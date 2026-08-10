@@ -61,7 +61,7 @@ function shell({ title, bodyHtml, button, link, fallback }) {
           <tr><td style="padding-bottom:32px;">
             <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
               <td width="44" style="width:44px;height:44px;border:1px solid ${C.gold};border-radius:12px;text-align:center;font-family:Georgia,'Times New Roman',serif;font-style:italic;font-weight:bold;font-size:23px;line-height:44px;color:${C.gold};">E</td>
-              <td style="padding-left:15px;font-family:Helvetica,Arial,sans-serif;font-size:10px;letter-spacing:3px;line-height:1.55;text-transform:uppercase;color:${C.gold};">Eurasian<br/>Art&nbsp;Platform</td>
+              <td style="padding-left:15px;font-family:Helvetica,Arial,sans-serif;font-size:10px;letter-spacing:3px;line-height:1.55;text-transform:uppercase;color:${C.gold};">Eurasia<br/>Art&nbsp;Platform</td>
             </tr></table>
           </td></tr>
           <tr><td style="font-family:Georgia,'Times New Roman',serif;font-weight:normal;font-size:28px;line-height:1.25;letter-spacing:-0.3px;color:${C.ivory};padding-bottom:18px;">${title}</td></tr>
@@ -70,7 +70,7 @@ function shell({ title, bodyHtml, button, link, fallback }) {
           ${fallbackRow}
           <tr><td style="padding-top:36px;">
             <div style="border-top:1px solid ${C.rule};padding-top:22px;font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:0.5px;color:${C.faint};">
-              Eurasian Art Platform &middot; <a href="https://myeap.xyz" style="color:${C.gold};text-decoration:none;">myeap.xyz</a>
+              Eurasia Art Platform &middot; <a href="https://eurasiaartplatform.com" style="color:${C.gold};text-decoration:none;">eurasiaartplatform.com</a>
             </div>
           </td></tr>
         </table>
@@ -84,28 +84,28 @@ function shell({ title, bodyHtml, button, link, fallback }) {
 // `invite` = new applicant (set a password); `login` = returning applicant (magic login link).
 const COPY = {
   ru: {
-    subject: 'Eurasian Art Platform · Заявка оплачена',
+    subject: 'Eurasia Art Platform · Заявка оплачена',
     title: 'Заявка оплачена',
     fallback: 'Если кнопка не работает, откройте ссылку:',
     invite: { body: 'Спасибо! Мы получили вашу оплату. Создайте пароль, чтобы войти в личный кабинет и следить за статусом заявки.', button: 'Создать пароль' },
     login: { body: 'Спасибо! Мы получили вашу оплату. Войдите в личный кабинет, чтобы следить за статусом заявки.', button: 'Войти в кабинет' },
   },
   en: {
-    subject: 'Eurasian Art Platform · Application paid',
+    subject: 'Eurasia Art Platform · Application paid',
     title: 'Application paid',
     fallback: 'If the button does not work, open this link:',
     invite: { body: 'Thank you! We have received your payment. Set a password to sign in to your account and follow your application status.', button: 'Set password' },
     login: { body: 'Thank you! We have received your payment. Sign in to your account to follow your application status.', button: 'Open account' },
   },
   kz: {
-    subject: 'Eurasian Art Platform · Өтінім төленді',
+    subject: 'Eurasia Art Platform · Өтінім төленді',
     title: 'Өтінім төленді',
     fallback: 'Түйме жұмыс істемесе, сілтемені ашыңыз:',
     invite: { body: 'Рақмет! Төлеміңізді алдық. Жеке кабинетке кіріп, өтінім күйін бақылау үшін құпиясөз орнатыңыз.', button: 'Құпиясөз орнату' },
     login: { body: 'Рақмет! Төлеміңізді алдық. Өтінім күйін бақылау үшін жеке кабинетке кіріңіз.', button: 'Кабинетке кіру' },
   },
   zh: {
-    subject: 'Eurasian Art Platform · 申请已支付',
+    subject: 'Eurasia Art Platform · 申请已支付',
     title: '申请已支付',
     fallback: '如果按钮无法使用，请打开此链接：',
     invite: { body: '谢谢！我们已收到您的付款。请设置密码，以登录个人账户并跟踪申请状态。', button: '设置密码' },
@@ -120,7 +120,7 @@ export function emailCopy(lang) {
 // Localised copy for tour-result emails.
 const TOUR_COPY = {
   ru: {
-    subject: (t) => `Eurasian Art Platform · Результаты ${t === 1 ? 'первого' : 'второго'} тура`,
+    subject: (t) => `Eurasia Art Platform · Результаты ${t === 1 ? 'первого' : 'второго'} тура`,
     title: (t) => `Результаты ${t === 1 ? 'первого' : 'второго'} тура`,
     advanced: (t) => (t === 1
       ? 'Поздравляем! Ваша работа прошла во второй тур.'
@@ -133,7 +133,7 @@ const TOUR_COPY = {
     detailsNote: 'Подробные результаты доступны в вашем личном кабинете.',
   },
   en: {
-    subject: (t) => `Eurasian Art Platform · ${t === 1 ? 'First' : 'Second'} round results`,
+    subject: (t) => `Eurasia Art Platform · ${t === 1 ? 'First' : 'Second'} round results`,
     title: (t) => `${t === 1 ? 'First' : 'Second'} round results`,
     advanced: (t) => (t === 1
       ? 'Congratulations! Your work has advanced to the second round.'
@@ -146,7 +146,7 @@ const TOUR_COPY = {
     detailsNote: 'Detailed results are available in your account.',
   },
   kz: {
-    subject: (t) => `Eurasian Art Platform · ${t === 1 ? 'Бірінші' : 'Екінші'} тур нәтижелері`,
+    subject: (t) => `Eurasia Art Platform · ${t === 1 ? 'Бірінші' : 'Екінші'} тур нәтижелері`,
     title: (t) => `${t === 1 ? 'Бірінші' : 'Екінші'} тур нәтижелері`,
     advanced: (t) => (t === 1
       ? 'Құттықтаймыз! Жұмысыңыз екінші турға өтті.'
@@ -159,7 +159,7 @@ const TOUR_COPY = {
     detailsNote: 'Толық нәтижелер жеке кабинетіңізде қолжетімді.',
   },
   zh: {
-    subject: (t) => `Eurasian Art Platform · ${t === 1 ? '第一轮' : '第二轮'}结果`,
+    subject: (t) => `Eurasia Art Platform · ${t === 1 ? '第一轮' : '第二轮'}结果`,
     title: (t) => `${t === 1 ? '第一轮' : '第二轮'}结果`,
     advanced: (t) => (t === 1
       ? '恭喜！您的作品已晋级第二轮。'
@@ -193,10 +193,10 @@ export function tourResultEmail({ lang, tour, advanced, loginUrl }) {
 // Jury invitation (always Russian - jurors are invited by the RU admin).
 export function juryInviteEmail(link) {
   return {
-    subject: 'Eurasian Art Platform · Приглашение в жюри',
+    subject: 'Eurasia Art Platform · Приглашение в жюри',
     html: shell({
       title: 'Приглашение в жюри',
-      bodyHtml: para('Вас пригласили в жюри Eurasian Art Platform. Создайте пароль, чтобы войти в кабинет и оценивать заявки художников.', { gap: 0 }),
+      bodyHtml: para('Вас пригласили в жюри Eurasia Art Platform. Создайте пароль, чтобы войти в кабинет и оценивать заявки художников.', { gap: 0 }),
       button: 'Создать пароль',
       link,
       fallback: 'Если кнопка не работает, откройте ссылку:',
@@ -208,30 +208,30 @@ export function juryInviteEmail(link) {
 // recovery link generated server-side — never Supabase's default email).
 const RESET_COPY = {
   ru: {
-    subject: 'Eurasian Art Platform · Сброс пароля',
+    subject: 'Eurasia Art Platform · Сброс пароля',
     title: 'Сброс пароля',
-    body: 'Вы запросили сброс пароля для кабинета Eurasian Art Platform. Нажмите кнопку, чтобы задать новый пароль. Если вы не запрашивали сброс — просто игнорируйте это письмо.',
+    body: 'Вы запросили сброс пароля для кабинета Eurasia Art Platform. Нажмите кнопку, чтобы задать новый пароль. Если вы не запрашивали сброс — просто игнорируйте это письмо.',
     button: 'Задать новый пароль',
     fallback: 'Если кнопка не работает, откройте ссылку:',
   },
   en: {
-    subject: 'Eurasian Art Platform · Reset your password',
+    subject: 'Eurasia Art Platform · Reset your password',
     title: 'Reset your password',
-    body: 'You requested a password reset for your Eurasian Art Platform account. Click the button below to set a new password. If you didn’t request this, simply ignore this email.',
+    body: 'You requested a password reset for your Eurasia Art Platform account. Click the button below to set a new password. If you didn’t request this, simply ignore this email.',
     button: 'Set a new password',
     fallback: 'If the button does not work, open this link:',
   },
   kz: {
-    subject: 'Eurasian Art Platform · Құпиясөзді қалпына келтіру',
+    subject: 'Eurasia Art Platform · Құпиясөзді қалпына келтіру',
     title: 'Құпиясөзді қалпына келтіру',
-    body: 'Сіз Eurasian Art Platform кабинеті үшін құпиясөзді қалпына келтіруді сұрадыңыз. Жаңа құпиясөз орнату үшін түймені басыңыз. Егер сұрамаған болсаңыз — бұл хатты елемеңіз.',
+    body: 'Сіз Eurasia Art Platform кабинеті үшін құпиясөзді қалпына келтіруді сұрадыңыз. Жаңа құпиясөз орнату үшін түймені басыңыз. Егер сұрамаған болсаңыз — бұл хатты елемеңіз.',
     button: 'Жаңа құпиясөз орнату',
     fallback: 'Түйме жұмыс істемесе, сілтемені ашыңыз:',
   },
   zh: {
-    subject: 'Eurasian Art Platform · 重置密码',
+    subject: 'Eurasia Art Platform · 重置密码',
     title: '重置密码',
-    body: '您请求重置 Eurasian Art Platform 账户的密码。点击下方按钮设置新密码。如果这不是您本人操作，请忽略此邮件。',
+    body: '您请求重置 Eurasia Art Platform 账户的密码。点击下方按钮设置新密码。如果这不是您本人操作，请忽略此邮件。',
     button: '设置新密码',
     fallback: '如果按钮无法使用，请打开此链接：',
   },

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 
-// Core Eurasian audience pinned to the top; the rest is a broad world list.
+// Core Eurasia audience pinned to the top; the rest is a broad world list.
 const PINNED = ['RU', 'KZ', 'UA', 'BY', 'UZ', 'KG', 'TJ', 'TM', 'AM', 'AZ', 'GE', 'MD'];
 const REST = [
   'AF', 'AL', 'DZ', 'AD', 'AO', 'AR', 'AT', 'AU', 'BH', 'BD', 'BE', 'BA', 'BR', 'BG', 'KH', 'CM', 'CA',

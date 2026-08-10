@@ -4,7 +4,7 @@ import { getIgToken } from './igToken.js';
 const GRAPH = 'https://graph.instagram.com/v21.0';
 
 const cfg = (env) => ({
-  hashtags: env.IG_HASHTAGS || '#EAP #CallForArtists #ContemporaryArt #EurasianExhibition',
+  hashtags: env.IG_HASHTAGS || '#EAP #CallForArtists #ContemporaryArt #EurasiaExhibition',
 });
 
 function igHandle(raw) {
@@ -21,7 +21,7 @@ function igHandle(raw) {
 //
 //   <title>, <year> — <media>. <size>   (one line per work)
 //
-//   #EAP #CallForArtists #ContemporaryArt #EurasianExhibition
+//   #EAP #CallForArtists #ContemporaryArt #EurasiaExhibition
 function buildCaption(app, c, opts = {}) {
   const name = [app.first_name, app.last_name].filter(Boolean).join(' ') || 'Artist';
   const handle = igHandle(app.instagram);
@@ -75,7 +75,7 @@ async function buildStoryUrl(admin, app, signedArtworkUrl) {
   <image href="data:image/jpeg;base64,${b64}" x="140" y="300" width="800" height="800" preserveAspectRatio="xMidYMid meet"/>
   <text x="540" y="1360" text-anchor="middle" font-family="Georgia, serif" font-weight="bold" font-size="70" fill="#f0ece4">${name}</text>
   ${handle ? `<text x="540" y="1440" text-anchor="middle" font-family="sans-serif" font-size="46" fill="#c2a063">@${xmlEsc(handle)}</text>` : ''}
-  <text x="540" y="1540" text-anchor="middle" font-family="sans-serif" font-size="30" fill="#9a9a9a" letter-spacing="2">EURASIAN ART PLATFORM · OPEN CALL</text>
+  <text x="540" y="1540" text-anchor="middle" font-family="sans-serif" font-size="30" fill="#9a9a9a" letter-spacing="2">EURASIA ART PLATFORM · OPEN CALL</text>
 </svg>`;
   const path = `applications/${app.id}/_story.svg`;
   await admin.storage.from('works').upload(path, svg, { contentType: 'image/svg+xml', upsert: true });

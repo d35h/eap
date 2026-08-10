@@ -30,7 +30,7 @@ export default function ForgotPassword() {
   return (
     <main className="apply-page auth-page">
       <div className="auth-card">
-        <span className="auth-card__kicker">Eurasian Art Platform</span>
+        <span className="auth-card__kicker">Eurasia Art Platform</span>
 
         {sent ? (
           <>

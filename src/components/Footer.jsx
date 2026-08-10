@@ -32,7 +32,7 @@ export default function Footer() {
                 if (location.pathname === '/') window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
             >
-              <em>Eurasian</em> Art Platform
+              <em>Eurasia</em> Art Platform
             </Link>
             <p>{t('footer.brandDesc')}</p>
           </div>
@@ -65,7 +65,7 @@ export default function Footer() {
             <ul>
               <li><a onClick={() => goToSection('contact')}>{t('nav.contact')}</a></li>
               <li><a href="mailto:info@eap.art">info@eap.art</a></li>
-              <li><a href="https://www.instagram.com/eurasian_art_platform/" target="_blank" rel="noreferrer">Instagram</a></li>
+              <li><a href="https://www.instagram.com/eurasia_art_platform/" target="_blank" rel="noreferrer">Instagram</a></li>
             </ul>
           </div>
         </div>

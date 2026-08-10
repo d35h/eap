@@ -38,7 +38,7 @@
   <!-- content -->
   <g transform="translate(100,0)">
     <rect x="0" y="158" width="48" height="2" fill="url(#gold)"/>
-    <text x="64" y="166" font-family="Georgia, 'Times New Roman', serif" font-size="21" letter-spacing="7" fill="#cca773">EURASIAN ART PLATFORM</text>
+    <text x="64" y="166" font-family="Georgia, 'Times New Roman', serif" font-size="21" letter-spacing="7" fill="#cca773">EURASIA ART PLATFORM</text>
 
     <text x="-4" y="372" font-family="Georgia, 'Times New Roman', serif" font-weight="400" font-size="158" letter-spacing="-3" fill="url(#ivory)">Open <tspan font-style="italic" fill="url(#gold)">Call</tspan></text>
 
