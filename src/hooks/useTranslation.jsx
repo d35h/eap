@@ -9,6 +9,10 @@ const LanguageContext = createContext({
 
 const STORAGE_KEY = 'eap-lang';
 
+// Our internal code for Kazakh is the country code; <html lang> needs the
+// ISO 639-1 language code. Everything else already matches.
+const HTML_LANG = { kz: 'kk' };
+
 export function LanguageProvider({ children }) {
   const [lang, setLangState] = useState(() => {
     if (typeof window === 'undefined') return 'ru';
@@ -17,7 +21,7 @@ export function LanguageProvider({ children }) {
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, lang);
-    document.documentElement.lang = lang;
+    document.documentElement.lang = HTML_LANG[lang] || lang;
   }, [lang]);
 
   const setLang = useCallback((newLang) => {
