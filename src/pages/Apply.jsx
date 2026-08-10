@@ -441,7 +441,7 @@ function WorkEntry({ index, work, file, onChange, onFile, onRemove, errors, t })
     const f = fileList && fileList[0];
     if (!f) return;
     if (f.size > 25 * 1024 * 1024) {
-      alert('Файл больше 25 MB.');
+      alert(t('apply.fileTooLarge'));
       return;
     }
     onFile(f);
@@ -490,8 +490,8 @@ function WorkEntry({ index, work, file, onChange, onFile, onRemove, errors, t })
             <span className="work-file__name">{file.name}</span>
             <span className="work-file__size">{fmtSize(file.size)}</span>
           </span>
-          <button type="button" className="work-file__replace" onClick={() => inputRef.current?.click()}>Заменить</button>
-          <button type="button" className="work-file__remove" onClick={() => onFile(null)} aria-label="Удалить файл">
+          <button type="button" className="work-file__replace" onClick={() => inputRef.current?.click()}>{t('apply.replaceFile')}</button>
+          <button type="button" className="work-file__remove" onClick={() => onFile(null)} aria-label={t('apply.removeFile')}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
           </button>
         </div>
