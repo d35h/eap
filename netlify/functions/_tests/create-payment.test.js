@@ -54,4 +54,21 @@ describe('handlePayment', () => {
     expect(JSON.parse(res.body).error).toBe('unknown channel');
   });
 
+  it('400s when a work has no uploaded file', async () => {
+    const { client, update } = adminStub(
+      { id: 'app-1', tier: 2, works: worksFor(2) },
+      filesFor(1) // work2 never uploaded
+    );
+    const res = await handlePayment({ admin: client, env: {} }, { applicationId: 'app-1', channel: 'mock' });
+    expect(res.statusCode).toBe(400);
+    expect(JSON.parse(res.body).code).toBe('missing_files');
+    expect(update).not.toHaveBeenCalled();
+  });
+
+  it('400s when the application has no works at all', async () => {
+    const { client } = adminStub({ id: 'app-1', tier: 1, works: [] });
+    const res = await handlePayment({ admin: client, env: {} }, { applicationId: 'app-1', channel: 'mock' });
+    expect(res.statusCode).toBe(400);
+    expect(JSON.parse(res.body).code).toBe('missing_files');
+  });
 });
