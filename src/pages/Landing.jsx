@@ -99,6 +99,7 @@ export default function Landing() {
               {t('manifest.p1Start')}<em>{t('manifest.p1Em')}</em>{t('manifest.p1Rest')}
             </p>
             <p>{t('manifest.p2')}</p>
+            <p>{t('manifest.p3')}</p>
           </div>
           <div className="manifest-facts">
             {[1, 2, 3].map((n) => (
