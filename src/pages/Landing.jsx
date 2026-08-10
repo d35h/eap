@@ -102,12 +102,16 @@ export default function Landing() {
             <p>{t('manifest.p3')}</p>
           </div>
           <div className="manifest-facts">
-            {[1, 2, 3].map((n) => (
-              <div className="fact" key={n}>
-                <div className="num">{t(`manifest.fact${n}Num`)}</div>
-                <div className="desc">{t(`manifest.fact${n}Desc`)}</div>
-              </div>
-            ))}
+            {[1, 2, 3].map((n) => {
+              // A fact can be text-only; an empty .num would still reserve its line.
+              const num = t(`manifest.fact${n}Num`);
+              return (
+                <div className="fact" key={n}>
+                  {num ? <div className="num">{num}</div> : null}
+                  <div className="desc">{t(`manifest.fact${n}Desc`)}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -138,18 +142,6 @@ export default function Landing() {
                 </div>
               );
             })}
-          </div>
-
-          <div className="jury-criteria">
-            <h3 className="subsection-title">{t('team.criteriaLabel')}</h3>
-            <div className="criteria-list">
-              {(Array.isArray(t('team.criteria')) ? t('team.criteria') : []).map((c, i) => (
-                <div className="criterion" key={i}>
-                  <h4>{c.title}</h4>
-                  <p>{c.desc}</p>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
