@@ -602,11 +602,15 @@ input, textarea, select { font-family: inherit; }
 .footer-col ul { list-style: none; }
 .footer-col li { margin-bottom: 10px; }
 .footer-col a {
-  color: hsla(36, 22%, 92%, 0.7); text-decoration: none;
-  font-size: 0.9rem; transition: color 0.3s; background: none; border: none;
+  color: hsla(36, 22%, 92%, 0.7);
+  text-decoration: underline;
+  text-decoration-color: hsla(36, 22%, 92%, 0.3);
+  text-decoration-thickness: 1px; text-underline-offset: 4px;
+  font-size: 0.9rem; transition: color 0.3s, text-decoration-color 0.3s;
+  background: none; border: none;
   cursor: pointer; font-family: inherit; padding: 0;
 }
-.footer-col a:hover { color: var(--accent); }
+.footer-col a:hover { color: var(--accent); text-decoration-color: var(--accent); }
 .partners-row {
   border-top: 1px solid var(--border); padding-top: 40px; margin-bottom: 40px;
 }
