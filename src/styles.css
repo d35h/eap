@@ -2785,6 +2785,19 @@ input, textarea, select { font-family: inherit; }
 /* The headline takes the colour, as in the reference; the small copy and
    the apply link stay above it, since that is the text that must stay crisp. */
 .ed-hero__foot { position: relative; z-index: 32; }
+
+/* Entrance. Measured off the reference: its headline band holds at the ground
+   luma for the first ~2s - colour only - then darkens over ~2s as the type
+   arrives. The name leads, the small copy follows it in. */
+.ed-title { animation: ed-arrive 2.2s cubic-bezier(0.22, 1, 0.36, 1) 1.5s both; }
+.ed-hero__foot { animation: ed-arrive 1.6s cubic-bezier(0.22, 1, 0.36, 1) 3s both; }
+@keyframes ed-arrive {
+  from { opacity: 0; filter: blur(16px); transform: translateY(24px); }
+  to { opacity: 1; filter: blur(0); transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ed-title, .ed-hero__foot { animation: none; }
+}
 .ed-hero__foot { display: flex; flex-direction: column; align-items: center; gap: 26px; }
 .ed-micro {
   margin: 0; font-family: var(--font-body);
@@ -2860,37 +2873,37 @@ input, textarea, select { font-family: inherit; }
 }
 .wash span {
   position: absolute; border-radius: 50%;
-  filter: blur(78px); opacity: 0.86; will-change: transform;
+  filter: blur(64px); opacity: 1; will-change: transform;
 }
 .wash span:nth-child(1) {
-  width: 40vw; height: 34vw; left: -4%; top: -14%;
+  width: 46vw; height: 40vw; left: -6%; top: -16%;
   background: radial-gradient(circle, #3f9c6b 0%, rgba(63, 156, 107, 0) 68%);
-  animation: wash-a 11s ease-in-out infinite;
+  animation: wash-a 8s ease-in-out infinite;
 }
 .wash span:nth-child(2) {
-  width: 36vw; height: 32vw; right: -6%; top: -10%;
+  width: 42vw; height: 38vw; right: -8%; top: -12%;
   background: radial-gradient(circle, #9a5fd0 0%, rgba(154, 95, 208, 0) 66%);
-  animation: wash-b 13s ease-in-out infinite;
+  animation: wash-b 9.4s ease-in-out infinite -1.7s;
 }
 .wash span:nth-child(3) {
-  width: 38vw; height: 30vw; left: 28%; top: 4%;
+  width: 44vw; height: 34vw; left: 24%; top: 0%;
   background: radial-gradient(circle, #e05334 0%, rgba(224, 83, 52, 0) 66%);
-  animation: wash-c 9.5s ease-in-out infinite;
+  animation: wash-c 6.8s ease-in-out infinite -0.9s;
 }
 .wash span:nth-child(4) {
   width: 40vw; height: 34vw; left: -6%; bottom: -18%; opacity: 0;
   background: radial-gradient(circle, #57534f 0%, rgba(87, 83, 79, 0) 68%);
-  animation: wash-d 15s ease-in-out infinite;
+  animation: wash-d 10.9s ease-in-out infinite -3.1s;
 }
 .wash span:nth-child(5) {
-  width: 32vw; height: 26vw; right: 8%; top: 30%;
+  width: 38vw; height: 30vw; right: 6%; top: 26%;
   background: radial-gradient(circle, #3f6fb5 0%, rgba(63, 111, 181, 0) 66%);
-  animation: wash-e 12s ease-in-out infinite;
+  animation: wash-e 8.7s ease-in-out infinite -2.2s;
 }
-@keyframes wash-a { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(26vw, 22vh, 0) scale(1.25); } }
-@keyframes wash-b { 0%,100% { transform: translate3d(0,0,0) scale(1.1); } 50% { transform: translate3d(-30vw, 30vh, 0) scale(0.85); } }
-@keyframes wash-c { 0%,100% { transform: translate3d(0,0,0) scale(0.95); } 50% { transform: translate3d(-22vw, -20vh, 0) scale(1.3); } }
-@keyframes wash-d { 0%,100% { transform: translate3d(0,0,0) scale(1.05); } 50% { transform: translate3d(34vw, -26vh, 0) scale(0.9); } }
-@keyframes wash-e { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(-26vw, -22vh, 0) scale(1.2); } }
+@keyframes wash-a { 0%,100% { transform: translate3d(0,0,0) scale(0.78); } 50% { transform: translate3d(46vw, 34vh, 0) scale(1.5); } }
+@keyframes wash-b { 0%,100% { transform: translate3d(0,0,0) scale(1.45); } 50% { transform: translate3d(-52vw, 40vh, 0) scale(0.72); } }
+@keyframes wash-c { 0%,100% { transform: translate3d(0,0,0) scale(0.75); } 50% { transform: translate3d(-44vw, -30vh, 0) scale(1.55); } }
+@keyframes wash-d { 0%,100% { transform: translate3d(0,0,0) scale(1.4); } 50% { transform: translate3d(56vw, -36vh, 0) scale(0.76); } }
+@keyframes wash-e { 0%,100% { transform: translate3d(0,0,0) scale(0.8); } 50% { transform: translate3d(-48vw, -32vh, 0) scale(1.48); } }
 
 @media (prefers-reduced-motion: reduce) { .wash span { animation: none; } }
