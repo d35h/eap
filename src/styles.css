@@ -1,5 +1,5 @@
 /* EAP - Eurasia Art Platform */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap');
 
 :root {
   --bg: hsl(220, 14%, 7%);
@@ -2705,6 +2705,7 @@ input, textarea, select { font-family: inherit; }
    staying dark over cream. Redefining the tokens carries most components for
    free; only hard-coded colours need the overrides that follow. */
 :root.paper {
+  --font-display: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
   --bg: #f5eae2;
   --bg-soft: #f0e4da;
   --bg-darker: #ece0d5;
@@ -2822,3 +2823,46 @@ input, textarea, select { font-family: inherit; }
   .ed-row { padding: 28px 20px 30px; }
   .ed-row:hover { padding-left: 28px; }
 }
+
+/* ─── Colour wash ──────────────────────────────────────────────────────────
+   The reference's ground is not paper - it is soft blurred colour drifting
+   across it, tinting the type it passes behind. Sampled from it: sage #87a697,
+   lilac #e3d1e0, blue-grey #858c97. Sits under the header so the nav stays
+   clean, over the content so the letters take the colour. */
+.wash { position: fixed; inset: 0; z-index: 30; pointer-events: none; overflow: hidden; }
+.wash span {
+  position: absolute; border-radius: 50%;
+  filter: blur(88px); opacity: 0.68; will-change: transform;
+}
+.wash span:nth-child(1) {
+  width: 54vw; height: 46vw; left: -6%; top: -12%;
+  background: radial-gradient(circle, #5d9c78 0%, rgba(93, 156, 120, 0) 68%);
+  animation: wash-a 26s ease-in-out infinite;
+}
+.wash span:nth-child(2) {
+  width: 48vw; height: 44vw; right: -8%; top: -6%;
+  background: radial-gradient(circle, #a97fc9 0%, rgba(169, 127, 201, 0) 66%);
+  animation: wash-b 31s ease-in-out infinite;
+}
+.wash span:nth-child(3) {
+  width: 50vw; height: 42vw; left: 26%; top: 26%;
+  background: radial-gradient(circle, #d4694c 0%, rgba(212, 105, 76, 0) 66%);
+  animation: wash-c 23s ease-in-out infinite;
+}
+.wash span:nth-child(4) {
+  width: 46vw; height: 40vw; left: -4%; bottom: -14%; opacity: 0.32;
+  background: radial-gradient(circle, #57534f 0%, rgba(87, 83, 79, 0) 68%);
+  animation: wash-d 35s ease-in-out infinite;
+}
+.wash span:nth-child(5) {
+  width: 42vw; height: 38vw; right: 4%; bottom: -10%;
+  background: radial-gradient(circle, #5f7fa8 0%, rgba(95, 127, 168, 0) 66%);
+  animation: wash-e 28s ease-in-out infinite;
+}
+@keyframes wash-a { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(26vw, 22vh, 0) scale(1.25); } }
+@keyframes wash-b { 0%,100% { transform: translate3d(0,0,0) scale(1.1); } 50% { transform: translate3d(-30vw, 30vh, 0) scale(0.85); } }
+@keyframes wash-c { 0%,100% { transform: translate3d(0,0,0) scale(0.95); } 50% { transform: translate3d(-22vw, -20vh, 0) scale(1.3); } }
+@keyframes wash-d { 0%,100% { transform: translate3d(0,0,0) scale(1.05); } 50% { transform: translate3d(34vw, -26vh, 0) scale(0.9); } }
+@keyframes wash-e { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(-26vw, -22vh, 0) scale(1.2); } }
+
+@media (prefers-reduced-motion: reduce) { .wash span { animation: none; } }

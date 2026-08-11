@@ -25,6 +25,10 @@ export default function Landing() {
 
   return (
     <main>
+      {/* Drifting colour over the whole page, as in the reference */}
+      <div className="wash" aria-hidden="true">
+        <span /><span /><span /><span /><span />
+      </div>
       {/* HERO - type carries the screen, everything else is a footnote to it */}
       <section className="ed-hero" id="opencall">
         <h1 className="ed-title">
