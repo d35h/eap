@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect, useLayoutEffect } from 'react';
 import Header from './components/Header.jsx';
+import Watercolour from './components/Watercolour.jsx';
 import Footer from './components/Footer.jsx';
 import VersionWatcher from './components/VersionWatcher.jsx';
 import Landing from './pages/Landing.jsx';
@@ -39,6 +40,18 @@ function PaperScheme() {
   return null;
 }
 
+// The landing carries its own field in the hero; every other light page gets
+// the wash behind it.
+function PageWash() {
+  const { pathname } = useLocation();
+  if (CABINET.test(pathname) || pathname === '/') return null;
+  return (
+    <div className="page-wash" aria-hidden="true">
+      <Watercolour seed={11} />
+    </div>
+  );
+}
+
 // On route change, jump to the top of the new page INSTANTLY. The global
 // `scroll-behavior: smooth` is for in-page anchor links — for page navigation it
 // would animate the reset (landing you mid-page), so we override it to 'auto'
@@ -60,6 +73,7 @@ export default function App() {
   return (
     <>
       <PaperScheme />
+      <PageWash />
       <ScrollToTop />
       <VersionWatcher />
       <Header />

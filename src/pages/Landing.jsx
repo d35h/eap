@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Countdown from '../components/Countdown.jsx';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
+import Watercolour from '../components/Watercolour.jsx';
 
 // ── Временный состав жюри (hardcoded). Имена и фото постоянны;
 //    роль и био берутся из переводов (team.jury, по индексу). ──
@@ -178,36 +179,45 @@ export default function Landing() {
 // ── Contact form with state + validation + simulated submit ──
 function ContactBlock() {
   const { t } = useTranslation();
-  const [form, setForm] = useState({
-    name: '', email: '', phone: '', subject: '', message: '',
-  });
-  const [status, setStatus] = useState(null); // null | 'sending' | 'success' | 'error'
+  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
+  const [status, setStatus] = useState(null); // null | 'sending' | 'success' | 'error' | 'unavailable'
   const [errors, setErrors] = useState({});
+  // Errors are withheld until a field has been left or the form submitted -
+  // showing "required" under everything untouched reads as an accusation.
+  const [touched, setTouched] = useState({});
 
   const update = (k, v) => {
     setForm((f) => ({ ...f, [k]: v }));
     if (errors[k]) setErrors((e) => ({ ...e, [k]: null }));
   };
 
-  const validate = () => {
-    const newErrors = {};
-    if (!form.name.trim()) newErrors.name = t('apply.required');
-    if (!form.email.trim()) newErrors.email = t('apply.required');
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) newErrors.email = t('apply.invalidEmail');
-    if (!form.message.trim()) newErrors.message = t('apply.required');
-    return newErrors;
+  const validate = (f = form) => {
+    const next = {};
+    if (!f.name.trim()) next.name = t('apply.required');
+    if (!f.email.trim()) next.email = t('apply.required');
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) next.email = t('apply.invalidEmail');
+    if (!f.message.trim()) next.message = t('apply.required');
+    return next;
   };
+
+  const blur = (k) => {
+    setTouched((s0) => ({ ...s0, [k]: true }));
+    const found = validate();
+    setErrors((e) => ({ ...e, [k]: found[k] || null }));
+  };
+
+  const shown = (k) => (touched[k] || status === 'validation' ? errors[k] : null);
 
   const submit = async (e) => {
     e.preventDefault();
-    const v = validate();
-    if (Object.keys(v).length > 0) {
-      setErrors(v);
+    const found = validate();
+    if (Object.keys(found).length > 0) {
+      setErrors(found);
+      setTouched({ name: true, email: true, message: true });
       setStatus('validation');
       return;
     }
     setStatus('sending');
-
     try {
       const res = await fetch('/.netlify/functions/contact', {
         method: 'POST',
@@ -215,111 +225,104 @@ function ContactBlock() {
         body: JSON.stringify(form),
       });
       if (!res.ok) {
-        // Never report a delivery we cannot back up - the previous version
-        // faked success and every enquiry was silently lost.
+        // Never report a delivery we cannot back up.
         const data = await res.json().catch(() => ({}));
         setStatus(data.code === 'no_transport' ? 'unavailable' : 'error');
         return;
       }
       setStatus('success');
       setForm({ name: '', email: '', phone: '', subject: '', message: '' });
+      setTouched({});
     } catch (err) {
       console.error(err);
       setStatus('error');
     }
   };
 
+  const field = (key, { type = 'text', ph, multiline = false } = {}) => {
+    const err = shown(key);
+    const id = `contact-${key}`;
+    const required = key !== 'subject';
+    const props = {
+      id,
+      value: form[key],
+      placeholder: ph,
+      onChange: (e) => update(key, e.target.value),
+      onBlur: () => blur(key),
+      'aria-invalid': err ? 'true' : undefined,
+      'aria-describedby': err ? `${id}-err` : undefined,
+      className: err ? 'error' : '',
+    };
+    return (
+      <div className={`cx-field${multiline ? ' cx-field--wide' : ''}`}>
+        <label htmlFor={id}>
+          {t(`contact.${key}`)} {required && <span className="req">*</span>}
+        </label>
+        {multiline ? <textarea rows={5} {...props} /> : <input type={type} {...props} />}
+        {err && <span className="cx-error" id={`${id}-err`}>{err}</span>}
+      </div>
+    );
+  };
+
+  const ROWS = [
+    { label: t('contact.emailLabel'), value: 'info@eap.art', href: 'mailto:info@eap.art' },
+    { label: t('contact.opencallLabel'), value: 'opencall@eap.art', href: 'mailto:opencall@eap.art' },
+    { label: t('contact.partnersLabel'), value: 'partners@eap.art', href: 'mailto:partners@eap.art' },
+    {
+      label: t('contact.socialLabel'),
+      value: 'Instagram',
+      href: 'https://www.instagram.com/eurasia_art_platform/',
+      external: true,
+    },
+  ];
+
   return (
-    <section className="contact-block" id="contact">
-      <div className="container">
-        <span className="eyebrow">{t('contact.eyebrow')}</span>
-        <p className="lead">{t('contact.lead')}</p>
+    <section className="cx" id="contact">
+      {/* Pigment spreading from the right, kept well behind the type. */}
+      <div className="cx__water" aria-hidden="true"><Watercolour /></div>
 
-        <div className="contact-grid">
-          <form className="contact-form" onSubmit={submit} noValidate>
-            <div className="field-group">
-              <label>{t('contact.name')} <span className="req">*</span></label>
-              <input
-                type="text"
-                placeholder={t('contact.namePh')}
-                value={form.name}
-                onChange={(e) => update('name', e.target.value)}
-                className={errors.name ? 'error' : ''}
-              />
-              <span className="field-error">{errors.name}</span>
+      <div className="cx__inner">
+        <div className="cx__left">
+          <span className="cx__eyebrow">{t('contact.eyebrow')}</span>
+          <h2 className="cx__title">{t('contact.lead')}</h2>
+
+          <form className="cx__form" onSubmit={submit} noValidate>
+            <div className="cx__row">
+              {field('name', { ph: t('contact.namePh') })}
+              {field('email', { type: 'email', ph: t('contact.emailPh') })}
             </div>
+            {field('subject', { ph: t('contact.subjectPh') })}
+            {field('message', { ph: t('contact.messagePh'), multiline: true })}
 
-            <div className="field-group">
-              <label>{t('contact.email')} <span className="req">*</span></label>
-              <input
-                type="email"
-                placeholder={t('contact.emailPh')}
-                value={form.email}
-                onChange={(e) => update('email', e.target.value)}
-                className={errors.email ? 'error' : ''}
-              />
-              <span className="field-error">{errors.email}</span>
-            </div>
+            <button className="cx__send" type="submit" disabled={status === 'sending'}>
+              <span>{status === 'sending' ? t('contact.sending') : t('contact.send')}</span>
+              <span className="cx__arrow" aria-hidden="true">&#10230;</span>
+            </button>
 
-            <div className="field-group full">
-              <label>{t('contact.subject')}</label>
-              <input
-                type="text"
-                placeholder={t('contact.subjectPh')}
-                value={form.subject}
-                onChange={(e) => update('subject', e.target.value)}
-              />
-            </div>
-
-            <div className="field-group full">
-              <label>{t('contact.message')} <span className="req">*</span></label>
-              <textarea
-                placeholder={t('contact.messagePh')}
-                value={form.message}
-                onChange={(e) => update('message', e.target.value)}
-                className={errors.message ? 'error' : ''}
-              />
-              <span className="field-error">{errors.message}</span>
-            </div>
-
-            <div className="full">
-              <button className="btn-ink" type="submit" disabled={status === 'sending'}>
-                {status === 'sending' ? t('contact.sending') : t('contact.send')}
-              </button>
-
-              {status === 'success' && (
-                <div className="form-status success">{t('contact.successMsg')}</div>
-              )}
-              {(status === 'error' || status === 'unavailable') && (
-                <div className="form-status error">{t('contact.errorMsg')}</div>
-              )}
-              {status === 'validation' && (
-                <div className="form-status error">{t('contact.validationMsg')}</div>
-              )}
-            </div>
+            {status === 'success' && <p className="cx__note">{t('contact.successMsg')}</p>}
+            {(status === 'error' || status === 'unavailable') && (
+              <p className="cx__note cx__note--bad">{t('contact.errorMsg')}</p>
+            )}
           </form>
-
-          <aside className="contact-aside">
-            <div className="item">
-              <div className="label">{t('contact.emailLabel')}</div>
-              <div className="value"><a href="mailto:info@eap.art">info@eap.art</a></div>
-            </div>
-            <div className="item">
-              <div className="label">{t('contact.opencallLabel')}</div>
-              <div className="value"><a href="mailto:opencall@eap.art">opencall@eap.art</a></div>
-            </div>
-            <div className="item">
-              <div className="label">{t('contact.partnersLabel')}</div>
-              <div className="value"><a href="mailto:partners@eap.art">partners@eap.art</a></div>
-            </div>
-            <div className="item">
-              <div className="label">{t('contact.socialLabel')}</div>
-              <div className="social-row">
-                <a href="https://www.instagram.com/eurasia_art_platform/" target="_blank" rel="noreferrer">Instagram</a>
-              </div>
-            </div>
-          </aside>
         </div>
+
+        <aside className="cx__right">
+          <p className="cx__open">{t('contact.openTo')}</p>
+          <ul className="cx__list">
+            {ROWS.map((r) => (
+              <li key={r.href}>
+                <a
+                  href={r.href}
+                  {...(r.external ? { target: '_blank', rel: 'noreferrer' } : {})}
+                >
+                  <span className="cx__label">{r.label}</span>
+                  <span className="cx__value">{r.value}</span>
+                  <span className="cx__arrow" aria-hidden="true">&#10230;</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </aside>
       </div>
     </section>
   );
