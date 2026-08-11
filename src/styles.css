@@ -2706,9 +2706,9 @@ input, textarea, select { font-family: inherit; }
    free; only hard-coded colours need the overrides that follow. */
 :root.paper {
   --font-display: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --bg: #f7f2ea;
-  --bg-soft: #f2ece2;
-  --bg-darker: #ece5d9;
+  --bg: #fbf9f6;
+  --bg-soft: #f7f4ef;
+  --bg-darker: #f1ede6;
   --fg: #0b0c0e;
   --fg-muted: #4a4a4c;
   --fg-faint: #86868a;
@@ -3237,9 +3237,11 @@ input, textarea, select { font-family: inherit; }
 :root.paper .contact-aside .value, :root.paper .contact-aside .social-row {
   font-family: var(--font-display); font-weight: 600; letter-spacing: -0.025em;
 }
-:root.paper h1 em, :root.paper h2 em, :root.paper h3 em, :root.paper h4 em {
-  font-family: var(--font-display); font-style: normal; font-weight: 400;
-  color: var(--fg-muted);
+:root.paper h1 em, :root.paper h2 em, :root.paper h3 em, :root.paper h4 em,
+:root.paper .ed-title em, :root.paper .hero-title em {
+  /* Emphasis is set in the same colour and weight as its line - the greyed
+     version read as a different voice mid-sentence. */
+  font-family: inherit; font-style: normal; font-weight: inherit; color: inherit;
 }
 
 /* The ghost button kept the dark scheme's leading dash inside a box, which in
@@ -3269,3 +3271,26 @@ input, textarea, select { font-family: inherit; }
 :root.paper .process-steps { border-top: none; margin-top: 0; }
 :root.paper .process-steps.is-open { margin-top: 4px; }
 :root.paper .process-steps.is-open .step:first-child { border-top: none; }
+
+/* Status and validation: a marked line, not a tinted panel. */
+:root.paper .form-status {
+  margin-top: 22px; padding: 14px 0 0; background: none; border: none;
+  border-top: 1px solid var(--fg);
+  font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--fg); display: flex; align-items: baseline; gap: 12px;
+}
+:root.paper .form-status::before { content: "—"; color: var(--fg); }
+:root.paper .form-status.success { background: none; color: var(--fg); }
+:root.paper .form-status.success::before { content: "✓"; }
+:root.paper .form-status.error { background: none; color: var(--fg); border-top-color: #b4483f; }
+:root.paper .form-status.error::before { content: "!"; color: #b4483f; font-weight: 600; }
+
+/* Field-level errors sit under their own field, in the same small voice. */
+:root.paper .field-error {
+  margin-top: 8px; font-size: 0.64rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #b4483f;
+}
+:root.paper .field-group input.error,
+:root.paper .field-group textarea.error,
+:root.paper input.error, :root.paper textarea.error { border-bottom-color: #b4483f; }
+:root.paper label .req { color: #b4483f; }
