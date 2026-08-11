@@ -3835,3 +3835,8 @@ input, textarea, select { font-family: inherit; }
   :root.paper:not(.paper-home) .wizard-progress { grid-auto-flow: row; grid-auto-columns: auto; }
   :root.paper .wstep { padding-bottom: 12px; }
 }
+
+/* One ground from the last section through the footer - the CTA band was on
+   --bg-soft while the footer was on --bg, which showed as a seam. */
+:root.paper .process-cta { background: var(--bg); border-color: var(--border); }
+:root.paper .contact-block, :root.paper .cx { background: var(--bg); }
