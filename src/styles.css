@@ -2705,7 +2705,7 @@ input, textarea, select { font-family: inherit; }
    staying dark over cream. Redefining the tokens carries most components for
    free; only hard-coded colours need the overrides that follow. */
 :root.paper {
-  --font-display: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Prata', 'Playfair Display', Georgia, serif;
   --bg: #fbf9f6;
   --bg-soft: #f7f4ef;
   --bg-darker: #f1ede6;
@@ -2768,8 +2768,8 @@ input, textarea, select { font-family: inherit; }
   margin: 0; font-family: var(--font-display); font-weight: 400;
   /* The reference sets its name edge to edge; vw sizing plus caps is what
      makes the line span the viewport instead of sitting in a column. */
-  font-size: clamp(1.8rem, 9.6vw, 10.5rem);
-  font-weight: 700; line-height: 1.02; letter-spacing: -0.035em; color: var(--fg);
+  font-size: clamp(1.9rem, 10.2vw, 11rem);
+  font-weight: 400; line-height: 1.06; letter-spacing: -0.012em; color: var(--fg);
   text-transform: uppercase;
   display: flex; flex-direction: column; width: 100%;
 }
@@ -3193,7 +3193,7 @@ input, textarea, select { font-family: inherit; }
 :root.paper .contact-aside .value,
 :root.paper .contact-aside .social-row {
   font-family: var(--font-display); font-size: clamp(1.4rem, 2.4vw, 1.85rem);
-  font-weight: 500; letter-spacing: -0.02em; line-height: 1.15;
+  font-weight: 400; letter-spacing: -0.01em; line-height: 1.2;
 }
 :root.paper .contact-aside a {
   display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
@@ -3235,7 +3235,7 @@ input, textarea, select { font-family: inherit; }
 :root.paper h1, :root.paper h2, :root.paper h3, :root.paper h4,
 :root.paper .ed-row__title, :root.paper .step h3,
 :root.paper .contact-aside .value, :root.paper .contact-aside .social-row {
-  font-family: var(--font-display); font-weight: 600; letter-spacing: -0.025em;
+  font-family: var(--font-display); font-weight: 400; letter-spacing: -0.012em;
 }
 :root.paper h1 em, :root.paper h2 em, :root.paper h3 em, :root.paper h4 em,
 :root.paper .ed-title em, :root.paper .hero-title em {
