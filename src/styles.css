@@ -2870,22 +2870,27 @@ input, textarea, select { font-family: inherit; }
 }
 .wash span:nth-child(1) {
   width: 62vw; height: 46vw; left: -22%; top: -18%;
-  background: radial-gradient(circle, rgba(96, 178, 196, 0.5) 0%, rgba(96, 178, 196, 0) 68%);
+  background: radial-gradient(circle, rgba(63, 156, 107, 0.62) 0%, rgba(63, 156, 107, 0) 68%);
   animation: wash-a 4.6s ease-in-out infinite;
 }
 .wash span:nth-child(2) {
   width: 54vw; height: 42vw; right: -24%; top: -12%;
-  background: radial-gradient(circle, rgba(126, 196, 209, 0.42) 0%, rgba(126, 196, 209, 0) 66%);
+  background: radial-gradient(circle, rgba(154, 95, 208, 0.58) 0%, rgba(154, 95, 208, 0) 66%);
   animation: wash-b 5.5s ease-in-out infinite -2.6s;
 }
 .wash span:nth-child(3) {
   width: 50vw; height: 38vw; left: 26%; bottom: -18%;
-  background: radial-gradient(circle, rgba(72, 150, 172, 0.34) 0%, rgba(72, 150, 172, 0) 66%);
+  background: radial-gradient(circle, rgba(224, 83, 52, 0.5) 0%, rgba(224, 83, 52, 0) 66%);
   animation: wash-c 4.9s ease-in-out infinite -4.1s;
 }
 /* Two of the five masses are retired: the field should drift through an edge,
    not fill the screen. */
-.wash span:nth-child(4), .wash span:nth-child(5) { display: none; }
+.wash span:nth-child(4) {
+  width: 44vw; height: 36vw; right: 6%; top: 24%;
+  background: radial-gradient(circle, rgba(63, 111, 181, 0.5) 0%, rgba(63, 111, 181, 0) 66%);
+  animation: wash-b 6.4s ease-in-out infinite -3.4s;
+}
+.wash span:nth-child(5) { display: none; }
 
 @keyframes wash-a { 0%,100% { transform: translate3d(0,0,0) scale(0.8); } 50% { transform: translate3d(34vw, 26vh, 0) scale(1.45); } }
 @keyframes wash-b { 0%,100% { transform: translate3d(0,0,0) scale(1.35); } 50% { transform: translate3d(-38vw, 30vh, 0) scale(0.78); } }
