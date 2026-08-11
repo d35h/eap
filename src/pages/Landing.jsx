@@ -29,6 +29,7 @@ export default function Landing() {
       <div className="wash" aria-hidden="true">
         <span /><span /><span /><span /><span />
       </div>
+      <div className="grain" aria-hidden="true" />
       {/* HERO - type carries the screen, everything else is a footnote to it */}
       <section className="ed-hero" id="opencall">
         <h1 className="ed-title">

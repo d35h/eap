@@ -2782,6 +2782,9 @@ input, textarea, select { font-family: inherit; }
 }
 /* Each line holds together; the vw size is what fits them, not wrapping. */
 .ed-title > span { white-space: nowrap; }
+/* The headline takes the colour, as in the reference; the small copy and
+   the apply link stay above it, since that is the text that must stay crisp. */
+.ed-hero__foot { position: relative; z-index: 32; }
 .ed-hero__foot { display: flex; flex-direction: column; align-items: center; gap: 26px; }
 .ed-micro {
   margin: 0; font-family: var(--font-body);
@@ -2829,35 +2832,60 @@ input, textarea, select { font-family: inherit; }
    across it, tinting the type it passes behind. Sampled from it: sage #87a697,
    lilac #e3d1e0, blue-grey #858c97. Sits under the header so the nav stays
    clean, over the content so the letters take the colour. */
-.wash { position: fixed; inset: 0; z-index: 30; pointer-events: none; overflow: hidden; }
+.wash {
+  position: fixed; inset: 0; z-index: 30; pointer-events: none; overflow: hidden;
+  animation: wash-hue 26s ease-in-out infinite alternate;
+}
+@keyframes wash-hue { from { filter: hue-rotate(-11deg); } to { filter: hue-rotate(11deg); } }
+
+/* Fine grain over everything - the reference is dusted with it, and without it
+   wide blurred gradients band into visible steps. */
+.grain {
+  position: fixed; inset: 0; z-index: 31; pointer-events: none; opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  animation: grain-shift 1.1s steps(4) infinite;
+}
+/* Shifting the tile keeps the grain alive instead of reading as a fixed dirty
+   overlay pinned to the screen. */
+@keyframes grain-shift {
+  0% { background-position: 0 0; }
+  25% { background-position: -40px 30px; }
+  50% { background-position: 30px -40px; }
+  75% { background-position: -30px -20px; }
+  100% { background-position: 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wash, .grain { animation: none; }
+}
 .wash span {
   position: absolute; border-radius: 50%;
-  filter: blur(88px); opacity: 0.68; will-change: transform;
+  filter: blur(78px); opacity: 0.86; will-change: transform;
 }
 .wash span:nth-child(1) {
-  width: 54vw; height: 46vw; left: -6%; top: -12%;
-  background: radial-gradient(circle, #5d9c78 0%, rgba(93, 156, 120, 0) 68%);
-  animation: wash-a 26s ease-in-out infinite;
+  width: 40vw; height: 34vw; left: -4%; top: -14%;
+  background: radial-gradient(circle, #3f9c6b 0%, rgba(63, 156, 107, 0) 68%);
+  animation: wash-a 11s ease-in-out infinite;
 }
 .wash span:nth-child(2) {
-  width: 48vw; height: 44vw; right: -8%; top: -6%;
-  background: radial-gradient(circle, #a97fc9 0%, rgba(169, 127, 201, 0) 66%);
-  animation: wash-b 31s ease-in-out infinite;
+  width: 36vw; height: 32vw; right: -6%; top: -10%;
+  background: radial-gradient(circle, #9a5fd0 0%, rgba(154, 95, 208, 0) 66%);
+  animation: wash-b 13s ease-in-out infinite;
 }
 .wash span:nth-child(3) {
-  width: 50vw; height: 42vw; left: 26%; top: 26%;
-  background: radial-gradient(circle, #d4694c 0%, rgba(212, 105, 76, 0) 66%);
-  animation: wash-c 23s ease-in-out infinite;
+  width: 38vw; height: 30vw; left: 28%; top: 4%;
+  background: radial-gradient(circle, #e05334 0%, rgba(224, 83, 52, 0) 66%);
+  animation: wash-c 9.5s ease-in-out infinite;
 }
 .wash span:nth-child(4) {
-  width: 46vw; height: 40vw; left: -4%; bottom: -14%; opacity: 0.32;
+  width: 40vw; height: 34vw; left: -6%; bottom: -18%; opacity: 0;
   background: radial-gradient(circle, #57534f 0%, rgba(87, 83, 79, 0) 68%);
-  animation: wash-d 35s ease-in-out infinite;
+  animation: wash-d 15s ease-in-out infinite;
 }
 .wash span:nth-child(5) {
-  width: 42vw; height: 38vw; right: 4%; bottom: -10%;
-  background: radial-gradient(circle, #5f7fa8 0%, rgba(95, 127, 168, 0) 66%);
-  animation: wash-e 28s ease-in-out infinite;
+  width: 32vw; height: 26vw; right: 8%; top: 30%;
+  background: radial-gradient(circle, #3f6fb5 0%, rgba(63, 111, 181, 0) 66%);
+  animation: wash-e 12s ease-in-out infinite;
 }
 @keyframes wash-a { 0%,100% { transform: translate3d(0,0,0) scale(1); } 50% { transform: translate3d(26vw, 22vh, 0) scale(1.25); } }
 @keyframes wash-b { 0%,100% { transform: translate3d(0,0,0) scale(1.1); } 50% { transform: translate3d(-30vw, 30vh, 0) scale(0.85); } }
