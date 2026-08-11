@@ -3771,12 +3771,16 @@ input, textarea, select { font-family: inherit; }
 }
 
 /* The same wash on every inner page, held to the right edge and well back. */
+:root.paper body { position: relative; }
+/* Anchored to the end of the document rather than to the viewport: the pigment
+   settles at the foot of the page instead of travelling with the scroll. */
 :root.paper .page-wash {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  position: absolute; left: 0; right: 0; bottom: 0; height: min(120vh, 1200px);
+  z-index: 0; pointer-events: none; overflow: hidden;
 }
 :root.paper .page-wash .wc {
-  position: absolute; top: -6%; right: -18%; width: 82%; height: 112%;
-  opacity: 0.85; animation: cx-drift 70s ease-in-out infinite alternate;
+  position: absolute; bottom: -14%; right: -18%; width: 86%; height: 104%;
+  opacity: 0.9; animation: cx-drift 70s ease-in-out infinite alternate;
 }
 @media (max-width: 900px) {
   :root.paper .page-wash .wc { width: 130%; right: -40%; opacity: 0.5; }
@@ -3798,4 +3802,36 @@ input, textarea, select { font-family: inherit; }
 }
 @media (prefers-reduced-motion: reduce) {
   :root.paper .site-footer__wash .wc { animation: none; }
+}
+
+/* ─── Application wizard on inner pages ───────────────────────────────────
+   The card and its padding were removed here, but the progress row kept the
+   negative margins that were bleeding it to the card's edge - so it hung
+   outside the container. And the inactive steps were set so faint they were
+   effectively invisible. */
+:root.paper:not(.paper-home) .wizard-progress {
+  margin: 0 0 clamp(28px, 4vh, 44px);
+  display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+  border-bottom: 1px solid var(--border);
+}
+:root.paper:not(.paper-home) .wizard-body { padding: 0; }
+:root.paper .wstep {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+  padding: 0 0 16px; text-align: left; color: var(--fg-muted);
+}
+:root.paper .wstep .num {
+  font-family: var(--font-body); font-size: 0.6rem;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-faint);
+}
+:root.paper .wstep .name {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem); line-height: 1.1; color: var(--fg-muted);
+}
+:root.paper .wstep.active .name,
+:root.paper .wstep.done .name { color: var(--fg); }
+:root.paper .wstep.active .num { color: var(--fg); }
+:root.paper .wstep.active { box-shadow: inset 0 -2px 0 var(--fg); }
+@media (max-width: 720px) {
+  :root.paper:not(.paper-home) .wizard-progress { grid-auto-flow: row; grid-auto-columns: auto; }
+  :root.paper .wstep { padding-bottom: 12px; }
 }
