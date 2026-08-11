@@ -14,6 +14,8 @@ const JURY = [
 
 export default function Landing() {
   const { t } = useTranslation();
+  // The four steps are long; behind a disclosure the section stays scannable.
+  const [stepsOpen, setStepsOpen] = useState(false);
   const submOpen = useSubmissionsOpen(); // undefined = loading, then true/false
 
   return (
@@ -82,7 +84,17 @@ export default function Landing() {
             <p className="section-intro">{t('process.intro')}</p>
           </div>
 
-          <div className="process-steps">
+          <button
+            type="button"
+            className={`btn-ghost disclosure${stepsOpen ? ' is-open' : ''}`}
+            aria-expanded={stepsOpen}
+            aria-controls="process-steps"
+            onClick={() => setStepsOpen((v) => !v)}
+          >
+            {t('processPage.titlePart1')}{t('processPage.titleEm')}{t('processPage.titlePart2')}
+          </button>
+
+          <div id="process-steps" className={`process-steps${stepsOpen ? ' is-open' : ''}`} hidden={!stepsOpen}>
             {[1, 2, 3, 4].map((n) => (
               <div className="step" key={n}>
                 <div className="step-num">0{n}</div>
@@ -93,9 +105,7 @@ export default function Landing() {
             ))}
           </div>
 
-          <div style={{ marginTop: '40px' }}>
-            <Link to="/process" className="btn-ghost">{t('processPage.titlePart1')}{t('processPage.titleEm')}{t('processPage.titlePart2')}</Link>
-          </div>
+
         </div>
       </section>
 

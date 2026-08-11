@@ -3241,3 +3241,31 @@ input, textarea, select { font-family: inherit; }
   font-family: var(--font-display); font-style: normal; font-weight: 400;
   color: var(--fg-muted);
 }
+
+/* The ghost button kept the dark scheme's leading dash inside a box, which in
+   this system read as a stray mark. It becomes a full-width line with a
+   travelling arrow, matching the contact action. */
+:root.paper .btn-ghost {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  width: 100%; max-width: 520px; padding: 16px 0; border: none; border-radius: 0;
+  border-bottom: 1px solid var(--fg); color: var(--fg);
+  font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+}
+:root.paper .btn-ghost::before { display: none; }
+:root.paper .btn-ghost::after {
+  content: "→"; font-size: 1.15em; transition: transform 0.3s ease;
+}
+:root.paper .btn-ghost:hover { border-bottom-color: var(--fg); color: var(--fg); }
+:root.paper .btn-ghost:hover::after { transform: translateX(6px); }
+
+/* Disclosure: the button carries a + that becomes a - when open. */
+:root.paper .btn-ghost.disclosure { cursor: pointer; max-width: 100%; }
+:root.paper .btn-ghost.disclosure::after {
+  content: "+"; font-size: 1.4em; line-height: 1; transform: none;
+  transition: transform 0.3s ease;
+}
+:root.paper .btn-ghost.disclosure.is-open::after { content: "\2212"; }
+:root.paper .btn-ghost.disclosure:hover::after { transform: none; }
+:root.paper .process-steps { border-top: none; margin-top: 0; }
+:root.paper .process-steps.is-open { margin-top: 4px; }
+:root.paper .process-steps.is-open .step:first-child { border-top: none; }
