@@ -14,6 +14,7 @@ const FRAG = `
 precision highp float;
 uniform vec2 u_res;
 uniform float u_time;
+uniform vec2 u_mouse;
 
 // -- value noise + fbm, used for the drifting light behind the sphere ---------
 float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -33,13 +34,15 @@ float fbm(vec2 p) {
 
 // The platform's gold against a deep green, the palette the site already uses.
 vec3 palette(float t) {
-  vec3 ink   = vec3(0.035, 0.040, 0.048);
-  vec3 green = vec3(0.114, 0.196, 0.157);
-  vec3 gold  = vec3(0.718, 0.565, 0.310);
-  vec3 pale  = vec3(0.906, 0.855, 0.702);
-  vec3 c = mix(ink, green, smoothstep(0.05, 0.45, t));
-  c = mix(c, gold, smoothstep(0.42, 0.78, t));
-  c = mix(c, pale, smoothstep(0.80, 1.0, t));
+  vec3 ink   = vec3(0.055, 0.058, 0.056); // #0e0f0e
+  vec3 olive = vec3(0.196, 0.192, 0.133); // #323122
+  vec3 amber = vec3(0.337, 0.235, 0.125); // #563c20
+  vec3 khaki = vec3(0.431, 0.384, 0.231); // #6e623b - the reference's brightest
+  vec3 lit   = vec3(0.639, 0.573, 0.376); // reserved for the limb
+  vec3 c = mix(ink, olive, smoothstep(0.04, 0.42, t));
+  c = mix(c, amber, smoothstep(0.38, 0.68, t));
+  c = mix(c, khaki, smoothstep(0.66, 0.90, t));
+  c = mix(c, lit, smoothstep(0.90, 1.0, t));
   return c;
 }
 
@@ -61,10 +64,11 @@ mat2 rot(float a) { float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
 void main() {
   vec2 uv = (gl_FragCoord.xy - 0.5 * u_res) / u_res.y;
 
-  vec3 col = field(uv);
+  vec3 col = field(uv + u_mouse * 0.05);
 
   // Sphere sits right of centre with its left limb crossing the frame.
   vec2 c = vec2(0.46 + 0.022 * sin(u_time * 0.17), -0.02 + 0.018 * cos(u_time * 0.13));
+  c += u_mouse * 0.16; // pointer parallax - the sphere leans toward the cursor
   float r = 0.92;
   vec2 d = uv - c;
   float dist = length(d);
@@ -92,7 +96,7 @@ void main() {
 
     // A soft specular highlight up-left, matching the site's light direction.
     float spec = pow(max(0.0, dot(normalize(n), normalize(vec3(-0.5, 0.5, 0.7)))), 14.0);
-    inside += vec3(0.95, 0.90, 0.78) * spec * 0.28;
+    inside += vec3(0.82, 0.78, 0.64) * spec * 0.26;
 
     // Antialias the silhouette.
     float edge = smoothstep(r, r - 0.02, dist);
@@ -150,6 +154,17 @@ export function startOrb(canvas, { still = false } = {}) {
 
   const uRes = gl.getUniformLocation(program, 'u_res');
   const uTime = gl.getUniformLocation(program, 'u_time');
+  const uMouse = gl.getUniformLocation(program, 'u_mouse');
+
+  // Pointer in -1..1, eased toward the cursor rather than snapped to it: the
+  // sphere should feel weighted, and raw coordinates make it twitch.
+  const target = { x: 0, y: 0 };
+  const eased = { x: 0, y: 0 };
+  const onPointer = (e) => {
+    target.x = (e.clientX / window.innerWidth) * 2 - 1;
+    target.y = 1 - (e.clientY / window.innerHeight) * 2;
+  };
+  window.addEventListener('pointermove', onPointer, { passive: true });
 
   // Full device pixel ratio is wasted on a blurred gradient and costs fill rate.
   const DPR_CAP = 1.5;
@@ -171,7 +186,10 @@ export function startOrb(canvas, { still = false } = {}) {
 
   const draw = (t) => {
     resize();
+    eased.x += (target.x - eased.x) * 0.045;
+    eased.y += (target.y - eased.y) * 0.045;
     gl.uniform1f(uTime, t);
+    gl.uniform2f(uMouse, eased.x, eased.y);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   };
 
@@ -205,6 +223,7 @@ export function startOrb(canvas, { still = false } = {}) {
     running = false;
     cancelAnimationFrame(raf);
     document.removeEventListener('visibilitychange', onVisibility);
+    window.removeEventListener('pointermove', onPointer);
     window.removeEventListener('resize', resize);
     gl.getExtension('WEBGL_lose_context')?.loseContext();
   };
