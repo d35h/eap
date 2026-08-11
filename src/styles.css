@@ -2706,9 +2706,9 @@ input, textarea, select { font-family: inherit; }
    free; only hard-coded colours need the overrides that follow. */
 :root.paper {
   --font-display: 'Prata', 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-  --bg: #ffffff;
-  --bg-soft: #fbfbfa;
-  --bg-darker: #f4f3f1;
+  --bg: #f9f9f7;
+  --bg-soft: #f4f5f4;
+  --bg-darker: #eef0ef;
   --fg: #0b0c0e;
   --fg-muted: #4a4a4c;
   --fg-faint: #86868a;
@@ -2725,7 +2725,7 @@ input, textarea, select { font-family: inherit; }
   backdrop-filter: none; -webkit-backdrop-filter: none;
 }
 /* The reference's bar is two words. Everything that reads as chrome goes. */
-:root.paper .logo,
+:root.paper-home .logo,
 :root.paper .header-auth,
 :root.paper .btn-ghost-sm,
 :root.paper .site-header .lang-switch .sep { display: none; }
@@ -2757,19 +2757,19 @@ input, textarea, select { font-family: inherit; }
 
 /* Hero: the type is the composition. */
 .ed-hero {
-  position: relative; overflow: hidden; background: #f5eae2;
+  position: relative; overflow: hidden; background: var(--bg);
   min-height: 100vh; display: flex; flex-direction: column;
   align-items: center; justify-content: flex-start;
   /* The reference sets the name high and leaves the lower half empty. */
-  padding: 15vh 2vw 52px; text-align: center; gap: 34px;
+  padding: 17vh 3vw 52px; text-align: center; gap: 40px;
 }
 .ed-title {
   position: relative; z-index: 3;
   margin: 0; font-family: var(--font-display); font-weight: 400;
   /* The reference sets its name edge to edge; vw sizing plus caps is what
      makes the line span the viewport instead of sitting in a column. */
-  font-size: clamp(2rem, 13.2vw, 15rem);
-  line-height: 0.84; letter-spacing: -0.028em; color: var(--fg);
+  font-size: clamp(1.9rem, 10.4vw, 11.5rem);
+  line-height: 1.06; letter-spacing: -0.008em; color: var(--fg);
   text-transform: uppercase;
   display: flex; flex-direction: column; width: 100%;
 }
@@ -2794,13 +2794,13 @@ input, textarea, select { font-family: inherit; }
 .ed-hero__foot { display: flex; flex-direction: column; align-items: center; gap: 26px; }
 .ed-micro {
   margin: 0; font-family: var(--font-body);
-  font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.24em;
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.24em;
   color: var(--fg); max-width: 46ch; line-height: 1.9;
 }
 .ed-micro--faint { color: var(--fg-muted); }
 .ed-cta {
   text-decoration: none; color: var(--fg);
-  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.24em;
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.24em;
   border-bottom: 1px solid var(--fg); padding-bottom: 3px;
   transition: opacity 0.3s ease;
 }
@@ -2823,8 +2823,8 @@ input, textarea, select { font-family: inherit; }
   color: var(--fg-muted);
 }
 .ed-row__title {
-  display: block; font-family: var(--font-display); font-weight: 300;
-  font-size: clamp(2rem, 7vw, 5.4rem); line-height: 1; letter-spacing: -0.02em;
+  display: block; font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(2.1rem, 6.2vw, 4.8rem); line-height: 1; letter-spacing: -0.02em;
 }
 
 @media (max-width: 720px) {
@@ -2840,14 +2840,14 @@ input, textarea, select { font-family: inherit; }
    clean, over the content so the letters take the colour. */
 .wash {
   position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
-  animation: wash-hue 26s ease-in-out infinite alternate;
+
 }
-@keyframes wash-hue { from { filter: hue-rotate(-11deg); } to { filter: hue-rotate(11deg); } }
+
 
 /* Fine grain over everything - the reference is dusted with it, and without it
    wide blurred gradients band into visible steps. */
 .grain {
-  position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0.4;
+  position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0.26;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 160px 160px;
   animation: grain-shift 1.1s steps(4) infinite;
@@ -2866,38 +2866,30 @@ input, textarea, select { font-family: inherit; }
 }
 .wash span {
   position: absolute; border-radius: 50%;
-  filter: blur(64px); opacity: 1; will-change: transform;
+  filter: blur(110px); opacity: 0.85; will-change: transform;
 }
 .wash span:nth-child(1) {
-  width: 46vw; height: 40vw; left: -6%; top: -16%;
-  background: radial-gradient(circle, #3f9c6b 0%, rgba(63, 156, 107, 0) 68%);
-  animation: wash-a 8s ease-in-out infinite;
+  width: 62vw; height: 46vw; left: -22%; top: -18%;
+  background: radial-gradient(circle, rgba(96, 178, 196, 0.5) 0%, rgba(96, 178, 196, 0) 68%);
+  animation: wash-a 17s ease-in-out infinite;
 }
 .wash span:nth-child(2) {
-  width: 42vw; height: 38vw; right: -8%; top: -12%;
-  background: radial-gradient(circle, #9a5fd0 0%, rgba(154, 95, 208, 0) 66%);
-  animation: wash-b 9.4s ease-in-out infinite -1.7s;
+  width: 54vw; height: 42vw; right: -24%; top: -12%;
+  background: radial-gradient(circle, rgba(126, 196, 209, 0.42) 0%, rgba(126, 196, 209, 0) 66%);
+  animation: wash-b 21s ease-in-out infinite -4s;
 }
 .wash span:nth-child(3) {
-  width: 44vw; height: 34vw; left: 24%; top: 0%;
-  background: radial-gradient(circle, #e05334 0%, rgba(224, 83, 52, 0) 66%);
-  animation: wash-c 6.8s ease-in-out infinite -0.9s;
+  width: 46vw; height: 34vw; left: 34%; bottom: -26%;
+  background: radial-gradient(circle, rgba(72, 150, 172, 0.34) 0%, rgba(72, 150, 172, 0) 66%);
+  animation: wash-c 19s ease-in-out infinite -7s;
 }
-.wash span:nth-child(4) {
-  width: 40vw; height: 34vw; left: -6%; bottom: -18%; opacity: 0;
-  background: radial-gradient(circle, #57534f 0%, rgba(87, 83, 79, 0) 68%);
-  animation: wash-d 10.9s ease-in-out infinite -3.1s;
-}
-.wash span:nth-child(5) {
-  width: 38vw; height: 30vw; right: 6%; top: 26%;
-  background: radial-gradient(circle, #3f6fb5 0%, rgba(63, 111, 181, 0) 66%);
-  animation: wash-e 8.7s ease-in-out infinite -2.2s;
-}
-@keyframes wash-a { 0%,100% { transform: translate3d(0,0,0) scale(0.78); } 50% { transform: translate3d(46vw, 34vh, 0) scale(1.5); } }
-@keyframes wash-b { 0%,100% { transform: translate3d(0,0,0) scale(1.45); } 50% { transform: translate3d(-52vw, 40vh, 0) scale(0.72); } }
-@keyframes wash-c { 0%,100% { transform: translate3d(0,0,0) scale(0.75); } 50% { transform: translate3d(-44vw, -30vh, 0) scale(1.55); } }
-@keyframes wash-d { 0%,100% { transform: translate3d(0,0,0) scale(1.4); } 50% { transform: translate3d(56vw, -36vh, 0) scale(0.76); } }
-@keyframes wash-e { 0%,100% { transform: translate3d(0,0,0) scale(0.8); } 50% { transform: translate3d(-48vw, -32vh, 0) scale(1.48); } }
+/* Two of the five masses are retired: the field should drift through an edge,
+   not fill the screen. */
+.wash span:nth-child(4), .wash span:nth-child(5) { display: none; }
+
+@keyframes wash-a { 0%,100% { transform: translate3d(0,0,0) scale(0.9); } 50% { transform: translate3d(16vw, 14vh, 0) scale(1.3); } }
+@keyframes wash-b { 0%,100% { transform: translate3d(0,0,0) scale(1.2); } 50% { transform: translate3d(-18vw, 16vh, 0) scale(0.85); } }
+@keyframes wash-c { 0%,100% { transform: translate3d(0,0,0) scale(0.85); } 50% { transform: translate3d(-14vw, -18vh, 0) scale(1.35); } }
 
 @media (prefers-reduced-motion: reduce) { .wash span { animation: none; } }
 
@@ -2915,15 +2907,15 @@ input, textarea, select { font-family: inherit; }
 /* Section heads follow the hero: a small label over an oversized title. */
 :root.paper .eyebrow {
   display: block; font-family: var(--font-body);
-  font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+  font-size: 0.68rem; letter-spacing: 0.24em; text-transform: uppercase;
   color: var(--fg-muted); margin-bottom: 14px;
 }
 :root.paper .section-head h2,
 :root.paper .manifest-text h2 {
-  font-size: clamp(2rem, 6vw, 4.6rem); line-height: 1.02;
+  font-size: clamp(2.1rem, 5.4vw, 4.2rem); line-height: 1.04;
   letter-spacing: -0.02em; margin-bottom: 20px;
 }
-:root.paper .section-intro { max-width: 62ch; font-size: 1rem; color: var(--fg-muted); }
+:root.paper .section-intro { max-width: 60ch; font-size: 1.08rem; line-height: 1.65; color: var(--fg-muted); }
 
 /* Steps become hairline-separated rows rather than boxes in a grid. */
 :root.paper .process-steps {
@@ -2938,18 +2930,18 @@ input, textarea, select { font-family: inherit; }
   border-left: none; border-right: none; background: none; min-height: 0;
 }
 :root.paper .step-num {
-  font-family: var(--font-body); font-size: 0.62rem; letter-spacing: 0.24em;
+  font-family: var(--font-body); font-size: 0.68rem; letter-spacing: 0.22em;
   color: var(--fg-muted); padding-top: 0.7rem;
 }
 :root.paper .step h3 {
   font-family: var(--font-display); font-weight: 400;
-  font-size: clamp(1.6rem, 3.4vw, 2.9rem); line-height: 1.05;
+  font-size: clamp(1.5rem, 3vw, 2.4rem); line-height: 1.08;
   letter-spacing: -0.015em; margin: 0 0 10px;
 }
-:root.paper .step p { grid-column: 2; max-width: 62ch; margin: 0; color: var(--fg-muted); }
+:root.paper .step p { grid-column: 2; max-width: 60ch; margin: 0; font-size: 1rem; line-height: 1.7; color: var(--fg-muted); }
 :root.paper .step .meta {
-  grid-column: 2; margin-top: 14px; border: none; padding: 0;
-  font-size: 0.6rem; letter-spacing: 0.22em; color: var(--fg-faint);
+  grid-column: 2; margin-top: 16px; border: none; padding: 0;
+  font-size: 0.66rem; letter-spacing: 0.2em; color: var(--fg-faint);
 }
 
 /* Forms: hairlines and square corners, so they belong to the same page. */
@@ -2976,6 +2968,7 @@ input, textarea, select { font-family: inherit; }
 :root.paper button[type="submit"]:hover, :root.paper .btn-gold:hover {
   background: transparent; color: var(--fg);
 }
+:root.paper button[type="submit"] { color: var(--bg); }
 /* The header's apply link is not a button here. */
 :root.paper .site-header .btn-gold {
   background: none; border: none; color: var(--fg); padding: 0;
@@ -2985,3 +2978,193 @@ input, textarea, select { font-family: inherit; }
   font-size: 0.62rem; letter-spacing: 0.22em; padding: 14px 28px;
 }
 :root.paper .btn-ghost:hover { border-color: var(--fg); }
+
+/* Auth and CTA panels join the hairline system: squared, bordered, unshadowed. */
+:root.paper .auth-card {
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 0; box-shadow: none;
+}
+:root.paper .auth-card__kicker { letter-spacing: 0.26em; color: var(--fg-muted); }
+:root.paper .auth-card__title { font-family: var(--font-display); font-weight: 400; }
+:root.paper .auth-card__sub { color: var(--fg-muted); }
+:root.paper .process-cta {
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 0; box-shadow: none; padding: 48px 40px;
+}
+:root.paper .process-cta h3 {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(1.7rem, 3.6vw, 3rem); line-height: 1.05; letter-spacing: -0.015em;
+}
+:root.paper .process-cta p { color: var(--fg-muted); }
+/* Cards elsewhere on the site carry the dark scheme's rounding and shadows. */
+:root.paper .jury-member, :root.paper .fact, :root.paper .contact-card,
+:root.paper .faq-item, :root.paper .step { border-radius: 0; box-shadow: none; }
+
+:root.paper .manifest-text p { font-size: 1.08rem; line-height: 1.72; }
+:root.paper .fact .desc { font-size: 0.92rem; line-height: 1.6; }
+:root.paper .jury-member h4 { font-family: var(--font-display); font-weight: 400; font-size: 1.5rem; }
+:root.paper .jury-member .bio { font-size: 0.95rem; line-height: 1.65; }
+:root.paper .jury-member .role { font-size: 0.66rem; letter-spacing: 0.22em; }
+
+/* ─── Forms ────────────────────────────────────────────────────────────────
+   Two columns, small letterspaced labels above hairline fields, rules between
+   groups, and a solid button set to the right. */
+:root.paper .form-grid,
+:root.paper .contact-form,
+:root.paper .apply-form {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 26px 40px;
+}
+:root.paper .form-grid .full,
+:root.paper .contact-form .full,
+:root.paper .apply-form .full { grid-column: 1 / -1; }
+
+:root.paper label, :root.paper .field-label {
+  display: block; margin-bottom: 9px;
+  font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--fg-faint); font-weight: 500;
+}
+:root.paper input[type="text"], :root.paper input[type="email"],
+:root.paper input[type="tel"], :root.paper input[type="url"],
+:root.paper input[type="password"], :root.paper select, :root.paper textarea {
+  width: 100%; background: transparent;
+  border: 1px solid rgba(var(--fg-rgb), 0.18); border-radius: 0;
+  padding: 15px 16px; font-size: 0.95rem; color: var(--fg);
+}
+:root.paper input:hover, :root.paper select:hover, :root.paper textarea:hover {
+  border-color: rgba(var(--fg-rgb), 0.34);
+}
+:root.paper input:focus, :root.paper select:focus, :root.paper textarea:focus {
+  border-color: var(--fg); outline: none;
+}
+:root.paper input::placeholder, :root.paper textarea::placeholder {
+  color: rgba(var(--fg-rgb), 0.34); letter-spacing: 0.04em;
+}
+/* Groups are separated by a rule, not by a box. */
+:root.paper .form-section + .form-section,
+:root.paper .apply-step + .apply-step {
+  margin-top: 44px; padding-top: 44px; border-top: 1px solid var(--border);
+}
+:root.paper .form-actions,
+:root.paper .apply-actions {
+  grid-column: 1 / -1; display: flex; justify-content: flex-end;
+  gap: 14px; margin-top: 34px; padding-top: 34px; border-top: 1px solid var(--border);
+}
+:root.paper button[type="submit"], :root.paper .btn-gold, :root.paper .btn-ink {
+  min-width: 190px; padding: 17px 32px; border-radius: 0;
+  background: #2f2f2f; color: #fff; border: 1px solid #2f2f2f;
+  font-size: 0.7rem; letter-spacing: 0.16em; text-transform: none;
+}
+:root.paper button[type="submit"]:hover, :root.paper .btn-gold:hover, :root.paper .btn-ink:hover {
+  background: var(--fg); border-color: var(--fg); color: #fff;
+}
+:root.paper .site-header .btn-gold {
+  min-width: 0; padding: 0; background: none; border: none; color: var(--fg);
+}
+@media (max-width: 720px) {
+  :root.paper .form-grid, :root.paper .contact-form, :root.paper .apply-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Editorial application ───────────────────────────────────────────────
+   Per the brief: no input boxes, thin rules, oversized black type, and the
+   field questions carrying the page rather than a form chrome. */
+:root.paper label, :root.paper .field-label {
+  display: block; margin-bottom: 9px;
+  font-family: var(--font-body); font-weight: 500;
+  font-size: 0.64rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: #8b8b88;
+}
+:root.paper input[type="text"], :root.paper input[type="email"],
+:root.paper input[type="tel"], :root.paper input[type="url"],
+:root.paper input[type="password"], :root.paper textarea, :root.paper select {
+  width: 100%; background: transparent; border-radius: 0;
+  border: 1px solid #dcdcda; padding: 15px 16px;
+  font-size: 0.95rem; color: var(--fg);
+  transition: border-color 0.2s ease;
+}
+:root.paper input:hover, :root.paper textarea:hover, :root.paper select:hover {
+  border-color: #bcbcb9;
+}
+:root.paper input:focus, :root.paper textarea:focus, :root.paper select:focus {
+  border-color: var(--fg); outline: none; box-shadow: none;
+}
+:root.paper input::placeholder, :root.paper textarea::placeholder {
+  color: #b6b6b3; letter-spacing: 0.04em;
+}
+
+/* Panels and banners: rules, not boxes. */
+:root.paper .info-banner, :root.paper .apply-email-notice {
+  background: none; border: none; border-left: 2px solid var(--fg);
+  border-radius: 0; padding: 4px 0 4px 18px; color: var(--fg-muted);
+}
+:root.paper .auth-card, :root.paper .process-cta,
+:root.paper .apply-card, :root.paper .wizard, :root.paper .wizard-card {
+  background: none; border: 1px solid var(--border);
+  border-radius: 0; box-shadow: none;
+}
+/* Step tracker as a numbered rule, matching the section labels. */
+:root.paper .wizard { background: none; border: 1px solid var(--border); border-radius: 0; box-shadow: none; }
+:root.paper .wizard-progress {
+  background: none; border: none; border-bottom: 1px solid var(--border); border-radius: 0;
+}
+:root.paper .wstep {
+  background: none; border: none; border-right: 1px solid var(--border);
+  border-radius: 0; color: var(--fg-faint); padding: 18px 20px;
+}
+:root.paper .wstep:last-child { border-right: none; }
+:root.paper .wstep.active {
+  /* Active is marked with a rule, not a filled slab. */
+  background: none; color: var(--fg); box-shadow: inset 0 -2px 0 var(--fg);
+}
+:root.paper .wstep.done { background: none; color: var(--fg-muted); }
+:root.paper .wstep.done:hover { background: var(--bg-darker); }
+:root.paper .wstep .num { font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; }
+:root.paper .wstep .name { font-family: var(--font-display); font-weight: 400; font-size: 1.15rem; }
+:root.paper .wizard-body { padding: 44px 44px 36px; }
+
+:root.paper .wizard-steps, :root.paper .apply-steps {
+  background: none; border: none; border-bottom: 1px solid var(--border);
+  border-radius: 0; box-shadow: none;
+}
+:root.paper .wizard-steps .step-tab, :root.paper .apply-steps > * {
+  background: none; border: none; border-radius: 0; color: var(--fg-faint);
+}
+:root.paper .wizard-steps .step-tab.active, :root.paper .apply-steps .active {
+  background: none; color: var(--fg); border-bottom: 2px solid var(--fg);
+}
+:root.paper .wizard-section-label {
+  display: block; font-size: 0.68rem; letter-spacing: 0.24em;
+  text-transform: uppercase; color: var(--fg-faint); margin-bottom: 10px;
+}
+
+/* ─── Contact ─────────────────────────────────────────────────────────────
+   Same system as the application: hairline fields on the left, contacts as a
+   plain labelled list on the right - no card, no fill. */
+:root.paper .contact-block { background: var(--bg); border-top: 1px solid var(--border); }
+:root.paper .contact-block .eyebrow::before { display: none; }
+:root.paper .contact-block h2 {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(2rem, 5vw, 3.8rem); line-height: 1.04; letter-spacing: -0.02em;
+}
+:root.paper .contact-block p.lead { color: var(--fg-muted); font-size: 1.05rem; }
+:root.paper .contact-card, :root.paper .contact-info {
+  background: none; border: none; border-left: 1px solid var(--border);
+  border-radius: 0; box-shadow: none; padding-left: 40px;
+}
+:root.paper .contact-card > * + *, :root.paper .contact-info > * + * { margin-top: 26px; }
+:root.paper .contact-card .label, :root.paper .contact-info .label {
+  display: block; margin-bottom: 6px;
+  font-size: 0.64rem; letter-spacing: 0.16em; text-transform: uppercase; color: #8b8b88;
+}
+:root.paper .contact-card a, :root.paper .contact-info a {
+  color: var(--fg); text-decoration: none;
+  border-bottom: 1px solid rgba(var(--fg-rgb), 0.25); padding-bottom: 2px;
+}
+:root.paper .contact-card a:hover, :root.paper .contact-info a:hover { border-bottom-color: var(--fg); }
+:root.paper .contact-form { align-items: start; }
+:root.paper .contact-form textarea { min-height: 150px; resize: vertical; }
+
+:root.paper .apply-page,
+:root.paper .auth-page { background: var(--bg); color: var(--fg); }
+:root.paper .apply-page .eyebrow { color: var(--fg-muted); }

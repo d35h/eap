@@ -28,7 +28,13 @@ function PaperScheme() {
   useLayoutEffect(() => {
     const paper = !CABINET.test(pathname);
     document.documentElement.classList.toggle('paper', paper);
-    return () => document.documentElement.classList.remove('paper');
+    // The landing drops the wordmark, since you are already there. Every other
+    // page needs it - it is the way back.
+    document.documentElement.classList.toggle('paper-home', paper && pathname === '/');
+    return () => {
+      document.documentElement.classList.remove('paper');
+      document.documentElement.classList.remove('paper-home');
+    };
   }, [pathname]);
   return null;
 }
