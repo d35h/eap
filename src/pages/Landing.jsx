@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Countdown from '../components/Countdown.jsx';
-import HeroOrb from '../components/HeroOrb.jsx';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
 
@@ -17,47 +16,61 @@ export default function Landing() {
   const { t } = useTranslation();
   const submOpen = useSubmissionsOpen(); // undefined = loading, then true/false
 
+  // The light scheme lives on <html> rather than on this subtree, so the fixed
+  // header and the footer flip with it instead of staying dark over cream.
+  useEffect(() => {
+    document.documentElement.classList.add('paper');
+    return () => document.documentElement.classList.remove('paper');
+  }, []);
+
   return (
     <main>
-      <HeroOrb />
+      {/* HERO - type carries the screen, everything else is a footnote to it */}
+      <section className="ed-hero" id="opencall">
+        <h1 className="ed-title">
+          <span>Eurasia</span>
+          <span>Art Platform</span>
+        </h1>
 
-      {/* HERO */}
-      <section className="hero" id="opencall">
-        <div className="container">
-          <div className="hero-meta">
-            <span>- {t('hero.meta1')}</span>
-          </div>
-          <div className="hero-grid">
-            <div className="hero-left">
-              <h1 className="hero-title">
-                <span className="hero-title__acronym">EAP</span>
-                <span className="hero-title__full"><em>Eurasia</em> Art Platform</span>
-              </h1>
-              <p className="hero-vp">
-                {t('hero.vpStart')}
-                <strong>{t('hero.vpStrong')}</strong>
-                {t('hero.vpRest')}
-              </p>
-              <p className="hero-sub">{t('hero.sub')}</p>
-            </div>
-            <aside className="hero-right">
-              {submOpen === undefined ? (
-                <div className="hero-loading" aria-hidden="true" />
-              ) : submOpen ? (
-                <>
-                  <Countdown />
-                  <span className="hero-opening">{t('opencall.opening')}</span>
-                </>
-              ) : (
-                <div className="hero-closed">
-                  <span className="hero-closed__title">{t('opencall.closedTitle')}</span>
-                  <p className="hero-closed__note">{t('opencall.closedNote')}</p>
-                </div>
-              )}
-            </aside>
-          </div>
+        <div className="ed-hero__foot">
+          <p className="ed-micro">{t('hero.vpStrong')}</p>
+          {submOpen === undefined ? (
+            <div className="hero-loading" aria-hidden="true" />
+          ) : submOpen ? (
+            <>
+              <Countdown />
+              <p className="ed-micro ed-micro--faint">{t('opencall.deadlineValue')}</p>
+              <Link to="/apply" className="ed-cta">{t('nav.apply')}</Link>
+            </>
+          ) : (
+            <>
+              <p className="ed-micro">{t('opencall.closedTitle')}</p>
+              <p className="ed-micro ed-micro--faint">{t('opencall.closedNote')}</p>
+            </>
+          )}
         </div>
       </section>
+
+      {/* INDEX - the reference's stacked list of oversized titles */}
+      <nav className="ed-index" aria-label={t('nav.process')}>
+        {[
+          {
+            to: '/process',
+            label: t('process.eyebrow'),
+            // The section titles are stored in three pieces; the middle one on
+            // its own reads as a stray word ("подать").
+            title: [t('process.titlePart1'), t('process.titleEm'), t('process.titlePart2')].join(''),
+          },
+          { to: '/faq', label: t('nav.faq'), title: t('faq.title') },
+        ].map((row) => (
+          <Link className="ed-row" to={row.to} key={row.to}>
+            {/* Eyebrow strings carry a leading dash for the dark layout; this
+                design sets the label plainly. */}
+            <span className="ed-row__label">{row.label.replace(/^[-–—]\s*/, '')}</span>
+            <span className="ed-row__title">{row.title}</span>
+          </Link>
+        ))}
+      </nav>
 
       {/* PROCESS */}
       <section className="block" id="process">
