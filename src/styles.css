@@ -3566,7 +3566,9 @@ input, textarea, select { font-family: inherit; }
    read as a different material against the near-white page. One ground, with
    a hairline to mark the change of register. */
 :root.paper .site-footer {
-  background: var(--bg); border-top: 1px solid var(--border);
+  /* No rule above it: the wash runs straight through from the section above,
+     and a line across it cuts the spill in half. */
+  background: var(--bg); border-top: none;
   color: var(--fg-muted);
 }
 :root.paper .footer-col h4,
