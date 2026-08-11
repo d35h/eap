@@ -44,13 +44,19 @@ vec3 palette(float t) {
 }
 
 // Slow-moving field the sphere sits in and refracts.
+// Measured against the reference: its frame-to-frame luma difference averages
+// ~30/255 over half a second. Drifting the field slowly enough to be tasteful
+// still has to be fast enough to be *seen* - the first pass was ~10x too slow.
 vec3 field(vec2 p) {
-  float t = u_time * 0.028;
-  float n = fbm(p * 0.85 + vec2(t, -t * 0.7));
-  n += 0.34 * fbm(p * 1.7 - vec2(t * 1.2, t));
+  float t = u_time * 0.62;
+  // Two layers pulling against each other so the masses fold rather than slide.
+  float n = fbm(p * 0.85 + vec2(t, -t * 0.62));
+  n += 0.34 * fbm(p * 1.7 - vec2(t * 0.83, t * 1.15));
   // Bias upward: outside the glass the field is the bright part of the frame.
   return palette(clamp(n * 0.95, 0.0, 1.0));
 }
+
+mat2 rot(float a) { float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
 
 void main() {
   vec2 uv = (gl_FragCoord.xy - 0.5 * u_res) / u_res.y;
@@ -58,7 +64,7 @@ void main() {
   vec3 col = field(uv);
 
   // Sphere sits right of centre with its left limb crossing the frame.
-  vec2 c = vec2(0.46 + 0.012 * sin(u_time * 0.11), -0.02 + 0.010 * cos(u_time * 0.09));
+  vec2 c = vec2(0.46 + 0.022 * sin(u_time * 0.17), -0.02 + 0.018 * cos(u_time * 0.13));
   float r = 0.92;
   vec2 d = uv - c;
   float dist = length(d);
@@ -70,7 +76,9 @@ void main() {
 
     // Refraction: bend the sampled field toward the centre by the surface slope.
     vec2 bent = uv + n.xy * 0.34 * (1.0 - n.z);
-    vec3 inside = field(bent * 1.18);
+    // Slow rotation of what the glass transmits - this is most of the visible
+    // life in the sphere, since translation alone reads as a moving backdrop.
+    vec3 inside = field(rot(u_time * 0.11) * (bent - c) * 1.18 + c);
 
     // Glass darkens what it transmits, and the core more than the edge.
     inside *= 0.09 + 0.34 * (1.0 - n.z);
@@ -79,7 +87,7 @@ void main() {
     float fres = pow(1.0 - n.z, 2.1);
 
     // Thin-film style shift so the rim is not a flat gold line.
-    vec3 rim = palette(0.55 + 0.42 * sin(atan(s.y, s.x) * 1.6 + u_time * 0.06));
+    vec3 rim = palette(0.55 + 0.42 * sin(atan(s.y, s.x) * 1.6 + u_time * 0.32));
     inside += rim * fres * 1.85;
 
     // A soft specular highlight up-left, matching the site's light direction.

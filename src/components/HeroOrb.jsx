@@ -69,19 +69,6 @@ export default function HeroOrb() {
         </span>
       </h2>
 
-      <div className="orb__scroll" aria-hidden="true">
-        <svg viewBox="0 0 100 100" className="orb__scroll-ring">
-          <defs>
-            <path id="orb-ring" d="M50,50 m-34,0 a34,34 0 1,1 68,0 a34,34 0 1,1 -68,0" />
-          </defs>
-          <text>
-            <textPath href="#orb-ring" startOffset="0">
-              SCROLL DOWN · SCROLL DOWN ·
-            </textPath>
-          </text>
-        </svg>
-        <span className="orb__scroll-dot" />
-      </div>
     </section>
   );
 }
