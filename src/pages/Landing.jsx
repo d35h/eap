@@ -31,10 +31,15 @@ export default function Landing() {
 
         {/* The name is the way back to the top of the site. */}
         <h1 className="ed-title">
-          <Link to="/" aria-label="Eurasia Art Platform">
+          {/* Already on "/", so the router would do nothing - scroll explicitly. */}
+          <a
+            href="/"
+            aria-label="Eurasia Art Platform"
+            onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+          >
             <span>Eurasia Art</span>
             <span>Platform</span>
-          </Link>
+          </a>
         </h1>
 
         <div className="ed-hero__foot">
@@ -55,23 +60,19 @@ export default function Landing() {
       </section>
 
       {/* INDEX - the reference's stacked list of oversized titles */}
-      {/* FAQ - opens in place rather than sending you to another page */}
+      {/* FAQ - the heading is the control, as in the reference's list */}
       <section className="ed-panel" id="faq">
-        <div className="section-head">
-          <span className="eyebrow">{t('faq.eyebrow')}</span>
-          <h2>{t('faq.title')}</h2>
-          <p className="section-intro">{t('faq.lead')}</p>
-        </div>
         <button
           type="button"
-          className={`btn-ghost disclosure${faqOpen ? ' is-open' : ''}`}
+          className={`ed-row ed-row--toggle${faqOpen ? ' is-open' : ''}`}
           aria-expanded={faqOpen}
           aria-controls="faq-list"
           onClick={() => setFaqOpen((v) => !v)}
         >
-          {t('faq.toggle')}
+          <span className="ed-row__title">{t('faq.title')}</span>
         </button>
         <div id="faq-list" className="faq-list" hidden={!faqOpen}>
+          <p className="section-intro">{t('faq.lead')}</p>
           {(Array.isArray(t('faq.items')) ? t('faq.items') : []).map((qa, i) => (
             <div className="faq-row" key={i}>
               <h3>{qa.q}</h3>
@@ -82,29 +83,21 @@ export default function Landing() {
       </section>
 
       {/* PROCESS */}
-      <section className="block" id="process">
-        <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">{t('process.eyebrow')}</span>
-            <h2>
-              {t('process.titlePart1')}
-              <em>{t('process.titleEm')}</em>
-              {t('process.titlePart2')}
-            </h2>
-            <p className="section-intro">{t('process.intro')}</p>
-          </div>
+      <section className="ed-panel" id="process">
+        <button
+          type="button"
+          className={`ed-row ed-row--toggle${stepsOpen ? ' is-open' : ''}`}
+          aria-expanded={stepsOpen}
+          aria-controls="process-steps"
+          onClick={() => setStepsOpen((v) => !v)}
+        >
+          <span className="ed-row__title">
+            {[t('process.titlePart1'), t('process.titleEm'), t('process.titlePart2')].join('')}
+          </span>
+        </button>
 
-          <button
-            type="button"
-            className={`btn-ghost disclosure${stepsOpen ? ' is-open' : ''}`}
-            aria-expanded={stepsOpen}
-            aria-controls="process-steps"
-            onClick={() => setStepsOpen((v) => !v)}
-          >
-            {t('process.stepsToggle')}
-          </button>
-
-          <div id="process-steps" className={`process-steps${stepsOpen ? ' is-open' : ''}`} hidden={!stepsOpen}>
+        <div id="process-steps" className="process-steps" hidden={!stepsOpen}>
+          <p className="section-intro">{t('process.intro')}</p>
             {[1, 2, 3, 4].map((n) => (
               <div className="step" key={n}>
                 <div className="step-num">0{n}</div>
@@ -113,9 +106,6 @@ export default function Landing() {
                 <div className="meta">{t(`process.step${n}Meta`)}</div>
               </div>
             ))}
-          </div>
-
-
         </div>
       </section>
 
