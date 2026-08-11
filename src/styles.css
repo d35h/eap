@@ -3780,3 +3780,20 @@ input, textarea, select { font-family: inherit; }
   :root.paper .page-wash .wc { width: 130%; right: -40%; opacity: 0.5; }
 }
 @media (prefers-reduced-motion: reduce) { :root.paper .page-wash .wc { animation: none; } }
+
+/* Footer wash: the same spill, fainter, anchored to the same right edge. */
+:root.paper .site-footer { position: relative; overflow: hidden; }
+:root.paper .site-footer__wash {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+:root.paper .site-footer__wash .wc {
+  position: absolute; top: -60%; right: -16%; width: 76%; height: 190%;
+  opacity: 0.55; animation: cx-drift 80s ease-in-out infinite alternate;
+}
+:root.paper .site-footer .container { position: relative; z-index: 1; }
+@media (max-width: 900px) {
+  :root.paper .site-footer__wash .wc { width: 130%; right: -38%; opacity: 0.4; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root.paper .site-footer__wash .wc { animation: none; }
+}

@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
+import Watercolour from './Watercolour.jsx';
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -22,6 +23,11 @@ export default function Footer() {
 
   return (
     <footer className="site-footer">
+      {/* The wash carries on past the contact section instead of stopping at
+          its edge, so the pigment reads as one spill down the page. */}
+      <div className="site-footer__wash" aria-hidden="true">
+        <Watercolour seed={19} />
+      </div>
       <div className="container">
         <div className="footer-top">
           <div className="footer-brand">
