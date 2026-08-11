@@ -16,6 +16,7 @@ export default function Landing() {
   const { t } = useTranslation();
   // The four steps are long; behind a disclosure the section stays scannable.
   const [stepsOpen, setStepsOpen] = useState(false);
+  const [faqOpen, setFaqOpen] = useState(false);
   const submOpen = useSubmissionsOpen(); // undefined = loading, then true/false
 
   return (
@@ -51,25 +52,26 @@ export default function Landing() {
       </section>
 
       {/* INDEX - the reference's stacked list of oversized titles */}
-      <nav className="ed-index" aria-label={t('nav.process')}>
-        {[
-          {
-            to: '/process',
-            label: t('process.eyebrow'),
-            // The section titles are stored in three pieces; the middle one on
-            // its own reads as a stray word ("подать").
-            title: [t('process.titlePart1'), t('process.titleEm'), t('process.titlePart2')].join(''),
-          },
-          { to: '/faq', label: t('nav.faq'), title: t('faq.title') },
-        ].map((row) => (
-          <Link className="ed-row" to={row.to} key={row.to}>
-            {/* Eyebrow strings carry a leading dash for the dark layout; this
-                design sets the label plainly. */}
-            <span className="ed-row__label">{row.label.replace(/^[-–—]\s*/, '')}</span>
-            <span className="ed-row__title">{row.title}</span>
-          </Link>
-        ))}
-      </nav>
+      {/* FAQ - opens in place rather than sending you to another page */}
+      <section className="ed-panel" id="faq">
+        <button
+          type="button"
+          className={`btn-ghost disclosure${faqOpen ? ' is-open' : ''}`}
+          aria-expanded={faqOpen}
+          aria-controls="faq-list"
+          onClick={() => setFaqOpen((v) => !v)}
+        >
+          {t('faq.title')}
+        </button>
+        <div id="faq-list" className="faq-list" hidden={!faqOpen}>
+          {(Array.isArray(t('faq.items')) ? t('faq.items') : []).map((qa, i) => (
+            <div className="faq-row" key={i}>
+              <h3>{qa.q}</h3>
+              <p>{qa.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* PROCESS */}
       <section className="block" id="process">

@@ -2764,7 +2764,7 @@ input, textarea, select { font-family: inherit; }
   padding: 17vh 3vw 52px; text-align: center; gap: 40px;
 }
 .ed-title {
-  position: relative; z-index: 3;
+  position: relative; z-index: 1;
   margin: 0; font-family: var(--font-display); font-weight: 400;
   /* The reference sets its name edge to edge; vw sizing plus caps is what
      makes the line span the viewport instead of sitting in a column. */
@@ -2839,7 +2839,7 @@ input, textarea, select { font-family: inherit; }
    lilac #e3d1e0, blue-grey #858c97. Sits under the header so the nav stays
    clean, over the content so the letters take the colour. */
 .wash {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
+  position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
 
 }
 
@@ -2847,7 +2847,7 @@ input, textarea, select { font-family: inherit; }
 /* Fine grain over everything - the reference is dusted with it, and without it
    wide blurred gradients band into visible steps. */
 .grain {
-  position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0.26;
+  position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0.26;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 160px 160px;
   animation: grain-shift 1.1s steps(4) infinite;
@@ -2866,35 +2866,39 @@ input, textarea, select { font-family: inherit; }
 }
 .wash span {
   position: absolute; border-radius: 50%;
-  filter: blur(82px); opacity: 1; will-change: transform;
+  filter: blur(54px); opacity: 1; will-change: transform;
 }
 .wash span:nth-child(1) {
-  width: 62vw; height: 46vw; left: -22%; top: -18%;
-  background: radial-gradient(circle, rgba(63, 156, 107, 0.62) 0%, rgba(63, 156, 107, 0) 68%);
+  width: 36vw; height: 32vw; left: 4%; top: 6%;
+  background: radial-gradient(circle, rgba(52, 140, 92, 0.86) 0%, rgba(63, 156, 107, 0) 68%);
   animation: wash-a 4.6s ease-in-out infinite;
 }
 .wash span:nth-child(2) {
-  width: 54vw; height: 42vw; right: -24%; top: -12%;
-  background: radial-gradient(circle, rgba(154, 95, 208, 0.58) 0%, rgba(154, 95, 208, 0) 66%);
+  width: 34vw; height: 30vw; right: 4%; top: 2%;
+  background: radial-gradient(circle, rgba(140, 78, 196, 0.82) 0%, rgba(154, 95, 208, 0) 66%);
   animation: wash-b 5.5s ease-in-out infinite -2.6s;
 }
 .wash span:nth-child(3) {
-  width: 50vw; height: 38vw; left: 26%; bottom: -18%;
-  background: radial-gradient(circle, rgba(224, 83, 52, 0.5) 0%, rgba(224, 83, 52, 0) 66%);
+  width: 34vw; height: 28vw; left: 28%; top: 22%;
+  background: radial-gradient(circle, rgba(214, 74, 44, 0.7) 0%, rgba(224, 83, 52, 0) 66%);
   animation: wash-c 4.9s ease-in-out infinite -4.1s;
 }
 /* Two of the five masses are retired: the field should drift through an edge,
    not fill the screen. */
 .wash span:nth-child(4) {
-  width: 44vw; height: 36vw; right: 6%; top: 24%;
-  background: radial-gradient(circle, rgba(63, 111, 181, 0.5) 0%, rgba(63, 111, 181, 0) 66%);
+  width: 28vw; height: 24vw; right: 26%; top: 30%;
+  background: radial-gradient(circle, rgba(52, 98, 168, 0.72) 0%, rgba(63, 111, 181, 0) 66%);
   animation: wash-b 6.4s ease-in-out infinite -3.4s;
 }
-.wash span:nth-child(5) { display: none; }
+.wash span:nth-child(5) {
+  width: 32vw; height: 27vw; left: 12%; top: 30%;
+  background: radial-gradient(circle, rgba(64, 58, 54, 0.6) 0%, rgba(64, 58, 54, 0) 66%);
+  animation: wash-c 7.2s ease-in-out infinite -2.1s;
+}
 
-@keyframes wash-a { 0%,100% { transform: translate3d(0,0,0) scale(0.8); } 50% { transform: translate3d(34vw, 26vh, 0) scale(1.45); } }
-@keyframes wash-b { 0%,100% { transform: translate3d(0,0,0) scale(1.35); } 50% { transform: translate3d(-38vw, 30vh, 0) scale(0.78); } }
-@keyframes wash-c { 0%,100% { transform: translate3d(0,0,0) scale(0.8); } 50% { transform: translate3d(-30vw, -34vh, 0) scale(1.5); } }
+@keyframes wash-a { 0%,100% { transform: translate3d(0,0,0) scale(0.8); } 50% { transform: translate3d(13vw, 11vh, 0) scale(1.3); } }
+@keyframes wash-b { 0%,100% { transform: translate3d(0,0,0) scale(1.35); } 50% { transform: translate3d(-14vw, 13vh, 0) scale(0.82); } }
+@keyframes wash-c { 0%,100% { transform: translate3d(0,0,0) scale(0.8); } 50% { transform: translate3d(-12vw, -13vh, 0) scale(1.34); } }
 
 @media (prefers-reduced-motion: reduce) { .wash span { animation: none; } }
 
@@ -3299,3 +3303,19 @@ input, textarea, select { font-family: inherit; }
 :root.paper .field-group textarea.error,
 :root.paper input.error, :root.paper textarea.error { border-bottom-color: #b4483f; }
 :root.paper label .req { color: #b4483f; }
+
+/* Disclosure panels sit on the page rhythm, not in boxes. */
+:root.paper .ed-panel { padding: 0 24px; max-width: 1180px; margin: 0 auto 8px; }
+:root.paper .faq-list { padding-top: 8px; }
+:root.paper .faq-row {
+  padding: 26px 0 28px; border-bottom: 1px solid var(--border);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 12px 48px;
+}
+:root.paper .faq-row h3 {
+  margin: 0; font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(1.2rem, 2.2vw, 1.7rem); line-height: 1.15; letter-spacing: -0.012em;
+}
+:root.paper .faq-row p { margin: 0; color: var(--fg-muted); font-size: 1rem; line-height: 1.7; }
+@media (max-width: 720px) {
+  :root.paper .faq-row { grid-template-columns: 1fr; gap: 10px; }
+}
