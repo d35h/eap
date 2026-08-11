@@ -1,7 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect, useLayoutEffect } from 'react';
 import Header from './components/Header.jsx';
-import Intro from './components/Intro.jsx';
 import Footer from './components/Footer.jsx';
 import VersionWatcher from './components/VersionWatcher.jsx';
 import Landing from './pages/Landing.jsx';
@@ -42,8 +41,6 @@ export default function App() {
     <>
       <ScrollToTop />
       <VersionWatcher />
-      {/* Above Header so the panel covers the fixed nav too. */}
-      <Intro />
       <Header />
       <Routes>
         <Route path="/" element={<Landing />} />

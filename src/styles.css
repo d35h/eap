@@ -2691,30 +2691,164 @@ input, textarea, select { font-family: inherit; }
   .process-cta .btn-gold:active { transform: scale(0.985); }
 }
 
-/* ─── Intro counter ─── */
-/* Sits above every other layer, including the toast at z-index 1000. */
-.intro {
-  position: fixed; inset: 0; z-index: 2000;
-  background: var(--bg);
-  display: flex; align-items: flex-end; justify-content: flex-end;
-  padding: clamp(24px, 6vw, 80px);
-  transition: transform 900ms cubic-bezier(0.76, 0, 0.24, 1);
-  will-change: transform;
+
+/* ─── Opening orb ─── */
+/* A full-height screen of slowly drifting gradient, with the tagline cycling
+   through every locale. The scroll badge is the promise that content follows. */
+.orb {
+  position: relative; height: 100vh; min-height: 560px;
+  overflow: hidden; background: var(--bg-darker);
+  display: flex; align-items: center; justify-content: center;
+  isolation: isolate;
 }
-.intro--leaving { transform: translateY(-100%); }
-.intro__count {
-  display: flex; align-items: baseline; gap: 0.08em;
+.orb__field { position: absolute; inset: 0; z-index: 0; }
+/* Vignette - the reference sits far darker than raw gradients land on their own. */
+.orb__field::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 46% 52%, transparent 34%, hsla(220, 16%, 4%, 0.34) 86%),
+    linear-gradient(180deg, hsla(220, 16%, 4%, 0.34), transparent 26%, hsla(220, 16%, 4%, 0.46));
+}
+
+/* Loose colour drifting behind the sphere. */
+.orb__blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.42; }
+.orb__blob--1 {
+  width: 70vmax; height: 55vmax; left: -18%; top: -12%;
+  background: radial-gradient(circle, hsla(38, 45%, 50%, 0.55), transparent 65%);
+  animation: orb-drift-a 38s ease-in-out infinite;
+}
+.orb__blob--2 {
+  width: 60vmax; height: 60vmax; left: 8%; bottom: -22%;
+  background: radial-gradient(circle, hsla(140, 22%, 30%, 0.65), transparent 62%);
+  animation: orb-drift-b 47s ease-in-out infinite;
+}
+.orb__blob--3 {
+  width: 46vmax; height: 40vmax; right: 4%; top: 34%;
+  background: radial-gradient(circle, hsla(28, 40%, 34%, 0.6), transparent 60%);
+  animation: orb-drift-c 53s ease-in-out infinite;
+}
+
+/* The sphere: dark core, iridescent rim - a soap-bubble read rather than a ball.
+   The conic gradient supplies the rim colours; the radial punches out the core. */
+.orb__sphere {
+  /* Sized and placed so the left arc crosses the frame around a third in -
+     that visible curve is what makes it read as a sphere at all. */
+  position: absolute; top: -22%; right: -14%;
+  width: 78vw; height: 78vw; min-width: 720px; min-height: 720px; border-radius: 50%;
+  background:
+    radial-gradient(circle at 38% 32%, hsla(60, 28%, 60%, 0.16), transparent 44%),
+    radial-gradient(circle at 64% 72%, hsla(38, 55%, 56%, 0.20), transparent 40%),
+    radial-gradient(circle at 50% 50%, hsl(220, 16%, 3%) 84%, hsla(220, 16%, 3%, 0.94) 94%, hsla(220, 16%, 3%, 0) 100%);
+  /* Light blur only - the silhouette has to survive, that is the whole effect. */
+  filter: blur(8px);
+  animation: orb-breathe 44s ease-in-out infinite;
+}
+/* The lit crescent along part of the circumference - the edge cue itself. */
+.orb__sphere::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from 196deg at 50% 50%,
+    transparent 0deg,
+    hsla(48, 72%, 78%, 0.95) 46deg,
+    hsla(58, 48%, 74%, 0.6) 84deg,
+    hsla(150, 30%, 48%, 0.4) 124deg,
+    transparent 164deg);
+  -webkit-mask: radial-gradient(circle at 50% 50%, transparent 93%, #000 96.5%);
+  mask: radial-gradient(circle at 50% 50%, transparent 93%, #000 96.5%);
+  filter: blur(3px);
+}
+
+/* The colour lives behind the body, so it reads as a lit rim rather than paint. */
+.orb__sphere::before {
+  content: ""; position: absolute; inset: -2%; border-radius: 50%; z-index: -1;
+  background: conic-gradient(from 200deg at 50% 50%,
+    hsla(150, 26%, 24%, 0.75),
+    hsla(45, 60%, 58%, 0.7),
+    hsla(30, 32%, 9%, 0.95),
+    hsla(95, 22%, 26%, 0.75),
+    hsla(45, 55%, 52%, 0.55),
+    hsla(150, 26%, 24%, 0.75));
+  filter: blur(38px);
+  animation: orb-turn 60s linear infinite;
+}
+
+/* Grain keeps the big blurs from banding on wide gradients. */
+.orb__grain {
+  position: absolute; inset: 0; opacity: 0.22; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+@keyframes orb-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(6vw, 5vh, 0) scale(1.14); }
+}
+@keyframes orb-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.05); }
+  50% { transform: translate3d(-7vw, -6vh, 0) scale(0.92); }
+}
+@keyframes orb-drift-c {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(0.95); }
+  50% { transform: translate3d(-5vw, 7vh, 0) scale(1.16); }
+}
+@keyframes orb-turn { to { transform: rotate(360deg); } }
+@keyframes orb-breathe {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-2.5vw, 2vh, 0) scale(1.05); }
+}
+
+/* Tagline. Absolutely positioned so the outgoing and incoming lines overlap
+   during the crossfade instead of shoving each other sideways. */
+.orb__line {
+  position: relative; z-index: 2; margin: 0;
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; padding: 0 24px; min-height: 1.4em;
   font-family: var(--font-display); font-weight: 300;
-  font-size: clamp(4rem, 12vw, 11rem); line-height: 0.85;
-  color: var(--accent);
-  /* Without tabular figures the number jitters as digit widths change. */
-  font-variant-numeric: tabular-nums;
+  font-size: clamp(1.8rem, 4.6vw, 3.9rem); line-height: 1.15;
+  letter-spacing: -0.015em; color: var(--fg); text-align: center;
 }
-.intro__pct { font-size: 0.3em; color: var(--fg-faint); letter-spacing: 0.08em; }
-.intro__bar { position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--border); }
-/* Driven per frame from JS, so no transition here - it would lag the counter. */
-.intro__bar span { display: block; height: 100%; background: var(--accent); transform-origin: 0 50%; }
+.orb__word { position: absolute; max-width: 92vw; }
+.orb__word--in { animation: orb-word-in 1100ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.orb__word--out { animation: orb-word-out 1100ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes orb-word-in {
+  from { opacity: 0; transform: translateX(38px); filter: blur(7px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes orb-word-out {
+  from { opacity: 0.5; transform: none; filter: blur(0); }
+  to { opacity: 0; transform: translateX(-38px); filter: blur(7px); }
+}
+
+/* Scroll badge. */
+.orb__scroll {
+  position: absolute; z-index: 2; left: clamp(20px, 5vw, 64px); bottom: clamp(24px, 6vh, 72px);
+  width: 96px; height: 96px; display: grid; place-items: center;
+}
+.orb__scroll-ring {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  animation: orb-turn 18s linear infinite;
+}
+.orb__scroll-ring text {
+  font-family: var(--font-mono); font-size: 8.5px;
+  letter-spacing: 0.22em; fill: hsla(36, 22%, 92%, 0.62);
+  text-transform: uppercase;
+}
+.orb__scroll-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); opacity: 0.85;
+}
+
+@media (max-width: 720px) {
+  .orb { height: 92vh; }
+  .orb__sphere { width: 150vw; height: 150vw; right: -55%; top: -10%; }
+}
+
+/* Everything here is decoration; hold it all still when asked. */
+.orb--still .orb__blob,
+.orb--still .orb__sphere,
+.orb--still .orb__scroll-ring,
+.orb--still .orb__word--in,
+.orb--still .orb__word--out { animation: none; }
+.orb--still .orb__word--out { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .intro { transition: none; }
+  .orb__blob, .orb__sphere, .orb__scroll-ring, .orb__word--in, .orb__word--out { animation: none; }
 }

@@ -36,6 +36,7 @@ export const translations = {
     },
     hero: {
       meta1: 'Eurasia Art Platform · современное искусство',
+      orbTagline: 'Современное искусство Евразии',
       meta2: 'Первый цикл · 2026',
       vpStrong: 'Каждый, кто подаёт работу, получает место',
       vpRest: ' - на выставке или в цифровой программе.',
@@ -378,6 +379,7 @@ export const translations = {
     },
     hero: {
       meta1: 'Eurasia Art Platform · contemporary art',
+      orbTagline: 'Contemporary art of Eurasia',
       meta2: 'First cycle · 2026',
       vpStrong: 'Everyone who applies gets a place',
       vpRest: ' - in the exhibition or the digital program.',
@@ -713,6 +715,7 @@ export const translations = {
     },
     hero: {
       meta1: 'Eurasia Art Platform · заманауи өнер',
+      orbTagline: 'Еуразияның заманауи өнері',
       meta2: 'Бірінші цикл · 2026',
       vpStrong: 'Жұмыс жіберген әркім орын алады',
       vpRest: ' - көрмеде немесе сандық бағдарламада.',
@@ -1047,6 +1050,7 @@ export const translations = {
     },
     hero: {
       meta1: 'Eurasia Art Platform · 当代艺术',
+      orbTagline: '欧亚当代艺术',
       meta2: '首个周期 · 2026',
       vpStrong: '每位申请者都能获得一席之地',
       vpRest: '——在展览或数字项目中。',

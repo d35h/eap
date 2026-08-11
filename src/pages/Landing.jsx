@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Countdown from '../components/Countdown.jsx';
+import HeroOrb from '../components/HeroOrb.jsx';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
 
@@ -18,6 +19,8 @@ export default function Landing() {
 
   return (
     <main>
+      <HeroOrb />
+
       {/* HERO */}
       <section className="hero" id="opencall">
         <div className="container">
