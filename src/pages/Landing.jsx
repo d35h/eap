@@ -28,8 +28,8 @@ export default function Landing() {
       {/* HERO - type carries the screen, everything else is a footnote to it */}
       <section className="ed-hero" id="opencall">
         <h1 className="ed-title">
-          <span>Eurasia</span>
-          <span>Art Platform</span>
+          <span>Eurasia Art</span>
+          <span>Platform</span>
         </h1>
 
         <div className="ed-hero__foot">
@@ -38,8 +38,6 @@ export default function Landing() {
             <div className="hero-loading" aria-hidden="true" />
           ) : submOpen ? (
             <>
-              <Countdown />
-              <p className="ed-micro ed-micro--faint">{t('opencall.deadlineValue')}</p>
               <Link to="/apply" className="ed-cta">{t('nav.apply')}</Link>
             </>
           ) : (

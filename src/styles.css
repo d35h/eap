@@ -2717,10 +2717,32 @@ input, textarea, select { font-family: inherit; }
   --border: rgba(21, 22, 26, 0.16);
   --fg-rgb: 21, 22, 26;
 }
-:root.paper body { background: var(--bg); color: var(--fg); }
+:root.paper body {
+  /* Matched to samples off the reference: light through the left and centre,
+     falling to roughly 7% darker at the right edge. */
+  background:
+    radial-gradient(62% 58% at 99% 68%, #ddd2c9 0%, rgba(221, 210, 201, 0) 68%),
+    radial-gradient(120% 85% at 18% 14%, #f9f1eb 0%, rgba(249, 241, 235, 0) 60%),
+    var(--bg);
+  background-attachment: fixed;
+  color: var(--fg);
+}
 
-:root.paper .site-header { padding: 22px 0; }
-:root.paper .logo { font-size: 1rem; }
+:root.paper .site-header {
+  padding: 20px 0; background: none; border-bottom: none;
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+}
+/* The reference's bar is two words. Everything that reads as chrome goes. */
+:root.paper .logo,
+:root.paper .header-auth,
+:root.paper .btn-ghost-sm,
+:root.paper .site-header .lang-switch .sep { display: none; }
+/* The two remaining pills are the last thing reading as chrome. */
+:root.paper .header-login,
+:root.paper .lang-globe {
+  border: none; background: none; padding: 0;
+  font-size: 0.6rem; letter-spacing: 0.22em; color: var(--fg);
+}
 :root.paper .nav-primary { gap: 22px; }
 :root.paper .nav-primary a { font-size: 0.6rem; letter-spacing: 0.22em; }
 /* Strip the pills - borders and fills are what make the bar read as chrome. */
@@ -2744,24 +2766,25 @@ input, textarea, select { font-family: inherit; }
 /* Hero: the type is the composition. */
 .ed-hero {
   min-height: 100vh; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 108px 2vw 52px; text-align: center; gap: 28px;
+  align-items: center; justify-content: flex-start;
+  /* The reference sets the name high and leaves the lower half empty. */
+  padding: 15vh 2vw 52px; text-align: center; gap: 34px;
 }
 .ed-title {
   margin: 0; font-family: var(--font-display); font-weight: 400;
   /* The reference sets its name edge to edge; vw sizing plus caps is what
      makes the line span the viewport instead of sitting in a column. */
-  font-size: clamp(2rem, 12.1vw, 14rem);
-  line-height: 0.88; letter-spacing: -0.012em; color: var(--fg);
+  font-size: clamp(2rem, 13.2vw, 15rem);
+  line-height: 0.84; letter-spacing: -0.028em; color: var(--fg);
   text-transform: uppercase;
   display: flex; flex-direction: column; width: 100%;
 }
 /* Each line holds together; the vw size is what fits them, not wrapping. */
 .ed-title > span { white-space: nowrap; }
-.ed-hero__foot { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.ed-hero__foot { display: flex; flex-direction: column; align-items: center; gap: 26px; }
 .ed-micro {
   margin: 0; font-family: var(--font-body);
-  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.24em;
+  font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.24em;
   color: var(--fg); max-width: 46ch; line-height: 1.9;
 }
 .ed-micro--faint { color: var(--fg-muted); }
