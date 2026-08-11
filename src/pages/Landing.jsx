@@ -261,7 +261,7 @@ function ContactBlock() {
               <span className="field-error">{errors.email}</span>
             </div>
 
-            <div className="field-group">
+            <div className="field-group full">
               <label>{t('contact.subject')}</label>
               <input
                 type="text"
