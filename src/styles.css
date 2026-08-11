@@ -2706,28 +2706,19 @@ input, textarea, select { font-family: inherit; }
    free; only hard-coded colours need the overrides that follow. */
 :root.paper {
   --font-display: 'Prata', 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-  --bg: #f5eae2;
-  --bg-soft: #f0e4da;
-  --bg-darker: #ece0d5;
-  --fg: #15161a;
-  --fg-muted: #5f5a55;
-  --fg-faint: #8d857d;
+  --bg: #ffffff;
+  --bg-soft: #fbfbfa;
+  --bg-darker: #f4f3f1;
+  --fg: #0b0c0e;
+  --fg-muted: #4a4a4c;
+  --fg-faint: #86868a;
   --accent: #15161a;
   --accent-soft: #3a352f;
   --accent-deep: #15161a;
-  --border: rgba(21, 22, 26, 0.16);
-  --fg-rgb: 21, 22, 26;
+  --border: rgba(11, 12, 14, 0.14);
+  --fg-rgb: 11, 12, 14;
 }
-:root.paper body {
-  /* Matched to samples off the reference: light through the left and centre,
-     falling to roughly 7% darker at the right edge. */
-  background:
-    radial-gradient(62% 58% at 99% 68%, #ddd2c9 0%, rgba(221, 210, 201, 0) 68%),
-    radial-gradient(120% 85% at 18% 14%, #f9f1eb 0%, rgba(249, 241, 235, 0) 60%),
-    var(--bg);
-  background-attachment: fixed;
-  color: var(--fg);
-}
+:root.paper body { background: var(--bg); color: var(--fg); }
 
 :root.paper .site-header {
   padding: 20px 0; background: none; border-bottom: none;
@@ -2766,12 +2757,14 @@ input, textarea, select { font-family: inherit; }
 
 /* Hero: the type is the composition. */
 .ed-hero {
+  position: relative; overflow: hidden; background: #f5eae2;
   min-height: 100vh; display: flex; flex-direction: column;
   align-items: center; justify-content: flex-start;
   /* The reference sets the name high and leaves the lower half empty. */
   padding: 15vh 2vw 52px; text-align: center; gap: 34px;
 }
 .ed-title {
+  position: relative; z-index: 3;
   margin: 0; font-family: var(--font-display); font-weight: 400;
   /* The reference sets its name edge to edge; vw sizing plus caps is what
      makes the line span the viewport instead of sitting in a column. */
@@ -2784,7 +2777,7 @@ input, textarea, select { font-family: inherit; }
 .ed-title > span { white-space: nowrap; }
 /* The headline takes the colour, as in the reference; the small copy and
    the apply link stay above it, since that is the text that must stay crisp. */
-.ed-hero__foot { position: relative; z-index: 32; }
+.ed-hero__foot { position: relative; z-index: 4; }
 
 /* Entrance. Measured off the reference: its headline band holds at the ground
    luma for the first ~2s - colour only - then darkens over ~2s as the type
@@ -2817,7 +2810,7 @@ input, textarea, select { font-family: inherit; }
 .ed-hero__foot { margin-top: -6px; }
 
 /* Index rows: a small label over an oversized title, hairline between. */
-.ed-index { display: block; border-top: 1px solid var(--border); }
+.ed-index { display: block; background: var(--bg); border-top: none; padding-top: 8px; }
 .ed-row {
   display: block; padding: 40px 24px 44px; text-decoration: none;
   border-bottom: 1px solid var(--border); color: var(--fg);
@@ -2846,7 +2839,7 @@ input, textarea, select { font-family: inherit; }
    lilac #e3d1e0, blue-grey #858c97. Sits under the header so the nav stays
    clean, over the content so the letters take the colour. */
 .wash {
-  position: fixed; inset: 0; z-index: 30; pointer-events: none; overflow: hidden;
+  position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
   animation: wash-hue 26s ease-in-out infinite alternate;
 }
 @keyframes wash-hue { from { filter: hue-rotate(-11deg); } to { filter: hue-rotate(11deg); } }
@@ -2854,7 +2847,7 @@ input, textarea, select { font-family: inherit; }
 /* Fine grain over everything - the reference is dusted with it, and without it
    wide blurred gradients band into visible steps. */
 .grain {
-  position: fixed; inset: 0; z-index: 31; pointer-events: none; opacity: 0.4;
+  position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0.4;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 160px 160px;
   animation: grain-shift 1.1s steps(4) infinite;

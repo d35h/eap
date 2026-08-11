@@ -19,6 +19,20 @@ import AppResults from './pages/AppResults.jsx';
 import ApplicationDetail from './pages/ApplicationDetail.jsx';
 import Jurors from './pages/Jurors.jsx';
 
+// The light scheme covers the public site. The staff cabinet keeps the dark
+// one - it is a different product with its own conventions.
+const CABINET = /^\/account(\/|$)/;
+
+function PaperScheme() {
+  const { pathname } = useLocation();
+  useLayoutEffect(() => {
+    const paper = !CABINET.test(pathname);
+    document.documentElement.classList.toggle('paper', paper);
+    return () => document.documentElement.classList.remove('paper');
+  }, [pathname]);
+  return null;
+}
+
 // On route change, jump to the top of the new page INSTANTLY. The global
 // `scroll-behavior: smooth` is for in-page anchor links — for page navigation it
 // would animate the reset (landing you mid-page), so we override it to 'auto'
@@ -39,6 +53,7 @@ function ScrollToTop() {
 export default function App() {
   return (
     <>
+      <PaperScheme />
       <ScrollToTop />
       <VersionWatcher />
       <Header />

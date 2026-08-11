@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Countdown from '../components/Countdown.jsx';
 import { useTranslation } from '../hooks/useTranslation.jsx';
@@ -16,22 +16,16 @@ export default function Landing() {
   const { t } = useTranslation();
   const submOpen = useSubmissionsOpen(); // undefined = loading, then true/false
 
-  // The light scheme lives on <html> rather than on this subtree, so the fixed
-  // header and the footer flip with it instead of staying dark over cream.
-  useEffect(() => {
-    document.documentElement.classList.add('paper');
-    return () => document.documentElement.classList.remove('paper');
-  }, []);
-
   return (
     <main>
-      {/* Drifting colour over the whole page, as in the reference */}
-      <div className="wash" aria-hidden="true">
-        <span /><span /><span /><span /><span />
-      </div>
-      <div className="grain" aria-hidden="true" />
       {/* HERO - type carries the screen, everything else is a footnote to it */}
       <section className="ed-hero" id="opencall">
+        {/* Colour and grain are the hero's, so the page below stays white */}
+        <div className="wash" aria-hidden="true">
+          <span /><span /><span /><span /><span />
+        </div>
+        <div className="grain" aria-hidden="true" />
+
         <h1 className="ed-title">
           <span>Eurasia Art</span>
           <span>Platform</span>
