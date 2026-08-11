@@ -2900,3 +2900,88 @@ input, textarea, select { font-family: inherit; }
 @keyframes wash-e { 0%,100% { transform: translate3d(0,0,0) scale(0.8); } 50% { transform: translate3d(-48vw, -32vh, 0) scale(1.48); } }
 
 @media (prefers-reduced-motion: reduce) { .wash span { animation: none; } }
+
+/* ─── Paper: type and forms ────────────────────────────────────────────────── */
+
+/* Prata ships a single upright style. Every <em> in a heading was being
+   slanted by the browser, which is what looked broken - Playfair has a drawn
+   italic, so the emphasis borrows it. */
+:root.paper h1 em, :root.paper h2 em, :root.paper h3 em,
+:root.paper h4 em, :root.paper .ed-title em {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic; font-weight: 500;
+}
+
+/* Section heads follow the hero: a small label over an oversized title. */
+:root.paper .eyebrow {
+  display: block; font-family: var(--font-body);
+  font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+  color: var(--fg-muted); margin-bottom: 14px;
+}
+:root.paper .section-head h2,
+:root.paper .manifest-text h2 {
+  font-size: clamp(2rem, 6vw, 4.6rem); line-height: 1.02;
+  letter-spacing: -0.02em; margin-bottom: 20px;
+}
+:root.paper .section-intro { max-width: 62ch; font-size: 1rem; color: var(--fg-muted); }
+
+/* Steps become hairline-separated rows rather than boxes in a grid. */
+:root.paper .process-steps {
+  /* The dark layout draws its rules by showing a background through 1px grid
+     gaps; as a block list that background becomes a grey slab. */
+  display: block; background: none; gap: 0;
+  border-top: 1px solid var(--border); margin-top: 32px;
+}
+:root.paper .step {
+  display: grid; grid-template-columns: 4.5rem 1fr; gap: 0 32px;
+  padding: 30px 0 34px; border-bottom: 1px solid var(--border);
+  border-left: none; border-right: none; background: none; min-height: 0;
+}
+:root.paper .step-num {
+  font-family: var(--font-body); font-size: 0.62rem; letter-spacing: 0.24em;
+  color: var(--fg-muted); padding-top: 0.7rem;
+}
+:root.paper .step h3 {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(1.6rem, 3.4vw, 2.9rem); line-height: 1.05;
+  letter-spacing: -0.015em; margin: 0 0 10px;
+}
+:root.paper .step p { grid-column: 2; max-width: 62ch; margin: 0; color: var(--fg-muted); }
+:root.paper .step .meta {
+  grid-column: 2; margin-top: 14px; border: none; padding: 0;
+  font-size: 0.6rem; letter-spacing: 0.22em; color: var(--fg-faint);
+}
+
+/* Forms: hairlines and square corners, so they belong to the same page. */
+:root.paper input[type="text"], :root.paper input[type="email"],
+:root.paper input[type="tel"], :root.paper input[type="url"],
+:root.paper input[type="password"], :root.paper select, :root.paper textarea {
+  background: transparent; border: 1px solid var(--border); border-radius: 0;
+  color: var(--fg); font-family: var(--font-body); font-size: 0.95rem;
+  padding: 14px 16px; transition: border-color 0.25s ease;
+}
+:root.paper input:focus, :root.paper select:focus, :root.paper textarea:focus {
+  outline: none; border-color: var(--fg);
+}
+:root.paper input::placeholder, :root.paper textarea::placeholder { color: var(--fg-faint); }
+:root.paper label, :root.paper .field-label {
+  font-family: var(--font-body); font-size: 0.6rem;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-muted);
+}
+:root.paper button[type="submit"], :root.paper .btn-gold {
+  background: var(--fg); color: #fff; border: 1px solid var(--fg); border-radius: 0;
+  font-size: 0.64rem; letter-spacing: 0.22em; text-transform: uppercase;
+  padding: 16px 34px; box-shadow: none; transition: background 0.25s ease, color 0.25s ease;
+}
+:root.paper button[type="submit"]:hover, :root.paper .btn-gold:hover {
+  background: transparent; color: var(--fg);
+}
+/* The header's apply link is not a button here. */
+:root.paper .site-header .btn-gold {
+  background: none; border: none; color: var(--fg); padding: 0;
+}
+:root.paper .btn-ghost {
+  border-radius: 0; border: 1px solid var(--border); color: var(--fg);
+  font-size: 0.62rem; letter-spacing: 0.22em; padding: 14px 28px;
+}
+:root.paper .btn-ghost:hover { border-color: var(--fg); }
