@@ -29,9 +29,12 @@ export default function Landing() {
         </div>
         <div className="grain" aria-hidden="true" />
 
+        {/* The name is the way back to the top of the site. */}
         <h1 className="ed-title">
-          <span>Eurasia Art</span>
-          <span>Platform</span>
+          <Link to="/" aria-label="Eurasia Art Platform">
+            <span>Eurasia Art</span>
+            <span>Platform</span>
+          </Link>
         </h1>
 
         <div className="ed-hero__foot">
@@ -54,6 +57,11 @@ export default function Landing() {
       {/* INDEX - the reference's stacked list of oversized titles */}
       {/* FAQ - opens in place rather than sending you to another page */}
       <section className="ed-panel" id="faq">
+        <div className="section-head">
+          <span className="eyebrow">{t('faq.eyebrow')}</span>
+          <h2>{t('faq.title')}</h2>
+          <p className="section-intro">{t('faq.lead')}</p>
+        </div>
         <button
           type="button"
           className={`btn-ghost disclosure${faqOpen ? ' is-open' : ''}`}
@@ -61,7 +69,7 @@ export default function Landing() {
           aria-controls="faq-list"
           onClick={() => setFaqOpen((v) => !v)}
         >
-          {t('faq.title')}
+          {t('faq.toggle')}
         </button>
         <div id="faq-list" className="faq-list" hidden={!faqOpen}>
           {(Array.isArray(t('faq.items')) ? t('faq.items') : []).map((qa, i) => (
@@ -93,7 +101,7 @@ export default function Landing() {
             aria-controls="process-steps"
             onClick={() => setStepsOpen((v) => !v)}
           >
-            {t('processPage.titlePart1')}{t('processPage.titleEm')}{t('processPage.titlePart2')}
+            {t('process.stepsToggle')}
           </button>
 
           <div id="process-steps" className={`process-steps${stepsOpen ? ' is-open' : ''}`} hidden={!stepsOpen}>

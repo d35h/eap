@@ -3319,3 +3319,71 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 720px) {
   :root.paper .faq-row { grid-template-columns: 1fr; gap: 10px; }
 }
+
+/* The hidden attribute must win over any display we set on these panels. */
+:root.paper [hidden] { display: none !important; }
+
+/* Disclosure panels share the page container, otherwise the FAQ block sat on a
+   different left margin from every section around it. */
+:root.paper .ed-panel {
+  width: 100%; max-width: 1320px; margin: 0 auto; padding: 0 2rem;
+}
+
+/* ─── Contact and application forms ───────────────────────────────────────
+   Pill fields inside a rounded panel, with a dark pill action carrying a
+   circular mark. */
+:root.paper .contact-form,
+:root.paper .wizard .field-group + .field-group { }
+
+:root.paper .contact-block .container > .contact-grid,
+:root.paper .contact-form {
+  --pill: 999px;
+}
+:root.paper .contact-form input,
+:root.paper .contact-form textarea,
+:root.paper .contact-form select,
+:root.paper .wizard input, :root.paper .wizard textarea, :root.paper .wizard select {
+  border: 1px solid #1a1a1a; border-radius: 999px; background: transparent;
+  padding: 16px 22px; font-size: 0.95rem; color: var(--fg);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+:root.paper .contact-form textarea,
+:root.paper .wizard textarea {
+  border-radius: 26px; min-height: 170px; padding: 20px 22px; resize: vertical;
+}
+:root.paper .contact-form input::placeholder,
+:root.paper .contact-form textarea::placeholder,
+:root.paper .wizard input::placeholder, :root.paper .wizard textarea::placeholder {
+  color: #9a9a97; letter-spacing: 0;
+}
+:root.paper .contact-form input:focus,
+:root.paper .contact-form textarea:focus,
+:root.paper .wizard input:focus, :root.paper .wizard textarea:focus {
+  border-color: #000; box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+/* Dark pill action with the circular mark from the reference. */
+:root.paper .contact-form .btn-ink,
+:root.paper .wizard button[type="submit"], :root.paper .wizard .btn-ink {
+  width: auto; min-width: 0; align-self: center;
+  display: inline-flex; align-items: center; gap: 14px;
+  background: #1a1a1a; color: #fff; border: 1px solid #1a1a1a;
+  border-radius: 999px; padding: 14px 14px 14px 30px;
+  font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+}
+:root.paper .contact-form .btn-ink::after,
+:root.paper .wizard button[type="submit"]::after, :root.paper .wizard .btn-ink::after {
+  content: "↗"; display: inline-grid; place-items: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #fff; color: #1a1a1a; font-size: 0.85rem;
+  transition: transform 0.3s ease;
+}
+:root.paper .contact-form .btn-ink:hover,
+:root.paper .wizard button[type="submit"]:hover {
+  background: #000; color: #fff;
+}
+:root.paper .contact-form .btn-ink:hover::after { transform: translate(2px, -2px); }
+:root.paper .contact-form .full:last-child { display: flex; justify-content: center; }
+
+:root.paper .ed-title a {
+  color: inherit; text-decoration: none; display: flex; flex-direction: column;
+}

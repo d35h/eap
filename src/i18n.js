@@ -22,6 +22,7 @@ export const translations = {
     faq: {
       eyebrow: '- FAQ',
       title: 'Частые вопросы',
+      toggle: 'Показать вопросы',
       lead: 'Коротко о том, как устроена подача и что вас ждёт.',
       items: [
         { q: 'Кто может подать заявку?', a: 'Художники, работающие в любых медиа и направлениях современного искусства. Географических ограничений внутри Евразии нет - от Калининграда до Владивостока, от Алматы до Тбилиси.' },
@@ -65,6 +66,7 @@ export const translations = {
       titlePart1: 'Как ',
       titleEm: 'подать',
       titlePart2: ' заявку',
+      stepsToggle: 'Показать шаги',
       intro: 'Четыре простых шага - от подачи до результата. Никаких скрытых требований: все условия описаны заранее.',
       step1Title: 'Подготовьте материалы',
       step1Desc: 'Подготовьте до трёх работ, их описание на русском или английском и несколько слов о себе (краткая биография). Форматы: JPEG, PNG, PDF, MP4 - до 25 MB на файл.',
@@ -365,6 +367,7 @@ export const translations = {
     faq: {
       eyebrow: '- FAQ',
       title: 'Frequently asked questions',
+      toggle: 'Show the questions',
       lead: 'A quick overview of how applying works and what to expect.',
       items: [
         { q: 'Who can apply?', a: 'Artists working in any media and direction of contemporary art. There are no geographic limits within Eurasia - from Kaliningrad to Vladivostok, from Almaty to Tbilisi.' },
@@ -408,6 +411,7 @@ export const translations = {
       titlePart1: 'How to ',
       titleEm: 'submit',
       titlePart2: '',
+      stepsToggle: 'Show the steps',
       intro: 'Four simple steps - from submission to outcome. No hidden requirements: all conditions are described upfront.',
       step1Title: 'Prepare materials',
       step1Desc: 'Prepare up to three works, their descriptions in Russian or English, and a few words about yourself (a short bio). Formats: JPEG, PNG, PDF, MP4 - up to 25 MB per file.',
@@ -701,6 +705,7 @@ export const translations = {
     faq: {
       eyebrow: '- FAQ',
       title: 'Жиі қойылатын сұрақтар',
+      toggle: 'Сұрақтарды көрсету',
       lead: 'Өтінім қалай беріледі және сізді не күтіп тұрғаны туралы қысқаша.',
       items: [
         { q: 'Кім өтінім бере алады?', a: 'Заманауи өнердің кез келген медиасы мен бағытында жұмыс істейтін суретшілер. Еуразия ішінде географиялық шектеу жоқ.' },
@@ -744,6 +749,7 @@ export const translations = {
       titlePart1: 'Өтінімді қалай ',
       titleEm: 'беру',
       titlePart2: ' керек',
+      stepsToggle: 'Қадамдарды көрсету',
       intro: 'Өтінімнен нәтижеге дейін төрт қарапайым қадам. Жасырын талаптар жоқ: барлық шарттар алдын ала сипатталған.',
       step1Title: 'Материалдарды дайындау',
       step1Desc: 'Үш жұмысқа дейін, олардың орыс немесе ағылшын тіліндегі сипаттамасын және өзіңіз туралы бірнеше сөз (қысқаша өмірбаян) дайындаңыз. Форматтар: JPEG, PNG, PDF, MP4 - 25 MB-ге дейін.',
@@ -1036,6 +1042,7 @@ export const translations = {
     faq: {
       eyebrow: '- 常见问题',
       title: '常见问题',
+      toggle: '查看问题',
       lead: '简要说明申请方式以及您将获得什么。',
       items: [
         { q: '谁可以申请？', a: '从事任何媒介与方向的当代艺术家。欧亚范围内没有地域限制——从加里宁格勒到符拉迪沃斯托克，从阿拉木图到第比利斯。' },
@@ -1079,6 +1086,7 @@ export const translations = {
       titlePart1: '如何',
       titleEm: '提交',
       titlePart2: '申请。',
+      stepsToggle: '查看步骤',
       intro: '从提交到结果的四个简单步骤。没有隐藏要求：所有条件都提前说明。',
       step1Title: '准备材料',
       step1Desc: '准备最多三件作品、俄语或英语的作品说明，以及关于您的简短介绍（简历）。格式：JPEG、PNG、PDF、MP4 - 每个文件不超过 25 MB。',
