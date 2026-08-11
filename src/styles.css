@@ -3424,3 +3424,98 @@ input, textarea, select { font-family: inherit; }
    the last hairline read as its top border rather than as the list's end. */
 :root.paper .manifest { padding-top: clamp(96px, 12vh, 180px); }
 :root.paper .ed-panel:last-of-type { margin-bottom: clamp(56px, 7vh, 110px); }
+
+/* ─── Update toast, status lines, and the apply action ─────────────────────*/
+
+/* The toast kept the dark scheme's fill and rounding. */
+:root.paper .version-toast {
+  background: var(--fg); color: var(--bg);
+  border: none; border-radius: 0; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+  padding: 14px 16px 14px 22px; gap: 18px;
+  font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+}
+:root.paper .version-toast__btn {
+  background: var(--bg); color: var(--fg); border: none; border-radius: 999px;
+  padding: 9px 20px; font-size: 0.68rem; letter-spacing: 0.14em;
+  text-transform: uppercase; filter: none; cursor: pointer;
+}
+:root.paper .version-toast__btn:hover { filter: none; opacity: 0.82; }
+
+/* Status belongs beside the action, not stretched across the column. */
+:root.paper .contact-form .full:last-child {
+  display: flex; flex-direction: column; align-items: center; gap: 18px;
+}
+:root.paper .form-status {
+  width: auto; margin: 0; padding: 12px 20px;
+  border: 1px solid var(--border); border-top: 1px solid var(--border);
+  border-radius: 999px; font-size: 0.66rem; letter-spacing: 0.14em;
+}
+:root.paper .form-status.error { border-color: #b4483f; }
+:root.paper .form-status.success { border-color: var(--fg); }
+
+/* Field-level errors were reserving a line under every field even when empty. */
+:root.paper .field-error:empty { display: none; }
+
+/* The apply action is the point of the site - give it a body. */
+:root.paper .site-header .btn-gold,
+:root.paper .header-apply {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--fg); color: var(--bg);
+  border: 1px solid var(--fg); border-radius: 999px;
+  padding: 10px 20px; font-size: 0.64rem; letter-spacing: 0.16em;
+  text-transform: uppercase; transition: background 0.25s ease, color 0.25s ease;
+}
+:root.paper .site-header .btn-gold::after,
+:root.paper .header-apply::after { content: "↗"; font-size: 0.9em; }
+:root.paper .site-header .btn-gold:hover,
+:root.paper .header-apply:hover { background: transparent; color: var(--fg); }
+
+/* Manifest body was set in the display serif while every other paragraph on
+   the page is the grotesk - two voices for the same kind of text. */
+:root.paper .manifest-text p {
+  font-family: var(--font-body); font-weight: 400;
+  font-size: 1.06rem; line-height: 1.72; color: var(--fg-muted);
+}
+:root.paper .manifest-text p em { font-family: var(--font-body); font-style: italic; color: var(--fg); }
+
+/* Country picker: the list kept the dark scheme's rounding, fill and shadow,
+   and its highlight colours had no contrast on the light ground. */
+:root.paper .cselect__list {
+  background: var(--bg); border: 1px solid var(--fg);
+  border-radius: 18px; padding: 8px; box-shadow: 0 18px 44px rgba(0, 0, 0, 0.1);
+}
+:root.paper .cselect__opt { border-radius: 999px; padding: 11px 16px; color: var(--fg); }
+:root.paper .cselect__opt.is-active { background: var(--bg-darker); }
+:root.paper .cselect__opt.is-current { color: var(--fg); font-weight: 600; }
+:root.paper .cselect__check { color: var(--fg); }
+:root.paper .cselect__chev { color: var(--fg-muted); right: 20px; }
+:root.paper .cselect input { padding-right: 46px !important; }
+
+/* Placeholders that outrun their field were being clipped mid-word. */
+:root.paper input::placeholder { text-overflow: ellipsis; }
+:root.paper input, :root.paper select { text-overflow: ellipsis; }
+
+/* Contact column: no head row, even rhythm, values allowed to wrap. */
+:root.paper .contact-aside .item {
+  padding: 0 0 18px; margin-bottom: 30px;
+}
+:root.paper .contact-aside .item:first-child { padding-top: 4px; }
+:root.paper .contact-aside .value,
+:root.paper .contact-aside .social-row {
+  font-size: clamp(1.15rem, 1.9vw, 1.5rem); line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+:root.paper .contact-aside .label { letter-spacing: 0.18em; font-size: 0.62rem; }
+
+/* Air before the manifest and before the jury - both began straight under the
+   block above them. */
+:root.paper .manifest { padding-top: clamp(120px, 15vh, 220px); }
+:root.paper #team { padding-top: clamp(110px, 13vh, 200px); }
+
+/* Clicking a control left its focus ring drawn as a stray line. Keyboard users
+   still get a ring; pointer clicks do not. */
+:root.paper button:focus:not(:focus-visible),
+:root.paper a:focus:not(:focus-visible),
+:root.paper .ed-row--toggle:focus:not(:focus-visible) { outline: none; }
+:root.paper button:focus-visible,
+:root.paper a:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }

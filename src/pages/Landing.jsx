@@ -208,14 +208,19 @@ function ContactBlock() {
     }
     setStatus('sending');
 
-    // ───────────────────────────────────────────────────────────
-    //  Здесь надо подключить реальную отправку.
-    //  Примеры: fetch('/api/contact'), Resend, EmailJS, Formspree.
-    //  Сейчас симулируем задержку и успех.
-    // ───────────────────────────────────────────────────────────
     try {
-      await new Promise((res) => setTimeout(res, 900));
-      // throw new Error('demo error'); // расскомментировать для теста ошибки
+      const res = await fetch('/.netlify/functions/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) {
+        // Never report a delivery we cannot back up - the previous version
+        // faked success and every enquiry was silently lost.
+        const data = await res.json().catch(() => ({}));
+        setStatus(data.code === 'no_transport' ? 'unavailable' : 'error');
+        return;
+      }
       setStatus('success');
       setForm({ name: '', email: '', phone: '', subject: '', message: '' });
     } catch (err) {
@@ -285,7 +290,7 @@ function ContactBlock() {
               {status === 'success' && (
                 <div className="form-status success">{t('contact.successMsg')}</div>
               )}
-              {status === 'error' && (
+              {(status === 'error' || status === 'unavailable') && (
                 <div className="form-status error">{t('contact.errorMsg')}</div>
               )}
               {status === 'validation' && (
@@ -295,12 +300,6 @@ function ContactBlock() {
           </form>
 
           <aside className="contact-aside">
-            {/* Column head, so the right side reads as catalogue metadata
-                rather than as a widget sitting next to the form. */}
-            <div className="contact-aside__head">
-              <span>{t('contact.eyebrow')}</span>
-              <span className="contact-aside__idx">01 / 04</span>
-            </div>
             <div className="item">
               <div className="label">{t('contact.emailLabel')}</div>
               <div className="value"><a href="mailto:info@eap.art">info@eap.art</a></div>
