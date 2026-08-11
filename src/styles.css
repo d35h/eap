@@ -1,5 +1,5 @@
 /* EAP - Eurasia Art Platform */
-@import url('https://fonts.googleapis.com/css2?family=Prata&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Prata&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap');
 
 :root {
   --bg: hsl(220, 14%, 7%);
@@ -2705,10 +2705,10 @@ input, textarea, select { font-family: inherit; }
    staying dark over cream. Redefining the tokens carries most components for
    free; only hard-coded colours need the overrides that follow. */
 :root.paper {
-  --font-display: 'Prata', 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-  --bg: #f9f9f7;
-  --bg-soft: #f4f5f4;
-  --bg-darker: #eef0ef;
+  --font-display: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --bg: #f7f2ea;
+  --bg-soft: #f2ece2;
+  --bg-darker: #ece5d9;
   --fg: #0b0c0e;
   --fg-muted: #4a4a4c;
   --fg-faint: #86868a;
@@ -2757,7 +2757,7 @@ input, textarea, select { font-family: inherit; }
 
 /* Hero: the type is the composition. */
 .ed-hero {
-  position: relative; overflow: hidden; background: var(--bg);
+  position: relative; overflow: hidden; background: #f8fafb;
   min-height: 100vh; display: flex; flex-direction: column;
   align-items: center; justify-content: flex-start;
   /* The reference sets the name high and leaves the lower half empty. */
@@ -2768,8 +2768,8 @@ input, textarea, select { font-family: inherit; }
   margin: 0; font-family: var(--font-display); font-weight: 400;
   /* The reference sets its name edge to edge; vw sizing plus caps is what
      makes the line span the viewport instead of sitting in a column. */
-  font-size: clamp(1.9rem, 10.4vw, 11.5rem);
-  line-height: 1.06; letter-spacing: -0.008em; color: var(--fg);
+  font-size: clamp(1.8rem, 9.6vw, 10.5rem);
+  font-weight: 700; line-height: 1.02; letter-spacing: -0.035em; color: var(--fg);
   text-transform: uppercase;
   display: flex; flex-direction: column; width: 100%;
 }
@@ -2866,30 +2866,30 @@ input, textarea, select { font-family: inherit; }
 }
 .wash span {
   position: absolute; border-radius: 50%;
-  filter: blur(110px); opacity: 0.85; will-change: transform;
+  filter: blur(82px); opacity: 1; will-change: transform;
 }
 .wash span:nth-child(1) {
   width: 62vw; height: 46vw; left: -22%; top: -18%;
   background: radial-gradient(circle, rgba(96, 178, 196, 0.5) 0%, rgba(96, 178, 196, 0) 68%);
-  animation: wash-a 17s ease-in-out infinite;
+  animation: wash-a 4.6s ease-in-out infinite;
 }
 .wash span:nth-child(2) {
   width: 54vw; height: 42vw; right: -24%; top: -12%;
   background: radial-gradient(circle, rgba(126, 196, 209, 0.42) 0%, rgba(126, 196, 209, 0) 66%);
-  animation: wash-b 21s ease-in-out infinite -4s;
+  animation: wash-b 5.5s ease-in-out infinite -2.6s;
 }
 .wash span:nth-child(3) {
-  width: 46vw; height: 34vw; left: 34%; bottom: -26%;
+  width: 50vw; height: 38vw; left: 26%; bottom: -18%;
   background: radial-gradient(circle, rgba(72, 150, 172, 0.34) 0%, rgba(72, 150, 172, 0) 66%);
-  animation: wash-c 19s ease-in-out infinite -7s;
+  animation: wash-c 4.9s ease-in-out infinite -4.1s;
 }
 /* Two of the five masses are retired: the field should drift through an edge,
    not fill the screen. */
 .wash span:nth-child(4), .wash span:nth-child(5) { display: none; }
 
-@keyframes wash-a { 0%,100% { transform: translate3d(0,0,0) scale(0.9); } 50% { transform: translate3d(16vw, 14vh, 0) scale(1.3); } }
-@keyframes wash-b { 0%,100% { transform: translate3d(0,0,0) scale(1.2); } 50% { transform: translate3d(-18vw, 16vh, 0) scale(0.85); } }
-@keyframes wash-c { 0%,100% { transform: translate3d(0,0,0) scale(0.85); } 50% { transform: translate3d(-14vw, -18vh, 0) scale(1.35); } }
+@keyframes wash-a { 0%,100% { transform: translate3d(0,0,0) scale(0.8); } 50% { transform: translate3d(34vw, 26vh, 0) scale(1.45); } }
+@keyframes wash-b { 0%,100% { transform: translate3d(0,0,0) scale(1.35); } 50% { transform: translate3d(-38vw, 30vh, 0) scale(0.78); } }
+@keyframes wash-c { 0%,100% { transform: translate3d(0,0,0) scale(0.8); } 50% { transform: translate3d(-30vw, -34vh, 0) scale(1.5); } }
 
 @media (prefers-reduced-motion: reduce) { .wash span { animation: none; } }
 
@@ -3168,3 +3168,76 @@ input, textarea, select { font-family: inherit; }
 :root.paper .apply-page,
 :root.paper .auth-page { background: var(--bg); color: var(--fg); }
 :root.paper .apply-page .eyebrow { color: var(--fg-muted); }
+
+/* ─── Contact: catalogue metadata, not a card ─────────────────────────────
+   No border, radius or shadow on the right column. Each entry is a tiny
+   tracked label over a large serif value, closed by a hairline. */
+:root.paper .contact-aside {
+  background: none; border: none; border-radius: 0; box-shadow: none; padding: 0;
+}
+:root.paper .contact-aside__head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding-bottom: 14px; margin-bottom: 34px; border-bottom: 1px solid #d8d8d8;
+  font-size: 0.66rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--fg);
+}
+:root.paper .contact-aside__idx { color: #a8a8a5; }
+:root.paper .contact-aside .item {
+  padding: 0 0 20px; margin-bottom: 34px; border-bottom: 1px solid #d8d8d8;
+  background: none; border-left: none;
+}
+:root.paper .contact-aside .item:last-child { margin-bottom: 0; }
+:root.paper .contact-aside .label {
+  display: block; margin-bottom: 12px;
+  font-size: 0.64rem; letter-spacing: 0.2em; text-transform: uppercase; color: #8b8b88;
+}
+:root.paper .contact-aside .value,
+:root.paper .contact-aside .social-row {
+  font-family: var(--font-display); font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+  font-weight: 500; letter-spacing: -0.02em; line-height: 1.15;
+}
+:root.paper .contact-aside a {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+  color: var(--fg); text-decoration: none; border-bottom: none; padding: 0;
+}
+/* The mark travels on hover; the row is the affordance, not a button. */
+:root.paper .contact-aside a::after {
+  content: "↗"; font-family: var(--font-body); font-size: 0.8em;
+  color: #a8a8a5; transition: transform 0.3s ease, color 0.3s ease;
+}
+:root.paper .contact-aside a:hover::after { transform: translate(4px, -4px); color: var(--fg); }
+:root.paper .contact-aside .item:hover { border-bottom-color: var(--fg); }
+:root.paper .contact-aside .item { transition: border-color 0.3s ease; }
+
+/* Left side takes the same grammar: rules, not boxes. */
+:root.paper .contact-form input,
+:root.paper .contact-form textarea {
+  border: none; border-bottom: 1px solid #d8d8d8; padding: 10px 0 12px;
+  font-size: 1.05rem; border-radius: 0;
+}
+:root.paper .contact-form input:hover,
+:root.paper .contact-form textarea:hover { border-bottom-color: #b0b0ad; }
+:root.paper .contact-form input:focus,
+:root.paper .contact-form textarea:focus { border-bottom-color: var(--fg); }
+:root.paper .contact-form .btn-ink {
+  min-width: 0; width: 100%; background: none; color: var(--fg);
+  border: none; border-bottom: 1px solid var(--fg); border-radius: 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+}
+:root.paper .contact-form .btn-ink::after {
+  content: "→"; font-size: 1.1em; transition: transform 0.3s ease;
+}
+:root.paper .contact-form .btn-ink:hover { background: none; color: var(--fg); }
+:root.paper .contact-form .btn-ink:hover::after { transform: translateX(6px); }
+
+/* The display face is a grotesk now: headings need weight and tighter
+   tracking than the serif wanted, and the faux-italic fix no longer applies. */
+:root.paper h1, :root.paper h2, :root.paper h3, :root.paper h4,
+:root.paper .ed-row__title, :root.paper .step h3,
+:root.paper .contact-aside .value, :root.paper .contact-aside .social-row {
+  font-family: var(--font-display); font-weight: 600; letter-spacing: -0.025em;
+}
+:root.paper h1 em, :root.paper h2 em, :root.paper h3 em, :root.paper h4 em {
+  font-family: var(--font-display); font-style: normal; font-weight: 400;
+  color: var(--fg-muted);
+}

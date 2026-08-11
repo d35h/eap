@@ -285,6 +285,12 @@ function ContactBlock() {
           </form>
 
           <aside className="contact-aside">
+            {/* Column head, so the right side reads as catalogue metadata
+                rather than as a widget sitting next to the form. */}
+            <div className="contact-aside__head">
+              <span>{t('contact.eyebrow')}</span>
+              <span className="contact-aside__idx">01 / 04</span>
+            </div>
             <div className="item">
               <div className="label">{t('contact.emailLabel')}</div>
               <div className="value"><a href="mailto:info@eap.art">info@eap.art</a></div>
