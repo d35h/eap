@@ -3419,3 +3419,8 @@ input, textarea, select { font-family: inherit; }
 :root.paper .ed-row--toggle:hover::after { color: var(--fg); }
 :root.paper .process-steps .section-intro,
 :root.paper .faq-list .section-intro { margin: 26px 0 4px; }
+
+/* The manifest sat straight under the disclosure rows with no separation, so
+   the last hairline read as its top border rather than as the list's end. */
+:root.paper .manifest { padding-top: clamp(96px, 12vh, 180px); }
+:root.paper .ed-panel:last-of-type { margin-bottom: clamp(56px, 7vh, 110px); }
