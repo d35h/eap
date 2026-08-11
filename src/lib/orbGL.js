@@ -24,8 +24,10 @@ float noise(vec2 p) {
              mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
 }
 float fbm(vec2 p) {
-  float v = 0.0, a = 0.5;
-  for (int i = 0; i < 5; i++) { v += a * noise(p); p *= 2.02; a *= 0.5; }
+  float v = 0.0, a = 0.58;
+  // Three octaves only, and a gentle lacunarity: the reference is all
+  // large soft masses. More octaves just add grain the blur would eat.
+  for (int i = 0; i < 3; i++) { v += a * noise(p); p *= 1.86; a *= 0.46; }
   return v;
 }
 
@@ -43,10 +45,11 @@ vec3 palette(float t) {
 
 // Slow-moving field the sphere sits in and refracts.
 vec3 field(vec2 p) {
-  float t = u_time * 0.035;
-  float n = fbm(p * 1.45 + vec2(t, -t * 0.7));
-  n += 0.5 * fbm(p * 3.1 - vec2(t * 1.3, t));
-  return palette(clamp(n * 0.72, 0.0, 1.0));
+  float t = u_time * 0.028;
+  float n = fbm(p * 0.85 + vec2(t, -t * 0.7));
+  n += 0.34 * fbm(p * 1.7 - vec2(t * 1.2, t));
+  // Bias upward: outside the glass the field is the bright part of the frame.
+  return palette(clamp(n * 0.95, 0.0, 1.0));
 }
 
 void main() {
@@ -56,7 +59,7 @@ void main() {
 
   // Sphere sits right of centre with its left limb crossing the frame.
   vec2 c = vec2(0.46 + 0.012 * sin(u_time * 0.11), -0.02 + 0.010 * cos(u_time * 0.09));
-  float r = 0.78;
+  float r = 0.92;
   vec2 d = uv - c;
   float dist = length(d);
 
@@ -70,27 +73,27 @@ void main() {
     vec3 inside = field(bent * 1.18);
 
     // Glass darkens what it transmits, and the core more than the edge.
-    inside *= 0.30 + 0.55 * (1.0 - n.z);
+    inside *= 0.09 + 0.34 * (1.0 - n.z);
 
     // Fresnel: grazing angles reflect, which is the bright limb.
-    float fres = pow(1.0 - n.z, 3.4);
+    float fres = pow(1.0 - n.z, 2.1);
 
     // Thin-film style shift so the rim is not a flat gold line.
     vec3 rim = palette(0.55 + 0.42 * sin(atan(s.y, s.x) * 1.6 + u_time * 0.06));
-    inside += rim * fres * 1.55;
+    inside += rim * fres * 1.85;
 
     // A soft specular highlight up-left, matching the site's light direction.
-    float spec = pow(max(0.0, dot(normalize(n), normalize(vec3(-0.45, 0.55, 0.72)))), 26.0);
-    inside += vec3(0.95, 0.90, 0.78) * spec * 0.5;
+    float spec = pow(max(0.0, dot(normalize(n), normalize(vec3(-0.5, 0.5, 0.7)))), 14.0);
+    inside += vec3(0.95, 0.90, 0.78) * spec * 0.28;
 
     // Antialias the silhouette.
-    float edge = smoothstep(r, r - 0.004, dist);
+    float edge = smoothstep(r, r - 0.02, dist);
     col = mix(col, inside, edge);
   }
 
   // Vignette, then grain to stop the wide gradients banding.
-  col *= 1.0 - 0.42 * smoothstep(0.35, 1.25, length(uv));
-  col += (hash(gl_FragCoord.xy + u_time) - 0.5) * 0.022;
+  col *= 1.0 - 0.30 * smoothstep(0.45, 1.35, length(uv));
+  col += (hash(gl_FragCoord.xy + u_time) - 0.5) * 0.010;
 
   gl_FragColor = vec4(max(col, 0.0), 1.0);
 }
