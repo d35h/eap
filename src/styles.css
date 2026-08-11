@@ -3561,3 +3561,17 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 720px) {
   :root.paper .contact-form, :root.paper .wizard { border-radius: 16px; }
 }
+
+/* The footer sat on its own beige, left over from the sand experiment, which
+   read as a different material against the near-white page. One ground, with
+   a hairline to mark the change of register. */
+:root.paper .site-footer {
+  background: var(--bg); border-top: 1px solid var(--border);
+  color: var(--fg-muted);
+}
+:root.paper .footer-col h4,
+:root.paper .footer-col .fname { color: var(--fg); }
+:root.paper .footer-col a { color: var(--fg-muted); text-decoration-color: rgba(11, 12, 14, 0.22); }
+:root.paper .footer-col a:hover { color: var(--fg); text-decoration-color: var(--fg); }
+:root.paper .footer .partners img,
+:root.paper .footer .partner { border-color: var(--border); }
