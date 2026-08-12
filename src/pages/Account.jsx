@@ -718,15 +718,18 @@ export default function Account() {
                     <span className="pl-row__email">{app.email}</span>
                   </span>
                 </span>
+                {/* The header row is hidden on a phone, so each value carries its
+                    own label there - otherwise a bare "Не рассмотрено" turns up
+                    under the name with nothing saying which tour it belongs to. */}
                 {isCurrentEdition && (
-                  <span className="pl-cell">
+                  <span className="pl-cell" data-label="Оплата">
                     <span className={`review-chip review-chip--${app.payment_status === 'paid' ? 'finished' : 'draft'}`}>
                       {app.payment_status === 'paid' ? 'Оплачено' : 'Не оплачено'}
                     </span>
                   </span>
                 )}
-                <span className="pl-cell">{cell(t1)}</span>
-                <span className="pl-cell">{cell(t2)}</span>
+                <span className="pl-cell" data-label="Тур 1">{cell(t1)}</span>
+                <span className="pl-cell" data-label="Тур 2">{cell(t2)}</span>
               </Link>
             );
           }

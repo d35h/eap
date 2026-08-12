@@ -4393,3 +4393,40 @@ input, textarea, select { font-family: inherit; }
   :root.paper .account-section-label { font-size: 0.72rem; letter-spacing: 0.18em; }
   :root.paper .cx__send { font-size: 0.76rem; }
 }
+
+/* ─── Cabinet: the phone ───────────────────────────────────────────────────
+   Signed in on an iPhone the dashboard scrolled 47px sideways, the search sat
+   in a pill left over from the old chrome, and the status cells wrapped to a
+   second row with the header hidden, so a bare "Не рассмотрено" appeared under
+   the name with nothing saying which tour it belonged to. */
+:root.paper.cabinet .app-filters__search {
+  border-radius: 0 !important;
+  background: none; border: none; border-bottom: 1px solid var(--border);
+  padding: 12px 0 !important;
+}
+:root.paper.cabinet .app-filters__search:focus {
+  outline: none; border-bottom-color: var(--fg);
+}
+:root.paper.cabinet .pl-row__thumb,
+:root.paper.cabinet .app-row__thumb { box-shadow: none; }
+
+@media (max-width: 720px) {
+  /* The filter sets are what ran off the edge: one unbroken row of a label plus
+     three buttons is wider than the screen. */
+  :root.paper.cabinet .app-filters { gap: 12px 14px; }
+  :root.paper.cabinet .filterset { flex-wrap: wrap; width: 100%; gap: 8px; }
+  :root.paper.cabinet .filterset__label { flex: 1 0 100%; margin-bottom: 2px; }
+
+  /* One record per row: the artist, then the values on a labelled run. */
+  :root.paper.cabinet .pl-row,
+  :root.paper.cabinet .pl-row--archive { grid-template-columns: 1fr; row-gap: 10px; }
+  :root.paper.cabinet .pl-row .pl-cell {
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  :root.paper.cabinet .pl-row .pl-cell[data-label]::before {
+    content: attr(data-label);
+    flex: 0 0 5.4rem;
+    font-size: 0.66rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--fg-faint);
+  }
+}
