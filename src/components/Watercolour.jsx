@@ -24,9 +24,18 @@ export default function Watercolour({ className = '', seed = 7 }) {
       <feTurbulence type="fractalNoise" baseFrequency={freq} numOctaves="6" seed={seed} result="n" />
       <feDisplacementMap in="SourceGraphic" in2="n" scale={scale} xChannelSelector="R" yChannelSelector="G" />
       <feGaussianBlur stdDeviation={blur} />
-      <feComponentTransfer>
+      <feComponentTransfer result="shape">
         <feFuncA type="gamma" amplitude={steepness} exponent="1" offset="-0.12" />
       </feComponentTransfer>
+      {/* Granulation: real pigment does not dry evenly, it settles into the
+          paper's tooth in fine specks. High-frequency noise, clipped to the
+          wash so it only shows where there is pigment, and multiplied in so it
+          darkens rather than lightens. */}
+      <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="3" seed={seed + 11} result="grain" />
+      <feColorMatrix in="grain" type="matrix"
+        values="0 0 0 0 0.42  0 0 0 0 0.55  0 0 0 0 0.66  0 0 0 0.35 0" result="grainTinted" />
+      <feComposite in="grainTinted" in2="shape" operator="in" result="grainClipped" />
+      <feBlend in="shape" in2="grainClipped" mode="multiply" />
       {children}
     </filter>
   );
@@ -54,21 +63,21 @@ export default function Watercolour({ className = '', seed = 7 }) {
       </defs>
 
       {/* Palest and largest, reaching furthest up the page. */}
-      <g filter={`url(#${f('a')})`} opacity="0.85">
+      <g filter={`url(#${f('a')})`} opacity="0.95">
         <ellipse cx="880" cy="880" rx="620" ry="470" fill="#e8f6fb" />
         <ellipse cx="1010" cy="520" rx="330" ry="330" fill="#e8f6fb" />
       </g>
 
       {/* Second wash, pulled toward the corner. */}
-      <g filter={`url(#${f('b')})`} opacity="0.6">
-        <ellipse cx="930" cy="930" rx="470" ry="330" fill="#cceaf4" />
-        <ellipse cx="1050" cy="700" rx="240" ry="250" fill="#cceaf4" />
+      <g filter={`url(#${f('b')})`} opacity="0.85">
+        <ellipse cx="930" cy="930" rx="470" ry="330" fill="#b7e0ef" />
+        <ellipse cx="1050" cy="700" rx="240" ry="250" fill="#b7e0ef" />
       </g>
 
       {/* The dried edge: smallest, densest, and where the pigment settled. */}
-      <g filter={`url(#${f('c')})`} opacity="0.45">
-        <ellipse cx="960" cy="960" rx="360" ry="230" fill="#a8dbea" />
-        <ellipse cx="820" cy="990" rx="230" ry="120" fill="#a8dbea" />
+      <g filter={`url(#${f('c')})`} opacity="0.72">
+        <ellipse cx="960" cy="960" rx="360" ry="230" fill="#8fcde3" />
+        <ellipse cx="820" cy="990" rx="230" ry="120" fill="#8fcde3" />
       </g>
 
       <rect width="1000" height="1000" filter={`url(#${f('paper')})`} opacity="0.05" />

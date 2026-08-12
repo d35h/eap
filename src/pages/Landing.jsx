@@ -59,6 +59,67 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* MANIFEST */}
+      <section className="block manifest">
+        <div className="container">
+          <div className="manifest-text">
+            <span className="eyebrow">{t('manifest.eyebrow')}</span>
+            <h2>
+              {t('manifest.titlePart1')}
+              <em>{t('manifest.titleEm')}</em>
+            </h2>
+            <p>
+              {t('manifest.p1Start')}<em>{t('manifest.p1Em')}</em>{t('manifest.p1Rest')}
+            </p>
+            <p>{t('manifest.p2')}</p>
+            <p>{t('manifest.p3')}</p>
+          </div>
+          <div className="manifest-facts">
+            {[1, 2, 3].map((n) => {
+              // A fact can be text-only; an empty .num would still reserve its line.
+              const num = t(`manifest.fact${n}Num`);
+              return (
+                <div className="fact" key={n}>
+                  {num ? <div className="num">{num}</div> : null}
+                  <div className="desc">{t(`manifest.fact${n}Desc`)}</div>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      </section>
+
+      {/* TEAM / JURY */}
+      <section className="block" id="team">
+        <div className="container">
+          <div className="section-head">
+            <span className="eyebrow">{t('team.eyebrow')}</span>
+            <h2>
+              {t('team.titlePart1')}
+              <em>{t('team.titleEm')}</em>
+            </h2>
+            <p className="section-intro">{t('team.intro')}</p>
+          </div>
+
+          <div className="jury-grid">
+            {JURY.map((j, i) => {
+              const meta = (Array.isArray(t('team.jury')) ? t('team.jury') : [])[i] || {};
+              return (
+                <div className="jury-member" key={j.name}>
+                  <div className="jury-photo">
+                    <img src={j.photo} alt={j.name} loading="lazy" />
+                  </div>
+                  <div className="role">{meta.role}</div>
+                  <h4>{j.name}</h4>
+                  <p className="bio">{meta.bio}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* INDEX - the reference's stacked list of oversized titles */}
       {/* FAQ - the heading is the control, as in the reference's list */}
       <section className="ed-panel" id="faq">
@@ -106,66 +167,6 @@ export default function Landing() {
                 <div className="meta">{t(`process.step${n}Meta`)}</div>
               </div>
             ))}
-        </div>
-      </section>
-
-      {/* MANIFEST */}
-      <section className="block manifest">
-        <div className="container">
-          <div className="manifest-text">
-            <span className="eyebrow">{t('manifest.eyebrow')}</span>
-            <h2>
-              {t('manifest.titlePart1')}
-              <em>{t('manifest.titleEm')}</em>
-            </h2>
-            <p>
-              {t('manifest.p1Start')}<em>{t('manifest.p1Em')}</em>{t('manifest.p1Rest')}
-            </p>
-            <p>{t('manifest.p2')}</p>
-            <p>{t('manifest.p3')}</p>
-          </div>
-          <div className="manifest-facts">
-            {[1, 2, 3].map((n) => {
-              // A fact can be text-only; an empty .num would still reserve its line.
-              const num = t(`manifest.fact${n}Num`);
-              return (
-                <div className="fact" key={n}>
-                  {num ? <div className="num">{num}</div> : null}
-                  <div className="desc">{t(`manifest.fact${n}Desc`)}</div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* TEAM / JURY */}
-      <section className="block" id="team">
-        <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">{t('team.eyebrow')}</span>
-            <h2>
-              {t('team.titlePart1')}
-              <em>{t('team.titleEm')}</em>
-            </h2>
-            <p className="section-intro">{t('team.intro')}</p>
-          </div>
-
-          <div className="jury-grid">
-            {JURY.map((j, i) => {
-              const meta = (Array.isArray(t('team.jury')) ? t('team.jury') : [])[i] || {};
-              return (
-                <div className="jury-member" key={j.name}>
-                  <div className="jury-photo">
-                    <img src={j.photo} alt={j.name} loading="lazy" />
-                  </div>
-                  <div className="role">{meta.role}</div>
-                  <h4>{j.name}</h4>
-                  <p className="bio">{meta.bio}</p>
-                </div>
-              );
-            })}
-          </div>
         </div>
       </section>
 
