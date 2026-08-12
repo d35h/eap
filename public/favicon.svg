@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" fill="#F5FBFF"/>
+  <!-- Paper cream, matching the site ground and the share image. -->
+  <rect width="64" height="64" fill="#FAF9F5"/>
   <!-- Off-centre on purpose: the mark should sit like set type, not a logo in a box. -->
-  <path d="M17 12h31v9.5H27.5v9H45v9H27.5v9.5H48.5V58H17z" fill="#0B0C0E"/>
+  <path d="M17 12h31v9.5H27.5v9H45v9H27.5v9.5H48.5V58H17z" fill="#11110F"/>
 </svg>
