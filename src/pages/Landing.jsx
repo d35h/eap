@@ -12,13 +12,6 @@ const JURY = [
   { name: 'Anish Kapoor', photo: '/jury/kapoor.jpg' },
 ];
 
-// The ticker beside the manifesto. Latin throughout so it reads the same in all
-// four locales - it is a mark, not copy, and it is hidden from screen readers.
-const TICKER = [
-  'CONTEMPORARY ART', 'EURASIA', 'OPEN CALL', 'EXHIBITIONS',
-  'CURATORIAL PROJECTS', 'NEW NAMES', 'DIGITAL PROGRAMME',
-];
-
 export default function Landing() {
   const { t } = useTranslation();
   const submOpen = useSubmissionsOpen(); // undefined = loading, then true/false
@@ -81,28 +74,12 @@ export default function Landing() {
             <p>{t('manifest.p4')}</p>
           </div>
 
-          {/* A slow ticker of the platform's own words, beside the statement.
-              Duplicated once so the loop has a seamless second half to hand over
-              to, and hidden from screen readers: it is the same words the
-              section already says. */}
-            <div className="manifest-ticker" aria-hidden="true">
-              <div className="manifest-ticker__track">
-                {[0, 1].map((copy) => (
-                  <span className="manifest-ticker__run" key={copy}>
-                    {TICKER.map((word, i) => (
-                      <span className="manifest-ticker__word" key={i}>{word}</span>
-                    ))}
-                  </span>
-                ))}
-              </div>
+            {/* The clock sits beside the statement, where the run of words used
+                to be: four figures on rules with their units beneath. */}
+            <div className="manifest-clock">
+              <span className="manifest-clock__label">{t('opencall.deadlineLabel')}</span>
+              <Countdown />
             </div>
-          </div>
-
-          {/* The clock is a band across the section, not a note in a column:
-              four figures on rules with their units beneath. */}
-          <div className="manifest-clock">
-            <span className="manifest-clock__label">{t('opencall.deadlineLabel')}</span>
-            <Countdown />
           </div>
           <div className="manifest-facts">
             {[1, 2, 3].map((n) => {

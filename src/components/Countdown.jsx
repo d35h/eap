@@ -20,7 +20,7 @@ function calcTimeLeft() {
 }
 
 // The same clock, without the markup, for callers that want to set the numbers
-// their own way - the manifesto ticker runs them as a single line.
+// their own way - the manifesto sets them as one line beside the statement.
 export function useCountdown() {
   const [time, setTime] = useState(calcTimeLeft);
   useEffect(() => {

@@ -2825,7 +2825,18 @@ input, textarea, select { font-family: inherit; }
    clean, over the content so the letters take the colour. */
 .wash {
   position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
-
+  /* The masses are wider than the hero, so the hero's own overflow cut them off
+     square: a hard rectangle of colour around the name, which reads as a frame
+     drawn over it. Fading the layer out at every edge means the colour ends
+     where the paper begins, with no line between them. */
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent, #000 14%, #000 72%, transparent),
+    linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  mask-image:
+    linear-gradient(to bottom, transparent, #000 14%, #000 72%, transparent),
+    linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
 }
 
 
@@ -4304,7 +4315,14 @@ input, textarea, select { font-family: inherit; }
    name out in full on /process and /faq, so the brand changed shape depending on
    which menu item you had clicked. It is EAP on every page now. */
 :root.paper .logo__full { display: none; }
-:root.paper .logo__short { display: inline; }
+:root.paper .logo__short {
+  display: inline-block;
+  /* A hairline box around the mark, the way a stamp sits on a sheet. */
+  padding: 7px 11px 5px; border: 1px solid var(--fg);
+  font-size: 0.92em; line-height: 1; letter-spacing: 0.04em;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+:root.paper .logo:hover .logo__short { background: var(--fg); color: var(--bg); }
 
 /* Routed page copy is plain static flow. Static content paints below every
    positioned sibling, so the fixed wash was landing on top of the letters and
@@ -4491,125 +4509,74 @@ input, textarea, select { font-family: inherit; }
   }
 }
 
-/* ─── Manifesto ticker ─────────────────────────────────────────────────────
-   A slow vertical run of the platform's own words down the gutter between the
-   statement and the facts. Latin throughout, hidden from screen readers: it is
-   a mark, not copy. The track holds two identical runs and travels exactly half
-   its length, so the hand-over is seamless. */
-/* The paper manifesto is a single column, statement over facts. The ticker runs
-   down the gutter beside the statement, so the two share a row and the facts
-   still get the full width underneath. */
+/* ─── Manifesto: the clock beside the statement ────────────────────────────
+   The right-hand column holds the clock: four
+   figures in the display face on hairlines, two by two, with their units
+   beneath. */
 .manifest-lede {
-  display: flex; align-items: stretch;
-  gap: clamp(28px, 4vw, 64px);
-  /* An explicit width, not stretch: the ticker's nowrap run is min-content in
-     the cross axis, and stacked it dragged the whole row out to its full length
-     and took the page with it. */
+  display: flex; align-items: flex-start;
+  gap: clamp(28px, 4vw, 72px);
   width: 100%; min-width: 0;
 }
 .manifest-lede .manifest-text { flex: 1 1 auto; min-width: 0; }
-.manifest-ticker {
-  /* A readable column beside the statement, not a rotated hairline in the
-     gutter - at 2.6rem the words were set on their side and read as a texture
-     rather than as a ticker. */
-  flex: 0 0 clamp(9rem, 14vw, 13.5rem);
-  position: relative; overflow: hidden; align-self: stretch;
-  /* Grid items default to min-width:auto, which lets a nowrap run push its own
-     track wide open. The gutter is a fixed 2.6rem and stays that way. */
-  min-width: 0; width: 100%; max-width: 100%;
-  min-height: 320px;
-  border-left: 1px solid var(--border);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
-  mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+
+@media (max-width: 1024px) {
+  .manifest-lede { flex-direction: column; gap: 40px; }
 }
-/* Absolute, so the run's own length never becomes the column's height - left in
-   flow it stretched the whole manifesto row to two thousand pixels. */
-.manifest-ticker__track {
-  position: absolute; top: 0; left: 0;
-  display: flex; flex-direction: column;
-  animation: manifest-ticker-y 38s linear infinite;
-}
-.manifest-ticker__run { display: flex; flex-direction: column; flex: 0 0 auto; }
-.manifest-ticker__word {
-  display: block; padding: 0 0 1.9em; white-space: nowrap;
-  font-family: var(--font-body); font-size: 0.66rem; line-height: 1.3;
-  letter-spacing: 0.24em; text-transform: uppercase; color: var(--fg-faint);
-}
-/* ─── The clock, as a band across the manifesto ────────────────────────────
-   Four figures set large in the display face, divided by hairlines, with their
-   units beneath, and one rule closing the block. Tabular figures so nothing
-   shifts on the tick. */
+
+/* The clock itself. Two by two in the column, four across once the column
+   becomes a full-width row on a narrow screen. Tabular figures so nothing
+   shifts on the tick, and cells sized to content - days runs to three figures
+   for most of the open call. */
 :root.paper .manifest-clock {
-  margin-top: clamp(48px, 7vh, 88px);
-  padding-bottom: clamp(28px, 4vh, 44px);
-  border-bottom: 1px solid var(--border);
+  flex: 0 0 clamp(16rem, 26vw, 23rem);
+  padding-left: clamp(24px, 3vw, 44px);
+  border-left: 1px solid var(--border);
 }
 :root.paper .manifest-clock__label {
-  display: block; margin-bottom: clamp(20px, 3vh, 34px);
-  font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase;
+  display: block; margin-bottom: clamp(18px, 2.6vh, 28px);
+  font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
   color: var(--fg-muted);
 }
+/* All four on one line, divided by hairlines - stacked two by two it read as a
+   table of numbers rather than a clock. */
 :root.paper .manifest-clock .countdown {
-  margin: 0; gap: 0; flex-wrap: nowrap;
-  max-width: 46rem;
+  margin: 0; display: flex; flex-wrap: nowrap; gap: 0;
 }
-/* Sized to content, not into equal thirds: days runs to three figures for most
-   of the open call and an equal cell put 231 straight through the hours rule. */
 :root.paper .manifest-clock .count-item {
-  flex: 1 1 auto; min-width: 0;
-  align-items: flex-start;
-  padding: 0 clamp(18px, 3vw, 44px);
+  flex: 0 1 auto; min-width: 0; align-items: flex-start;
+  padding: 0 clamp(9px, 1vw, 15px);
   border-left: 1px solid var(--border);
 }
 :root.paper .manifest-clock .count-item:first-child { padding-left: 0; border-left: none; }
 :root.paper .manifest-clock .count-item:last-child { padding-right: 0; }
 :root.paper .manifest-clock .count-num {
   font-family: var(--font-display); font-weight: 400;
-  font-size: clamp(2.2rem, 5.4vw, 4.6rem); line-height: 0.98;
+  font-size: clamp(1.9rem, 3.1vw, 2.9rem); line-height: 0.96;
   letter-spacing: -0.01em; color: var(--fg);
   font-variant-numeric: tabular-nums;
 }
 :root.paper .manifest-clock .count-label {
-  margin-top: 14px;
-  font-size: 0.58rem; letter-spacing: 0.24em; text-transform: uppercase;
+  margin-top: 11px;
+  font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--fg-faint);
 }
-@media (max-width: 640px) {
-  :root.paper .manifest-clock .count-item { padding-left: 12px; }
-  :root.paper .manifest-clock .count-num { font-size: clamp(1.9rem, 11vw, 2.9rem); }
-  :root.paper .manifest-clock .count-label { font-size: 0.54rem; letter-spacing: 0.16em; }
-}
-@keyframes manifest-ticker-y {
-  from { transform: translateY(0); }
-  to { transform: translateY(-50%); }
-}
-
-/* Below the two-column breakpoint the gutter is gone, so the run lies down and
-   becomes a rule between the statement and the facts. */
 @media (max-width: 1024px) {
-  .manifest-lede { flex-direction: column; gap: 32px; overflow: hidden; }
-  .manifest-ticker {
-    /* Lying down the track is absolute too, so the strip needs its own height. */
-    flex: 0 0 auto; min-height: 0; height: 3.2rem; padding: 0;
-    border-left: none; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
-    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  /* Lying under the statement it is a band, not a column: four across, and the
+     rule moves from the side to the top. */
+  :root.paper .manifest-clock {
+    flex: 0 0 auto; width: 100%;
+    padding: clamp(26px, 4vh, 38px) 0 0;
+    border-left: none; border-top: 1px solid var(--border);
   }
-  .manifest-ticker__track {
-    flex-direction: row; align-items: center; height: 100%;
-    animation: manifest-ticker-x 26s linear infinite;
-  }
-  .manifest-ticker__run { flex-direction: row; align-items: center; }
-  /* Lying down it is read at a glance rather than scanned, so it takes the same
-     size as the rest of the small caps on a phone. */
-  .manifest-ticker__word { writing-mode: horizontal-tb; padding: 0 3em 0 0; font-size: 0.72rem; }
-  @keyframes manifest-ticker-x {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
+  :root.paper .manifest-clock .count-item { padding: 0 clamp(14px, 4.5vw, 40px); }
+  :root.paper .manifest-clock .count-item:first-child { padding-left: 0; }
+  :root.paper .manifest-clock .count-num { font-size: clamp(2.2rem, 7vw, 3.4rem); }
 }
-@media (prefers-reduced-motion: reduce) {
-  .manifest-ticker__track { animation: none; }
+@media (max-width: 420px) {
+  :root.paper .manifest-clock .count-num { font-size: clamp(2rem, 10.5vw, 2.8rem); }
+  :root.paper .manifest-clock .count-label { font-size: 0.54rem; letter-spacing: 0.12em; }
+  :root.paper .manifest-clock .count-item { padding-right: 14px; }
 }
 
 /* ─── Cabinet: the actions under the title ─────────────────────────────────
