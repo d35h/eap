@@ -59,6 +59,10 @@ export default function Apply() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
   const [step, setStep] = useState(1);
+  // The intro is skipped for anyone returning to a draft they have begun.
+  const [started, setStarted] = useState(
+    () => Boolean(form.firstName || form.lastName || form.email || form.works?.[0]?.title),
+  );
   // Файлы не сохраняются в localStorage (File нельзя сериализовать). Параллельно works по индексу.
   const [workFiles, setWorkFiles] = useState(() => form.works.map(() => null));
   const [errors, setErrors] = useState({});
@@ -222,7 +226,30 @@ export default function Apply() {
   return (
     <div className="apply-page">
       <div className="container">
-        <div className="apply-head">
+        {!started && (
+          <div className="apply-intro">
+            <span className="eyebrow">{t('apply.eyebrow')}</span>
+            <h1 className="apply-intro__title">{t('apply.introTitle')}</h1>
+            <p className="apply-intro__lead">{t('apply.introLead')}</p>
+            <p className="apply-intro__meta">{t('apply.introMeta')}</p>
+
+            <div className="apply-intro__need">
+              <span className="apply-intro__needTitle">{t('apply.introNeedTitle')}</span>
+              <ul>
+                <li>{t('apply.introNeed1')}</li>
+                <li>{t('apply.introNeed2')}</li>
+                <li>{t('apply.introNeed3')}</li>
+              </ul>
+            </div>
+
+            <button type="button" className="apply-intro__start" onClick={() => setStarted(true)}>
+              <span>{t('apply.introStart')}</span>
+              <span aria-hidden="true">&#10230;</span>
+            </button>
+          </div>
+        )}
+
+        <div className="apply-head" hidden={!started}>
           <span className="eyebrow">{t('apply.eyebrow')}</span>
           <h1>
             {t('apply.titlePart1')}
@@ -235,7 +262,7 @@ export default function Apply() {
           </div>
         </div>
 
-        <div className="wizard">
+        <div className="wizard" hidden={!started}>
           {/* Progress */}
           <div className="wizard-progress">
             {[1, 2, 3].map((n) => {

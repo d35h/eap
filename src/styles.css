@@ -3878,3 +3878,40 @@ input, textarea, select { font-family: inherit; }
 :root.paper .header-login:hover { text-decoration-color: currentColor; }
 :root.paper .lang-switch button.active { text-decoration-color: currentColor; }
 :root.paper .cx .cx__send:hover:not(:disabled) { border-bottom-color: var(--fg); opacity: 0.75; }
+
+/* ─── Application: the opening screen ─────────────────────────────────────
+   A form that opens with every field visible reads as a wall. This states the
+   shape of the task first - how many sections, roughly how long, what to have
+   to hand - and only then asks for anything. */
+:root.paper .apply-intro { max-width: 44rem; padding: clamp(8px, 3vh, 32px) 0 0; }
+:root.paper .apply-intro__title {
+  margin: 18px 0 14px; font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(2.1rem, 5vw, 3.6rem); line-height: 1.04; letter-spacing: -0.018em;
+}
+:root.paper .apply-intro__lead { margin: 0 0 10px; font-size: 1.06rem; color: var(--fg-muted); }
+:root.paper .apply-intro__meta {
+  margin: 0 0 clamp(34px, 5vh, 54px);
+  font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-faint);
+}
+:root.paper .apply-intro__need { border-top: 1px solid var(--border); padding-top: 24px; }
+:root.paper .apply-intro__needTitle {
+  display: block; margin-bottom: 16px;
+  font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-muted);
+}
+:root.paper .apply-intro__need ul { margin: 0; padding: 0; list-style: none; }
+:root.paper .apply-intro__need li {
+  padding: 11px 0; font-size: 1rem; color: var(--fg);
+  border-bottom: 1px solid var(--border);
+}
+:root.paper .apply-intro__start {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  width: 100%; max-width: 30rem; margin-top: clamp(34px, 5vh, 52px);
+  background: none; border: none; border-bottom: 1px solid var(--fg); border-radius: 0;
+  padding: 17px 0; cursor: pointer; color: var(--fg);
+  font-family: var(--font-body); font-size: 0.72rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  transition: opacity 0.22s ease;
+}
+:root.paper .apply-intro__start span:last-child { font-size: 1.15rem; transition: transform 0.22s ease; }
+:root.paper .apply-intro__start:hover { opacity: 0.72; }
+:root.paper .apply-intro__start:hover span:last-child { transform: translateX(6px); }
