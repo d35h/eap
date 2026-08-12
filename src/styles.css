@@ -2752,7 +2752,10 @@ input, textarea, select { font-family: inherit; }
 /* Hero: the type is the composition. */
 .ed-hero {
   position: relative; overflow: hidden; background: #f8fafb;
-  min-height: 100vh; display: flex; flex-direction: column;
+  /* vh on iOS measures the window behind the browser chrome, so a 100vh screen
+     is taller than what you can see and leaves a void below the fold. */
+  min-height: 100vh; min-height: 100svh;
+  display: flex; flex-direction: column;
   align-items: center; justify-content: flex-start;
   /* The reference sets the name high and leaves the lower half empty. */
   padding: 17vh 3vw 52px; text-align: center; gap: 40px;
@@ -2807,8 +2810,8 @@ input, textarea, select { font-family: inherit; }
 .ed-index { display: block; background: var(--bg); border-top: none; padding-top: 8px; }
 
 @media (max-width: 720px) {
-  .ed-hero { min-height: 92vh; gap: 32px; }
-    }
+  .ed-hero { min-height: auto; gap: 32px; }
+}
 
 /* ─── Colour wash ──────────────────────────────────────────────────────────
    The reference's ground is not paper - it is soft blurred colour drifting
@@ -3760,7 +3763,10 @@ input, textarea, select { font-family: inherit; }
      as plain paper. Bring it back into the frame. */
   /* Hero: the name was small against the screen and the note under it was lost
      in the ink. */
-  :root.paper .ed-hero { padding: 96px 20px 44px; min-height: 82vh; gap: 24px; }
+  :root.paper .ed-hero {
+    padding: 96px 20px 56px; gap: 24px;
+    min-height: auto; justify-content: center;
+  }
   :root.paper .ed-title { font-size: clamp(2.1rem, 13vw, 3.4rem); line-height: 1.04; }
   :root.paper .ed-micro { font-size: 0.7rem; letter-spacing: 0.16em; }
   :root.paper .ed-hero__foot { gap: 18px; }
@@ -4153,7 +4159,7 @@ input, textarea, select { font-family: inherit; }
     /* Anchored low it read as absent on a phone; it now runs up the right edge
      where there is margin rather than text. */
   :root.paper .page-wash .wc {
-    width: 150%; right: -46%; top: auto; bottom: -8%; height: 96%; opacity: 0.6;
+    width: 160%; right: -52%; top: -10%; bottom: auto; height: 120%; opacity: 0.55;
   }
 }
 @media (prefers-reduced-motion: reduce) {
