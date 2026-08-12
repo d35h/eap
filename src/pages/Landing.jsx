@@ -263,18 +263,6 @@ function ContactBlock() {
     );
   };
 
-  const ROWS = [
-    { label: t('contact.emailLabel'), value: 'info@eap.art', href: 'mailto:info@eap.art' },
-    { label: t('contact.opencallLabel'), value: 'opencall@eap.art', href: 'mailto:opencall@eap.art' },
-    { label: t('contact.partnersLabel'), value: 'partners@eap.art', href: 'mailto:partners@eap.art' },
-    {
-      label: t('contact.socialLabel'),
-      value: 'Instagram',
-      href: 'https://www.instagram.com/eurasia_art_platform/',
-      external: true,
-    },
-  ];
-
   return (
     <section className="cx" id="contact">
       <div className="cx__inner">
@@ -302,22 +290,6 @@ function ContactBlock() {
           </form>
         </div>
 
-        <aside className="cx__right">
-          <ul className="cx__list">
-            {ROWS.map((r) => (
-              <li key={r.href}>
-                <a
-                  href={r.href}
-                  {...(r.external ? { target: '_blank', rel: 'noreferrer' } : {})}
-                >
-                  <span className="cx__label">{r.label}</span>
-                  <span className="cx__value">{r.value}</span>
-                  <span className="cx__arrow" aria-hidden="true">&#10230;</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </aside>
       </div>
     </section>
   );

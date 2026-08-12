@@ -4063,3 +4063,59 @@ input, textarea, select { font-family: inherit; }
 :root.paper { --bg: #faf9f6; --rule: rgba(18, 18, 18, 0.18); }
 :root.paper .page-wash .wc { opacity: 0.62; }
 @media (max-width: 900px) { :root.paper .page-wash .wc { opacity: 0.5; } }
+
+/* With the details column gone the form stands alone: a single measure on the
+   page, not a half-width column with a hole beside it. */
+:root.paper .cx__inner { grid-template-columns: minmax(0, 1fr); max-width: 900px; }
+:root.paper .cx__left { width: 100%; }
+
+/* ─── The final screen ────────────────────────────────────────────────────
+   A submission that took ten minutes deserves more than a toast. Room, one
+   large line, and a reference the applicant can quote back at us. */
+:root.paper .success-screen {
+  max-width: 44rem; padding: clamp(40px, 10vh, 120px) 0 clamp(40px, 8vh, 100px);
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+:root.paper .success-mark {
+  display: block; margin-bottom: 26px;
+  font-size: 1.1rem; color: var(--fg);
+}
+:root.paper .success-title {
+  margin: 0 0 20px; font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(2.2rem, 5.4vw, 4rem); line-height: 1.02; letter-spacing: -0.018em;
+}
+:root.paper .success-desc {
+  margin: 0 0 clamp(34px, 5vh, 52px); max-width: 46ch;
+  font-size: 1.05rem; line-height: 1.7; color: var(--fg-muted);
+}
+:root.paper .success-sentto,
+:root.paper .success-ref {
+  display: flex; flex-direction: column; gap: 8px;
+  width: 100%; margin: 0 0 26px; padding-top: 20px;
+  border-top: 1px solid var(--rule, rgba(18, 18, 18, 0.18));
+}
+:root.paper .success-sentto span,
+:root.paper .success-ref span {
+  font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-muted);
+}
+:root.paper .success-sentto strong,
+:root.paper .success-ref strong {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(1.3rem, 2.4vw, 1.9rem); letter-spacing: 0.01em;
+}
+:root.paper .success-back {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  width: 100%; max-width: 30rem; margin-top: clamp(18px, 3vh, 34px);
+  padding: 17px 0; text-decoration: none; color: var(--fg);
+  border-bottom: 1px solid var(--fg); background: none; border-radius: 0;
+  font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+  transition: opacity 0.22s ease;
+}
+:root.paper .success-back span:last-child { font-size: 1.15rem; transition: transform 0.22s ease; }
+:root.paper .success-back:hover { opacity: 0.72; }
+:root.paper .success-back:hover span:last-child { transform: translateX(6px); }
+
+/* The base success screen centres its text; this design sets everything from
+   the left margin. */
+:root.paper .success-screen { text-align: left; }
+:root.paper .success-screen > * { align-self: flex-start; }

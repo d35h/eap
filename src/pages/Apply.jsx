@@ -69,6 +69,7 @@ export default function Apply() {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [ref, setRef] = useState('');
+  const [sentTo, setSentTo] = useState('');
   const submOpen = useSubmissionsOpen(); // undefined = loading, then true/false
   const closed = submOpen === false;
 
@@ -76,7 +77,10 @@ export default function Apply() {
     const p = new URLSearchParams(window.location.search);
     if (p.get('status') === 'success') {
       clearForm();
-      try { setRef(sessionStorage.getItem('eap-apply-ref') || ''); } catch { /* ignore */ }
+      try {
+        setRef(sessionStorage.getItem('eap-apply-ref') || '');
+        setSentTo(sessionStorage.getItem('eap-apply-email') || '');
+      } catch { /* ignore */ }
       setSuccess(true);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -167,7 +171,11 @@ export default function Apply() {
         const application = await submitApplication({ ...form, tier: form.works.length });
         // The provider returns to ?status=success with nothing of ours attached,
         // so the reference has to be parked before we leave the page.
-        try { sessionStorage.setItem('eap-apply-ref', application.id); } catch { /* ignore */ }
+        try {
+          sessionStorage.setItem('eap-apply-ref', application.id);
+          // The form is cleared on return, so the address has to travel too.
+          sessionStorage.setItem('eap-apply-email', form.email || '');
+        } catch { /* ignore */ }
         const paths = await uploadWorkFiles(supabase, application.id, workFiles);
         console.log('Application stored:', application.id, paths);
         const channel = form.paymentChannel === 'intl' ? 'georgia' : 'bepaid';
@@ -195,16 +203,28 @@ export default function Apply() {
       <div className="apply-page">
         <div className="container">
           <div className="success-screen">
-            <div className="ok">{t('apply.successOk')}</div>
-            <h2>{t('apply.successTitle')}</h2>
-            <p>{t('apply.successDesc')}</p>
+            <span className="success-mark" aria-hidden="true">{t('apply.successOk')}</span>
+            <h2 className="success-title">{t('apply.successTitle')}</h2>
+            <p className="success-desc">{t('apply.successDesc')}</p>
+
+            {sentTo && (
+              <p className="success-sentto">
+                <span>{t('apply.successSentTo')}</span>
+                <strong>{sentTo}</strong>
+              </p>
+            )}
+
             {ref && (
               <p className="success-ref">
-                <span>{t('apply.refLabel')}</span>
+                <span>{t('apply.successRefWord')}</span>
                 <strong>{`EAP-${String(ref).slice(0, 8).toUpperCase()}`}</strong>
               </p>
             )}
-            <Link to="/" className="btn-ink">{t('apply.successBack')}</Link>
+
+            <Link to="/" className="success-back">
+              <span>{t('apply.successBack')}</span>
+              <span aria-hidden="true">&#10230;</span>
+            </Link>
           </div>
         </div>
       </div>
