@@ -2756,7 +2756,11 @@ input, textarea, select { font-family: inherit; }
 
 /* Hero: the type is the composition. */
 .ed-hero {
-  position: relative; overflow: hidden; background: #f8fafb;
+  /* The same ground as the rest of the page. It used to be #f8fafb, a cool
+     blue-white against the warm cream everywhere else - a 375px block of a
+     different colour, which the page wash happened to cover. With the wash gone
+     that block reads as a rectangle drawn around the name. */
+  position: relative; overflow: hidden; background: var(--bg);
   /* vh on iOS measures the window behind the browser chrome, so a 100vh screen
      is taller than what you can see and leaves a void below the fold. */
   min-height: 100vh; min-height: 100svh;
@@ -2844,6 +2848,11 @@ input, textarea, select { font-family: inherit; }
    wide blurred gradients band into visible steps. */
 .grain {
   position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0.26;
+  /* Fades out with the colour it is there to smooth. Left hard-edged it filled
+     the hero exactly and stopped dead at the foot, which is a rectangle of
+     noise sitting on plain paper. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 160px 160px;
   animation: grain-shift 1.1s steps(4) infinite;
