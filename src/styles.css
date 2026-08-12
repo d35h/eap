@@ -3455,7 +3455,8 @@ input, textarea, select { font-family: inherit; }
 /* Low on the page the list has nowhere to fall, so it opens upwards instead of
    hanging off the bottom of the window. */
 .cselect.is-up .cselect__list { top: auto; bottom: calc(100% + 6px); }
-/* Never taller than the room actually available. */
+/* Height is set inline from the space visualViewport reports, so the keyboard
+   cannot swallow the list. This is the ceiling if that measurement is missing. */
 .cselect__list { max-height: min(290px, 46svh); }
 
 /* Placeholders that outrun their field were being clipped mid-word. */

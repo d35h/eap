@@ -39,9 +39,12 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
 
   useEffect(() => {
     if (!open) return;
+    // pointerdown to match the options, so a tap outside closes on the same
+    // event a tap inside picks on - mousedown alone can arrive too late on a
+    // phone, or not at all.
     const onDoc = (e) => { if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false); };
-    document.addEventListener('mousedown', onDoc);
-    return () => document.removeEventListener('mousedown', onDoc);
+    document.addEventListener('pointerdown', onDoc);
+    return () => document.removeEventListener('pointerdown', onDoc);
   }, [open]);
 
   // Report both the localised name (stored & submitted) and the stable region
@@ -61,29 +64,45 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
     if (el) el.scrollIntoView({ block: 'nearest' });
   }, [active, open]);
 
-  // Open upwards when the field sits low on the screen. Dropping down from there
-  // ran the list off the bottom of the window, and the options underneath it
-  // could not be reached without scrolling the list out from under the pointer.
-  const [up, setUp] = useState(false);
+  // Place the list against the space that is actually visible. On a phone the
+  // keyboard opens with the field and takes roughly half the screen: window
+  // .innerHeight does not change, so a list measured against it drops straight
+  // behind the keyboard and the options cannot be reached at all. visualViewport
+  // does change, and it fires resize when the keyboard appears - so measure
+  // against that, flip upwards when there is more room above, and never ask for
+  // more height than the gap that is left.
+  const [place, setPlace] = useState({ up: false, max: 290 });
   useEffect(() => {
-    if (!open) { setUp(false); return undefined; }
+    if (!open) { setPlace({ up: false, max: 290 }); return undefined; }
+    const vv = window.visualViewport;
     const measure = () => {
       const r = wrapRef.current?.getBoundingClientRect();
       if (!r) return;
-      const below = window.innerHeight - r.bottom;
-      setUp(below < 300 && r.top > below);
+      const viewTop = vv ? vv.offsetTop : 0;
+      const viewH = vv ? vv.height : window.innerHeight;
+      const below = viewTop + viewH - r.bottom - 12;
+      const above = r.top - viewTop - 12;
+      const up = above > below;
+      setPlace({ up, max: Math.max(132, Math.min(290, Math.round(up ? above : below))) });
     };
     measure();
+    // The keyboard animates in, so one measurement at open time is too early.
+    const t = setTimeout(measure, 350);
     window.addEventListener('resize', measure);
     window.addEventListener('scroll', measure, true);
+    vv?.addEventListener('resize', measure);
+    vv?.addEventListener('scroll', measure);
     return () => {
+      clearTimeout(t);
       window.removeEventListener('resize', measure);
       window.removeEventListener('scroll', measure, true);
+      vv?.removeEventListener('resize', measure);
+      vv?.removeEventListener('scroll', measure);
     };
   }, [open]);
 
   return (
-    <div className={`cselect ${open ? 'is-open' : ''} ${up ? 'is-up' : ''}`} ref={wrapRef}>
+    <div className={`cselect ${open ? 'is-open' : ''} ${place.up ? 'is-up' : ''}`} ref={wrapRef}>
       <input
         type="text"
         role="combobox"
@@ -101,7 +120,7 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
       </span>
       {open && filtered.length > 0 && (
-        <ul className="cselect__list" ref={listRef} role="listbox">
+        <ul className="cselect__list" ref={listRef} role="listbox" style={{ maxHeight: `${place.max}px` }}>
           {filtered.map((x, i) => (
             <li
               key={x.c}
@@ -109,7 +128,12 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
               aria-selected={value === x.name}
               className={`cselect__opt ${i === active ? 'is-active' : ''} ${x.pinned ? 'is-pinned' : ''} ${value === x.name ? 'is-current' : ''}`}
               onMouseEnter={() => setActive(i)}
-              onMouseDown={(e) => { e.preventDefault(); pick(x.name, x.c); }}
+              // pointerdown, not mousedown: it is the first event a finger
+              // produces, so the choice is taken before the keyboard opening or
+              // a stray scroll can move the row out from under the touch. It
+              // covers the mouse identically. preventDefault keeps focus on the
+              // field, which is what stops the list closing under us.
+              onPointerDown={(e) => { e.preventDefault(); pick(x.name, x.c); }}
             >
               {x.name}
               {value === x.name && <span className="cselect__check" aria-hidden="true">✓</span>}
