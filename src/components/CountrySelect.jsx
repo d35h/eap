@@ -51,6 +51,15 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
   // code, so the caller can re-translate the name when the language changes.
   const pick = (name, code) => { onChange(name, code); setQuery(''); setOpen(false); };
 
+  // Show the whole list again, from the top, with nothing typed. Idempotent, so
+  // it is safe on both focus and press - a first tap fires both.
+  const reveal = () => {
+    if (open) return;
+    setQuery('');
+    setOpen(true);
+    setActive(0);
+  };
+
   const onKey = (e) => {
     if (e.key === 'ArrowDown') { e.preventDefault(); setOpen(true); setActive((i) => Math.min(i + 1, filtered.length - 1)); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); setActive((i) => Math.max(i - 1, 0)); }
@@ -113,7 +122,13 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
         placeholder={placeholder}
         value={open ? query : value}
         onChange={(e) => { setQuery(e.target.value); onChange(e.target.value, ''); setOpen(true); setActive(0); }}
-        onFocus={() => { setQuery(''); setOpen(true); setActive(0); }}
+        onFocus={reveal}
+        // Opening hung entirely off focus, and picking deliberately keeps focus
+        // on the field - so after the first choice the input was already focused
+        // and tapping it again fired nothing at all. The list could not be
+        // reopened without first tapping somewhere else. Any press on the field
+        // opens it, however many times you come back to it.
+        onPointerDown={reveal}
         onKeyDown={onKey}
       />
       <span className="cselect__chev" aria-hidden="true">
