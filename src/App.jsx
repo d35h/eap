@@ -40,11 +40,12 @@ function PaperScheme() {
   return null;
 }
 
-// The landing carries its own field in the hero; every other light page gets
-// the wash behind it.
+// Every light page gets the wash, the landing included - excluding it left the
+// pigment showing only in the contact section and the footer, i.e. only at the
+// very end. The hero paints an opaque ground over it, so the two do not fight.
 function PageWash() {
   const { pathname } = useLocation();
-  if (CABINET.test(pathname) || pathname === '/') return null;
+  if (CABINET.test(pathname)) return null;
   return (
     <div className="page-wash" aria-hidden="true">
       <Watercolour seed={11} />
