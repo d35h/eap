@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import Countdown from '../components/Countdown.jsx';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
-import Watercolour from '../components/Watercolour.jsx';
 
 // ── Временный состав жюри (hardcoded). Имена и фото постоянны;
 //    роль и био берутся из переводов (team.jury, по индексу). ──
@@ -278,9 +277,6 @@ function ContactBlock() {
 
   return (
     <section className="cx" id="contact">
-      {/* Pigment spreading from the right, kept well behind the type. */}
-      <div className="cx__water" aria-hidden="true"><Watercolour /></div>
-
       <div className="cx__inner">
         <div className="cx__left">
           <span className="cx__eyebrow">{t('contact.eyebrow')}</span>
