@@ -2805,27 +2805,10 @@ input, textarea, select { font-family: inherit; }
 
 /* Index rows: a small label over an oversized title, hairline between. */
 .ed-index { display: block; background: var(--bg); border-top: none; padding-top: 8px; }
-.ed-row {
-  display: block; padding: 40px 24px 44px; text-decoration: none;
-  border-bottom: 1px solid var(--border); color: var(--fg);
-  transition: background 0.35s ease, padding-left 0.35s ease;
-}
-.ed-row:hover { background: var(--bg-darker); padding-left: 44px; }
-.ed-row__label {
-  display: block; margin-bottom: 10px; font-family: var(--font-body);
-  font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.28em;
-  color: var(--fg-muted);
-}
-.ed-row__title {
-  display: block; font-family: var(--font-display); font-weight: 400;
-  font-size: clamp(2.1rem, 6.2vw, 4.8rem); line-height: 1; letter-spacing: -0.02em;
-}
 
 @media (max-width: 720px) {
   .ed-hero { min-height: 92vh; gap: 32px; }
-  .ed-row { padding: 28px 20px 30px; }
-  .ed-row:hover { padding-left: 28px; }
-}
+    }
 
 /* ─── Colour wash ──────────────────────────────────────────────────────────
    The reference's ground is not paper - it is soft blurred colour drifting
@@ -3236,7 +3219,7 @@ input, textarea, select { font-family: inherit; }
 /* The display face is a grotesk now: headings need weight and tighter
    tracking than the serif wanted, and the faux-italic fix no longer applies. */
 :root.paper h1, :root.paper h2, :root.paper h3, :root.paper h4,
-:root.paper .ed-row__title, :root.paper .step h3,
+:root.paper .step h3,
 :root.paper .contact-aside .value, :root.paper .contact-aside .social-row {
   font-family: var(--font-display); font-weight: 400; letter-spacing: -0.012em;
 }
@@ -3299,29 +3282,14 @@ input, textarea, select { font-family: inherit; }
 :root.paper label .req { color: #b4483f; }
 
 /* Disclosure panels sit on the page rhythm, not in boxes. */
-:root.paper .ed-panel { padding: 0 24px; max-width: 1180px; margin: 0 auto 8px; }
-:root.paper .faq-list { padding-top: 8px; }
-:root.paper .faq-row {
-  padding: 26px 0 28px; border-bottom: 1px solid var(--border);
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 12px 48px;
-}
-:root.paper .faq-row h3 {
-  margin: 0; font-family: var(--font-display); font-weight: 400;
-  font-size: clamp(1.2rem, 2.2vw, 1.7rem); line-height: 1.15; letter-spacing: -0.012em;
-}
-:root.paper .faq-row p { margin: 0; color: var(--fg-muted); font-size: 1rem; line-height: 1.7; }
 @media (max-width: 720px) {
-  :root.paper .faq-row { grid-template-columns: 1fr; gap: 10px; }
-}
+  }
 
 /* The hidden attribute must win over any display we set on these panels. */
 :root.paper [hidden] { display: none !important; }
 
 /* Disclosure panels share the page container, otherwise the FAQ block sat on a
    different left margin from every section around it. */
-:root.paper .ed-panel {
-  width: 100%; max-width: 1320px; margin: 0 auto; padding: 0 2rem;
-}
 
 /* ─── Contact and application forms ───────────────────────────────────────
    Pill fields inside a rounded panel, with a dark pill action carrying a
@@ -3381,43 +3349,11 @@ input, textarea, select { font-family: inherit; }
 :root.paper .ed-title a {
   color: inherit; text-decoration: none; display: flex; flex-direction: column;
 }
-
-/* ─── Expandable list rows ────────────────────────────────────────────────
-   The heading itself is the control: a small label over an oversized title,
-   flush left, closed by a hairline, with the mark alone on the right. */
-:root.paper .ed-row--toggle {
-  display: grid; grid-template-columns: 1fr auto; align-items: end;
-  width: 100%; text-align: left; cursor: pointer;
-  background: none; border: none; border-radius: 0;
-  border-bottom: 1px solid var(--border);
-  padding: 34px 0 30px; color: var(--fg);
-  transition: border-color 0.3s ease;
-}
-:root.paper .ed-row--toggle:hover { border-bottom-color: var(--fg); }
-:root.paper .ed-row--toggle .ed-row__label {
-  grid-column: 1; margin-bottom: 14px;
-  font-family: var(--font-body); font-size: 0.66rem;
-  letter-spacing: 0.24em; text-transform: uppercase; color: var(--fg-muted);
-}
-:root.paper .ed-row--toggle .ed-row__title {
-  grid-column: 1; display: block;
-  font-family: var(--font-display); font-weight: 400;
-  font-size: clamp(2rem, 6vw, 4.6rem); line-height: 1; letter-spacing: -0.015em;
-}
-:root.paper .ed-row--toggle::after {
-  content: "+"; grid-column: 2; grid-row: 1 / -1; align-self: center;
-  font-family: var(--font-body); font-size: 1.7rem; font-weight: 300;
-  color: var(--fg-muted); line-height: 1; transition: color 0.3s ease;
-}
-:root.paper .ed-row--toggle.is-open::after { content: "\2212"; color: var(--fg); }
-:root.paper .ed-row--toggle:hover::after { color: var(--fg); }
 :root.paper .process-steps .section-intro,
-:root.paper .faq-list .section-intro { margin: 26px 0 4px; }
 
 /* The manifest sat straight under the disclosure rows with no separation, so
    the last hairline read as its top border rather than as the list's end. */
 :root.paper .manifest { padding-top: clamp(96px, 12vh, 180px); }
-:root.paper .ed-panel:last-of-type { margin-bottom: clamp(56px, 7vh, 110px); }
 
 /* ─── Update toast, status lines, and the apply action ─────────────────────*/
 
@@ -3510,7 +3446,6 @@ input, textarea, select { font-family: inherit; }
    still get a ring; pointer clicks do not. */
 :root.paper button:focus:not(:focus-visible),
 :root.paper a:focus:not(:focus-visible),
-:root.paper .ed-row--toggle:focus:not(:focus-visible) { outline: none; }
 :root.paper button:focus-visible,
 :root.paper a:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
 
@@ -3523,11 +3458,6 @@ input, textarea, select { font-family: inherit; }
 :root.paper .contact-aside .item:hover { border-bottom-color: transparent; }
 :root.paper .contact-aside .label { margin-bottom: 8px; }
 
-:root.paper .faq-row {
-  border-bottom: none; padding: 0; margin-bottom: 40px;
-}
-:root.paper .faq-row:last-child { margin-bottom: 0; }
-:root.paper .faq-list { padding-top: 28px; padding-bottom: 8px; }
 :root.paper .process-steps .step { border-bottom: none; padding: 0 0 34px; }
 :root.paper .process-steps .step:last-child { padding-bottom: 0; }
 :root.paper .process-steps { border-top: none; }
@@ -3846,9 +3776,7 @@ input, textarea, select { font-family: inherit; }
 
   :root.paper .cx { padding: 44px 0 40px; }
   :root.paper .cx__title { font-size: clamp(1.9rem, 8.6vw, 2.6rem); }
-  :root.paper .ed-row--toggle { padding: 24px 0 22px; }
-  :root.paper .ed-row--toggle .ed-row__title { font-size: clamp(1.7rem, 8vw, 2.4rem); }
-
+    
   /* Anything you tap needs to be worth tapping at. */
   :root.paper .site-header a,
   :root.paper .site-header button,
@@ -4122,9 +4050,6 @@ input, textarea, select { font-family: inherit; }
 
 /* The disclosures now close the page, so they step down from the oversized
    display size the hero owns. */
-:root.paper .ed-row--toggle .ed-row__title { font-size: clamp(1.5rem, 3.2vw, 2.3rem); }
-:root.paper .ed-row--toggle { padding: 26px 0 24px; }
-:root.paper .ed-panel:first-of-type { padding-top: clamp(40px, 6vh, 80px); }
 :root.paper #team { padding-top: clamp(48px, 6vh, 90px); }
 
 /* ─── Expanded panels ─────────────────────────────────────────────────────
@@ -4132,22 +4057,6 @@ input, textarea, select { font-family: inherit; }
    lines while the answer sat in a strip beside it, and the lead was jammed
    against the first row. Wider measure for the question, real air between
    entries, and the lead standing on its own. */
-:root.paper .faq-list .section-intro,
-:root.paper .process-steps .section-intro {
-  margin: 0 0 clamp(30px, 4vh, 46px); padding-bottom: clamp(24px, 3vh, 34px);
-  border-bottom: 1px solid var(--border); max-width: 62ch;
-}
-:root.paper .faq-row {
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-  gap: 14px clamp(40px, 6vw, 96px);
-  margin-bottom: clamp(30px, 4vh, 46px);
-  align-items: start;
-}
-:root.paper .faq-row h3 {
-  font-size: clamp(1.1rem, 1.7vw, 1.45rem); line-height: 1.25;
-  max-width: 22ch; text-wrap: balance;
-}
-:root.paper .faq-row p { max-width: 56ch; font-size: 0.98rem; line-height: 1.75; }
 
 /* Steps: the number is a margin note, the title and text share one measure. */
 :root.paper .process-steps .step {
@@ -4163,9 +4072,7 @@ input, textarea, select { font-family: inherit; }
 :root.paper .process-steps .step-num { padding-top: 0.35rem; }
 
 @media (max-width: 860px) {
-  :root.paper .faq-row { grid-template-columns: 1fr; gap: 10px; }
-  :root.paper .faq-row h3 { max-width: none; }
-  :root.paper .process-steps .step { grid-template-columns: 1fr; gap: 8px; }
+      :root.paper .process-steps .step { grid-template-columns: 1fr; gap: 8px; }
   :root.paper .process-steps .step h3,
   :root.paper .process-steps .step p,
   :root.paper .process-steps .step .meta { grid-column: 1; }
@@ -4199,4 +4106,49 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 900px) {
   :root.paper .manifest .container { grid-template-columns: 1fr; gap: 44px; }
   :root.paper .manifest-text, :root.paper .manifest-text h2 { max-width: none; }
+}
+
+/* One call to action per screen: the bar's copy waits until the hero's has
+   gone. Kept in the layout so the bar does not jump when it appears. */
+:root.paper .header-apply.is-hidden {
+  opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+}
+:root.paper .header-apply { transition: opacity 0.25s ease; }
+
+/* ─── Manifesto ───────────────────────────────────────────────────────────
+   Facts read as a row of three claims under the statement: number, then the
+   claim beneath it, on a shared top line. The middle one carries no number, so
+   the row is aligned from the top rather than the baseline. */
+:root.paper .manifest-facts {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 64px);
+  padding-top: clamp(30px, 4vh, 48px);
+  border-top: 1px solid var(--border);
+  align-items: start;
+}
+:root.paper .manifest-facts .fact { display: flex; flex-direction: column; }
+:root.paper .manifest-facts .num {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(1.7rem, 2.6vw, 2.3rem); line-height: 1;
+  color: var(--fg); margin-bottom: 12px;
+}
+:root.paper .manifest-facts .desc {
+  font-size: 0.92rem; line-height: 1.6; color: var(--fg-muted); max-width: 34ch;
+}
+@media (max-width: 900px) {
+  :root.paper .manifest-facts { grid-template-columns: 1fr; gap: 26px; }
+  :root.paper .manifest-facts .desc { max-width: none; }
+}
+
+/* No rule under every question: the pairs are separated by space. The only
+   lines left are the two disclosure headings themselves. */
+:root.paper .process-steps .section-intro { border-bottom: none; padding-bottom: 0; }
+:root.paper .process-steps .step { border-bottom: none; border-top: none; }
+
+/* The wash was reaching far enough left to sit under the reading column. Held
+   to the right margin, and quieter, so nothing is read through pigment. */
+:root.paper .page-wash .wc { width: 58%; right: -10%; opacity: 0.6; }
+:root.paper main { position: relative; z-index: 2; }
+@media (max-width: 900px) {
+  :root.paper .page-wash .wc { width: 120%; right: -34%; opacity: 0.42; }
 }

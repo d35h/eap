@@ -188,7 +188,7 @@ export default function Header() {
 
             {!authLoading && !user && submOpen !== undefined && (
               submOpen ? (
-                <Link to="/apply" className="btn-gold header-apply">
+                <Link to="/apply" className={`btn-gold header-apply${overOrb ? ' is-hidden' : ''}`}>
                   {t('nav.apply')}
                 </Link>
               ) : (

@@ -95,7 +95,7 @@ export const translations = {
       fact2Num: '',
       fact2Desc: 'Без географических ограничений внутри Евразии - от Калининграда до Владивостока, от Алматы до Тбилиси',
       fact3Num: '100%',
-      fact3Desc: 'Обратная связь каждому участнику, независимо от результата отбора',
+      fact3Desc: 'Каждый автор получает профессиональный комментарий к своей работе',
     },
     participants: {
       eyebrow: '- Участники платформы',
@@ -456,7 +456,7 @@ export const translations = {
       fact2Num: '',
       fact2Desc: 'No geographic limits within Eurasia - from Kaliningrad to Vladivostok, from Almaty to Tbilisi',
       fact3Num: '100%',
-      fact3Desc: 'Feedback to every participant, regardless of selection outcome',
+      fact3Desc: 'Every artist receives a professional response to their work',
     },
     participants: {
       eyebrow: '- Platform participants',
@@ -810,7 +810,7 @@ export const translations = {
       fact2Num: '',
       fact2Desc: 'Еуразия ішінде географиялық шектеулерсіз',
       fact3Num: '100%',
-      fact3Desc: 'Әр қатысушыға кері байланыс',
+      fact3Desc: 'Әр автор өз жұмысына кәсіби пікір алады',
     },
     participants: {
       eyebrow: '- Платформа қатысушылары',
@@ -1163,7 +1163,7 @@ export const translations = {
       fact2Num: '',
       fact2Desc: '欧亚范围内无地域限制',
       fact3Num: '100%',
-      fact3Desc: '无论评选结果如何，每位参与者都会收到反馈',
+      fact3Desc: '每位创作者都会收到对其作品的专业评述',
     },
     participants: {
       eyebrow: '- 平台参与者',

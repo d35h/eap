@@ -14,9 +14,6 @@ const JURY = [
 
 export default function Landing() {
   const { t } = useTranslation();
-  // The four steps are long; behind a disclosure the section stays scannable.
-  const [stepsOpen, setStepsOpen] = useState(false);
-  const [faqOpen, setFaqOpen] = useState(false);
   const submOpen = useSubmissionsOpen(); // undefined = loading, then true/false
 
   return (
@@ -43,7 +40,6 @@ export default function Landing() {
         </h1>
 
         <div className="ed-hero__foot">
-          <p className="ed-micro">{t('hero.vpStrong')}</p>
           {submOpen === undefined ? (
             <div className="hero-loading" aria-hidden="true" />
           ) : submOpen ? (
@@ -121,55 +117,6 @@ export default function Landing() {
       </section>
 
       {/* INDEX - the reference's stacked list of oversized titles */}
-      {/* FAQ - the heading is the control, as in the reference's list */}
-      <section className="ed-panel" id="faq">
-        <button
-          type="button"
-          className={`ed-row ed-row--toggle${faqOpen ? ' is-open' : ''}`}
-          aria-expanded={faqOpen}
-          aria-controls="faq-list"
-          onClick={() => setFaqOpen((v) => !v)}
-        >
-          <span className="ed-row__title">{t('faq.title')}</span>
-        </button>
-        <div id="faq-list" className="faq-list" hidden={!faqOpen}>
-          <p className="section-intro">{t('faq.lead')}</p>
-          {(Array.isArray(t('faq.items')) ? t('faq.items') : []).map((qa, i) => (
-            <div className="faq-row" key={i}>
-              <h3>{qa.q}</h3>
-              <p>{qa.a}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* PROCESS */}
-      <section className="ed-panel" id="process">
-        <button
-          type="button"
-          className={`ed-row ed-row--toggle${stepsOpen ? ' is-open' : ''}`}
-          aria-expanded={stepsOpen}
-          aria-controls="process-steps"
-          onClick={() => setStepsOpen((v) => !v)}
-        >
-          <span className="ed-row__title">
-            {[t('process.titlePart1'), t('process.titleEm'), t('process.titlePart2')].join('')}
-          </span>
-        </button>
-
-        <div id="process-steps" className="process-steps" hidden={!stepsOpen}>
-          <p className="section-intro">{t('process.intro')}</p>
-            {[1, 2, 3, 4].map((n) => (
-              <div className="step" key={n}>
-                <div className="step-num">0{n}</div>
-                <h3>{t(`process.step${n}Title`)}</h3>
-                <p>{t(`process.step${n}Desc`)}</p>
-                <div className="meta">{t(`process.step${n}Meta`)}</div>
-              </div>
-            ))}
-        </div>
-      </section>
-
       {/* CONTACT */}
       <ContactBlock />
     </main>

@@ -41,12 +41,12 @@ export default function Footer() {
             <h5>{t('team.teamLabel')}</h5>
             <ul>
               <li className="founder">
-                <span className="fname">{t('team.member1Name')}</span>
-                <span className="frole">{t('team.role1')}</span>
-              </li>
-              <li className="founder">
                 <span className="fname">{t('team.member2Name')}</span>
                 <span className="frole">{t('team.role2')}</span>
+              </li>
+              <li className="founder">
+                <span className="fname">{t('team.member1Name')}</span>
+                <span className="frole">{t('team.role1')}</span>
               </li>
               <li className="founder">
                 <span className="fname">{t('team.member4Name')}</span>
