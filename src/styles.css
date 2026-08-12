@@ -3915,3 +3915,58 @@ input, textarea, select { font-family: inherit; }
 :root.paper .apply-intro__start span:last-child { font-size: 1.15rem; transition: transform 0.22s ease; }
 :root.paper .apply-intro__start:hover { opacity: 0.72; }
 :root.paper .apply-intro__start:hover span:last-child { transform: translateX(6px); }
+
+/* ─── Application: counter, navigation, draft note, reference ─────────────*/
+:root.paper .wizard-count {
+  display: flex; align-items: baseline; gap: 8px;
+  margin-bottom: 18px; font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.4vw, 2.2rem); line-height: 1; color: var(--fg);
+}
+:root.paper .wizard-count__of { font-size: 0.5em; color: var(--fg-faint); letter-spacing: 0.08em; }
+
+:root.paper .wizard-nav {
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 4vw, 56px);
+  margin-top: clamp(34px, 5vh, 56px);
+}
+:root.paper .wnav {
+  display: flex; align-items: center; gap: 14px;
+  background: none; border: none; border-radius: 0;
+  border-bottom: 1px solid var(--fg); padding: 16px 0; cursor: pointer;
+  color: var(--fg); font-family: var(--font-body); font-size: 0.7rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  transition: opacity 0.22s ease, border-color 0.22s ease;
+}
+:root.paper .wnav span[aria-hidden] { font-size: 1.15rem; transition: transform 0.22s ease; }
+:root.paper .wnav--next { justify-content: flex-end; }
+:root.paper .wnav--back:hover:not(:disabled) span[aria-hidden] { transform: translateX(-6px); }
+:root.paper .wnav--next:hover:not(:disabled) span[aria-hidden] { transform: translateX(6px); }
+:root.paper .wnav:hover:not(:disabled) { opacity: 0.72; }
+:root.paper .wnav:disabled { opacity: 0.28; cursor: default; border-bottom-color: var(--border); }
+:root.paper .wizard-nav .spacer { display: none; }
+
+/* The draft note states a fact and gets out of the way - no panel, no toast. */
+:root.paper .draft-note {
+  margin-top: 14px; font-size: 0.62rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--fg-faint);
+  opacity: 0; transition: opacity 0.4s ease;
+}
+:root.paper .draft-note.visible { opacity: 1; }
+
+/* The reference is what makes a submission feel recorded rather than sent. */
+:root.paper .success-ref {
+  display: flex; flex-direction: column; gap: 8px; margin: 26px 0 30px;
+  padding-top: 22px; border-top: 1px solid var(--border);
+}
+:root.paper .success-ref span {
+  font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-muted);
+}
+:root.paper .success-ref strong {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(1.4rem, 2.4vw, 2rem); letter-spacing: 0.02em;
+}
+
+@media (max-width: 720px) {
+  :root.paper .wizard-nav { grid-template-columns: 1fr; gap: 4px; }
+  :root.paper .wnav--next { justify-content: space-between; }
+  :root.paper .wnav--back { justify-content: flex-start; }
+}

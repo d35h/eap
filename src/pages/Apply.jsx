@@ -68,12 +68,17 @@ export default function Apply() {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [ref, setRef] = useState('');
   const submOpen = useSubmissionsOpen(); // undefined = loading, then true/false
   const closed = submOpen === false;
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
-    if (p.get('status') === 'success') { clearForm(); setSuccess(true); }
+    if (p.get('status') === 'success') {
+      clearForm();
+      try { setRef(sessionStorage.getItem('eap-apply-ref') || ''); } catch { /* ignore */ }
+      setSuccess(true);
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const update = (k, v) => {
@@ -160,6 +165,9 @@ export default function Apply() {
     try {
       if (isSupabaseConfigured()) {
         const application = await submitApplication({ ...form, tier: form.works.length });
+        // The provider returns to ?status=success with nothing of ours attached,
+        // so the reference has to be parked before we leave the page.
+        try { sessionStorage.setItem('eap-apply-ref', application.id); } catch { /* ignore */ }
         const paths = await uploadWorkFiles(supabase, application.id, workFiles);
         console.log('Application stored:', application.id, paths);
         const channel = form.paymentChannel === 'intl' ? 'georgia' : 'bepaid';
@@ -190,6 +198,12 @@ export default function Apply() {
             <div className="ok">{t('apply.successOk')}</div>
             <h2>{t('apply.successTitle')}</h2>
             <p>{t('apply.successDesc')}</p>
+            {ref && (
+              <p className="success-ref">
+                <span>{t('apply.refLabel')}</span>
+                <strong>{`EAP-${String(ref).slice(0, 8).toUpperCase()}`}</strong>
+              </p>
+            )}
             <Link to="/" className="btn-ink">{t('apply.successBack')}</Link>
           </div>
         </div>
@@ -257,12 +271,17 @@ export default function Apply() {
             {t('apply.titlePart2')}
           </h1>
           <p className="lead">{t('apply.lead')}</p>
-          <div className={`saved-notice ${justSaved ? 'visible' : ''}`}>
-            {t('apply.saved')}
+          <div className={`draft-note ${justSaved ? 'visible' : ''}`} role="status" aria-live="polite">
+            {t('apply.draftSaved')}
           </div>
         </div>
 
         <div className="wizard" hidden={!started}>
+          <div className="wizard-count" aria-hidden="true">
+            <span>{String(step).padStart(2, '0')}</span>
+            <span className="wizard-count__of">/ 03</span>
+          </div>
+
           {/* Progress */}
           <div className="wizard-progress">
             {[1, 2, 3].map((n) => {
@@ -306,37 +325,35 @@ export default function Apply() {
             )}
           </div>
 
-          {/* Nav */}
+          {/* Nav - ruled rows rather than buttons, matching the rest of the site */}
           <div className="wizard-nav">
             <button
-              className="btn-ink-outline"
+              className="wnav wnav--back"
               onClick={goBack}
               disabled={step === 1 || submitting}
               type="button"
             >
-              {t('apply.back')}
+              <span aria-hidden="true">&#10229;</span>
+              <span>{t('apply.back').replace(/^[←\s]+/, '')}</span>
             </button>
-            <div className="spacer" />
-            {step < 3 && (
-              <button
-                className="btn-ink"
-                onClick={goNext}
-                type="button"
-              >
-                {t('apply.next')}
+
+            {step < 3 ? (
+              <button className="wnav wnav--next" onClick={goNext} type="button">
+                <span>{t('apply.continueTo')}</span>
+                <span aria-hidden="true">&#10230;</span>
               </button>
-            )}
-            {step === 3 && (
+            ) : (
               <button
-                className="btn-ink"
+                className="wnav wnav--next"
                 onClick={submitFinal}
                 disabled={submitting}
                 type="button"
               >
-                {submitting ? t('apply.submitting') : t('apply.submit')}
+                <span>{submitting ? t('apply.submitting') : t('apply.submit')}</span>
+                <span aria-hidden="true">&#10230;</span>
               </button>
             )}
-          </div>
+        </div>
         </div>
       </div>
     </div>
