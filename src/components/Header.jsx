@@ -19,20 +19,10 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Over the orb the bar is transparent, as in the reference; it only takes its
-  // background once the opening screen has scrolled away.
-  const [overOrb, setOverOrb] = useState(location.pathname === '/');
-  useEffect(() => {
-    if (location.pathname !== '/') { setOverOrb(false); return undefined; }
-    const onScroll = () => setOverOrb(window.scrollY < window.innerHeight - 90);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-    };
-  }, [location.pathname]);
+  // The bar keeps its own ground at all times. Making it transparent over the
+  // opening screen meant content scrolled visibly under it the moment the
+  // measurement of "still over the hero" drifted - and it drifted on every
+  // viewport that was not the one it had been tuned on.
 
   // Resolve the user's display name: jurors/admin carry it in app_metadata; for
   // artists it lives on their application, so fetch the most recent one.
@@ -97,7 +87,7 @@ export default function Header() {
 
   return (
     <>
-      <header className={`site-header${overOrb ? ' site-header--over-orb' : ''}`}>
+      <header className="site-header">
         <div className="container">
           <Link
             to="/"

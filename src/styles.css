@@ -60,11 +60,6 @@ input, textarea, select { font-family: inherit; }
   border-bottom: 1px solid hsla(220, 10%, 18%, 0.5);
   transition: background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease;
 }
-/* Over the opening screen the bar carries no surface of its own. */
-.site-header--over-orb {
-  background: transparent; border-bottom-color: transparent;
-  backdrop-filter: none; -webkit-backdrop-filter: none;
-}
 .site-header .container {
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
 }
@@ -2749,7 +2744,6 @@ input, textarea, select { font-family: inherit; }
   background: rgba(245, 234, 226, 0.82);
   border-bottom-color: var(--border);
 }
-:root.paper .site-header--over-orb { background: transparent; }
 :root.paper .footer,
 :root.paper .contact-block { background: var(--bg); }
 :root.paper .footer-col a,
@@ -3969,4 +3963,21 @@ input, textarea, select { font-family: inherit; }
   :root.paper .wizard-nav { grid-template-columns: 1fr; gap: 4px; }
   :root.paper .wnav--next { justify-content: space-between; }
   :root.paper .wnav--back { justify-content: flex-start; }
+}
+
+/* Stripping the bar's chrome had removed its background unconditionally, so it
+   stayed see-through once the hero was gone and content scrolled under it. It
+   is transparent only while the opening screen is behind it. */
+:root.paper .site-header {
+  background: var(--bg);
+  border-bottom: 1px solid transparent;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+:root.paper:not(.paper-home) .site-header { border-bottom-color: var(--border); }
+
+/* One quiet, always-present bar. */
+:root.paper .site-header {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: none; -webkit-backdrop-filter: none;
 }
