@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Countdown from '../components/Countdown.jsx';
+import Countdown, { useCountdown } from '../components/Countdown.jsx';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
 
@@ -22,6 +22,14 @@ const TICKER = [
 export default function Landing() {
   const { t } = useTranslation();
   const submOpen = useSubmissionsOpen(); // undefined = loading, then true/false
+
+  // The clock rides in the ticker: the one number on the page that changes while
+  // you are looking at it. Tabular figures, so the run does not jitter each tick.
+  const left = useCountdown();
+  const pad = (n) => String(n).padStart(2, '0');
+  const clock = left.expired
+    ? 'OPEN CALL CLOSED'
+    : `OPEN CALL CLOSES IN ${left.days}:${pad(left.hours)}:${pad(left.minutes)}:${pad(left.seconds)}`;
 
   return (
     <main>
@@ -87,6 +95,7 @@ export default function Landing() {
             <div className="manifest-ticker__track">
               {[0, 1].map((copy) => (
                 <span className="manifest-ticker__run" key={copy}>
+                  <span className="manifest-ticker__word is-clock">{clock}</span>
                   {TICKER.map((word, i) => (
                     <span className="manifest-ticker__word" key={i}>{word}</span>
                   ))}

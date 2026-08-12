@@ -4542,6 +4542,13 @@ input, textarea, select { font-family: inherit; }
   font-family: var(--font-body); font-size: 0.62rem;
   letter-spacing: 0.32em; text-transform: uppercase; color: var(--fg-faint);
 }
+/* The clock is the one entry that changes as you watch. Tabular figures keep the
+   run from shifting a pixel on every tick, and it carries the ink weight so the
+   eye lands on it rather than on the words around it. */
+.manifest-ticker__word.is-clock {
+  color: var(--fg); font-variant-numeric: tabular-nums;
+  letter-spacing: 0.24em;
+}
 @keyframes manifest-ticker-y {
   from { transform: translateY(0); }
   to { transform: translateY(-50%); }

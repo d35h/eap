@@ -19,14 +19,20 @@ function calcTimeLeft() {
   };
 }
 
-export default function Countdown() {
-  const { t } = useTranslation();
+// The same clock, without the markup, for callers that want to set the numbers
+// their own way - the manifesto ticker runs them as a single line.
+export function useCountdown() {
   const [time, setTime] = useState(calcTimeLeft);
-
   useEffect(() => {
     const id = setInterval(() => setTime(calcTimeLeft()), 1000);
     return () => clearInterval(id);
   }, []);
+  return time;
+}
+
+export default function Countdown() {
+  const { t } = useTranslation();
+  const time = useCountdown();
 
   const pad = (n) => String(n).padStart(2, '0');
 
