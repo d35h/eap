@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Countdown, { useCountdown } from '../components/Countdown.jsx';
+import Countdown from '../components/Countdown.jsx';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
 
@@ -23,13 +23,6 @@ export default function Landing() {
   const { t } = useTranslation();
   const submOpen = useSubmissionsOpen(); // undefined = loading, then true/false
 
-  // The clock rides in the ticker: the one number on the page that changes while
-  // you are looking at it. Tabular figures, so the run does not jitter each tick.
-  const left = useCountdown();
-  const pad = (n) => String(n).padStart(2, '0');
-  const clock = left.expired
-    ? 'OPEN CALL CLOSED'
-    : `OPEN CALL CLOSES IN ${left.days}:${pad(left.hours)}:${pad(left.minutes)}:${pad(left.seconds)}`;
 
   return (
     <main>
@@ -88,21 +81,28 @@ export default function Landing() {
             <p>{t('manifest.p4')}</p>
           </div>
 
-          {/* A slow ticker beside the statement. Duplicated once so the loop has
-              a seamless second half to hand over to; aria-hidden because it is
-              the same words the section already says. */}
-          <div className="manifest-ticker" aria-hidden="true">
-            <div className="manifest-ticker__track">
-              {[0, 1].map((copy) => (
-                <span className="manifest-ticker__run" key={copy}>
-                  <span className="manifest-ticker__word is-clock">{clock}</span>
-                  {TICKER.map((word, i) => (
-                    <span className="manifest-ticker__word" key={i}>{word}</span>
-                  ))}
-                </span>
-              ))}
+          {/* A slow ticker of the platform's own words, beside the statement.
+              Duplicated once so the loop has a seamless second half to hand over
+              to, and hidden from screen readers: it is the same words the
+              section already says. */}
+            <div className="manifest-ticker" aria-hidden="true">
+              <div className="manifest-ticker__track">
+                {[0, 1].map((copy) => (
+                  <span className="manifest-ticker__run" key={copy}>
+                    {TICKER.map((word, i) => (
+                      <span className="manifest-ticker__word" key={i}>{word}</span>
+                    ))}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
+
+          {/* The clock is a band across the section, not a note in a column:
+              four figures on rules with their units beneath. */}
+          <div className="manifest-clock">
+            <span className="manifest-clock__label">{t('opencall.deadlineLabel')}</span>
+            <Countdown />
           </div>
           <div className="manifest-facts">
             {[1, 2, 3].map((n) => {

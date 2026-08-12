@@ -4273,11 +4273,14 @@ input, textarea, select { font-family: inherit; }
 :root.paper .page-wash {
   position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
 }
+/* Anchored into the bottom-right corner and bleeding off both edges, the way a
+   wash sits on a sheet - centred on the right it read as a stripe down the side
+   rather than as a cloud gathering in the corner. */
 :root.paper .page-wash::after {
-  content: ""; position: absolute; top: -4%; right: -8%;
-  width: 62%; height: 108%;
-  background: url('/wash.png') right center / contain no-repeat;
-  opacity: 0.72;
+  content: ""; position: absolute; right: -7%; bottom: -12%;
+  width: 60%; height: 104%;
+  background: url('/wash.png') right bottom / contain no-repeat;
+  opacity: 0.94;
   animation: cx-drift 70s ease-in-out infinite alternate;
 }
 @media (max-width: 900px) {
@@ -4290,7 +4293,7 @@ input, textarea, select { font-family: inherit; }
      (the sheet is 3:4, hence 0.75 of the height) and the same amount of pigment
      lands on screen as on a wide one. */
   :root.paper .page-wash::after {
-    width: 176%; right: -56%; top: -4%; height: 108%;
+    width: 172%; right: -54%; bottom: -8%; height: 104%;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -4532,12 +4535,49 @@ input, textarea, select { font-family: inherit; }
   font-family: var(--font-body); font-size: 0.66rem; line-height: 1.3;
   letter-spacing: 0.24em; text-transform: uppercase; color: var(--fg-faint);
 }
-/* The clock is the one entry that changes as you watch. Tabular figures keep the
-   run from shifting a pixel on every tick, and it carries the ink weight so the
-   eye lands on it rather than on the words around it. */
-.manifest-ticker__word.is-clock {
-  color: var(--fg); font-variant-numeric: tabular-nums;
-  letter-spacing: 0.16em; white-space: normal;
+/* ─── The clock, as a band across the manifesto ────────────────────────────
+   Four figures set large in the display face, divided by hairlines, with their
+   units beneath, and one rule closing the block. Tabular figures so nothing
+   shifts on the tick. */
+:root.paper .manifest-clock {
+  margin-top: clamp(48px, 7vh, 88px);
+  padding-bottom: clamp(28px, 4vh, 44px);
+  border-bottom: 1px solid var(--border);
+}
+:root.paper .manifest-clock__label {
+  display: block; margin-bottom: clamp(20px, 3vh, 34px);
+  font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--fg-muted);
+}
+:root.paper .manifest-clock .countdown {
+  margin: 0; gap: 0; flex-wrap: nowrap;
+  max-width: 46rem;
+}
+/* Sized to content, not into equal thirds: days runs to three figures for most
+   of the open call and an equal cell put 231 straight through the hours rule. */
+:root.paper .manifest-clock .count-item {
+  flex: 1 1 auto; min-width: 0;
+  align-items: flex-start;
+  padding: 0 clamp(18px, 3vw, 44px);
+  border-left: 1px solid var(--border);
+}
+:root.paper .manifest-clock .count-item:first-child { padding-left: 0; border-left: none; }
+:root.paper .manifest-clock .count-item:last-child { padding-right: 0; }
+:root.paper .manifest-clock .count-num {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(2.2rem, 5.4vw, 4.6rem); line-height: 0.98;
+  letter-spacing: -0.01em; color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+:root.paper .manifest-clock .count-label {
+  margin-top: 14px;
+  font-size: 0.58rem; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--fg-faint);
+}
+@media (max-width: 640px) {
+  :root.paper .manifest-clock .count-item { padding-left: 12px; }
+  :root.paper .manifest-clock .count-num { font-size: clamp(1.9rem, 11vw, 2.9rem); }
+  :root.paper .manifest-clock .count-label { font-size: 0.54rem; letter-spacing: 0.16em; }
 }
 @keyframes manifest-ticker-y {
   from { transform: translateY(0); }
