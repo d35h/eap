@@ -2712,6 +2712,12 @@ input, textarea, select { font-family: inherit; }
   --accent-deep: #15161a;
   --border: rgba(11, 12, 14, 0.14);
   --fg-rgb: 11, 12, 14;
+  /* The cabinet is built on the ivory/ink family rather than bg/fg. Mapping the
+     four here carries most of it across without touching a single rule. */
+  --ivory: #f7f4ef;
+  --ivory-soft: #fbf9f6;
+  --ink: #0b0c0e;
+  --ink-soft: #4a4a4c;
 }
 :root.paper body { background: var(--bg); color: var(--fg); }
 
@@ -4258,3 +4264,111 @@ input, textarea, select { font-family: inherit; }
 :root.paper .mobile-menu .mm-apply:active {
   transform: none; box-shadow: none; opacity: 0.82;
 }
+
+/* ─── Cabinet on paper ─────────────────────────────────────────────────────
+   Signing in used to hand you the old dark theme mid-session, so the product
+   changed shape the moment you had an account. The cabinet now runs on the same
+   scheme as the public site. It is a working surface rather than a page to look
+   at, so it keeps its density - what changes is the chrome: rules instead of
+   raised cards, square instead of rounded, ink instead of gold. */
+:root.paper.cabinet .account-page { background: none; }
+
+/* Panels. Every one of these was a floating cream card with a soft shadow. */
+:root.paper.cabinet .tours-panel,
+:root.paper.cabinet .account-app-card,
+:root.paper.cabinet .jury-waiting,
+:root.paper.cabinet .admin-panel,
+:root.paper.cabinet .admin-confirm,
+:root.paper.cabinet .juror-card,
+:root.paper.cabinet .edition-card,
+:root.paper.cabinet .edition-summary,
+:root.paper.cabinet .invite-card,
+:root.paper.cabinet .scorecard,
+:root.paper.cabinet .jcard,
+:root.paper.cabinet .jcov,
+:root.paper.cabinet .crit,
+:root.paper.cabinet .review-app,
+:root.paper.cabinet .review-work,
+:root.paper.cabinet .review-eval,
+:root.paper.cabinet .review-locked,
+:root.paper.cabinet .review-intro,
+:root.paper.cabinet .empty-state,
+:root.paper.cabinet .artist-result,
+:root.paper.cabinet .artist-outcome,
+:root.paper.cabinet .art-arch__row,
+:root.paper.cabinet .appresults-crit,
+:root.paper.cabinet .tours-confirm,
+:root.paper.cabinet .work-file,
+:root.paper.cabinet .dash-skeleton__card {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Rows, chips, tabs, controls: square, hairline, no lift. */
+:root.paper.cabinet .pl-row,
+:root.paper.cabinet .app-row,
+:root.paper.cabinet .jrl__row,
+:root.paper.cabinet .review-row,
+:root.paper.cabinet .tours-result,
+:root.paper.cabinet .tours-select__item label,
+:root.paper.cabinet .filter-tag,
+:root.paper.cabinet .review-chip,
+:root.paper.cabinet .cycle-state,
+:root.paper.cabinet .account-app-card__status,
+:root.paper.cabinet .art-arch__badge,
+:root.paper.cabinet .tours-tab,
+:root.paper.cabinet .pager__btn,
+:root.paper.cabinet .segmented,
+:root.paper.cabinet .app-filters__search,
+:root.paper.cabinet .review-row__btn,
+:root.paper.cabinet .tours-btn,
+:root.paper.cabinet .cycle-panel__btn {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Thumbnails and image plates keep a square corner too, so a row of works reads
+   as a contact sheet rather than a set of app tiles. */
+:root.paper.cabinet .pl-row__thumb,
+:root.paper.cabinet .app-row__thumb,
+:root.paper.cabinet .jrl__thumb,
+:root.paper.cabinet .account-work__thumb,
+:root.paper.cabinet .work-file__thumb,
+:root.paper.cabinet .smartimg,
+:root.paper.cabinet .review-work__noimg { border-radius: 0; }
+
+/* The gold that survives as a literal rather than a token. Ink reads as the
+   same emphasis without pulling the eye off the work. */
+:root.paper.cabinet .account-app-card__ref,
+:root.paper.cabinet .auth-card__kicker,
+:root.paper.cabinet .account-section-label,
+:root.paper.cabinet .panel-title,
+:root.paper.cabinet .jcard__total,
+:root.paper.cabinet .artist-score__value,
+:root.paper.cabinet .tours-result__score,
+:root.paper.cabinet .review-crit__num,
+:root.paper.cabinet .work-num,
+:root.paper.cabinet .work-entry-num { color: var(--fg); }
+:root.paper.cabinet .linklike,
+:root.paper.cabinet .detail-tour__link,
+:root.paper.cabinet .detail-ig__link,
+:root.paper.cabinet .art-arch__edition {
+  color: var(--fg);
+  text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px;
+  border-bottom: none;
+}
+:root.paper.cabinet .stage--current .stage__dot,
+:root.paper.cabinet .stage--done .stage__dot,
+:root.paper.cabinet .stage__bar,
+:root.paper.cabinet .jury-progress__bar,
+:root.paper.cabinet .review-bar__track > * { background: var(--fg); }
+:root.paper.cabinet .tours-tab.active,
+:root.paper.cabinet .segmented button[aria-pressed="true"] {
+  background: var(--fg); color: var(--bg); border-color: var(--fg);
+}
+
+/* Identity block stays stacked name over email, per the house pattern. */
+:root.paper.cabinet .identity,
+:root.paper.cabinet .detail-id { display: flex; flex-direction: column; gap: 2px; }

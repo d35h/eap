@@ -19,14 +19,18 @@ import AppResults from './pages/AppResults.jsx';
 import ApplicationDetail from './pages/ApplicationDetail.jsx';
 import Jurors from './pages/Jurors.jsx';
 
-// The light scheme covers the public site. The staff cabinet keeps the dark
-// one - it is a different product with its own conventions.
+// The light scheme covers the whole product now, cabinet included: signing in
+// used to drop you into the old dark theme mid-session, which read as a
+// different site. The cabinet still skips the wash - it is a working surface,
+// not a page to look at - and carries its own `cabinet` class for the places
+// where a dense table wants tighter treatment than an editorial page.
 const CABINET = /^\/account(\/|$)/;
 
 function PaperScheme() {
   const { pathname } = useLocation();
   useLayoutEffect(() => {
-    const paper = !CABINET.test(pathname);
+    const paper = true;
+    document.documentElement.classList.toggle('cabinet', CABINET.test(pathname));
     document.documentElement.classList.toggle('paper', paper);
     // The landing drops the wordmark, since you are already there. Every other
     // page needs it - it is the way back.
@@ -34,6 +38,7 @@ function PaperScheme() {
     return () => {
       document.documentElement.classList.remove('paper');
       document.documentElement.classList.remove('paper-home');
+      document.documentElement.classList.remove('cabinet');
     };
   }, [pathname]);
   return null;
