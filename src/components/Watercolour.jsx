@@ -20,8 +20,8 @@ export default function Watercolour({ className = '', seed = 7 }) {
   // steepness: how abruptly the layer's edge resolves. Low values stay misty,
   // high values dry to a line.
   const Wash = ({ id, freq, scale, steepness, blur, children }) => (
-    <filter id={id} x="-35%" y="-35%" width="170%" height="170%">
-      <feTurbulence type="fractalNoise" baseFrequency={freq} numOctaves="6" seed={seed} result="n" />
+    <filter id={id} x="-12%" y="-12%" width="124%" height="124%">
+      <feTurbulence type="fractalNoise" baseFrequency={freq} numOctaves="3" seed={seed} result="n" />
       <feDisplacementMap in="SourceGraphic" in2="n" scale={scale} xChannelSelector="R" yChannelSelector="G" />
       <feGaussianBlur stdDeviation={blur} />
       <feComponentTransfer result="shape">
@@ -31,7 +31,7 @@ export default function Watercolour({ className = '', seed = 7 }) {
           paper's tooth in fine specks. High-frequency noise, clipped to the
           wash so it only shows where there is pigment, and multiplied in so it
           darkens rather than lightens. */}
-      <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="3" seed={seed + 11} result="grain" />
+      <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="2" seed={seed + 11} result="grain" />
       <feColorMatrix in="grain" type="matrix"
         values="0 0 0 0 0.42  0 0 0 0 0.55  0 0 0 0 0.66  0 0 0 0.35 0" result="grainTinted" />
       <feComposite in="grainTinted" in2="shape" operator="in" result="grainClipped" />

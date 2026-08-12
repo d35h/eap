@@ -3695,14 +3695,8 @@ input, textarea, select { font-family: inherit; }
 :root.paper .page-wash {
   position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
 }
-:root.paper .page-wash .wc {
-  position: absolute; top: -6%; right: -18%; width: 82%; height: 112%;
-  opacity: 0.9; animation: cx-drift 70s ease-in-out infinite alternate;
-}
 @media (max-width: 900px) {
-  :root.paper .page-wash .wc { width: 130%; right: -40%; opacity: 0.5; }
 }
-@media (prefers-reduced-motion: reduce) { :root.paper .page-wash .wc { animation: none; } }
 
 /* Footer wash: the same spill, fainter, anchored to the same right edge. */
 :root.paper .site-footer { position: relative; overflow: hidden; }
@@ -3764,9 +3758,6 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 900px) {
   /* The wash was pushed almost entirely off-canvas on a phone, so the page read
      as plain paper. Bring it back into the frame. */
-  :root.paper .page-wash .wc {
-    width: 165%; right: -46%; top: auto; bottom: -6%; height: 78%; opacity: 0.95;
-  }
   /* Hero: the name was small against the screen and the note under it was lost
      in the ink. */
   :root.paper .ed-hero { padding: 96px 20px 44px; min-height: 82vh; gap: 24px; }
@@ -3989,8 +3980,6 @@ input, textarea, select { font-family: inherit; }
 
 /* The supplied ground, and the wash kept faint over it. */
 :root.paper { --bg: #faf9f6; --rule: rgba(18, 18, 18, 0.18); }
-:root.paper .page-wash .wc { opacity: 0.72; }
-@media (max-width: 900px) { :root.paper .page-wash .wc { opacity: 0.6; } }
 
 /* With the details column gone the form stands alone: a single measure on the
    page, not a half-width column with a hole beside it. */
@@ -4147,8 +4136,26 @@ input, textarea, select { font-family: inherit; }
 
 /* The wash was reaching far enough left to sit under the reading column. Held
    to the right margin, and quieter, so nothing is read through pigment. */
-:root.paper .page-wash .wc { width: 58%; right: -10%; opacity: 0.6; }
 :root.paper main { position: relative; z-index: 2; }
 @media (max-width: 900px) {
-  :root.paper .page-wash .wc { width: 120%; right: -34%; opacity: 0.42; }
+}
+
+/* ─── Page wash ───────────────────────────────────────────────────────────
+   One rule for one element. Eight had accumulated over successive passes and
+   the one that won on a phone was not the one intended, so the wash was
+   missing there entirely. */
+:root.paper .page-wash .wc {
+  position: absolute; top: -6%; right: -12%;
+  width: 62%; height: 112%; opacity: 0.62;
+  animation: cx-drift 70s ease-in-out infinite alternate;
+}
+@media (max-width: 900px) {
+    /* Anchored low it read as absent on a phone; it now runs up the right edge
+     where there is margin rather than text. */
+  :root.paper .page-wash .wc {
+    width: 150%; right: -46%; top: auto; bottom: -8%; height: 96%; opacity: 0.6;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root.paper .page-wash .wc { animation: none; }
 }
