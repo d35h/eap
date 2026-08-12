@@ -3771,15 +3771,13 @@ input, textarea, select { font-family: inherit; }
 }
 
 /* The same wash on every inner page, held to the right edge and well back. */
-:root.paper body { position: relative; }
-/* Anchored to the end of the document rather than to the viewport: the pigment
-   settles at the foot of the page instead of travelling with the scroll. */
+/* Fixed to the viewport, so the wash stays with you down the page. Anchoring
+   it to the document foot meant it was absent from everything above. */
 :root.paper .page-wash {
-  position: absolute; left: 0; right: 0; bottom: 0; height: min(120vh, 1200px);
-  z-index: 0; pointer-events: none; overflow: hidden;
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
 }
 :root.paper .page-wash .wc {
-  position: absolute; bottom: -14%; right: -18%; width: 86%; height: 104%;
+  position: absolute; top: -6%; right: -18%; width: 82%; height: 112%;
   opacity: 0.9; animation: cx-drift 70s ease-in-out infinite alternate;
 }
 @media (max-width: 900px) {
