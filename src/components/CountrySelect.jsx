@@ -20,6 +20,8 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
   const [active, setActive] = useState(0);
   const wrapRef = useRef(null);
   const listRef = useRef(null);
+  // Where a finger went down on an option, so a drag can be told from a tap.
+  const pressRef = useRef(null);
 
   const names = useMemo(() => {
     let dn;
@@ -97,6 +99,12 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
       const up = below < Math.min(220, above);
       setPlace({ up, max: Math.max(132, Math.min(290, Math.round(up ? above : below))) });
     };
+    // On a touch device the keyboard claims the lower half of the screen the
+    // moment the field takes focus. Bringing the field up first leaves the list
+    // the whole of the space that is left, instead of a sliver above the keys.
+    if (window.matchMedia?.('(pointer: coarse)').matches) {
+      wrapRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
     measure();
     // The keyboard animates in, so one measurement at open time is too early.
     const t = setTimeout(measure, 350);
@@ -149,12 +157,23 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
               aria-selected={value === x.name}
               className={`cselect__opt ${i === active ? 'is-active' : ''} ${x.pinned ? 'is-pinned' : ''} ${value === x.name ? 'is-current' : ''}`}
               onMouseEnter={() => setActive(i)}
-              // pointerdown, not mousedown: it is the first event a finger
-              // produces, so the choice is taken before the keyboard opening or
-              // a stray scroll can move the row out from under the touch. It
-              // covers the mouse identically. preventDefault keeps focus on the
-              // field, which is what stops the list closing under us.
-              onPointerDown={(e) => { e.preventDefault(); pick(x.name, x.c); }}
+              // Taking the choice on pointerdown, with preventDefault, cancelled
+              // the gesture before the browser could decide it was a scroll - the
+              // list could not be dragged on a phone at all. The press is only
+              // recorded here; the choice is taken on release, and only if the
+              // finger stayed put. A drag scrolls, a tap picks.
+              onPointerDown={(e) => { pressRef.current = { x: e.clientX, y: e.clientY, id: e.pointerId }; }}
+              onPointerUp={(e) => {
+                const p = pressRef.current;
+                pressRef.current = null;
+                if (!p || p.id !== e.pointerId) return;
+                if (Math.hypot(e.clientX - p.x, e.clientY - p.y) > 10) return;
+                e.preventDefault();
+                pick(x.name, x.c);
+              }}
+              // Mouse only: keeps focus on the field so the list does not close
+              // under the pointer. Touch scrolling is unaffected by this.
+              onMouseDown={(e) => e.preventDefault()}
             >
               {x.name}
               {value === x.name && <span className="cselect__check" aria-hidden="true">✓</span>}

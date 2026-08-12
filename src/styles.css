@@ -3504,8 +3504,15 @@ input, textarea, select { font-family: inherit; }
    hanging off the bottom of the window. */
 .cselect.is-up .cselect__list { top: auto; bottom: calc(100% + 6px); }
 /* Height is set inline from the space visualViewport reports, so the keyboard
-   cannot swallow the list. This is the ceiling if that measurement is missing. */
-.cselect__list { max-height: min(290px, 46svh); }
+   cannot swallow the list. This is the ceiling if that measurement is missing.
+   `contain` stops a flick at either end of the list scrolling the page behind
+   it, which on a phone reads as the list refusing to move. */
+.cselect__list {
+  max-height: min(290px, 46svh);
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
 
 /* Placeholders that outrun their field were being clipped mid-word. */
 :root.paper input::placeholder { text-overflow: ellipsis; }
@@ -3529,9 +3536,12 @@ input, textarea, select { font-family: inherit; }
 :root.paper #team { padding-top: clamp(110px, 13vh, 200px); }
 
 /* Clicking a control left its focus ring drawn as a stray line. Keyboard users
-   still get a ring; pointer clicks do not. */
+   still get a ring; pointer clicks do not.
+   The :not(:focus-visible) pair was grouped with :focus-visible and handed the
+   same outline, which is the opposite of the intent - every button on the site
+   drew a 2px rectangle the moment it was clicked. */
 :root.paper button:focus:not(:focus-visible),
-:root.paper a:focus:not(:focus-visible),
+:root.paper a:focus:not(:focus-visible) { outline: none; }
 :root.paper button:focus-visible,
 :root.paper a:focus-visible { outline: 2px solid var(--fg); outline-offset: 3px; }
 
@@ -3824,10 +3834,28 @@ input, textarea, select { font-family: inherit; }
 :root.paper .wstep.active .num { color: var(--fg); }
 :root.paper .wstep.active { box-shadow: inset 0 -2px 0 var(--fg); }
 @media (max-width: 720px) {
+  /* Stacked, the steps kept the divider meant for a row - a stray vertical line
+     down the right - and the active step's underline ran the full width straight
+     into the label below it. Rows on hairlines instead, each one "ШАГ N ИЗ 3"
+     beside its name, and the current one carried by weight rather than a rule. */
   :root.paper:not(.paper-home) .wizard-progress { grid-auto-flow: row; grid-auto-columns: auto; }
-  :root.paper .wizard-progress { padding-top: 20px; }
-  :root.paper .wstep { padding: 0 14px 16px; }
+  :root.paper .wizard-progress { padding: 6px clamp(20px, 5vw, 28px) 0; }
+  :root.paper .wstep {
+    display: grid; grid-template-columns: 6.6rem 1fr;
+    align-items: baseline; gap: 0 14px;
+    padding: 15px 0; text-align: left;
+    border-right: none; border-bottom: 1px solid var(--border);
+    box-shadow: none;
+  }
   :root.paper .wstep:first-child { padding-left: 0; }
+  :root.paper .wstep:last-child { border-bottom: none; }
+  :root.paper .wstep.active { box-shadow: none; }
+  :root.paper .wstep .name { font-size: 1.12rem; }
+  :root.paper .wstep.active .name { color: var(--fg); }
+  :root.paper .wstep.active .num { color: var(--fg); }
+  /* The wizard already names the step in the tracker; repeating it as a section
+     label directly underneath said the same thing twice on one screen. */
+  :root.paper .wizard-body .wizard-section-label { display: none; }
 }
 
 /* One ground from the last section through the footer - the CTA band was on
@@ -4276,25 +4304,73 @@ input, textarea, select { font-family: inherit; }
 :root.paper .logo__full { display: none; }
 :root.paper .logo__short {
   display: inline-block;
-  /* A hairline box around the mark, the way a stamp sits on a sheet. */
-  padding: 7px 11px 5px; border: 1px solid var(--fg);
-  font-size: 0.92em; line-height: 1; letter-spacing: 0.04em;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  line-height: 1; letter-spacing: 0.04em;
+  transition: opacity 0.25s ease;
 }
-:root.paper .logo:hover .logo__short { background: var(--fg); color: var(--bg); }
-/* The signed-in initial is the same stamp at the other end of the bar: same
-   hairline, same face, same height, square rather than a circle. */
+:root.paper .logo:hover .logo__short { opacity: 0.6; }
+/* ─── Signed in: initials and the panel under them ────────────────────────
+   Initials with a chevron, set on a rule that thickens when the panel is open,
+   and divided from the language switch by a hairline. No box and no circle: the
+   mark at the other end of the bar is the only stamp, and a single letter in a
+   frame read as a placeholder next to it. */
+:root.paper .account-menu { position: relative; }
+:root.paper .account-menu::before {
+  content: ""; position: absolute; left: -18px; top: 50%;
+  transform: translateY(-50%); width: 1px; height: 18px; background: var(--border);
+}
 :root.paper .account-avatar {
-  width: auto; min-width: 2.4em; height: auto; border-radius: 0;
-  padding: 7px 11px 5px;
-  border: 1px solid var(--fg); background: none; color: var(--fg);
-  font-family: var(--font-display); font-weight: 400;
-  font-size: 1.4rem; line-height: 1; letter-spacing: 0.04em;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  width: auto; height: auto; min-width: 0; border-radius: 0;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 0 7px; background: none;
+  border: none; border-bottom: 1px solid transparent; color: var(--fg);
+  font-family: var(--font-body); font-weight: 500;
+  font-size: 0.66rem; line-height: 1; letter-spacing: 0.2em;
+  transition: border-color 0.2s ease, opacity 0.2s ease;
 }
-:root.paper .account-avatar:hover,
-:root.paper .account-avatar.open,
-:root.paper .account-avatar.active { background: var(--fg); color: var(--bg); }
+:root.paper .account-avatar:hover { background: none; color: var(--fg); opacity: 0.65; }
+:root.paper .account-avatar.open {
+  background: none; color: var(--fg); border-bottom-color: var(--fg); border-bottom-width: 2px;
+}
+/* The default focus ring drew a rectangle round the initials, which read as a
+   second stamp beside the mark. The rule under them is the indicator. */
+:root.paper .account-avatar:focus { outline: none; }
+:root.paper .account-avatar:focus-visible { outline: none; border-bottom-color: var(--fg); }
+:root.paper .account-avatar__chev { transition: transform 0.24s ease; }
+:root.paper .account-avatar.open .account-avatar__chev { transform: rotate(180deg); }
+
+/* The panel hangs off the bar, square and on hairlines, with each action on its
+   own rule and an arrow at the end of it. */
+:root.paper .account-dropdown {
+  top: calc(100% + 10px); min-width: 252px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 0;
+  padding: 22px 22px 4px;
+  box-shadow: 0 20px 48px rgba(11, 12, 14, 0.08);
+}
+:root.paper .account-dropdown-id {
+  padding: 0 0 15px; margin-bottom: 0; border-bottom: 1px solid var(--border);
+}
+:root.paper .account-dropdown-name {
+  font-family: var(--font-body); font-weight: 500; font-size: 0.66rem;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg);
+}
+:root.paper .account-dropdown-email {
+  margin-top: 7px; font-family: var(--font-body);
+  font-size: 0.74rem; letter-spacing: 0; color: var(--fg-muted);
+}
+:root.paper .account-dropdown-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  border-radius: 0; border-bottom: 1px solid var(--border);
+  padding: 14px 0; color: var(--fg);
+  font-size: 0.62rem; letter-spacing: 0.2em;
+  transition: opacity 0.2s ease;
+}
+/* Nothing under the last action - the panel's own edge closes the list. */
+:root.paper .account-dropdown-item:last-child { border-bottom: none; }
+:root.paper .account-dropdown-item:hover { background: none; color: var(--fg); opacity: 0.6; }
+:root.paper .account-dropdown-arrow {
+  font-size: 0.95rem; color: var(--fg-muted); transition: transform 0.22s ease;
+}
+:root.paper .account-dropdown-item:hover .account-dropdown-arrow { transform: translateX(5px); }
 
 /* One positioned layer for the routed page, so anything decorative behind it
    stays behind it. */
@@ -4534,6 +4610,7 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 1024px) {
   /* Lying under the statement it is a band, not a column: four across, and the
      rule moves from the side to the top. */
+  :root.paper .manifest-clock__label { font-size: 0.72rem; letter-spacing: 0.18em; }
   :root.paper .manifest-clock {
     flex: 0 0 auto; width: 100%;
     padding: clamp(26px, 4vh, 38px) 0 0;

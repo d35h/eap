@@ -72,6 +72,15 @@ export default function Header() {
     return () => { document.body.style.overflow = ''; };
   }, [menuOpen, langSheetOpen]);
 
+  // Two letters where there are two words, one otherwise. A single initial in a
+  // box read as a placeholder; the pair reads as a person.
+  const initials = (() => {
+    const parts = (displayName || '').trim().split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (user?.email || '?').slice(0, 2).toUpperCase();
+  })();
+
   const chooseLang = (code) => { setLang(code); setLangSheetOpen(false); };
   const currentLang = LANGUAGES.find((l) => l.code === lang) || LANGUAGES[0];
 
@@ -159,9 +168,11 @@ export default function Header() {
                     onClick={() => setAccountMenuOpen((o) => !o)}
                     aria-label={t('account.nav')}
                     aria-expanded={accountMenuOpen}
-                    title={displayName || user.email}
                   >
-                    {(displayName || user.email || '?').charAt(0).toUpperCase()}
+                    <span className="account-avatar__initials">{initials}</span>
+                    <svg className="account-avatar__chev" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
                   </button>
                   {accountMenuOpen && (
                     <div className="account-dropdown">
@@ -170,10 +181,12 @@ export default function Header() {
                         <span className="account-dropdown-email">{user.email}</span>
                       </div>
                       <Link to="/account" className="account-dropdown-item" onClick={() => setAccountMenuOpen(false)}>
-                        {t('account.nav')}
+                        <span>{t('account.nav')}</span>
+                        <span className="account-dropdown-arrow" aria-hidden="true">&#10230;</span>
                       </Link>
                       <button type="button" className="account-dropdown-item" onClick={handleLogout}>
-                        {t('account.signOut')}
+                        <span>{t('account.signOut')}</span>
+                        <span className="account-dropdown-arrow" aria-hidden="true">&#10230;</span>
                       </button>
                     </div>
                   )}
