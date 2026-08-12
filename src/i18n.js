@@ -78,7 +78,7 @@ export const translations = {
       step3Desc: 'Все заявки проходят рассмотрение независимым жюри из кураторов и художников. Результаты приходят на email и в личный кабинет. Обратная связь - каждому участнику.',
       step3Meta: 'Апрель–июнь 2027',
       step4Title: 'Что вы получите',
-      step4Desc: 'Отобранные работы - физическая выставка осенью 2027 и каталог. Остальные работы - цифровая программа платформы.',
+      step4Desc: '100 лучших работ будут представлены на международной выставке и включены в официальный каталог. Остальные принятые работы станут частью цифровой экспозиции Eurasia Art Platform.',
       step4Meta: 'Никто не уходит с пустыми руками',
     },
     manifest: {
@@ -439,7 +439,7 @@ export const translations = {
       step3Desc: 'All applications are reviewed by an independent jury of curators and artists. Results arrive via email and personal account. Feedback for every participant.',
       step3Meta: 'April–June 2027',
       step4Title: 'What you get',
-      step4Desc: 'Selected works - physical exhibition autumn 2027 and catalog. Other works - digital program.',
+      step4Desc: 'The 100 strongest works will be shown at the international exhibition and included in the official catalogue. Every other accepted work becomes part of the Eurasia Art Platform digital exhibition.',
       step4Meta: 'No one leaves empty-handed',
     },
     manifest: {
@@ -793,7 +793,7 @@ export const translations = {
       step3Desc: 'Барлық өтінімдер тәуелсіз жюридің қарауынан өтеді. Нәтижелер email арқылы келеді.',
       step3Meta: '2027 сәуір–маусым',
       step4Title: 'Сіз алатын нәрсе',
-      step4Desc: 'Іріктелген жұмыстар - 2027 күздегі физикалық көрме және каталог. Қалғаны - сандық бағдарлама.',
+      step4Desc: 'Ең үздік 100 жұмыс халықаралық көрмеде ұсынылып, ресми каталогқа енеді. Қабылданған қалған жұмыстар Eurasia Art Platform сандық экспозициясының бөлігі болады.',
       step4Meta: 'Ешкім бос қол қайтпайды',
     },
     manifest: {
@@ -1146,7 +1146,7 @@ export const translations = {
       step3Desc: '所有申请由策展人和艺术家组成的独立评审团审阅。结果通过电子邮件和个人账户发送。每位参与者都会收到反馈。',
       step3Meta: '2027 年 4 月–6 月',
       step4Title: '您将获得',
-      step4Desc: '入选作品——2027 年秋季实体展览及画册。其他作品——数字项目。',
+      step4Desc: '最优秀的 100 件作品将在国际展览中展出并收入官方画册。其余入选作品将成为 Eurasia Art Platform 数字展览的一部分。',
       step4Meta: '没有人空手而归',
     },
     manifest: {
