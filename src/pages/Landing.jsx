@@ -12,6 +12,13 @@ const JURY = [
   { name: 'Anish Kapoor', photo: '/jury/kapoor.jpg' },
 ];
 
+// The ticker beside the manifesto. Latin throughout so it reads the same in all
+// four locales - it is a mark, not copy, and it is hidden from screen readers.
+const TICKER = [
+  'CONTEMPORARY ART', 'EURASIA', 'OPEN CALL', 'EXHIBITIONS',
+  'CURATORIAL PROJECTS', 'NEW NAMES', 'DIGITAL PROGRAMME',
+];
+
 export default function Landing() {
   const { t } = useTranslation();
   const submOpen = useSubmissionsOpen(); // undefined = loading, then true/false
@@ -58,6 +65,7 @@ export default function Landing() {
       {/* MANIFEST */}
       <section className="block manifest">
         <div className="container">
+          <div className="manifest-lede">
           <div className="manifest-text">
             <span className="eyebrow">{t('manifest.eyebrow')}</span>
             <h2>
@@ -70,6 +78,22 @@ export default function Landing() {
             <p>{t('manifest.p2')}</p>
             <p>{t('manifest.p3')}</p>
             <p>{t('manifest.p4')}</p>
+          </div>
+
+          {/* A slow ticker beside the statement. Duplicated once so the loop has
+              a seamless second half to hand over to; aria-hidden because it is
+              the same words the section already says. */}
+          <div className="manifest-ticker" aria-hidden="true">
+            <div className="manifest-ticker__track">
+              {[0, 1].map((copy) => (
+                <span className="manifest-ticker__run" key={copy}>
+                  {TICKER.map((word, i) => (
+                    <span className="manifest-ticker__word" key={i}>{word}</span>
+                  ))}
+                </span>
+              ))}
+            </div>
+          </div>
           </div>
           <div className="manifest-facts">
             {[1, 2, 3].map((n) => {
