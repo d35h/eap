@@ -15,7 +15,7 @@ export default function SetPassword() {
     return (
       <main className="apply-page">
         <div className="container">
-          <p className="eyebrow">- {t('account.nav')}</p>
+          <p className="eyebrow">{t('account.nav')}</p>
           <p>{t('account.notConfigured')}</p>
         </div>
       </main>

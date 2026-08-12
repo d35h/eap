@@ -61,8 +61,29 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
     if (el) el.scrollIntoView({ block: 'nearest' });
   }, [active, open]);
 
+  // Open upwards when the field sits low on the screen. Dropping down from there
+  // ran the list off the bottom of the window, and the options underneath it
+  // could not be reached without scrolling the list out from under the pointer.
+  const [up, setUp] = useState(false);
+  useEffect(() => {
+    if (!open) { setUp(false); return undefined; }
+    const measure = () => {
+      const r = wrapRef.current?.getBoundingClientRect();
+      if (!r) return;
+      const below = window.innerHeight - r.bottom;
+      setUp(below < 300 && r.top > below);
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    window.addEventListener('scroll', measure, true);
+    return () => {
+      window.removeEventListener('resize', measure);
+      window.removeEventListener('scroll', measure, true);
+    };
+  }, [open]);
+
   return (
-    <div className={`cselect ${open ? 'is-open' : ''}`} ref={wrapRef}>
+    <div className={`cselect ${open ? 'is-open' : ''} ${up ? 'is-up' : ''}`} ref={wrapRef}>
       <input
         type="text"
         role="combobox"

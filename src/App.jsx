@@ -75,6 +75,12 @@ export default function App() {
       <ScrollToTop />
       <VersionWatcher />
       <Header />
+      {/* The wash is a fixed, positioned layer; page copy is plain static flow,
+          which paints *below* any positioned sibling. That is why paragraphs went
+          pale wherever the pigment crossed them - the pigment was on top of the
+          letters. Giving the routed page its own positioned layer puts the text
+          back above the wash. */}
+      <div className="page-body">
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/apply" element={<Apply />} />
@@ -93,6 +99,7 @@ export default function App() {
         <Route path="/account/jurors" element={<Jurors />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      </div>
       <Footer />
     </>
   );

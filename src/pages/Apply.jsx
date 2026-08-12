@@ -262,24 +262,31 @@ export default function Apply() {
       <div className="container">
         {!started && (
           <div className="apply-intro">
-            <span className="eyebrow">{t('apply.eyebrow')}</span>
-            <h1 className="apply-intro__title">{t('apply.introTitle')}</h1>
-            <p className="apply-intro__lead">{t('apply.introLead')}</p>
-            <p className="apply-intro__meta">{t('apply.introMeta')}</p>
-
-            <div className="apply-intro__need">
-              <span className="apply-intro__needTitle">{t('apply.introNeedTitle')}</span>
-              <ul>
-                <li>{t('apply.introNeed1')}</li>
-                <li>{t('apply.introNeed2')}</li>
-                <li>{t('apply.introNeed3')}</li>
-              </ul>
+            {/* No eyebrow here: "Подача заявки" over "Заявка для художников" was
+                the same sentence twice, and every extra line pushed the way in
+                further down the screen. */}
+            <div className="apply-intro__lede">
+              <h1 className="apply-intro__title">{t('apply.introTitle')}</h1>
+              <p className="apply-intro__lead">{t('apply.introLead')}</p>
+              <p className="apply-intro__meta">{t('apply.introMeta')}</p>
             </div>
 
-            <button type="button" className="apply-intro__start" onClick={() => setStarted(true)}>
-              <span>{t('apply.introStart')}</span>
-              <span aria-hidden="true">&#10230;</span>
-            </button>
+            <div className="apply-intro__aside">
+              <span className="apply-intro__needTitle">{t('apply.introNeedTitle')}</span>
+              <ol className="apply-intro__need">
+                {[t('apply.introNeed1'), t('apply.introNeed2'), t('apply.introNeed3')].map((item, i) => (
+                  <li key={i}>
+                    <span className="apply-intro__n" aria-hidden="true">{`0${i + 1}`}</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ol>
+
+              <button type="button" className="apply-intro__start" onClick={() => setStarted(true)}>
+                <span>{t('apply.introStart')}</span>
+                <span className="apply-intro__arrow" aria-hidden="true">&#10230;</span>
+              </button>
+            </div>
           </div>
         )}
 
@@ -431,9 +438,12 @@ function Step1({ form, update, errors, t }) {
           <CountrySelect
             value={form.country}
             placeholder={t('apply.countryPh')}
+            // Step1 has `update`, not `setForm` - calling setForm here threw on
+            // every pick, so the list never closed and the field fell back to the
+            // default country. Two functional updates apply cleanly in sequence.
             onChange={(name, code) => {
-              setForm((f) => ({ ...f, country: name, countryCode: code || '' }));
-              if (errors.country) setErrors((e) => ({ ...e, country: null }));
+              update('country', name);
+              update('countryCode', code || '');
             }}
           />
         </div>

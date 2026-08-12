@@ -15,7 +15,7 @@ export default function Process() {
   return (
     <div className="process-page">
       <div className="container">
-        <span className="eyebrow">- {t('nav.process')}</span>
+        <span className="eyebrow">{t('nav.process')}</span>
         <h1>
           {t('processPage.titlePart1')}
           <em>{t('processPage.titleEm')}</em>

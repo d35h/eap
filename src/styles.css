@@ -2720,7 +2720,6 @@ input, textarea, select { font-family: inherit; }
   backdrop-filter: none; -webkit-backdrop-filter: none;
 }
 /* The reference's bar is two words. Everything that reads as chrome goes. */
-:root.paper-home .logo,
 :root.paper .header-auth,
 :root.paper .btn-ghost-sm,
 :root.paper .site-header .lang-switch .sep { display: none; }
@@ -2905,6 +2904,9 @@ input, textarea, select { font-family: inherit; }
   letter-spacing: -0.02em; margin-bottom: 20px;
 }
 :root.paper .section-intro { max-width: 60ch; font-size: 1.08rem; line-height: 1.65; color: var(--fg-muted); }
+/* The jury note is one sentence; the 60ch cap broke it over three lines right
+   under the heading. Let it run the width of the column. */
+:root.paper #team .section-intro { max-width: none; }
 
 /* Steps become hairline-separated rows rather than boxes in a grid. */
 :root.paper .process-steps {
@@ -3087,6 +3089,15 @@ input, textarea, select { font-family: inherit; }
   background: none; border: none; border-left: 2px solid var(--fg);
   border-radius: 0; padding: 4px 0 4px 18px; color: var(--fg-muted);
 }
+/* The link inside the banner read as plain text - nothing marked it clickable. */
+:root.paper .info-banner a, :root.paper .apply-email-notice a {
+  color: var(--fg); text-decoration: underline;
+  text-underline-offset: 3px; text-decoration-thickness: 1px;
+  border-bottom: none;
+}
+:root.paper .info-banner a:hover, :root.paper .apply-email-notice a:hover {
+  border-bottom: none; opacity: 0.65;
+}
 :root.paper .auth-card, :root.paper .process-cta,
 :root.paper .apply-card, :root.paper .wizard, :root.paper .wizard-card {
   background: none; border: 1px solid var(--border);
@@ -3154,8 +3165,20 @@ input, textarea, select { font-family: inherit; }
 :root.paper .contact-form { align-items: start; }
 :root.paper .contact-form textarea { min-height: 150px; resize: vertical; }
 
+/* Transparent, not painted: body already carries the paper ground, and an opaque
+   panel here would hide the wash that sits between the two. */
 :root.paper .apply-page,
-:root.paper .auth-page { background: var(--bg); color: var(--fg); }
+:root.paper .auth-page { background: none; color: var(--fg); }
+/* The card was centred inside a box that started 80px down (the bar sits in
+   flow) and carried 140px of top padding against 80px at the foot, so it landed
+   well below the middle of the screen and its foot ran off the bottom. Fill only
+   the space the bar leaves, and pad it evenly. */
+:root.paper .auth-page {
+  min-height: calc(100svh - 80px); padding: 40px 20px;
+}
+@media (max-width: 640px) {
+  :root.paper .auth-page { min-height: calc(100svh - 85px); padding: 28px 20px; }
+}
 :root.paper .apply-page .eyebrow { color: var(--fg-muted); }
 
 /* ─── Contact: catalogue metadata, not a card ─────────────────────────────
@@ -3423,6 +3446,11 @@ input, textarea, select { font-family: inherit; }
 :root.paper .cselect__check { color: var(--fg); }
 :root.paper .cselect__chev { color: var(--fg-muted); right: 20px; }
 :root.paper .cselect input { padding-right: 46px !important; }
+/* Low on the page the list has nowhere to fall, so it opens upwards instead of
+   hanging off the bottom of the window. */
+.cselect.is-up .cselect__list { top: auto; bottom: calc(100% + 6px); }
+/* Never taller than the room actually available. */
+.cselect__list { max-height: min(290px, 46svh); }
 
 /* Placeholders that outrun their field were being clipped mid-word. */
 :root.paper input::placeholder { text-overflow: ellipsis; }
@@ -3743,8 +3771,16 @@ input, textarea, select { font-family: inherit; }
 
 /* One ground from the last section through the footer - the CTA band was on
    --bg-soft while the footer was on --bg, which showed as a seam. */
-:root.paper .process-cta { background: var(--bg); border-color: var(--border); }
-:root.paper .contact-block, :root.paper .cx { background: var(--bg); }
+:root.paper .process-cta { background: none; border-color: var(--border); }
+:root.paper .contact-block, :root.paper .cx { background: none; }
+/* Panels painted in the page colour hid the wash entirely once the copy moved
+   above it. Rules instead of slabs: same reading order, pigment still visible. */
+:root.paper .process-detail-list { background: none; gap: 0; }
+:root.paper .process-detail-item {
+  background: none; padding: 52px 0;
+  border-top: 1px solid var(--border);
+}
+:root.paper .process-detail-item:last-child { border-bottom: 1px solid var(--border); }
 
 /* ─── Mobile ──────────────────────────────────────────────────────────────*/
 @media (max-width: 1280px) {
@@ -3755,7 +3791,6 @@ input, textarea, select { font-family: inherit; }
   :root.paper .header-apply,
   :root.paper .header-apply--closed,
   :root.paper .header-login { display: none !important; }
-  :root.paper-home .logo { display: inline-block; }
 }
 
 @media (max-width: 900px) {
@@ -3801,39 +3836,62 @@ input, textarea, select { font-family: inherit; }
 /* ─── Application: the opening screen ─────────────────────────────────────
    A form that opens with every field visible reads as a wall. This states the
    shape of the task first - how many sections, roughly how long, what to have
-   to hand - and only then asks for anything. */
-:root.paper .apply-intro { max-width: 44rem; padding: clamp(8px, 3vh, 32px) 0 0; }
+   to hand - and only then asks for anything.
+   Two columns, the way the contact page and the reference multi-step forms are
+   set: the statement on the left, what you need plus the way in on the right.
+   Stacked in one narrow ribbon it read as a leaflet. */
+:root.paper .apply-intro {
+  display: grid; align-items: start;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(40px, 6vw, 104px);
+  max-width: 1120px; padding: clamp(8px, 3vh, 40px) 0 0;
+}
 :root.paper .apply-intro__title {
-  margin: 18px 0 14px; font-family: var(--font-display); font-weight: 400;
-  font-size: clamp(2.1rem, 5vw, 3.6rem); line-height: 1.04; letter-spacing: -0.018em;
+  margin: 0 0 18px; font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(2.4rem, 5.4vw, 4.4rem); line-height: 1.02; letter-spacing: -0.022em;
 }
-:root.paper .apply-intro__lead { margin: 0 0 10px; font-size: 1.06rem; color: var(--fg-muted); }
+:root.paper .apply-intro__lead {
+  margin: 0 0 22px; font-size: clamp(1.02rem, 1.5vw, 1.18rem);
+  line-height: 1.55; color: var(--fg-muted); max-width: 30ch;
+}
 :root.paper .apply-intro__meta {
-  margin: 0 0 clamp(34px, 5vh, 54px);
-  font-size: 0.66rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-faint);
+  margin: 0; padding-top: 20px; border-top: 1px solid var(--border);
+  font-size: 0.64rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-faint);
 }
-:root.paper .apply-intro__need { border-top: 1px solid var(--border); padding-top: 24px; }
 :root.paper .apply-intro__needTitle {
-  display: block; margin-bottom: 16px;
-  font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-muted);
+  display: block; padding-bottom: 18px;
+  font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-faint);
 }
-:root.paper .apply-intro__need ul { margin: 0; padding: 0; list-style: none; }
+/* Numbered rules rather than bullets: the same counting language the wizard
+   itself uses, so the two screens read as one document. */
+:root.paper .apply-intro__need { margin: 0; padding: 0; list-style: none; }
 :root.paper .apply-intro__need li {
-  padding: 11px 0; font-size: 1rem; color: var(--fg);
-  border-bottom: 1px solid var(--border);
+  display: grid; grid-template-columns: 3.2rem 1fr; align-items: baseline; gap: 4px;
+  padding: 16px 0; font-size: 1.02rem; line-height: 1.4; color: var(--fg);
+  border-top: 1px solid var(--border);
+}
+:root.paper .apply-intro__need li:last-child { border-bottom: 1px solid var(--border); }
+:root.paper .apply-intro__n {
+  font-family: var(--font-display); font-size: 0.82rem;
+  letter-spacing: 0.06em; color: var(--fg-faint);
 }
 :root.paper .apply-intro__start {
   display: flex; align-items: center; justify-content: space-between; gap: 20px;
-  width: 100%; max-width: 30rem; margin-top: clamp(34px, 5vh, 52px);
+  width: 100%; margin-top: clamp(30px, 4.5vh, 46px);
   background: none; border: none; border-bottom: 1px solid var(--fg); border-radius: 0;
-  padding: 17px 0; cursor: pointer; color: var(--fg);
+  padding: 18px 0; cursor: pointer; color: var(--fg);
   font-family: var(--font-body); font-size: 0.72rem;
-  letter-spacing: 0.2em; text-transform: uppercase;
+  letter-spacing: 0.22em; text-transform: uppercase;
   transition: opacity 0.22s ease;
 }
-:root.paper .apply-intro__start span:last-child { font-size: 1.15rem; transition: transform 0.22s ease; }
+:root.paper .apply-intro__arrow { font-size: 1.15rem; transition: transform 0.22s ease; }
 :root.paper .apply-intro__start:hover { opacity: 0.72; }
-:root.paper .apply-intro__start:hover span:last-child { transform: translateX(6px); }
+:root.paper .apply-intro__start:hover .apply-intro__arrow { transform: translateX(6px); }
+
+@media (max-width: 860px) {
+  :root.paper .apply-intro { grid-template-columns: 1fr; gap: 38px; }
+  :root.paper .apply-intro__lead { max-width: none; }
+}
 
 /* ─── Application: counter, navigation, draft note, reference ─────────────*/
 :root.paper .wizard-count {
@@ -4163,10 +4221,40 @@ input, textarea, select { font-family: inherit; }
   animation: cx-drift 70s ease-in-out infinite alternate;
 }
 @media (max-width: 900px) {
+  /* Bigger and stronger on a phone. Scaled to the same fraction of the frame as
+     on a desktop the pigment read as a faint smudge at the edge. */
   :root.paper .page-wash::after {
-    width: 128%; right: -34%; top: -6%; height: 112%; opacity: 0.6;
+    width: 172%; right: -46%; top: -8%; height: 120%; opacity: 0.88;
   }
 }
 @media (prefers-reduced-motion: reduce) {
   :root.paper .page-wash::after { animation: none; }
+}
+
+/* One mark, everywhere. The bar used to be blank on the landing and spell the
+   name out in full on /process and /faq, so the brand changed shape depending on
+   which menu item you had clicked. It is EAP on every page now. */
+:root.paper .logo__full { display: none; }
+:root.paper .logo__short { display: inline; }
+
+/* Routed page copy is plain static flow. Static content paints below every
+   positioned sibling, so the fixed wash was landing on top of the letters and
+   bleaching whole phrases wherever the pigment crossed a paragraph. One
+   positioned layer for the page puts the type back above the pigment. */
+.page-body { position: relative; z-index: 1; }
+
+/* The menu's apply action kept the dark theme's gold gradient and glow, which
+   on paper reads as a stray metallic slab. Same treatment as everywhere else:
+   solid ink, square, with a travelling arrow. */
+:root.paper .mobile-menu .mm-apply {
+  background: var(--fg) !important;
+  color: var(--bg) !important;
+  border: 1px solid var(--fg) !important;
+  border-radius: 0; box-shadow: none;
+  justify-content: space-between !important;
+  padding: 18px 22px !important;
+  font-weight: 500; letter-spacing: 0.18em;
+}
+:root.paper .mobile-menu .mm-apply:active {
+  transform: none; box-shadow: none; opacity: 0.82;
 }

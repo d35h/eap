@@ -216,7 +216,6 @@ function ContactBlock() {
     <section className="cx" id="contact">
       <div className="cx__inner">
         <div className="cx__left">
-          <span className="cx__eyebrow">{t('contact.eyebrow')}</span>
           <h2 className="cx__title">{t('contact.lead')}</h2>
 
           <form className="cx__form" onSubmit={submit} noValidate>

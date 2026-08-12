@@ -131,7 +131,6 @@ export default function Header() {
             <Link to="/faq" className={location.pathname === '/faq' ? 'active' : ''}>
               {t('nav.faq')}
             </Link>
-            <a onClick={() => goToSection('contact')}>{t('nav.contact')}</a>
           </nav>
 
           <div className="header-right">
@@ -246,7 +245,6 @@ export default function Header() {
           <Link to="/faq" onClick={() => setMenuOpen(false)}>
             {t('nav.faq')}
           </Link>
-          <button onClick={() => goToSection('contact')}>{t('nav.contact')}</button>
           {isSupabaseConfigured() && !authLoading && (
             user ? (
               <>
