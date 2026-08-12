@@ -91,7 +91,10 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
       const viewH = vv ? vv.height : window.innerHeight;
       const below = viewTop + viewH - r.bottom - 12;
       const above = r.top - viewTop - 12;
-      const up = above > below;
+      // Flip up only when dropping down genuinely will not work. Preferring
+      // whichever side is merely larger sent the list upwards over the whole
+      // form on a desktop, where the two are within a few pixels of each other.
+      const up = below < Math.min(220, above);
       setPlace({ up, max: Math.max(132, Math.min(290, Math.round(up ? above : below))) });
     };
     measure();
@@ -119,7 +122,10 @@ export default function CountrySelect({ value = '', onChange, placeholder, error
         aria-autocomplete="list"
         autoComplete="off"
         className={error ? 'error' : ''}
-        placeholder={placeholder}
+        // Opening clears the field so you can type to filter, which made the
+        // country you had already chosen look as though it had been thrown away.
+        // It stays visible as the placeholder until you type over it.
+        placeholder={open && value ? value : placeholder}
         value={open ? query : value}
         onChange={(e) => { setQuery(e.target.value); onChange(e.target.value, ''); setOpen(true); setActive(0); }}
         onFocus={reveal}
