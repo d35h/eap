@@ -4313,10 +4313,12 @@ input, textarea, select { font-family: inherit; }
    and divided from the language switch by a hairline. No box and no circle: the
    mark at the other end of the bar is the only stamp, and a single letter in a
    frame read as a placeholder next to it. */
-:root.paper .account-menu { position: relative; }
+/* The divider sat 18px out against a 20px gap, so it was all but touching the
+   last language. It gets a gap of its own to stand in the middle of. */
+:root.paper .account-menu { position: relative; margin-left: 26px; }
 :root.paper .account-menu::before {
-  content: ""; position: absolute; left: -18px; top: 50%;
-  transform: translateY(-50%); width: 1px; height: 18px; background: var(--border);
+  content: ""; position: absolute; left: -23px; top: 50%;
+  transform: translateY(-50%); width: 1px; height: 16px; background: var(--border);
 }
 :root.paper .account-avatar {
   width: auto; height: auto; min-width: 0; border-radius: 0;
