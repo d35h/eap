@@ -4372,3 +4372,21 @@ input, textarea, select { font-family: inherit; }
 /* Identity block stays stacked name over email, per the house pattern. */
 :root.paper.cabinet .identity,
 :root.paper.cabinet .detail-id { display: flex; flex-direction: column; gap: 2px; }
+
+/* ─── Phone ergonomics ─────────────────────────────────────────────────────
+   Three things a sweep on an iPhone 13 turned up: the hero's way in was a 22px
+   strip of text, the founders' roles set at ~10px, and the send label barely
+   above that. Type that small is a design choice on a desktop and a squint on a
+   phone; a 22px target is a miss waiting to happen. */
+@media (max-width: 640px) {
+  .ed-cta {
+    display: inline-block; padding: 14px 4px 12px; font-size: 0.76rem;
+  }
+  .footer-col .founder .frole,
+  .team-member .role,
+  :root.paper .jury-member .role { font-size: 0.72rem; letter-spacing: 0.18em; }
+  :root.paper .eyebrow,
+  :root.paper .cx__eyebrow,
+  :root.paper .account-section-label { font-size: 0.72rem; letter-spacing: 0.18em; }
+  :root.paper .cx__send { font-size: 0.76rem; }
+}

@@ -53,7 +53,12 @@ export async function handleContact({ env, send }, input) {
   if (!res.ok) {
     const detail = await res.text().catch(() => '');
     console.error('contact: provider rejected', res.status, detail.slice(0, 300));
-    return json(502, { error: 'could not deliver the message' });
+    // Echo the provider's own slug (validation_error, invalid_api_key, ...) and
+    // status. Without it a 502 here is unactionable from outside Netlify's logs,
+    // and the usual cause - an unverified sending domain - is invisible.
+    let code = null;
+    try { code = JSON.parse(detail)?.name ?? null; } catch { /* not JSON */ }
+    return json(502, { error: 'could not deliver the message', provider: res.status, code });
   }
   return json(200, { ok: true });
 }

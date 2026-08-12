@@ -664,8 +664,14 @@ function Field({ label, required, value, onChange, onBlur, ph, error, help, hint
   // The step-level check only runs on Continue, so a field left empty said
   // nothing until then. It answers for itself on the way out - but never
   // before it has been visited, which would be an accusation.
+  // An address that is not an address is caught here too: waiting until
+  // Continue meant typing three more fields before being told about the first.
   const leave = () => {
-    setOwnError(required && !String(value ?? '').trim() ? t('apply.required') : null);
+    const v = String(value ?? '').trim();
+    let own = null;
+    if (required && !v) own = t('apply.required');
+    else if (type === 'email' && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) own = t('apply.invalidEmail');
+    setOwnError(own);
     onBlur?.();
   };
   const clear = (v) => { if (ownError) setOwnError(null); onChange(v); };
