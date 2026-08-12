@@ -4227,10 +4227,13 @@ input, textarea, select { font-family: inherit; }
   animation: cx-drift 70s ease-in-out infinite alternate;
 }
 @media (max-width: 900px) {
-  /* Bigger and stronger on a phone. Scaled to the same fraction of the frame as
-     on a desktop the pigment read as a faint smudge at the edge. */
+  /* Bigger, stronger and more saturated on a phone. Scaled to the same fraction
+     of the frame as on a desktop the pigment read as a faint smudge at the edge;
+     at full opacity across two screens' worth of width it is the ground the page
+     sits on, which is the point. */
   :root.paper .page-wash::after {
-    width: 172%; right: -46%; top: -8%; height: 120%; opacity: 0.88;
+    width: 215%; right: -62%; top: -10%; height: 124%; opacity: 1;
+    filter: saturate(1.35) contrast(1.06);
   }
 }
 @media (prefers-reduced-motion: reduce) {
