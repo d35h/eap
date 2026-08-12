@@ -4281,28 +4281,16 @@ input, textarea, select { font-family: inherit; }
   animation: cx-drift 70s ease-in-out infinite alternate;
 }
 @media (max-width: 900px) {
-  /* Bigger, stronger and more saturated on a phone. Scaled to the same fraction
-     of the frame as on a desktop the pigment read as a faint smudge at the edge;
-     at full opacity across two screens' worth of width it is the ground the page
-     sits on, which is the point. */
+  /* The same sheet at the same weight as the desktop - no extra opacity, no
+     saturation, no contrast. Pushing those up is what put hard white patches in
+     the pale parts of the artwork, which is not what watercolour does.
+     Only the geometry changes, and only because the frame turns on its side:
+     `contain` in a box measured off a portrait viewport's width fits the sheet
+     by width and leaves a thin band, so the box is sized off its height instead
+     (the sheet is 3:4, hence 0.75 of the height) and the same amount of pigment
+     lands on screen as on a wide one. */
   :root.paper .page-wash::after {
-    width: 260%; right: -80%; top: -12%; height: 128%; opacity: 1;
-    filter: saturate(1.9) contrast(1.14);
-  }
-  /* The left half needs pigment too - one copy of the sheet always left a pale
-     column down the side. Gradients rather than a second, mirrored copy of the
-     image: the sheet's pigment stops partway up, and against flat paper that
-     stop read as a ruled line across the screen. A radial fades to nothing by
-     definition, so there is no edge to see. */
-  :root.paper .page-wash::before {
-    content: ""; position: absolute; inset: -12%;
-    background:
-      radial-gradient(58% 42% at 10% 74%, rgba(116, 198, 222, 0.58), transparent 72%),
-      radial-gradient(52% 38% at 2% 22%, rgba(164, 188, 226, 0.44), transparent 74%),
-      radial-gradient(66% 48% at 38% 104%, rgba(134, 212, 220, 0.46), transparent 74%),
-      radial-gradient(46% 34% at 30% 46%, rgba(186, 176, 220, 0.30), transparent 76%);
-    filter: blur(14px);
-    animation: cx-drift 90s ease-in-out infinite alternate-reverse;
+    width: 176%; right: -56%; top: -4%; height: 108%;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -4518,7 +4506,10 @@ input, textarea, select { font-family: inherit; }
 }
 .manifest-lede .manifest-text { flex: 1 1 auto; min-width: 0; }
 .manifest-ticker {
-  flex: 0 0 2.6rem;
+  /* A readable column beside the statement, not a rotated hairline in the
+     gutter - at 2.6rem the words were set on their side and read as a texture
+     rather than as a ticker. */
+  flex: 0 0 clamp(9rem, 14vw, 13.5rem);
   position: relative; overflow: hidden; align-self: stretch;
   /* Grid items default to min-width:auto, which lets a nowrap run push its own
      track wide open. The gutter is a fixed 2.6rem and stays that way. */
@@ -4537,17 +4528,16 @@ input, textarea, select { font-family: inherit; }
 }
 .manifest-ticker__run { display: flex; flex-direction: column; flex: 0 0 auto; }
 .manifest-ticker__word {
-  writing-mode: vertical-rl;
-  padding: 0 0 3em; white-space: nowrap;
-  font-family: var(--font-body); font-size: 0.62rem;
-  letter-spacing: 0.32em; text-transform: uppercase; color: var(--fg-faint);
+  display: block; padding: 0 0 1.9em; white-space: nowrap;
+  font-family: var(--font-body); font-size: 0.66rem; line-height: 1.3;
+  letter-spacing: 0.24em; text-transform: uppercase; color: var(--fg-faint);
 }
 /* The clock is the one entry that changes as you watch. Tabular figures keep the
    run from shifting a pixel on every tick, and it carries the ink weight so the
    eye lands on it rather than on the words around it. */
 .manifest-ticker__word.is-clock {
   color: var(--fg); font-variant-numeric: tabular-nums;
-  letter-spacing: 0.24em;
+  letter-spacing: 0.16em; white-space: normal;
 }
 @keyframes manifest-ticker-y {
   from { transform: translateY(0); }

@@ -6,6 +6,10 @@
     <meta name="theme-color" content="#F5FBFF" />
 
     <!-- v=4 busts the icon browsers and phones have already cached. -->
+    <!-- /favicon.ico had no file behind it, so the SPA rewrite answered every
+         request for it with index.html. Anything that only knows the legacy
+         convention - link scrapers included - got HTML where an icon should be. -->
+    <link rel="icon" href="/favicon.ico?v=6" sizes="16x16 32x32 48x48" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=4" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=4" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=4" />
@@ -19,12 +23,15 @@
     <meta property="og:description" content="Международный кураторский open call для современных художников Евразии." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://eurasiaartplatform.com/" />
-    <meta property="og:image" content="https://eurasiaartplatform.com/og-image.png?v=5" />
+    <!-- JPEG, not the 624KB PNG: WhatsApp drops preview images over roughly
+         300KB and falls back to nothing, or to whatever it cached last. 94KB. -->
+    <meta property="og:image" content="https://eurasiaartplatform.com/og-image.jpg?v=6" />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Eurasia Art Platform · Open Call" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://eurasiaartplatform.com/og-image.png?v=5" />
+    <meta name="twitter:image" content="https://eurasiaartplatform.com/og-image.jpg?v=6" />
   </head>
   <body>
     <div id="root"></div>
