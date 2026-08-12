@@ -4058,3 +4058,8 @@ input, textarea, select { font-family: inherit; }
   :root.paper .work-file__thumb { width: 72px; height: 58px; }
   :root.paper .work-file__replace, :root.paper .work-file__remove { grid-column: 2; justify-self: start; }
 }
+
+/* The supplied ground, and the wash kept faint over it. */
+:root.paper { --bg: #faf9f6; --rule: rgba(18, 18, 18, 0.18); }
+:root.paper .page-wash .wc { opacity: 0.62; }
+@media (max-width: 900px) { :root.paper .page-wash .wc { opacity: 0.5; } }
