@@ -21,9 +21,8 @@ import Jurors from './pages/Jurors.jsx';
 
 // The light scheme covers the whole product now, cabinet included: signing in
 // used to drop you into the old dark theme mid-session, which read as a
-// different site. The cabinet still skips the wash - it is a working surface,
-// not a page to look at - and carries its own `cabinet` class for the places
-// where a dense table wants tighter treatment than an editorial page.
+// different site. The cabinet carries its own class for the places where a
+// dense working surface wants tighter treatment than an editorial page.
 const CABINET = /^\/account(\/|$)/;
 
 function PaperScheme() {
@@ -42,17 +41,6 @@ function PaperScheme() {
     };
   }, [pathname]);
   return null;
-}
-
-// Every light page gets the wash, the landing included - excluding it left the
-// pigment showing only in the contact section and the footer, i.e. only at the
-// very end. The hero paints an opaque ground over it, so the two do not fight.
-function PageWash() {
-  const { pathname } = useLocation();
-  if (CABINET.test(pathname)) return null;
-  return (
-    <div className="page-wash" aria-hidden="true" />
-  );
 }
 
 // On route change, jump to the top of the new page INSTANTLY. The global
@@ -76,15 +64,9 @@ export default function App() {
   return (
     <>
       <PaperScheme />
-      <PageWash />
       <ScrollToTop />
       <VersionWatcher />
       <Header />
-      {/* The wash is a fixed, positioned layer; page copy is plain static flow,
-          which paints *below* any positioned sibling. That is why paragraphs went
-          pale wherever the pigment crossed them - the pigment was on top of the
-          letters. Giving the routed page its own positioned layer puts the text
-          back above the wash. */}
       <div className="page-body">
       <Routes>
         <Route path="/" element={<Landing />} />

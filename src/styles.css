@@ -3788,16 +3788,6 @@ input, textarea, select { font-family: inherit; }
   :root.paper .cx__arrow { transition: none; }
 }
 
-/* The same wash on every inner page, held to the right edge and well back. */
-/* Fixed to the viewport, so the wash stays with you down the page. Anchoring
-   it to the document foot meant it was absent from everything above. */
-:root.paper .page-wash {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-}
-@media (max-width: 900px) {
-}
-
-/* Footer wash: the same spill, fainter, anchored to the same right edge. */
 :root.paper .site-footer { position: relative; overflow: hidden; }
 
 @media (max-width: 900px) {
@@ -4276,59 +4266,9 @@ input, textarea, select { font-family: inherit; }
 }
 
 
-/* ─── Page wash ───────────────────────────────────────────────────────────
-   A pre-rendered image rather than live SVG filters. Safari will not paint
-   those chains dependably inside a fixed layer, and recomputing them on every
-   scroll frame is what made the page crawl on a phone. Same artwork, drawn
-   once at build time. */
-:root.paper .page-wash {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-}
-/* A real scan rather than a generated field: the granulation, the hard bleed
-   edges where the water stopped, and the deep pooling are things a gradient
-   cannot do. It multiplies onto the paper, which is how the sheet's own white
-   disappears and only pigment is left - no alpha channel needed, and the paper
-   texture in the scan lands on the paper colour of the page.
-   Masked in from the top and left so the wash arrives out of nothing. */
-:root.paper .page-wash::after {
-  content: ""; position: absolute; right: -6%; bottom: -7%;
-  width: 55%; height: 92%;
-  /* `contain`, not `cover`: cover crops into the densest part of the sheet and
-     fills the corner with flat pigment, which is what stopped reading as
-     watercolour. The whole wash shows, edges and all. */
-  background: url('/wash.jpg') right bottom / contain no-repeat;
-  mix-blend-mode: multiply;
-  opacity: 0.92;
-  filter: saturate(1.16);
-  -webkit-mask-image:
-    linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.26) 16%, #000 46%),
-    linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.34) 12%, #000 34%);
-  mask-image:
-    linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.26) 16%, #000 46%),
-    linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.34) 12%, #000 34%);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
-  animation: cx-drift 70s ease-in-out infinite alternate;
-}
-@media (max-width: 900px) {
-  /* The same sheet at the same weight as the desktop - no extra opacity, no
-     saturation, no contrast. Pushing those up is what put hard white patches in
-     the pale parts of the artwork, which is not what watercolour does.
-     Only the geometry changes, and only because the frame turns on its side:
-     `contain` in a box measured off a portrait viewport's width fits the sheet
-     by width and leaves a thin band, so the box is sized off its height instead
-     (the sheet is 3:4, hence 0.75 of the height) and the same amount of pigment
-     lands on screen as on a wide one. */
-  /* Held lower and further out on a phone, and eased back: a narrow column puts
-     body copy right over the deepest pooling, where the scan is at its darkest. */
-  :root.paper .page-wash::after {
-    width: 116%; right: -28%; bottom: -5%; height: 52%;
-    opacity: 0.86;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  :root.paper .page-wash::after { animation: none; }
-}
+/* The page wash is gone. Every version of it - generated field, mirrored sheet,
+   real scan - fought the copy sitting on top of it, and the page reads better as
+   plain paper. The hero keeps its own colour; that is a separate layer. */
 
 /* One mark, everywhere. The bar used to be blank on the landing and spell the
    name out in full on /process and /faq, so the brand changed shape depending on
@@ -4342,11 +4282,22 @@ input, textarea, select { font-family: inherit; }
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 :root.paper .logo:hover .logo__short { background: var(--fg); color: var(--bg); }
+/* The signed-in initial is the same stamp at the other end of the bar: same
+   hairline, same face, same height, square rather than a circle. */
+:root.paper .account-avatar {
+  width: auto; min-width: 2.4em; height: auto; border-radius: 0;
+  padding: 7px 11px 5px;
+  border: 1px solid var(--fg); background: none; color: var(--fg);
+  font-family: var(--font-display); font-weight: 400;
+  font-size: 1.4rem; line-height: 1; letter-spacing: 0.04em;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+:root.paper .account-avatar:hover,
+:root.paper .account-avatar.open,
+:root.paper .account-avatar.active { background: var(--fg); color: var(--bg); }
 
-/* Routed page copy is plain static flow. Static content paints below every
-   positioned sibling, so the fixed wash was landing on top of the letters and
-   bleaching whole phrases wherever the pigment crossed a paragraph. One
-   positioned layer for the page puts the type back above the pigment. */
+/* One positioned layer for the routed page, so anything decorative behind it
+   stays behind it. */
 .page-body { position: relative; z-index: 1; }
 
 /* The menu's apply action kept the dark theme's gold gradient and glow, which
