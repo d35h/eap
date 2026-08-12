@@ -1,7 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect, useLayoutEffect } from 'react';
 import Header from './components/Header.jsx';
-import Watercolour from './components/Watercolour.jsx';
 import Footer from './components/Footer.jsx';
 import VersionWatcher from './components/VersionWatcher.jsx';
 import Landing from './pages/Landing.jsx';
@@ -47,9 +46,7 @@ function PageWash() {
   const { pathname } = useLocation();
   if (CABINET.test(pathname)) return null;
   return (
-    <div className="page-wash" aria-hidden="true">
-      <Watercolour seed={11} />
-    </div>
+    <div className="page-wash" aria-hidden="true" />
   );
 }
 

@@ -4146,22 +4146,27 @@ input, textarea, select { font-family: inherit; }
 @media (max-width: 900px) {
 }
 
+
 /* ─── Page wash ───────────────────────────────────────────────────────────
-   One rule for one element. Eight had accumulated over successive passes and
-   the one that won on a phone was not the one intended, so the wash was
-   missing there entirely. */
-:root.paper .page-wash .wc {
-  position: absolute; top: -6%; right: -12%;
-  width: 62%; height: 112%; opacity: 0.62;
+   A pre-rendered image rather than live SVG filters. Safari will not paint
+   those chains dependably inside a fixed layer, and recomputing them on every
+   scroll frame is what made the page crawl on a phone. Same artwork, drawn
+   once at build time. */
+:root.paper .page-wash {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+:root.paper .page-wash::after {
+  content: ""; position: absolute; top: -4%; right: -8%;
+  width: 62%; height: 108%;
+  background: url('/wash.png') right center / contain no-repeat;
+  opacity: 0.72;
   animation: cx-drift 70s ease-in-out infinite alternate;
 }
 @media (max-width: 900px) {
-    /* Anchored low it read as absent on a phone; it now runs up the right edge
-     where there is margin rather than text. */
-  :root.paper .page-wash .wc {
-    width: 160%; right: -52%; top: -10%; bottom: auto; height: 120%; opacity: 0.55;
+  :root.paper .page-wash::after {
+    width: 128%; right: -34%; top: -6%; height: 112%; opacity: 0.6;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  :root.paper .page-wash .wc { animation: none; }
+  :root.paper .page-wash::after { animation: none; }
 }
