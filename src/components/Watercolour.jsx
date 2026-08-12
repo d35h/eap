@@ -63,21 +63,21 @@ export default function Watercolour({ className = '', seed = 7 }) {
       </defs>
 
       {/* Palest and largest, reaching furthest up the page. */}
-      <g filter={`url(#${f('a')})`} opacity="0.95">
+      <g filter={`url(#${f('a')})`} opacity="0.88">
         <ellipse cx="880" cy="880" rx="620" ry="470" fill="#e8f6fb" />
         <ellipse cx="1010" cy="520" rx="330" ry="330" fill="#e8f6fb" />
       </g>
 
       {/* Second wash, pulled toward the corner. */}
-      <g filter={`url(#${f('b')})`} opacity="0.85">
-        <ellipse cx="930" cy="930" rx="470" ry="330" fill="#b7e0ef" />
-        <ellipse cx="1050" cy="700" rx="240" ry="250" fill="#b7e0ef" />
+      <g filter={`url(#${f('b')})`} opacity="0.68">
+        <ellipse cx="930" cy="930" rx="470" ry="330" fill="#cceaf4" />
+        <ellipse cx="1050" cy="700" rx="240" ry="250" fill="#cceaf4" />
       </g>
 
       {/* The dried edge: smallest, densest, and where the pigment settled. */}
-      <g filter={`url(#${f('c')})`} opacity="0.72">
-        <ellipse cx="960" cy="960" rx="360" ry="230" fill="#8fcde3" />
-        <ellipse cx="820" cy="990" rx="230" ry="120" fill="#8fcde3" />
+      <g filter={`url(#${f('c')})`} opacity="0.5">
+        <ellipse cx="960" cy="960" rx="360" ry="230" fill="#a8dbea" />
+        <ellipse cx="820" cy="990" rx="230" ry="120" fill="#a8dbea" />
       </g>
 
       <rect width="1000" height="1000" filter={`url(#${f('paper')})`} opacity="0.05" />

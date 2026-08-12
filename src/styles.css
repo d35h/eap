@@ -4061,8 +4061,8 @@ input, textarea, select { font-family: inherit; }
 
 /* The supplied ground, and the wash kept faint over it. */
 :root.paper { --bg: #faf9f6; --rule: rgba(18, 18, 18, 0.18); }
-:root.paper .page-wash .wc { opacity: 0.95; }
-@media (max-width: 900px) { :root.paper .page-wash .wc { opacity: 0.8; } }
+:root.paper .page-wash .wc { opacity: 0.72; }
+@media (max-width: 900px) { :root.paper .page-wash .wc { opacity: 0.6; } }
 
 /* With the details column gone the form stands alone: a single measure on the
    page, not a half-width column with a hole beside it. */
@@ -4175,15 +4175,14 @@ input, textarea, select { font-family: inherit; }
    Statement and facts are one block, not a column of text with a stack of
    ruled cards beside it. Two measures on a shared baseline, no rules. */
 :root.paper .manifest .container {
-  display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr);
-  gap: clamp(40px, 6vw, 110px); align-items: start;
+  display: flex; flex-direction: column; gap: clamp(38px, 5vh, 64px);
   max-width: 1320px;
 }
-:root.paper .manifest-text { max-width: 46ch; }
-:root.paper .manifest-text h2 { max-width: 16ch; text-wrap: balance; }
+:root.paper .manifest-text { max-width: 62ch; }
+:root.paper .manifest-text h2 { max-width: 20ch; text-wrap: balance; }
 :root.paper .manifest-facts {
-  display: flex; flex-direction: column; gap: clamp(26px, 3.4vw, 40px);
-  padding-top: clamp(6px, 1.6vw, 18px);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(24px, 3.4vw, 52px); padding-top: 0;
 }
 /* No rules and no bars: the number carries the entry. */
 :root.paper .manifest-facts .fact {
