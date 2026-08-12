@@ -1,18 +1,15 @@
+
+!.env.example
+# Build output
+# Dependencies (installed by npm/Netlify, never tracked)
+# Editor / OS
 # Environment / secrets — never commit
+# Local Netlify folder
+.DS_Store
 .env
 .env.*
-!.env.example
-
-# Build output
-dist
-
-# Editor / OS
 .idea
-.DS_Store
-
-# Dependencies (installed by npm/Netlify, never tracked)
-node_modules/
-
-# Local Netlify folder
 .netlify
 deno.lock
+dist
+node_modules/
