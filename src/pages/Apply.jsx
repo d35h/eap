@@ -625,10 +625,24 @@ function Step4({ form, workFiles, update, t }) {
 }
 
 // ─── Reusable Field ───
-function Field({ label, required, value, onChange, ph, error, help, hint, type = 'text', textarea, full }) {
+let fieldSeq = 0;
+function Field({ label, required, value, onChange, onBlur, ph, error, help, hint, type = 'text', textarea, full }) {
+  const { t } = useTranslation();
+  const [id] = useState(() => `f${++fieldSeq}`);
+  const [ownError, setOwnError] = useState(null);
+
+  // The step-level check only runs on Continue, so a field left empty said
+  // nothing until then. It answers for itself on the way out - but never
+  // before it has been visited, which would be an accusation.
+  const leave = () => {
+    setOwnError(required && !String(value ?? '').trim() ? t('apply.required') : null);
+    onBlur?.();
+  };
+  const clear = (v) => { if (ownError) setOwnError(null); onChange(v); };
+  const shown = error || ownError;
   return (
     <div className={`field-group ${full ? 'full' : ''}`}>
-      <label>
+      <label htmlFor={id}>
         {label} {required && <span className="req">*</span>}
         {hint && (
           <span className="field-tip">
@@ -643,21 +657,29 @@ function Field({ label, required, value, onChange, ph, error, help, hint, type =
       </label>
       {textarea ? (
         <textarea
+          id={id}
           placeholder={ph}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className={error ? 'error' : ''}
+          onChange={(e) => clear(e.target.value)}
+          onBlur={leave}
+          aria-invalid={shown ? 'true' : undefined}
+          aria-describedby={shown ? `${id}-err` : undefined}
+          className={shown ? 'error' : ''}
         />
       ) : (
         <input
+          id={id}
           type={type}
           placeholder={ph}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className={error ? 'error' : ''}
+          onChange={(e) => clear(e.target.value)}
+          onBlur={leave}
+          aria-invalid={shown ? 'true' : undefined}
+          aria-describedby={shown ? `${id}-err` : undefined}
+          className={shown ? 'error' : ''}
         />
       )}
-      <span className="field-error">{error}</span>
+      <span className="field-error" id={`${id}-err`}>{shown}</span>
       {help && <span className="field-help">{help}</span>}
     </div>
   );

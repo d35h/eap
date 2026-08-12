@@ -19,10 +19,32 @@ export default function Header() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // The bar keeps its own ground at all times. Making it transparent over the
-  // opening screen meant content scrolled visibly under it the moment the
-  // measurement of "still over the hero" drifted - and it drifted on every
-  // viewport that was not the one it had been tuned on.
+  // Transparent while the opening screen is genuinely behind the bar, opaque
+  // the instant it is not. Driven by an observer on the hero rather than by a
+  // scroll threshold: the threshold was a guess at the hero's height and drifted
+  // on any viewport it had not been tuned on, leaving a band where content
+  // scrolled under a see-through bar.
+  const [overOrb, setOverOrb] = useState(false);
+  useEffect(() => {
+    if (location.pathname !== '/') { setOverOrb(false); return undefined; }
+    let io;
+    // The hero belongs to the route, which mounts after this bar does.
+    const attach = () => {
+      const hero = document.querySelector('.ed-hero');
+      if (!hero) return false;
+      io = new IntersectionObserver(
+        ([entry]) => setOverOrb(entry.isIntersecting),
+        { rootMargin: '-72px 0px 0px 0px', threshold: 0 },
+      );
+      io.observe(hero);
+      return true;
+    };
+    if (!attach()) {
+      const raf = requestAnimationFrame(() => { attach(); });
+      return () => { cancelAnimationFrame(raf); io?.disconnect(); };
+    }
+    return () => io?.disconnect();
+  }, [location.pathname]);
 
   // Resolve the user's display name: jurors/admin carry it in app_metadata; for
   // artists it lives on their application, so fetch the most recent one.
@@ -87,7 +109,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="site-header">
+      <header className={`site-header${overOrb ? ' site-header--over-orb' : ''}`}>
         <div className="container">
           <Link
             to="/"

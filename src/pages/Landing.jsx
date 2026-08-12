@@ -303,7 +303,6 @@ function ContactBlock() {
         </div>
 
         <aside className="cx__right">
-          <p className="cx__open">{t('contact.openTo')}</p>
           <ul className="cx__list">
             {ROWS.map((r) => (
               <li key={r.href}>

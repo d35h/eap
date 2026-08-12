@@ -3981,3 +3981,80 @@ input, textarea, select { font-family: inherit; }
   border-bottom: 1px solid var(--border);
   backdrop-filter: none; -webkit-backdrop-filter: none;
 }
+
+/* Transparent only over the opening screen; its own ground everywhere else. */
+:root.paper .site-header--over-orb {
+  background: transparent; border-bottom-color: transparent;
+}
+
+/* ─── Works as a catalogue list ───────────────────────────────────────────
+   Numbered entries with the uploaded piece shown at once - an artist needs to
+   see that the right file arrived, not just its name. */
+:root.paper .work-entry {
+  position: relative; background: none; border: none; border-radius: 0;
+  border-top: 1px solid var(--border);
+  padding: clamp(26px, 3.4vw, 40px) 0 clamp(28px, 3.6vw, 44px);
+  margin: 0;
+}
+:root.paper .work-entry:first-of-type { border-top: none; padding-top: 8px; }
+:root.paper .work-entry > h3,
+:root.paper .work-entry__title {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(1.2rem, 2vw, 1.6rem); letter-spacing: -0.01em; margin: 0 0 20px;
+}
+/* The uploaded piece, shown large enough to recognise. */
+:root.paper .work-file {
+  display: grid; grid-template-columns: 96px 1fr auto; align-items: center;
+  gap: 18px; padding: 14px 0; border: none; border-radius: 0;
+  border-top: 1px solid var(--border); background: none;
+}
+:root.paper .work-file__thumb {
+  width: 96px; height: 76px; overflow: hidden; border-radius: 0;
+  background: var(--bg-darker); display: grid; place-items: center;
+}
+:root.paper .work-file__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+:root.paper .work-file__ext {
+  font-size: 0.62rem; letter-spacing: 0.18em; color: var(--fg-muted); text-transform: uppercase;
+}
+:root.paper .work-file__meta { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+:root.paper .work-file__name {
+  font-size: 0.95rem; color: var(--fg); overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+:root.paper .work-file__size { font-size: 0.72rem; color: var(--fg-faint); }
+:root.paper .work-file__replace {
+  background: none; border: none; border-bottom: 1px solid var(--fg); border-radius: 0;
+  padding: 4px 0; font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--fg); cursor: pointer;
+}
+:root.paper .work-file__remove {
+  background: none; border: none; color: var(--fg-muted); cursor: pointer;
+  padding: 8px; min-width: 44px; min-height: 44px;
+}
+:root.paper .work-file__remove:hover { color: #b4483f; }
+
+:root.paper .dropzone {
+  border: 1px dashed rgba(11, 12, 14, 0.28); border-radius: 0; background: none;
+  padding: clamp(26px, 4vw, 40px); text-align: center; transition: border-color 0.2s ease;
+}
+:root.paper .dropzone:hover, :root.paper .dropzone.is-over { border-color: var(--fg); }
+
+:root.paper .add-work-btn {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  width: 100%; background: none; border: none; border-top: 1px solid var(--border);
+  border-radius: 0; padding: 20px 0; cursor: pointer; color: var(--fg);
+  font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+}
+:root.paper .add-work-btn:hover { opacity: 0.7; }
+:root.paper .works-full, :root.paper .price-note {
+  border-top: 1px solid var(--border); padding-top: 18px; margin-top: 4px;
+  display: flex; justify-content: space-between; gap: 16px;
+  font-size: 0.72rem; letter-spacing: 0.06em; color: var(--fg-muted);
+}
+:root.paper .price-note strong { font-family: var(--font-display); font-size: 1.15rem; color: var(--fg); }
+
+@media (max-width: 720px) {
+  :root.paper .work-file { grid-template-columns: 72px 1fr; grid-auto-rows: auto; }
+  :root.paper .work-file__thumb { width: 72px; height: 58px; }
+  :root.paper .work-file__replace, :root.paper .work-file__remove { grid-column: 2; justify-self: start; }
+}
