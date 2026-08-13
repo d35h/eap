@@ -136,6 +136,9 @@ export default function Header() {
             <Link to="/process" className={location.pathname === '/process' ? 'active' : ''}>
               {t('nav.process')}
             </Link>
+            <Link to="/prizes" className={location.pathname === '/prizes' ? 'active' : ''}>
+              {t('nav.prizes')}
+            </Link>
             <a onClick={() => goToSection('team')}>{t('nav.team')}</a>
             <Link to="/faq" className={location.pathname === '/faq' ? 'active' : ''}>
               {t('nav.faq')}
@@ -253,6 +256,9 @@ export default function Header() {
           </button>
           <Link to="/process" onClick={() => setMenuOpen(false)}>
             {t('nav.process')}
+          </Link>
+          <Link to="/prizes" onClick={() => setMenuOpen(false)}>
+            {t('nav.prizes')}
           </Link>
           <button onClick={() => goToSection('team')}>{t('nav.team')}</button>
           <Link to="/faq" onClick={() => setMenuOpen(false)}>

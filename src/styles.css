@@ -4632,3 +4632,91 @@ input, textarea, select { font-family: inherit; }
 :root.paper.cabinet .account-actions .btn-ink.is-active {
   color: var(--fg); text-decoration-thickness: 2px;
 }
+
+/* ─── Prizes ───────────────────────────────────────────────────────────────
+   Built like the process page: rules rather than cards, the sum set in the
+   display face beside the rank, and the hundred given a numeral of its own. */
+.prizes-page { padding: 160px 0 120px; }
+:root.paper .prizes-page h1 {
+  margin: 18px 0 0; font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: 1.02; letter-spacing: -0.02em;
+  max-width: 18ch; text-wrap: balance;
+}
+:root.paper .prize-block { margin-top: clamp(64px, 9vh, 116px); }
+:root.paper .prize-block__head {
+  margin: 0 0 clamp(20px, 3vh, 34px);
+  font-family: var(--font-body); font-weight: 500;
+  font-size: 0.66rem; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--fg-muted);
+}
+:root.paper .prize-list { margin: 0; padding: 0; list-style: none; }
+:root.paper .prize {
+  padding: clamp(26px, 3.6vh, 40px) 0;
+  border-top: 1px solid var(--border);
+}
+:root.paper .prize:last-child { border-bottom: 1px solid var(--border); }
+:root.paper .prize__place { color: var(--fg-muted); }
+:root.paper .prize__title {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px;
+  margin: 0 0 14px;
+  font-family: var(--font-body); font-weight: 500;
+  font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-muted);
+}
+/* The sum is the point of the row, so it is the thing set large. */
+:root.paper .prize__sum {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(1.7rem, 3.4vw, 2.9rem); line-height: 1;
+  letter-spacing: -0.01em; text-transform: none; color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+:root.paper .prize > p {
+  margin: 0; max-width: 58ch; font-size: 1.02rem; line-height: 1.68; color: var(--fg-muted);
+}
+
+:root.paper .prize-special {
+  display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(20px, 4vw, 56px);
+  padding: clamp(28px, 4vh, 44px) 0;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+:root.paper .prize-special__name {
+  margin: 0; font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(1.6rem, 3vw, 2.5rem); line-height: 1.1; color: var(--fg);
+}
+:root.paper .prize-special__body p {
+  margin: 0 0 18px; max-width: 58ch; font-size: 1.02rem; line-height: 1.68; color: var(--fg-muted);
+}
+:root.paper .prize-special__body p:last-child { margin-bottom: 0; }
+
+:root.paper .prize-hundred {
+  display: grid; grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 0 clamp(20px, 4vw, 56px);
+  padding-top: clamp(28px, 4vh, 44px);
+  border-top: 1px solid var(--border);
+}
+:root.paper .prize-hundred__num {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(2.2rem, 4vw, 3.4rem); line-height: 0.9; color: var(--fg);
+  font-variant-numeric: tabular-nums;
+}
+:root.paper .prize-hundred__body p {
+  margin: 0 0 18px; max-width: 58ch; font-size: 1.02rem; line-height: 1.68; color: var(--fg-muted);
+}
+:root.paper .prize-hundred__lead { color: var(--fg); }
+:root.paper .prize-hundred ul { margin: 0 0 22px; padding: 0; list-style: none; }
+:root.paper .prize-hundred li {
+  padding: 13px 0; border-top: 1px solid var(--border);
+  font-size: 1.02rem; line-height: 1.5; color: var(--fg);
+}
+:root.paper .prize-hundred li:last-child { border-bottom: 1px solid var(--border); }
+:root.paper .prize-hundred__note {
+  padding-top: 4px; font-size: 0.92rem; color: var(--fg-faint);
+}
+:root.paper .prizes-cta { margin-top: clamp(56px, 8vh, 96px); }
+
+@media (max-width: 820px) {
+  .prizes-page { padding: 110px 0 90px; }
+  :root.paper .prize-hundred { grid-template-columns: 1fr; gap: 12px; }
+  :root.paper .prize-special { grid-template-columns: 1fr; gap: 18px; }
+  :root.paper .prize-hundred__num { font-size: 1.35rem; }
+}

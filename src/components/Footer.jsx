@@ -59,6 +59,7 @@ export default function Footer() {
             <h5>{t('footer.platformHead')}</h5>
             <ul>
               <li><Link to="/process">{t('nav.process')}</Link></li>
+              <li><Link to="/prizes">{t('nav.prizes')}</Link></li>
               <li><a onClick={() => goToSection('team')}>{t('nav.team')}</a></li>
               <li><Link to="/faq">{t('nav.faq')}</Link></li>
             </ul>

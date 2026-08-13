@@ -6,6 +6,7 @@ import VersionWatcher from './components/VersionWatcher.jsx';
 import Landing from './pages/Landing.jsx';
 import Apply from './pages/Apply.jsx';
 import Process from './pages/Process.jsx';
+import Prizes from './pages/Prizes.jsx';
 import FAQ from './pages/FAQ.jsx';
 import NotFound from './pages/NotFound.jsx';
 import MockPay from './pages/MockPay.jsx';
@@ -72,6 +73,7 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/apply" element={<Apply />} />
         <Route path="/process" element={<Process />} />
+        <Route path="/prizes" element={<Prizes />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/mock-pay" element={<MockPay />} />
         <Route path="/login" element={<Login />} />
