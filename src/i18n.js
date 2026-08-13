@@ -310,6 +310,8 @@ export const translations = {
         'возможность представить свою работу на физической выставке EAP',
       ],
       hundredNote: 'Публикация в каталоге и участие в выставке для 100 лучших художников бесплатны.',
+      restHead: 'Остальные участники',
+      restP1: 'Все остальные художники, подавшие заявку, будут упомянуты в каталоге EAP списком участников.',
     },
     processPage: {
       titlePart1: 'Как ',
@@ -694,6 +696,8 @@ export const translations = {
         'the chance to show their work in the physical EAP exhibition',
       ],
       hundredNote: 'Catalogue publication and exhibition are free for all 100 artists.',
+      restHead: 'Everyone else',
+      restP1: 'Every other artist who applied is named in the EAP catalogue, in the list of participants.',
     },
     processPage: {
       titlePart1: 'How to ',
@@ -1078,6 +1082,8 @@ export const translations = {
         'жұмысын EAP физикалық көрмесінде ұсыну мүмкіндігі',
       ],
       hundredNote: '100 үздік суретші үшін каталогта жариялану мен көрмеге қатысу тегін.',
+      restHead: 'Қалған қатысушылар',
+      restP1: 'Өтінім берген барлық басқа суретшілер EAP каталогында қатысушылар тізімінде аталады.',
     },
     processPage: {
       titlePart1: 'Қалай ',
@@ -1461,6 +1467,8 @@ export const translations = {
         '在 EAP 实体展览中展示作品的机会',
       ],
       hundredNote: '对这 100 位艺术家而言，画册收录与参展均免费。',
+      restHead: '其余参与者',
+      restP1: '其余所有提交申请的艺术家都将列入 EAP 画册的参与者名单。',
     },
     processPage: {
       titlePart1: '如何',

@@ -27,7 +27,9 @@ export default function Prizes() {
             {PLACES.map((n) => (
               <li className="prize" key={n}>
                 <h3 className="prize__title">
-                  <span className="prize__place">{t(`prizes.place${n}`)}</span>
+                  {/* A real space between them, so the line reads correctly when
+                      it is copied as well as when it is set. */}
+                  <span className="prize__place">{t(`prizes.place${n}`)}</span>{' '}
                   <span className="prize__sum">{t(`prizes.amount${n}`)}</span>
                 </h3>
                 <p>{t('prizes.commonAward')}</p>
@@ -62,14 +64,14 @@ export default function Prizes() {
           </div>
         </section>
 
+        <section className="prize-block prize-rest">
+          <h2 className="prize-block__head">{t('prizes.restHead')}</h2>
+          <p>{t('prizes.restP1')}</p>
+        </section>
+
         {submOpen && (
           <div className="prizes-cta">
-            <Link to="/apply" className="btn-gold btn-gold-large">
-              <span>{t('nav.apply')}</span>
-              <svg className="btn-gold__arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M5 12h14M13 6l6 6-6 6" />
-              </svg>
-            </Link>
+            <Link to="/apply" className="ed-cta">{t('nav.apply')}</Link>
           </div>
         )}
       </div>
