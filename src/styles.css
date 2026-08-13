@@ -4785,8 +4785,14 @@ input, textarea, select { font-family: inherit; }
    transform directly overrides the transition, and the release snaps back. */
 :root.paper .org-cta {
   position: relative; display: grid; place-items: center; text-align: center;
-  text-decoration: none; color: var(--bg); background: none; border: 0;
-  cursor: pointer;
+  text-decoration: none; color: var(--bg); cursor: pointer;
+  /* The shape span paints the fill, so the element itself must never paint one.
+     `button[type="submit"]` alone gives every form button a #2f2f2f rectangle,
+     which sat behind the slab on the contact send as a second, square shape.
+     Clearing it once here covers every host rather than one at a time. */
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
   transform: translate(var(--mx, 0px), var(--my, 0px));
   transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
