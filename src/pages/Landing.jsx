@@ -165,6 +165,10 @@ function ContactBlock() {
 
   const shown = (k) => (touched[k] || status === 'validation' ? errors[k] : null);
 
+  // Everything they typed, ready to send by hand if the relay is down.
+  const mailtoHref = `mailto:info@eap.art?subject=${encodeURIComponent(form.subject || 'EAP')}`
+    + `&body=${encodeURIComponent(`${form.message}\n\n— ${form.name}${form.email ? ` <${form.email}>` : ''}`)}`;
+
   const submit = async (e) => {
     e.preventDefault();
     const found = validate();
@@ -241,7 +245,14 @@ function ContactBlock() {
 
             {status === 'success' && <p className="cx__note">{t('contact.successMsg')}</p>}
             {(status === 'error' || status === 'unavailable') && (
-              <p className="cx__note cx__note--bad">{t('contact.errorMsg')}</p>
+              <p className="cx__note cx__note--bad">
+                {t('contact.errorMsg')}{' '}
+                {/* The relay can fail for reasons the sender cannot do anything
+                    about. Telling them to write to us by hand throws away what
+                    they already typed; this carries it into their mail client
+                    instead, subject and body intact. */}
+                <a className="cx__mailto" href={mailtoHref}>{t('contact.errorMailto')}</a>
+              </p>
             )}
           </form>
         </div>
