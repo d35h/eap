@@ -4946,7 +4946,11 @@ input, textarea, select { font-family: inherit; }
   padding: 16px 32px !important;
 }
 :root.paper .auth-card__submit.org-cta:hover:not(:disabled) { box-shadow: none !important; transform: none; }
-:root.paper .process-cta .org-cta, :root.paper .faq-cta .org-cta { margin-top: 4px; }
+/* These two sections centre their heading, so the button under it has to be
+   centred as well - the shape is block-level, so it was sitting against the
+   left edge of a box whose text was in the middle. */
+:root.paper .process-cta .org-cta,
+:root.paper .faq-cta .org-cta { margin: 4px auto 0; }
 /* Full width is right in the menu, where it is the only thing on its line. */
 :root.paper .mm-apply.org-cta { width: 100%; }
 
