@@ -1,6 +1,7 @@
 import { makeAdmin } from './_lib/supabaseAdmin.js';
 import { sendEmail, juryInviteEmail } from './_lib/email.js';
 import { json } from './_lib/json.js';
+import { envForRequest } from './_lib/siteUrl.js';
 
 // Pure core (testable): deps injected.
 //   token = the caller's access token (must belong to an admin)
@@ -58,7 +59,8 @@ export async function handleInviteJury({ admin, env }, { token, email, name }) {
 
 // Netlify entrypoint.
 export async function handler(event) {
-  const env = process.env;
+  // The links this makes must point at the host we are actually served from.
+  const env = envForRequest(event, process.env);
   const admin = makeAdmin(env);
   const auth = event.headers?.authorization || event.headers?.Authorization || '';
   const token = auth.replace(/^Bearer\s+/i, '') || null;

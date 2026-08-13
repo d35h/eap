@@ -1,6 +1,7 @@
 import { makeAdmin } from './_lib/supabaseAdmin.js';
 import { sendEmail, passwordResetEmail } from './_lib/email.js';
 import { json } from './_lib/json.js';
+import { envForRequest } from './_lib/siteUrl.js';
 
 // Public endpoint: generate a recovery link server-side and email it via Resend
 // in our branded template — instead of Supabase's default reset email.
@@ -38,7 +39,8 @@ export async function handleResetRequest({ admin, env }, { email, lang }) {
 }
 
 export async function handler(event) {
-  const env = process.env;
+  // The links this makes must point at the host we are actually served from.
+  const env = envForRequest(event, process.env);
   const admin = makeAdmin(env);
   const body = JSON.parse(event.body || '{}');
   return handleResetRequest({ admin, env }, { email: body.email, lang: body.lang });

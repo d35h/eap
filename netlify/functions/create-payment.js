@@ -2,6 +2,7 @@ import { makeAdmin } from './_lib/supabaseAdmin.js';
 import { getProvider } from './_lib/providers/index.js';
 import { amountFor } from './_lib/pricing.js';
 import { json } from './_lib/json.js';
+import { envForRequest } from './_lib/siteUrl.js';
 
 // Pure core (testable): deps injected.
 export async function handlePayment({ admin, env }, input) {
@@ -40,7 +41,8 @@ export async function handlePayment({ admin, env }, input) {
 
 // Netlify entrypoint.
 export async function handler(event) {
-  const env = process.env;
+  // The links this makes must point at the host we are actually served from.
+  const env = envForRequest(event, process.env);
   const admin = makeAdmin(env);
   return handlePayment({ admin, env }, JSON.parse(event.body || '{}'));
 }

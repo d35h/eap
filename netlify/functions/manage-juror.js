@@ -1,6 +1,7 @@
 import { makeAdmin } from './_lib/supabaseAdmin.js';
 import { sendEmail, juryInviteEmail } from './_lib/email.js';
 import { json } from './_lib/json.js';
+import { envForRequest } from './_lib/siteUrl.js';
 
 // Admin juror management:
 //   action 'activate' : resend a set-password (recovery) link to a juror.
@@ -42,7 +43,8 @@ export async function handleManageJuror({ admin, env }, { token, action, jurorId
 }
 
 export async function handler(event) {
-  const env = process.env;
+  // The links this makes must point at the host we are actually served from.
+  const env = envForRequest(event, process.env);
   const admin = makeAdmin(env);
   const auth = event.headers?.authorization || event.headers?.Authorization || '';
   const token = auth.replace(/^Bearer\s+/i, '') || null;
