@@ -41,10 +41,10 @@ export default function Prizes() {
         <section className="pz-special">
           <span className="pz-eyebrow">{t('prizes.specialHead')}</span>
           <div className="pz-special__shell">
-            <div>
-              <h2 className="pz-special__head">{t('prizes.specialHead')}</h2>
-              <div className="pz-special__name">{t('prizes.specialName')}</div>
-            </div>
+            {/* The eyebrow above already says "Специальный приз"; printing it
+                again as the heading said the same words twice in a row. The
+                name is the heading. */}
+            <h2 className="pz-special__name">{t('prizes.specialName')}</h2>
             <div className="pz-special__copy">
               <p>{t('prizes.specialP1')}</p>
               <p>{t('prizes.specialP2')}</p>
