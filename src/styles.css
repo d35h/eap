@@ -4686,14 +4686,20 @@ input, textarea, select { font-family: inherit; }
   border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
   padding: 48px 0 52px;
 }
+/* Both lines set whole: the 9ch cap turned "Специальный приз" over after one
+   word. Sized to fit the column rather than wrapped. */
 :root.paper .pz-special__head {
-  margin: 0 0 24px; font-family: var(--font-display); font-weight: 400;
-  font-size: clamp(2.4rem, 5vw, 4.6rem); line-height: 0.94; letter-spacing: -0.04em;
-  max-width: 9ch;
+  margin: 0 0 18px; font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(1.8rem, 3.4vw, 3.3rem); line-height: 1.0; letter-spacing: -0.035em;
+  max-width: none;
+}
+@media (min-width: 900px) {
+  :root.paper .pz-special__head,
+  :root.paper .pz-special__name { white-space: nowrap; }
 }
 :root.paper .pz-special__name {
   font-family: var(--font-display); font-style: italic;
-  font-size: clamp(1.8rem, 3.6vw, 3.2rem); line-height: 1; letter-spacing: -0.03em;
+  font-size: clamp(1.6rem, 3.1vw, 3rem); line-height: 1.05; letter-spacing: -0.03em;
 }
 :root.paper .pz-special__copy { padding-top: 10px; max-width: 56ch; }
 :root.paper .pz-special__copy p {
