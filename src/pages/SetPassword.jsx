@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
+import OrganicCta from '../components/OrganicCta.jsx';
 import { isSupabaseConfigured } from '../lib/supabase.js';
 import { setPassword } from '../lib/auth.js';
 
@@ -60,9 +61,9 @@ export default function SetPassword() {
 
           {error && <p className="auth-card__error" role="alert">{error}</p>}
 
-          <button type="submit" className="auth-card__submit" disabled={loading}>
+          <OrganicCta type="submit" disabled={loading} className="auth-card__submit">
             {loading ? '…' : t('account.setPasswordBtn')}
-          </button>
+          </OrganicCta>
         </form>
       </div>
     </main>

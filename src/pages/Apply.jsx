@@ -354,15 +354,14 @@ export default function Apply() {
 
           {/* Nav - ruled rows rather than buttons, matching the rest of the site */}
           <div className="wizard-nav">
-            <button
+            <OrganicCta
+              tone="ghost"
               className="wnav wnav--back"
               onClick={goBack}
               disabled={step === 1 || submitting}
-              type="button"
             >
-              <span aria-hidden="true">&#10229;</span>
-              <span>{t('apply.back').replace(/^[←\s]+/, '')}</span>
-            </button>
+              {t('apply.back').replace(/^[←\s]+/, '')}
+            </OrganicCta>
 
             {step < 3 ? (
               <OrganicCta onClick={goNext} className="wnav wnav--next">

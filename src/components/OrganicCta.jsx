@@ -19,6 +19,7 @@ export default function OrganicCta({
   type,
   disabled,
   variant = 'slab',
+  tone = 'solid',
   className = '',
   children,
 }) {
@@ -50,7 +51,7 @@ export default function OrganicCta({
 
   const shared = {
     ref,
-    className: `org-cta org-cta--${variant} ${className}`.trim(),
+    className: `org-cta org-cta--${variant} org-cta--${tone} ${className}`.trim(),
     onPointerMove: lean,
     onPointerLeave: rest,
     onPointerCancel: rest,

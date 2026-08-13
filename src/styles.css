@@ -3717,7 +3717,7 @@ input, textarea, select { font-family: inherit; }
 :root.paper .cx-error { margin-top: 10px; font-size: 0.72rem; color: #b4483f; }
 
 /* The action is a ruled row, clickable across its width. */
-:root.paper .cx .cx__send, :root.paper .cx button[type="submit"].cx__send {
+:root.paper .cx .cx__send:not(.org-cta), :root.paper .cx button[type="submit"].cx__send:not(.org-cta) {
   padding: 13px 0 !important;
   background: none !important; color: var(--fg) !important;
   border: none !important; border-bottom: 1px solid var(--fg) !important;
@@ -3767,7 +3767,7 @@ input, textarea, select { font-family: inherit; }
   :root.paper .cx__inner { grid-template-columns: 1fr; gap: clamp(56px, 9vh, 88px); }
   :root.paper .cx__row { grid-template-columns: 1fr; }
   :root.paper .cx__title { font-size: clamp(2.2rem, 9vw, 3rem); }
-  :root.paper .cx .cx__send, :root.paper .cx button[type="submit"].cx__send {
+  :root.paper .cx .cx__send:not(.org-cta), :root.paper .cx button[type="submit"].cx__send:not(.org-cta) {
   padding: 13px 0 !important;
   background: none !important; color: var(--fg) !important;
   border: none !important; border-bottom: 1px solid var(--fg) !important;
@@ -4791,16 +4791,25 @@ input, textarea, select { font-family: inherit; }
   cursor: pointer;
   transform: translate(var(--mx, 0px), var(--my, 0px));
   transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-  isolation: isolate;
 }
+/* Stacked positively, above the button's own box and below the label. It used
+   to sit at z-index -1 inside an isolated context, and a negative-z child that
+   is also animating its border-radius tears along one corner while the page
+   scrolls - the compositor repaints it in a separate layer from the text.
+   will-change keeps that layer stable; backface-visibility stops the seam. */
 :root.paper .org-cta__shape {
-  position: absolute; inset: 0; z-index: -1; background: var(--fg);
+  position: absolute; inset: 0; z-index: 0; background: var(--fg);
   transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: border-radius;
+  backface-visibility: hidden;
 }
 /* The colour lives on the label, not on the button. Page-level rules like
    `.cx .cx__send` are two classes deep and beat `.paper .org-cta`, which painted
    the text ink on an ink shape - invisible. Nothing else targets this class. */
 :root.paper .org-cta__label { position: relative; z-index: 1; color: var(--bg); }
+/* The pill radius the old chrome left behind clipped nothing, but it is not
+   this shape's, and it confuses the corner the shape is drawing. */
+:root.paper .org-cta { border-radius: 0; }
 :root.paper .org-cta:disabled { opacity: 0.45; cursor: default; }
 :root.paper .org-cta:disabled .org-cta__shape { animation-play-state: paused; }
 
@@ -4825,19 +4834,24 @@ input, textarea, select { font-family: inherit; }
 /* Slab: pixel radii, because percentages on a wide box give lozenges rather
    than a hand-drawn edge. */
 :root.paper .org-cta--slab {
-  padding: 17px 30px; font-size: 0.64rem; min-height: 48px;
+  /* Bigger and less tracked than it was: at 0.64rem on 0.18em the label read as
+     a caption stranded in a slab rather than as the thing you press. */
+  padding: 16px 32px; font-size: 0.7rem; letter-spacing: 0.14em; min-height: 46px;
 }
+/* The radii swing between 18 and 26 rather than 11 and 28. Wider than that and
+   the black mass leans far enough that a label centred in the box reads as
+   off-centre, which is what it was doing. */
 :root.paper .org-cta--slab .org-cta__shape {
-  border-radius: 26px 12px 22px 14px;
+  border-radius: 24px 19px 23px 20px;
   animation: org-slab 16s ease-in-out infinite;
 }
 :root.paper .org-cta--slab:hover .org-cta__shape,
 :root.paper .org-cta--slab:active .org-cta__shape { animation-duration: 6s; transform: scale(1.03); }
 @keyframes org-slab {
-  0%, 100% { border-radius: 26px 12px 22px 14px; }
-  25%      { border-radius: 12px 28px 13px 24px; }
-  50%      { border-radius: 22px 15px 27px 11px; }
-  75%      { border-radius: 15px 22px 12px 28px; }
+  0%, 100% { border-radius: 24px 19px 23px 20px; }
+  25%      { border-radius: 19px 25px 18px 24px; }
+  50%      { border-radius: 22px 20px 25px 18px; }
+  75%      { border-radius: 20px 23px 19px 26px; }
 }
 
 /* Where it lands. Each of these had its own chrome; the shape replaces it, and
@@ -4846,19 +4860,65 @@ input, textarea, select { font-family: inherit; }
 :root.paper .org-cta::before { content: none !important; }
 :root.paper .org-cta--slab .org-cta__label { white-space: nowrap; }
 
-:root.paper .header-apply.org-cta { padding: 13px 22px; min-height: 0; font-size: 0.6rem; letter-spacing: 0.2em; }
+:root.paper .header-apply.org-cta { padding: 13px 24px; min-height: 0; font-size: 0.64rem; letter-spacing: 0.16em; }
 :root.paper .mm-apply.org-cta { width: 100%; padding: 20px 26px !important; background: none !important; border: 0 !important; box-shadow: none !important; }
 :root.paper .apply-intro__start.org-cta {
   /* The ruled version ran the width of the column; a slab that wide reads
      as a banner rather than a button. */
   width: auto; justify-self: start; margin-top: clamp(30px, 4.5vh, 46px);
 }
-:root.paper .cx__send.org-cta { justify-self: start; margin-top: 8px; }
-:root.paper .pz-cta { display: flex; justify-content: flex-start; padding-top: clamp(24px, 4vh, 48px); }
-:root.paper .wnav--next.org-cta {
-  background: none !important; border: 0 !important; box-shadow: none !important;
-  width: auto; min-width: 0;
+:root.paper .cx__send.org-cta {
+  /* The ruled version ran the width of the form and carried its own rule; the
+     shape needs neither. */
+  justify-self: start; width: auto; margin-top: 10px;
+  border: 0 !important; border-bottom: 0 !important; box-shadow: none !important;
+  padding: 16px 32px !important;
 }
+/* Centred on the page: at the foot of a page of rules, a small slab pushed to
+   the left edge reads as left over rather than as the way on. */
+:root.paper .pz-cta { display: flex; justify-content: center; padding-top: clamp(32px, 5vh, 60px); }
+/* Sizing, once, for every organic button. The classes it lands on all carry
+   their own layout - a grid cell that stretches, a rule that ran the width of
+   the column - and any of them will pull the shape out of shape. Each one is
+   sized to its label and placed rather than stretched, and the label is centred
+   in what is left. */
+:root.paper .org-cta {
+  width: auto; min-width: 0; max-width: 100%;
+  justify-self: start; align-self: center;
+  justify-content: center; align-items: center;
+}
+:root.paper .org-cta__label { text-align: center; }
+
+/* Two tones, one shape. Solid is the primary action; ghost is anything that
+   steps back from it - Назад, and any second choice beside a first. The outline
+   is an inset shadow rather than a border, so it follows the morphing radius. */
+:root.paper .org-cta--ghost .org-cta__shape {
+  background: none; box-shadow: inset 0 0 0 1px var(--fg);
+}
+:root.paper .org-cta--ghost .org-cta__label { color: var(--fg); }
+:root.paper .org-cta--ghost:hover .org-cta__shape,
+:root.paper .org-cta--ghost:active .org-cta__shape { background: var(--fg); }
+:root.paper .org-cta--ghost:hover .org-cta__label,
+:root.paper .org-cta--ghost:active .org-cta__label { color: var(--bg); }
+:root.paper .org-cta--ghost .org-cta__label { transition: color 0.34s ease; }
+/* Both wizard actions are the shape now, so the rule and the arrows their old
+   chrome carried have to be cleared off. */
+:root.paper .wnav.org-cta {
+  background: none !important; border: 0 !important; box-shadow: none !important;
+  gap: 0; padding: 16px 32px;
+}
+:root.paper .wnav--next.org-cta { justify-self: end; }
+:root.paper .wnav--back.org-cta { justify-self: start; }
+:root.paper .wnav.org-cta:hover:not(:disabled) { opacity: 1; }
+/* The auth forms and the two page CTAs handed their own box to the shape. */
+:root.paper .auth-card__submit.org-cta {
+  background: none !important; border: 0 !important; box-shadow: none !important;
+  min-width: 0; width: 100%; justify-self: stretch; margin-top: 8px;
+}
+:root.paper .auth-card__submit.org-cta:hover:not(:disabled) { box-shadow: none !important; transform: none; }
+:root.paper .process-cta .org-cta, :root.paper .faq-cta .org-cta { margin-top: 4px; }
+/* Full width is right in the menu, where it is the only thing on its line. */
+:root.paper .mm-apply.org-cta { width: 100%; }
 
 @media (prefers-reduced-motion: reduce) {
   :root.paper .org-cta__shape { animation: none; }
