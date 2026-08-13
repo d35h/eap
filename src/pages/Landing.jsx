@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Countdown from '../components/Countdown.jsx';
+import OrganicCta from '../components/OrganicCta.jsx';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
 
@@ -44,9 +45,7 @@ export default function Landing() {
           {submOpen === undefined ? (
             <div className="hero-loading" aria-hidden="true" />
           ) : submOpen ? (
-            <>
-              <Link to="/apply" className="ed-cta">{t('nav.apply')}</Link>
-            </>
+            <OrganicCta to="/apply">{t('nav.apply')}</OrganicCta>
           ) : (
             <>
               <p className="ed-micro">{t('opencall.closedTitle')}</p>

@@ -4772,3 +4772,46 @@ input, textarea, select { font-family: inherit; }
   :root.paper .pz-hundred__shell { grid-template-columns: 1fr; gap: 34px; }
   :root.paper .pz-hundred__caption { margin-top: 18px; }
 }
+/* ─── The organic call to action ───────────────────────────────────────────
+   A disc that is never quite a disc: four organic radii on a fourteen-second
+   loop, so it is alive before it is touched, and a lean toward the pointer with
+   the morph quickened on approach. The lean rides a custom property so the
+   transition still owns both the follow and the eased release. */
+:root.paper .org-cta {
+  position: relative; display: grid; place-items: center; text-align: center;
+  width: clamp(168px, 22vw, 218px); aspect-ratio: 1; flex: 0 0 auto;
+  text-decoration: none; color: var(--bg); background: none; border: 0;
+  font-family: var(--font-body); font-weight: 500;
+  font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1.5;
+  transform: translate(var(--mx, 0px), var(--my, 0px));
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  isolation: isolate;
+}
+:root.paper .org-cta__shape {
+  position: absolute; inset: 0; z-index: -1; background: var(--fg);
+  border-radius: 52% 48% 46% 54% / 48% 52% 48% 52%;
+  animation: org-breathe 14s ease-in-out infinite;
+  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+:root.paper .org-cta:hover .org-cta__shape,
+:root.paper .org-cta:active .org-cta__shape { animation-duration: 5.5s; transform: scale(1.06); }
+@keyframes org-breathe {
+  0%, 100% { border-radius: 52% 48% 46% 54% / 48% 52% 48% 52%; }
+  25%      { border-radius: 42% 58% 60% 40% / 56% 42% 58% 44%; }
+  50%      { border-radius: 60% 40% 42% 58% / 40% 60% 40% 60%; }
+  75%      { border-radius: 46% 54% 56% 44% / 58% 46% 54% 42%; }
+}
+:root.paper .org-cta__label { position: relative; z-index: 1; padding: 0 15%; }
+:root.paper .org-cta__arrow {
+  display: inline-block; transition: transform 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+:root.paper .org-cta:hover .org-cta__arrow,
+:root.paper .org-cta:active .org-cta__arrow { transform: translate(4px, -4px); }
+/* The hero used to sit on a ruled label; the disc needs air under the name. */
+:root.paper .ed-hero__foot:has(.org-cta) { margin-top: clamp(10px, 3vh, 34px); }
+@media (prefers-reduced-motion: reduce) {
+  :root.paper .org-cta__shape { animation: none; }
+  :root.paper .org-cta,
+  :root.paper .org-cta__shape,
+  :root.paper .org-cta__arrow { transition-duration: 0.01ms; }
+}
