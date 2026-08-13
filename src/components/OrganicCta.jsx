@@ -44,11 +44,7 @@ export default function OrganicCta({
   const inner = (
     <>
       <span className="org-cta__shape" aria-hidden="true" />
-      <span className="org-cta__label">
-        {children}
-        {' '}
-        <span className="org-cta__arrow" aria-hidden="true">&#8599;</span>
-      </span>
+      <span className="org-cta__label">{children}</span>
     </>
   );
 

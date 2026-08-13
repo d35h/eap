@@ -76,7 +76,7 @@ export default function Prizes() {
 
         {submOpen && (
           <section className="pz-cta">
-            <OrganicCta to="/apply" variant="disc">{t('nav.apply')}</OrganicCta>
+            <OrganicCta to="/apply">{t('nav.apply')}</OrganicCta>
           </section>
         )}
       </div>

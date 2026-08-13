@@ -365,20 +365,13 @@ export default function Apply() {
             </button>
 
             {step < 3 ? (
-              <button className="wnav wnav--next" onClick={goNext} type="button">
-                <span>{t('apply.continueTo')}</span>
-                <span aria-hidden="true">&#10230;</span>
-              </button>
+              <OrganicCta onClick={goNext} className="wnav wnav--next">
+                {t('apply.continueTo')}
+              </OrganicCta>
             ) : (
-              <button
-                className="wnav wnav--next"
-                onClick={submitFinal}
-                disabled={submitting}
-                type="button"
-              >
-                <span>{submitting ? t('apply.submitting') : t('apply.submit')}</span>
-                <span aria-hidden="true">&#10230;</span>
-              </button>
+              <OrganicCta onClick={submitFinal} disabled={submitting} className="wnav wnav--next">
+                {submitting ? t('apply.submitting') : t('apply.submit')}
+              </OrganicCta>
             )}
         </div>
         </div>
