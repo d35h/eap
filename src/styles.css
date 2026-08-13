@@ -2829,18 +2829,6 @@ input, textarea, select { font-family: inherit; }
    clean, over the content so the letters take the colour. */
 .wash {
   position: absolute; inset: 0; z-index: 2; pointer-events: none; overflow: hidden;
-  /* The masses are wider than the hero, so the hero's own overflow cut them off
-     square: a hard rectangle of colour around the name, which reads as a frame
-     drawn over it. Fading the layer out at every edge means the colour ends
-     where the paper begins, with no line between them. */
-  -webkit-mask-image:
-    linear-gradient(to bottom, transparent, #000 14%, #000 72%, transparent),
-    linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
-  mask-image:
-    linear-gradient(to bottom, transparent, #000 14%, #000 72%, transparent),
-    linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
-  -webkit-mask-composite: source-in;
-  mask-composite: intersect;
 }
 
 
@@ -2907,35 +2895,20 @@ input, textarea, select { font-family: inherit; }
 
 @media (prefers-reduced-motion: reduce) { .wash span { animation: none; } }
 
-/* On a phone every one of these was 36vw across - about 140px - under a 54px
-   blur, so the masses dissolved and the opening screen read as blank paper.
-   They are sized against the short edge here, not the wide one, and they travel
-   far enough that the drift is something you can actually see. */
+/* The web sets each mass at about 36vw with a 54px blur - roughly a tenth of
+   its own width - and they stay separate, with paper breathing between them.
+   Sized against the short edge on a phone they merged into one mass that filled
+   the hero and ran into its edges, which is where the rectangle came from. Same
+   proportions as the web instead: the blur comes down with the blob, and the
+   positions are the desktop ones. The keyframes are already in vw/vh, so the
+   travel scales by itself. */
 @media (max-width: 900px) {
-  .wash span { filter: blur(46px); }
-  .wash span:nth-child(1) {
-    width: 96vw; height: 96vw; left: -24%; top: -12%;
-    animation: wash-ma 5.4s ease-in-out infinite;
-  }
-  .wash span:nth-child(2) {
-    width: 92vw; height: 92vw; right: -26%; top: -16%;
-    animation: wash-mb 6.6s ease-in-out infinite -2.6s;
-  }
-  .wash span:nth-child(3) {
-    width: 98vw; height: 98vw; left: 2%; top: 16%;
-    animation: wash-mc 5.9s ease-in-out infinite -4.1s;
-  }
-  .wash span:nth-child(4) {
-    width: 84vw; height: 84vw; right: -8%; top: 34%;
-    animation: wash-mb 7.4s ease-in-out infinite -3.4s;
-  }
-  .wash span:nth-child(5) {
-    width: 90vw; height: 90vw; left: -20%; top: 30%;
-    animation: wash-mc 8.2s ease-in-out infinite -2.1s;
-  }
-  @keyframes wash-ma { 0%,100% { transform: translate3d(0,0,0) scale(0.78); } 50% { transform: translate3d(34vw, 18vh, 0) scale(1.32); } }
-  @keyframes wash-mb { 0%,100% { transform: translate3d(0,0,0) scale(1.34); } 50% { transform: translate3d(-32vw, 20vh, 0) scale(0.8); } }
-  @keyframes wash-mc { 0%,100% { transform: translate3d(0,0,0) scale(0.8); } 50% { transform: translate3d(-30vw, -19vh, 0) scale(1.36); } }
+  .wash span { filter: blur(24px); }
+  .wash span:nth-child(1) { width: 58vw; height: 52vw; left: 2%; top: 4%; }
+  .wash span:nth-child(2) { width: 55vw; height: 49vw; right: 2%; top: 0%; }
+  .wash span:nth-child(3) { width: 56vw; height: 46vw; left: 24%; top: 20%; }
+  .wash span:nth-child(4) { width: 46vw; height: 40vw; right: 22%; top: 30%; }
+  .wash span:nth-child(5) { width: 52vw; height: 44vw; left: 10%; top: 28%; }
 }
 
 /* ─── Paper: type and forms ────────────────────────────────────────────────── */
