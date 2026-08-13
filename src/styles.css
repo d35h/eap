@@ -4639,11 +4639,15 @@ input, textarea, select { font-family: inherit; }
    every block; nothing is a card. */
 .prizes-page { padding: 92px 0 110px; }
 :root.paper .pz-hero { padding: clamp(52px, 8vh, 100px) 0 clamp(56px, 8vh, 92px); }
+/* One line on a wide screen: sized off the viewport with no width cap, so the
+   title sets across the page rather than turning over after two words. It still
+   wraps on a phone, where a single line is not possible. */
 :root.paper .prizes-page h1 {
   margin: 22px 0 0; font-family: var(--font-display); font-weight: 400;
-  font-size: clamp(2.9rem, 6.6vw, 5.9rem); line-height: 0.94; letter-spacing: -0.04em;
-  max-width: 16ch;
+  font-size: clamp(2.5rem, 4.6vw, 4.6rem); line-height: 1.0; letter-spacing: -0.035em;
+  max-width: none;
 }
+@media (min-width: 1000px) { :root.paper .prizes-page h1 { white-space: nowrap; } }
 :root.paper .pz-eyebrow {
   display: block; margin-bottom: clamp(20px, 3vh, 28px);
   font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--fg-muted);
