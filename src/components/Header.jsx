@@ -6,6 +6,7 @@ import { isSupabaseConfigured, supabase } from '../lib/supabase.js';
 import { useAuth } from '../hooks/useAuth.jsx';
 import { signOut } from '../lib/auth.js';
 import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
+import OrganicCta from './OrganicCta.jsx';
 
 export default function Header() {
   const { lang, setLang, t } = useTranslation();
@@ -203,9 +204,9 @@ export default function Header() {
 
             {!authLoading && !user && submOpen !== undefined && (
               submOpen ? (
-                <Link to="/apply" className={`btn-gold header-apply${overOrb ? ' is-hidden' : ''}`}>
+                <OrganicCta to="/apply" className={`header-apply${overOrb ? ' is-hidden' : ''}`}>
                   {t('nav.apply')}
-                </Link>
+                </OrganicCta>
               ) : (
                 <span
                   className="header-apply header-apply--closed"
@@ -276,12 +277,9 @@ export default function Header() {
           )}
           {!authLoading && !user && submOpen !== undefined && (
             submOpen ? (
-              <Link to="/apply" onClick={() => setMenuOpen(false)} className="btn-gold mm-apply">
-                <span>{t('nav.apply')}</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M5 12h14M13 6l6 6-6 6" />
-                </svg>
-              </Link>
+              <OrganicCta to="/apply" onClick={() => setMenuOpen(false)} className="mm-apply">
+                {t('nav.apply')}
+              </OrganicCta>
             ) : (
               <span className="mobile-menu__closed" aria-disabled="true" style={{ marginTop: '24px' }}>
                 {t('opencall.closedTitle')}

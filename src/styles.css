@@ -4773,42 +4773,91 @@ input, textarea, select { font-family: inherit; }
   :root.paper .pz-hundred__caption { margin-top: 18px; }
 }
 /* ─── The organic call to action ───────────────────────────────────────────
-   A disc that is never quite a disc: four organic radii on a fourteen-second
-   loop, so it is alive before it is touched, and a lean toward the pointer with
-   the morph quickened on approach. The lean rides a custom property so the
-   transition still owns both the follow and the eased release. */
+   One motion, two silhouettes. Both breathe through four asymmetric radii on a
+   long loop and lean toward the pointer on approach, with the morph quickened
+   while it is there.
+
+   The disc is a statement: it belongs where a call to action is the point of
+   the screen. The slab is the everyday one - it sits in a row of other things,
+   so it leans less far and keeps a slab's proportions.
+
+   The lean rides a custom property, never style.transform: writing the
+   transform directly overrides the transition, and the release snaps back. */
 :root.paper .org-cta {
   position: relative; display: grid; place-items: center; text-align: center;
-  width: clamp(168px, 22vw, 218px); aspect-ratio: 1; flex: 0 0 auto;
   text-decoration: none; color: var(--bg); background: none; border: 0;
   font-family: var(--font-body); font-weight: 500;
-  font-size: 0.66rem; letter-spacing: 0.18em; text-transform: uppercase; line-height: 1.5;
+  letter-spacing: 0.18em; text-transform: uppercase; line-height: 1.5;
+  cursor: pointer;
   transform: translate(var(--mx, 0px), var(--my, 0px));
   transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
   isolation: isolate;
 }
 :root.paper .org-cta__shape {
   position: absolute; inset: 0; z-index: -1; background: var(--fg);
-  border-radius: 52% 48% 46% 54% / 48% 52% 48% 52%;
-  animation: org-breathe 14s ease-in-out infinite;
   transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-:root.paper .org-cta:hover .org-cta__shape,
-:root.paper .org-cta:active .org-cta__shape { animation-duration: 5.5s; transform: scale(1.06); }
-@keyframes org-breathe {
-  0%, 100% { border-radius: 52% 48% 46% 54% / 48% 52% 48% 52%; }
-  25%      { border-radius: 42% 58% 60% 40% / 56% 42% 58% 44%; }
-  50%      { border-radius: 60% 40% 42% 58% / 40% 60% 40% 60%; }
-  75%      { border-radius: 46% 54% 56% 44% / 58% 46% 54% 42%; }
-}
-:root.paper .org-cta__label { position: relative; z-index: 1; padding: 0 15%; }
+:root.paper .org-cta__label { position: relative; z-index: 1; }
 :root.paper .org-cta__arrow {
   display: inline-block; transition: transform 0.42s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 :root.paper .org-cta:hover .org-cta__arrow,
 :root.paper .org-cta:active .org-cta__arrow { transform: translate(4px, -4px); }
-/* The hero used to sit on a ruled label; the disc needs air under the name. */
-:root.paper .ed-hero__foot:has(.org-cta) { margin-top: clamp(10px, 3vh, 34px); }
+:root.paper .org-cta:disabled { opacity: 0.45; cursor: default; }
+:root.paper .org-cta:disabled .org-cta__shape { animation-play-state: paused; }
+
+/* Disc: percentage radii, which on a square give the blob. */
+:root.paper .org-cta--disc {
+  width: clamp(168px, 22vw, 218px); aspect-ratio: 1;
+  font-size: 0.66rem; padding: 0 15%;
+}
+:root.paper .org-cta--disc .org-cta__shape {
+  border-radius: 52% 48% 46% 54% / 48% 52% 48% 52%;
+  animation: org-disc 14s ease-in-out infinite;
+}
+:root.paper .org-cta--disc:hover .org-cta__shape,
+:root.paper .org-cta--disc:active .org-cta__shape { animation-duration: 5.5s; transform: scale(1.06); }
+@keyframes org-disc {
+  0%, 100% { border-radius: 52% 48% 46% 54% / 48% 52% 48% 52%; }
+  25%      { border-radius: 42% 58% 60% 40% / 56% 42% 58% 44%; }
+  50%      { border-radius: 60% 40% 42% 58% / 40% 60% 40% 60%; }
+  75%      { border-radius: 46% 54% 56% 44% / 58% 46% 54% 42%; }
+}
+
+/* Slab: pixel radii, because percentages on a wide box give lozenges rather
+   than a hand-drawn edge. */
+:root.paper .org-cta--slab {
+  padding: 17px 30px; font-size: 0.64rem; min-height: 48px;
+}
+:root.paper .org-cta--slab .org-cta__shape {
+  border-radius: 26px 12px 22px 14px;
+  animation: org-slab 16s ease-in-out infinite;
+}
+:root.paper .org-cta--slab:hover .org-cta__shape,
+:root.paper .org-cta--slab:active .org-cta__shape { animation-duration: 6s; transform: scale(1.03); }
+@keyframes org-slab {
+  0%, 100% { border-radius: 26px 12px 22px 14px; }
+  25%      { border-radius: 12px 28px 13px 24px; }
+  50%      { border-radius: 22px 15px 27px 11px; }
+  75%      { border-radius: 15px 22px 12px 28px; }
+}
+
+/* Where it lands. Each of these had its own chrome; the shape replaces it, and
+   any arrow those rules appended has to go - the component brings its own. */
+:root.paper .org-cta::after,
+:root.paper .org-cta::before { content: none !important; }
+:root.paper .org-cta--slab .org-cta__label { white-space: nowrap; }
+
+:root.paper .header-apply.org-cta { padding: 13px 22px; min-height: 0; font-size: 0.6rem; letter-spacing: 0.2em; }
+:root.paper .mm-apply.org-cta { width: 100%; padding: 20px 26px !important; background: none !important; border: 0 !important; box-shadow: none !important; }
+:root.paper .apply-intro__start.org-cta {
+  /* The ruled version ran the width of the column; a slab that wide reads
+     as a banner rather than a button. */
+  width: auto; justify-self: start; margin-top: clamp(30px, 4.5vh, 46px);
+}
+:root.paper .cx__send.org-cta { justify-self: start; margin-top: 8px; }
+:root.paper .pz-cta { display: flex; justify-content: center; padding-top: clamp(24px, 4vh, 48px); }
+
 @media (prefers-reduced-motion: reduce) {
   :root.paper .org-cta__shape { animation: none; }
   :root.paper .org-cta,

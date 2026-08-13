@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Countdown from '../components/Countdown.jsx';
-import OrganicCta from '../components/OrganicCta.jsx';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
+import OrganicCta from '../components/OrganicCta.jsx';
 
 // ── Временный состав жюри (hardcoded). Имена и фото постоянны;
 //    роль и био берутся из переводов (team.jury, по индексу). ──
@@ -45,7 +45,7 @@ export default function Landing() {
           {submOpen === undefined ? (
             <div className="hero-loading" aria-hidden="true" />
           ) : submOpen ? (
-            <OrganicCta to="/apply">{t('nav.apply')}</OrganicCta>
+            <Link to="/apply" className="ed-cta">{t('nav.apply')}</Link>
           ) : (
             <>
               <p className="ed-micro">{t('opencall.closedTitle')}</p>
@@ -235,10 +235,9 @@ function ContactBlock() {
             {field('subject', { ph: t('contact.subjectPh') })}
             {field('message', { ph: t('contact.messagePh'), multiline: true })}
 
-            <button className="cx__send" type="submit" disabled={status === 'sending'}>
-              <span>{status === 'sending' ? t('contact.sending') : t('contact.send')}</span>
-              <span className="cx__arrow" aria-hidden="true">&#10230;</span>
-            </button>
+            <OrganicCta type="submit" disabled={status === 'sending'} className="cx__send">
+              {status === 'sending' ? t('contact.sending') : t('contact.send')}
+            </OrganicCta>
 
             {status === 'success' && <p className="cx__note">{t('contact.successMsg')}</p>}
             {(status === 'error' || status === 'unavailable') && (

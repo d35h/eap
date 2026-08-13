@@ -4,6 +4,7 @@ import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useFormPersist } from '../hooks/useFormPersist.js';
 import { submitApplication, uploadWorkFiles } from '../lib/applicationsRepo.js';
 import CountrySelect from '../components/CountrySelect.jsx';
+import OrganicCta from '../components/OrganicCta.jsx';
 import { startPayment } from '../lib/payments.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
@@ -282,10 +283,9 @@ export default function Apply() {
                 ))}
               </ol>
 
-              <button type="button" className="apply-intro__start" onClick={() => setStarted(true)}>
-                <span>{t('apply.introStart')}</span>
-                <span className="apply-intro__arrow" aria-hidden="true">&#10230;</span>
-              </button>
+              <OrganicCta onClick={() => setStarted(true)} className="apply-intro__start">
+                {t('apply.introStart')}
+              </OrganicCta>
             </div>
           </div>
         )}

@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
+import OrganicCta from '../components/OrganicCta.jsx';
 
 // The three main prizes carry the same award text, so it is written once and
 // only the place and the sum change.
@@ -76,10 +76,7 @@ export default function Prizes() {
 
         {submOpen && (
           <section className="pz-cta">
-            <Link to="/apply" className="pz-cta__row">
-              <span className="pz-cta__title">{t('nav.apply')}</span>
-              <span className="pz-cta__arrow" aria-hidden="true">&#8594;</span>
-            </Link>
+            <OrganicCta to="/apply" variant="disc">{t('nav.apply')}</OrganicCta>
           </section>
         )}
       </div>

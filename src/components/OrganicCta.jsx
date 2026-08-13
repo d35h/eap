@@ -1,28 +1,38 @@
 import { useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
-// A disc that is never quite a disc. It breathes through four organic radii on a
-// long loop, so it is alive before you touch it; on approach it leans toward the
-// pointer and the morph quickens.
+// A shape that is never quite still: it breathes through four asymmetric radii
+// on a long loop, and leans toward the pointer on approach while the morph
+// quickens. Two silhouettes off the same motion - a disc where a call to action
+// is the whole point of the screen, an organic slab everywhere else.
 //
 // The lean is written to a custom property rather than to style.transform. Set
 // the transform directly and it overrides the CSS transition, so the follow
-// becomes instant and the release snaps back with no easing - which is what the
-// reference implementation did.
+// becomes instant and the release snaps back with no easing.
 const STRENGTH = 0.24;
-const MAX = 26;
+const MAX_DISC = 26;
+const MAX_SLAB = 10; // a slab sits in a row of other things; it must not barge
 
-export default function OrganicCta({ to, children, className = '' }) {
+export default function OrganicCta({
+  to,
+  onClick,
+  type,
+  disabled,
+  variant = 'slab',
+  className = '',
+  children,
+}) {
   const ref = useRef(null);
+  const max = variant === 'disc' ? MAX_DISC : MAX_SLAB;
 
   const lean = useCallback((e) => {
     const el = ref.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
-    const clamp = (v) => Math.max(-MAX, Math.min(MAX, v));
+    const clamp = (v) => Math.max(-max, Math.min(max, v));
     el.style.setProperty('--mx', `${clamp((e.clientX - r.left - r.width / 2) * STRENGTH)}px`);
     el.style.setProperty('--my', `${clamp((e.clientY - r.top - r.height / 2) * STRENGTH)}px`);
-  }, []);
+  }, [max]);
 
   const rest = useCallback(() => {
     const el = ref.current;
@@ -31,21 +41,29 @@ export default function OrganicCta({ to, children, className = '' }) {
     el.style.setProperty('--my', '0px');
   }, []);
 
-  return (
-    <Link
-      to={to}
-      ref={ref}
-      className={`org-cta ${className}`.trim()}
-      onPointerMove={lean}
-      onPointerLeave={rest}
-      onPointerCancel={rest}
-    >
+  const inner = (
+    <>
       <span className="org-cta__shape" aria-hidden="true" />
       <span className="org-cta__label">
         {children}
         {' '}
         <span className="org-cta__arrow" aria-hidden="true">&#8599;</span>
       </span>
-    </Link>
+    </>
+  );
+
+  const shared = {
+    ref,
+    className: `org-cta org-cta--${variant} ${className}`.trim(),
+    onPointerMove: lean,
+    onPointerLeave: rest,
+    onPointerCancel: rest,
+  };
+
+  if (to) return <Link to={to} {...shared} onClick={onClick}>{inner}</Link>;
+  return (
+    <button type={type || 'button'} disabled={disabled} onClick={onClick} {...shared}>
+      {inner}
+    </button>
   );
 }
