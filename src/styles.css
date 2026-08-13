@@ -167,7 +167,7 @@ input, textarea, select { font-family: inherit; }
 
 /* The apply CTA inside the mobile menu — solid gold to match */
 /* Premium primary CTA inside the mobile menu */
-.mobile-menu .mm-apply {
+.mobile-menu .mm-apply:not(.org-cta) {
   display: flex !important; width: 100%; box-sizing: border-box;
   align-items: center; justify-content: center; gap: 11px;
   background: linear-gradient(180deg, hsl(38, 44%, 80%), var(--accent)) !important;
@@ -4363,7 +4363,7 @@ input, textarea, select { font-family: inherit; }
 /* The menu's apply action kept the dark theme's gold gradient and glow, which
    on paper reads as a stray metallic slab. Same treatment as everywhere else:
    solid ink, square, with a travelling arrow. */
-:root.paper .mobile-menu .mm-apply {
+:root.paper .mobile-menu .mm-apply:not(.org-cta) {
   background: var(--fg) !important;
   color: var(--bg) !important;
   border: 1px solid var(--fg) !important;
@@ -4372,7 +4372,7 @@ input, textarea, select { font-family: inherit; }
   padding: 18px 22px !important;
   font-weight: 500; letter-spacing: 0.18em;
 }
-:root.paper .mobile-menu .mm-apply:active {
+:root.paper .mobile-menu .mm-apply:not(.org-cta):active {
   transform: none; box-shadow: none; opacity: 0.82;
 }
 
@@ -4885,9 +4885,24 @@ input, textarea, select { font-family: inherit; }
 :root.paper .org-cta {
   width: auto; min-width: 0; max-width: 100%;
   justify-self: start; align-self: center;
-  justify-content: center; align-items: center;
 }
-:root.paper .org-cta__label { text-align: center; }
+/* The shape owns its own inside, and says so. A dozen host rules set the layout
+   mode for the chrome they used to draw - `.mm-apply` forces `display: flex`
+   with `justify-content: space-between` for a label and an arrow, the auth
+   submit stretches to the width of the card - and every one of them left the
+   label against the left edge. This is the one place !important is the honest
+   answer: it is the component's own geometry, not a skirmish over a value. */
+/* place-items centres the label inside its track; place-content centres the
+   track inside the button. Only the first was set, so on any button a host rule
+   stretches - the auth submits, the menu's - the track stayed 46px wide at the
+   left edge and the label went with it. Both are needed. */
+:root.paper .org-cta {
+  display: grid !important;
+  place-items: center !important;
+  place-content: center !important;
+  text-align: center !important;
+}
+:root.paper .org-cta__label { text-align: center; justify-self: center; }
 
 /* Two tones, one shape. Solid is the primary action; ghost is anything that
    steps back from it - Назад, and any second choice beside a first. The outline
@@ -4924,4 +4939,12 @@ input, textarea, select { font-family: inherit; }
   :root.paper .org-cta__shape { animation: none; }
   :root.paper .org-cta,
   :root.paper .org-cta__shape { transition-duration: 0.01ms; }
+}
+
+/* The shape declares `display: grid !important` so no host rule can change its
+   layout - but that also beat the rule hiding the bar's action below 1280px,
+   and it came back on phones, colliding with the language control and pushing
+   the page 12px wide. Hiding wins over laying out. */
+@media (max-width: 1280px) {
+  :root.paper .header-apply.org-cta { display: none !important; }
 }
