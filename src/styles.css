@@ -4014,7 +4014,15 @@ input, textarea, select { font-family: inherit; }
 }
 
 @media (max-width: 720px) {
-  :root.paper .wizard-nav { grid-template-columns: 1fr; gap: 4px; }
+  /* One column put Назад on the first row pinned left and Далее on the second
+     pinned right, which reads as a zigzag inside a tinted box rather than as a
+     pair of actions. They fit side by side at 390px, so they sit side by side,
+     and the panel goes: the rule above them is enough. */
+  :root.paper .wizard-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; background: none; padding: 22px 0 4px;
+  }
+  :root.paper .wnav.org-cta { padding: 16px 22px; }
   :root.paper .wnav--next { justify-content: space-between; }
   :root.paper .wnav--back { justify-content: flex-start; }
 }
