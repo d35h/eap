@@ -1,3 +1,6 @@
+// First import on purpose: it must read the auth fragment from the URL before
+// the Supabase client loads and erases it.
+import './lib/authCallback.js';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';

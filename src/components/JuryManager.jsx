@@ -44,6 +44,12 @@ export default function JuryManager() {
     return res.json().catch(() => ({}));
   };
 
+  // Why a letter did not go out, in words an admin can act on. "Не удалось"
+  // alone sent us hunting through Netlify logs for an unverified sending domain.
+  const undelivered = (d) => (d.code === 'no_transport'
+    ? 'Почта не настроена — письмо не отправлено.'
+    : `Письмо не доставлено${d.provider ? ` (Resend ${d.provider}${d.code ? `: ${d.code}` : ''})` : ''}. Проверьте домен отправителя в Resend.`);
+
   const invite = async (e) => {
     e.preventDefault();
     setMsg(null);
@@ -56,6 +62,11 @@ export default function JuryManager() {
         setName(''); setEmail(''); setRefresh((r) => r + 1);
       } else if (d.status === 'exists') {
         setMsg({ type: 'err', text: 'Пользователь с таким email уже существует.' });
+      } else if (d.status === 'undelivered') {
+        // The account exists now; only the letter failed. Say both, so the
+        // admin retries with "Сбросить пароль" instead of inviting again.
+        setMsg({ type: 'err', text: `${undelivered(d)} Аккаунт создан — повторите отправку кнопкой «Сбросить пароль».` });
+        setRefresh((r) => r + 1);
       } else {
         setMsg({ type: 'err', text: 'Не удалось отправить приглашение.' });
       }
@@ -66,8 +77,12 @@ export default function JuryManager() {
     setMsg(null);
     setBusy(true);
     try {
-      await authed('/.netlify/functions/manage-juror', { action: 'activate', email: j.email });
-      setMsg({ type: 'ok', text: `Письмо для входа отправлено: ${j.email}` });
+      const d = await authed('/.netlify/functions/manage-juror', { action: 'activate', email: j.email });
+      if (d.ok) {
+        setMsg({ type: 'ok', text: `Письмо для входа отправлено: ${j.email}` });
+      } else {
+        setMsg({ type: 'err', text: d.status === 'undelivered' ? undelivered(d) : 'Не удалось отправить письмо.' });
+      }
     } finally { setBusy(false); }
   };
 

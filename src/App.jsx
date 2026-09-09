@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useLayoutEffect } from 'react';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
@@ -19,6 +19,7 @@ import ReviewView from './pages/ReviewView.jsx';
 import AppResults from './pages/AppResults.jsx';
 import ApplicationDetail from './pages/ApplicationDetail.jsx';
 import Jurors from './pages/Jurors.jsx';
+import { takeAuthCallbackRoute } from './lib/authCallback.js';
 
 // The light scheme covers the whole product now, cabinet included: signing in
 // used to drop you into the old dark theme mid-session, which read as a
@@ -61,9 +62,22 @@ function ScrollToTop() {
   return null;
 }
 
+// An invite or reset link that Supabase redirected to the wrong page still
+// carries its session; send it on to the page that can use it, so a juror who
+// was invited can actually set a password instead of landing on the home page.
+function AuthCallbackRedirect() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const route = takeAuthCallbackRoute();
+    if (route && window.location.pathname !== route) navigate(route, { replace: true });
+  }, [navigate]);
+  return null;
+}
+
 export default function App() {
   return (
     <>
+      <AuthCallbackRedirect />
       <PaperScheme />
       <ScrollToTop />
       <VersionWatcher />

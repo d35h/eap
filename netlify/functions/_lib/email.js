@@ -1,9 +1,13 @@
 // Email delivery via Resend's HTTP API (https://resend.com).
 // Server-side only. Returns false (no-op) when RESEND_API_KEY is not configured.
-
-export async function sendEmail(env, { to, subject, html }) {
+//
+// The thrown error carries the provider's own status and slug (validation_error,
+// invalid_api_key, ...). Callers need those: the usual cause of a silent
+// non-delivery is an unverified sending domain, and without the slug that is
+// invisible from anywhere but Netlify's logs.
+export async function sendEmail(env, { to, subject, html }, send = fetch) {
   if (!env.RESEND_API_KEY) return false;
-  const res = await fetch('https://api.resend.com/emails', {
+  const res = await send('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -17,7 +21,13 @@ export async function sendEmail(env, { to, subject, html }) {
     }),
   });
   if (!res.ok) {
-    throw new Error(`Resend ${res.status}: ${await res.text()}`);
+    const detail = await res.text().catch(() => '');
+    let code = null;
+    try { code = JSON.parse(detail)?.name ?? null; } catch { /* not JSON */ }
+    const err = new Error(`Resend ${res.status}: ${detail}`);
+    err.status = res.status;
+    err.code = code;
+    throw err;
   }
   return true;
 }
