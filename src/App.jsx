@@ -20,6 +20,7 @@ import AppResults from './pages/AppResults.jsx';
 import ApplicationDetail from './pages/ApplicationDetail.jsx';
 import Jurors from './pages/Jurors.jsx';
 import { takeAuthCallbackRoute } from './lib/authCallback.js';
+import { supabase } from './lib/supabase.js';
 
 // The light scheme covers the whole product now, cabinet included: signing in
 // used to drop you into the old dark theme mid-session, which read as a
@@ -65,11 +66,29 @@ function ScrollToTop() {
 // An invite or reset link that Supabase redirected to the wrong page still
 // carries its session; send it on to the page that can use it, so a juror who
 // was invited can actually set a password instead of landing on the home page.
+//
+// The move has to wait for the session. Supabase delivers it in the URL
+// fragment and reads that fragment asynchronously, so navigating on mount
+// rewrote the URL without it and the session was destroyed before it existed -
+// which is what "Auth session missing!" was, on the password form. We move only
+// once the session is really there, and carry the fragment along if it is not.
 function AuthCallbackRedirect() {
   const navigate = useNavigate();
   useEffect(() => {
     const route = takeAuthCallbackRoute();
-    if (route && window.location.pathname !== route) navigate(route, { replace: true });
+    if (!route || !supabase) return;
+
+    let moved = false;
+    const go = () => {
+      if (moved || window.location.pathname === route) return;
+      moved = true;
+      navigate({ pathname: route, hash: window.location.hash }, { replace: true });
+    };
+
+    // getSession resolves after the client has finished reading the fragment.
+    supabase.auth.getSession().then(({ data }) => { if (data?.session) go(); });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => { if (session) go(); });
+    return () => sub.subscription.unsubscribe();
   }, [navigate]);
   return null;
 }

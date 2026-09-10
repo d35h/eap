@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import OrganicCta from '../components/OrganicCta.jsx';
-import { isSupabaseConfigured } from '../lib/supabase.js';
+import { isSupabaseConfigured, supabase } from '../lib/supabase.js';
 import { setPassword } from '../lib/auth.js';
 
 export default function SetPassword() {
@@ -11,6 +11,22 @@ export default function SetPassword() {
   const [password, setPasswordValue] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  // null while the client is still reading the session out of the invite link.
+  const [hasSession, setHasSession] = useState(null);
+
+  useEffect(() => {
+    if (!supabase) return undefined;
+    let cancelled = false;
+    // getSession settles only after the link's fragment has been consumed, so
+    // this cannot mistake "still loading" for "no session".
+    supabase.auth.getSession().then(({ data }) => {
+      if (!cancelled) setHasSession(Boolean(data?.session));
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      if (!cancelled) setHasSession(Boolean(session));
+    });
+    return () => { cancelled = true; sub.subscription.unsubscribe(); };
+  }, []);
 
   if (!isSupabaseConfigured()) {
     return (
@@ -18,6 +34,24 @@ export default function SetPassword() {
         <div className="container">
           <p className="eyebrow">{t('account.nav')}</p>
           <p>{t('account.notConfigured')}</p>
+        </div>
+      </main>
+    );
+  }
+
+  // No session means the link was already used, expired, or opened on a host
+  // the session was never established on. Say that, and offer the way out -
+  // "Auth session missing!" told an invited juror nothing at all.
+  if (hasSession === false) {
+    return (
+      <main className="apply-page auth-page">
+        <div className="auth-card">
+          <span className="auth-card__kicker">Eurasia Art Platform</span>
+          <h1 className="auth-card__title">{t('account.setPasswordTitle')}</h1>
+          <p className="auth-card__sub">{t('account.setPasswordExpired')}</p>
+          <Link to="/forgot-password" className="auth-card__submit auth-card__submit--ghost">
+            {t('account.forgotBtn')}
+          </Link>
         </div>
       </main>
     );
@@ -31,7 +65,9 @@ export default function SetPassword() {
       await setPassword(password);
       navigate('/account');
     } catch (err) {
-      setError(err.message);
+      // Supabase phrases a missing session as "Auth session missing!", which is
+      // not something to show an artist who just followed an invitation.
+      setError(/session missing/i.test(err.message) ? t('account.setPasswordExpired') : err.message);
     } finally {
       setLoading(false);
     }
