@@ -75,16 +75,6 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="partners-row">
-          <div className="label">{t('footer.partners')}</div>
-          <div className="partners-logos">
-            <div className="partner-logo">Partner I</div>
-            <div className="partner-logo">Partner II</div>
-            <div className="partner-logo">Partner III</div>
-            <div className="partner-logo">Partner IV</div>
-          </div>
-        </div>
-
         <div className="footer-bottom">
           <span>{t('footer.copyright')}</span>
           <span>{t('footer.version')}</span>

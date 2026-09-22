@@ -596,18 +596,6 @@ input, textarea, select { font-family: inherit; }
   cursor: pointer; font-family: inherit; padding: 0;
 }
 .footer-col a:hover { color: var(--accent); text-decoration-color: var(--accent); }
-.partners-row {
-  border-top: 1px solid var(--border); padding-top: 40px; margin-bottom: 40px;
-}
-.partners-row .label {
-  font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.4em;
-  color: var(--fg-faint); margin-bottom: 24px;
-}
-.partners-logos { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
-.partner-logo {
-  font-family: var(--font-display); font-style: italic; font-size: 1.2rem;
-  color: rgba(var(--fg-rgb), 0.6); padding: 8px 16px; border: 1px solid var(--border);
-}
 .footer-bottom {
   border-top: 1px solid var(--border); padding-top: 24px;
   display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
@@ -3590,8 +3578,6 @@ input, textarea, select { font-family: inherit; }
 :root.paper .footer-col .fname { color: var(--fg); }
 :root.paper .footer-col a { color: var(--fg-muted); text-decoration-color: rgba(11, 12, 14, 0.22); }
 :root.paper .footer-col a:hover { color: var(--fg); text-decoration-color: var(--fg); }
-:root.paper .footer .partners img,
-:root.paper .footer .partner { border-color: var(--border); }
 
 /* ─── Inner pages: watercolour edge ───────────────────────────────────────
    Pale blue bleeding in from the right, the way ink spreads in water. Applied
@@ -4248,15 +4234,20 @@ input, textarea, select { font-family: inherit; }
 :root.paper .header-apply { transition: opacity 0.25s ease; }
 
 /* ─── Manifesto ───────────────────────────────────────────────────────────
-   Facts read as a row of three claims under the statement: number, then the
-   claim beneath it, on a shared top line. The middle one carries no number, so
-   the row is aligned from the top rather than the baseline. */
+   Facts read as claims under the statement: number, then the claim beneath it,
+   on a shared top line, aligned from the top rather than the baseline. The
+   track count follows the number of claims - a fixed three would have left a
+   lone claim sitting in the first of three empty columns. */
 :root.paper .manifest-facts {
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: grid; grid-template-columns: minmax(0, 1fr);
   gap: clamp(28px, 4vw, 64px);
   padding-top: clamp(30px, 4vh, 48px);
   border-top: 1px solid var(--border);
   align-items: start;
+  /* The container aligns its children to the start, so this would otherwise
+     shrink to its own text and take the rule with it. The rule divides the
+     section, not the sentence: it holds the measure of the statement above. */
+  align-self: stretch;
 }
 :root.paper .manifest-facts .fact { display: flex; flex-direction: column; }
 :root.paper .manifest-facts .num {
@@ -4267,9 +4258,27 @@ input, textarea, select { font-family: inherit; }
 :root.paper .manifest-facts .desc {
   font-size: 0.92rem; line-height: 1.6; color: var(--fg-muted); max-width: 34ch;
 }
+/* A single claim is not a three-column row with two columns missing. Standing
+   alone it carries the full measure: the figure beside the sentence, both on
+   one line, sized to hold the width the rule above it spans. */
+:root.paper .manifest-facts .fact:only-child {
+  flex-direction: row; align-items: baseline; gap: clamp(20px, 3vw, 40px);
+}
+:root.paper .manifest-facts .fact:only-child .num {
+  flex: none; margin-bottom: 0; font-size: clamp(2.2rem, 4.4vw, 3.4rem);
+}
+:root.paper .manifest-facts .fact:only-child .desc {
+  max-width: 46ch; font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+}
 @media (max-width: 900px) {
   :root.paper .manifest-facts { grid-template-columns: 1fr; gap: 26px; }
   :root.paper .manifest-facts .desc { max-width: none; }
+}
+@media (max-width: 640px) {
+  :root.paper .manifest-facts .fact:only-child {
+    flex-direction: column; align-items: flex-start; gap: 10px;
+  }
+  :root.paper .manifest-facts .fact:only-child .num { font-size: clamp(2rem, 9vw, 2.6rem); }
 }
 
 /* No rule under every question: the pairs are separated by space. The only

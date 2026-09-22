@@ -81,7 +81,7 @@ export default function Landing() {
             </div>
           </div>
           <div className="manifest-facts">
-            {[1, 2, 3].map((n) => {
+            {[1].map((n) => {
               // A fact can be text-only; an empty .num would still reserve its line.
               const num = t(`manifest.fact${n}Num`);
               return (
