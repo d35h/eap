@@ -24,12 +24,10 @@ const fmtSize = (bytes) => {
   return (bytes / 1024 / 1024).toFixed(1) + ' MB';
 };
 
-// Стоимость зависит от числа работ
-const PRICE_BY_COUNT = { 1: 100, 2: 150, 3: 170 };
-const feeFor = (n) => `${PRICE_BY_COUNT[Math.min(Math.max(n, 1), 3)]} BYN`;
-
-const EUR_BY_COUNT = { 1: 30, 2: 45, 3: 50 };
-const eurFor = (n) => `€${EUR_BY_COUNT[Math.min(Math.max(n, 1), 3)]}`;
+// Стоимость зависит от числа работ. USD on every channel - see
+// netlify/functions/_lib/pricing.js, which is what actually gets charged.
+const PRICE_BY_COUNT = { 1: 30, 2: 45, 3: 50 };
+const feeFor = (n) => `${PRICE_BY_COUNT[Math.min(Math.max(n, 1), 3)]} USD`;
 
 export default function Apply() {
   const { t, lang } = useTranslation();
@@ -638,7 +636,7 @@ function Step4({ form, workFiles, update, t }) {
           </button>
           <button type="button" className={`pay-method ${form.paymentChannel === 'intl' ? 'selected' : ''}`} onClick={() => update('paymentChannel', 'intl')}>
             <span className="pm-name">{t('apply.payIntl')}</span>
-            <span className="pm-desc">≈ {eurFor(form.works.length)}</span>
+            <span className="pm-desc">{feeFor(form.works.length)}</span>
           </button>
         </div>
       </div>

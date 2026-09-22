@@ -1,6 +1,8 @@
 import { supabase } from './supabase.js';
 
-const AMOUNT_BY_TIER = { 1: 100, 2: 150, 3: 170 };
+// USD, matching netlify/functions/_lib/pricing.js. Rows written before the
+// switch keep the BYN amount they were actually quoted.
+const AMOUNT_BY_TIER = { 1: 30, 2: 45, 3: 50 };
 
 function currentLang() {
   try {
@@ -42,7 +44,7 @@ export async function createApplication(client, form, userId = null) {
     })),
     tier: form.tier,
     amount: AMOUNT_BY_TIER[form.tier] ?? AMOUNT_BY_TIER[3],
-    currency: 'BYN',
+    currency: 'USD',
     payment_status: 'pending',
     lang: currentLang(),
   };

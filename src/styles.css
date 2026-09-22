@@ -396,13 +396,6 @@ input, textarea, select { font-family: inherit; }
 }
 .manifest-text p + p { margin-top: 28px; }
 .manifest-text em { color: var(--accent-soft); font-style: italic; }
-.manifest-facts { display: flex; flex-direction: column; gap: 28px; }
-.fact { padding-left: 24px; border-left: 1px solid var(--accent); }
-.fact .num {
-  font-family: var(--font-display); font-size: 2.4rem; font-weight: 300;
-  color: var(--accent); line-height: 1; margin-bottom: 8px;
-}
-.fact .desc { font-size: 0.85rem; color: var(--fg-muted); line-height: 1.5; }
 
 /* ─── Participants ─── */
 .participants-grid {
@@ -3010,7 +3003,6 @@ input, textarea, select { font-family: inherit; }
 :root.paper .faq-item, :root.paper .step { border-radius: 0; box-shadow: none; }
 
 :root.paper .manifest-text p { font-size: 1.08rem; line-height: 1.72; }
-:root.paper .fact .desc { font-size: 0.92rem; line-height: 1.6; }
 :root.paper .jury-member h4 { font-family: var(--font-display); font-weight: 400; font-size: 1.5rem; }
 :root.paper .jury-member .bio { font-size: 0.95rem; line-height: 1.65; }
 :root.paper .jury-member .role { font-size: 0.66rem; letter-spacing: 0.22em; }
@@ -4197,30 +4189,15 @@ input, textarea, select { font-family: inherit; }
 }
 
 /* ─── Manifesto ───────────────────────────────────────────────────────────
-   Statement and facts are one block, not a column of text with a stack of
-   ruled cards beside it. Two measures on a shared baseline, no rules. */
+   One column of statement, with the deadline clock alongside it. The figures
+   that used to sit under it are gone: the claim they carried reads as the
+   closing line of the statement instead. */
 :root.paper .manifest .container {
   display: flex; flex-direction: column; gap: clamp(38px, 5vh, 64px);
   max-width: 1320px;
 }
 :root.paper .manifest-text { max-width: 62ch; }
 :root.paper .manifest-text h2 { max-width: 20ch; text-wrap: balance; }
-:root.paper .manifest-facts {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: clamp(24px, 3.4vw, 52px); padding-top: 0;
-}
-/* No rules and no bars: the number carries the entry. */
-:root.paper .manifest-facts .fact {
-  border: none; border-left: none; padding: 0;
-}
-:root.paper .manifest-facts .num {
-  font-family: var(--font-display); font-weight: 400;
-  font-size: clamp(1.9rem, 3vw, 2.6rem); line-height: 1; color: var(--fg);
-  margin-bottom: 10px;
-}
-:root.paper .manifest-facts .desc {
-  font-size: 0.95rem; line-height: 1.65; color: var(--fg-muted); max-width: 40ch;
-}
 @media (max-width: 900px) {
   :root.paper .manifest .container { grid-template-columns: 1fr; gap: 44px; }
   :root.paper .manifest-text, :root.paper .manifest-text h2 { max-width: none; }
@@ -4232,54 +4209,6 @@ input, textarea, select { font-family: inherit; }
   opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
 }
 :root.paper .header-apply { transition: opacity 0.25s ease; }
-
-/* ─── Manifesto ───────────────────────────────────────────────────────────
-   Facts read as claims under the statement: number, then the claim beneath it,
-   on a shared top line, aligned from the top rather than the baseline. The
-   track count follows the number of claims - a fixed three would have left a
-   lone claim sitting in the first of three empty columns. */
-:root.paper .manifest-facts {
-  display: grid; grid-template-columns: minmax(0, 1fr);
-  gap: clamp(28px, 4vw, 64px);
-  padding-top: clamp(30px, 4vh, 48px);
-  border-top: 1px solid var(--border);
-  align-items: start;
-  /* The container aligns its children to the start, so this would otherwise
-     shrink to its own text and take the rule with it. The rule divides the
-     section, not the sentence: it holds the measure of the statement above. */
-  align-self: stretch;
-}
-:root.paper .manifest-facts .fact { display: flex; flex-direction: column; }
-:root.paper .manifest-facts .num {
-  font-family: var(--font-display); font-weight: 400;
-  font-size: clamp(1.7rem, 2.6vw, 2.3rem); line-height: 1;
-  color: var(--fg); margin-bottom: 12px;
-}
-:root.paper .manifest-facts .desc {
-  font-size: 0.92rem; line-height: 1.6; color: var(--fg-muted); max-width: 34ch;
-}
-/* A single claim is not a three-column row with two columns missing. Standing
-   alone it carries the full measure: the figure beside the sentence, both on
-   one line, sized to hold the width the rule above it spans. */
-:root.paper .manifest-facts .fact:only-child {
-  flex-direction: row; align-items: baseline; gap: clamp(20px, 3vw, 40px);
-}
-:root.paper .manifest-facts .fact:only-child .num {
-  flex: none; margin-bottom: 0; font-size: clamp(2.2rem, 4.4vw, 3.4rem);
-}
-:root.paper .manifest-facts .fact:only-child .desc {
-  max-width: 46ch; font-size: clamp(0.95rem, 1.1vw, 1.05rem);
-}
-@media (max-width: 900px) {
-  :root.paper .manifest-facts { grid-template-columns: 1fr; gap: 26px; }
-  :root.paper .manifest-facts .desc { max-width: none; }
-}
-@media (max-width: 640px) {
-  :root.paper .manifest-facts .fact:only-child {
-    flex-direction: column; align-items: flex-start; gap: 10px;
-  }
-  :root.paper .manifest-facts .fact:only-child .num { font-size: clamp(2rem, 9vw, 2.6rem); }
-}
 
 /* No rule under every question: the pairs are separated by space. The only
    lines left are the two disclosure headings themselves. */

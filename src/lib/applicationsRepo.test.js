@@ -30,7 +30,9 @@ describe('createApplication', () => {
     expect(payload.email).toBe('a@b.com'); // lowercased
     expect(payload.payment_status).toBe('pending');
     expect(payload.tier).toBe(1);
-    expect(payload.amount).toBe(100); // amount derived from tier, not client
+    expect(payload.amount).toBe(30); // amount derived from tier, not client
+    // One currency on every channel; the amount means nothing without it.
+    expect(payload.currency).toBe('USD');
     expect(payload.works).toHaveLength(1);
     expect(result.id).toBe(payload.id); // returns the inserted payload (with id)
   });

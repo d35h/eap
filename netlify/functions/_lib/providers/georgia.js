@@ -1,4 +1,4 @@
-// Georgian acquiring adapter (TBC E-Commerce / BOG iPay), EUR. Scaffold.
+// Georgian acquiring adapter (TBC E-Commerce / BOG iPay), USD. Scaffold.
 // Requires GEORGIA_CLIENT_ID/secret. Not yet wired to the live API.
 export const georgia = {
   id: 'georgia',

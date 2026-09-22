@@ -71,6 +71,7 @@ export default function Landing() {
             <p>{t('manifest.p2')}</p>
             <p>{t('manifest.p3')}</p>
             <p>{t('manifest.p4')}</p>
+            <p>{t('manifest.p5')}</p>
           </div>
 
             {/* The clock sits beside the statement, where the run of words used
@@ -79,18 +80,6 @@ export default function Landing() {
               <span className="manifest-clock__label">{t('opencall.deadlineLabel')}</span>
               <Countdown />
             </div>
-          </div>
-          <div className="manifest-facts">
-            {[1].map((n) => {
-              // A fact can be text-only; an empty .num would still reserve its line.
-              const num = t(`manifest.fact${n}Num`);
-              return (
-                <div className="fact" key={n}>
-                  {num ? <div className="num">{num}</div> : null}
-                  <div className="desc">{t(`manifest.fact${n}Desc`)}</div>
-                </div>
-              );
-            })}
           </div>
 
         </div>
