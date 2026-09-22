@@ -1,8 +1,8 @@
 import { supabase } from './supabase.js';
 
-// USD, matching netlify/functions/_lib/pricing.js. Rows written before the
-// switch keep the BYN amount they were actually quoted.
-const AMOUNT_BY_TIER = { 1: 30, 2: 45, 3: 50 };
+// USD, matching netlify/functions/_lib/pricing.js: 40 per work. Rows written
+// before the switch keep the amount they were actually quoted.
+const AMOUNT_BY_TIER = { 1: 40, 2: 80, 3: 120 };
 
 function currentLang() {
   try {

@@ -28,7 +28,7 @@ export const translations = {
       items: [
         { q: 'Кто может подать заявку?', a: 'Художники, работающие в любых медиа и направлениях современного искусства.' },
         { q: 'До какого числа открыт приём?', a: 'Заявки принимаются до 31 марта 2027, 23:59. Обратный отсчёт идёт на главной странице.' },
-        { q: 'Сколько стоит подача?', a: 'Стоимость зависит от числа работ: 1 работа: 30 USD, 2 работы: 45 USD, 3 работы: 50 USD. Оплата происходит в конце подачи заявки.' },
+        { q: 'Сколько стоит подача?', a: 'Стоимость зависит от числа работ: 40 USD за каждую работу — 1 работа: 40 USD, 2 работы: 80 USD, 3 работы: 120 USD. Оплата происходит в конце подачи заявки.' },
         { q: 'Какие материалы нужны?', a: 'Портфолио до 3 работ, описание проекта на русском или английском и краткое CV. Форматы: JPEG, PNG, PDF, MP4 (до 25 MB на работу).' },
         { q: 'Кто оценивает заявки?', a: 'Все заявки рассматривает независимое международное жюри из кураторов, художников и теоретиков искусства.' },
         { q: 'Когда будут результаты?', a: 'Отбор проходит с апреля по июнь 2027. Результаты приходят на email и в личный кабинет. Обратную связь получает каждый участник, независимо от итога.' },
@@ -255,7 +255,7 @@ export const translations = {
       payBank: 'Банковский перевод',
       payBankDesc: 'Для юридических лиц',
       fee: 'Стоимость подачи',
-      pricing: 'Стоимость: 1 работа 30 USD · 2 работы 45 USD · 3 работы 50 USD',
+      pricing: 'Стоимость: 40 USD за каждую работу',
       payByn: 'Карта РБ / РФ · ЕРИП',
       payIntl: 'Visa / Mastercard / UnionPay',
       // Nav
@@ -323,7 +323,7 @@ export const translations = {
       detail2Title: 'Заполните заявку',
       detail2P1: 'Заполните онлайн-заявку: укажите контактные данные, загрузите работы и завершите подачу заявки.',
       detail2P2: 'Все введённые данные сохраняются автоматически в браузере. Если вы закроете окно и вернётесь позже, продолжите с того же места.',
-      detail2P3: 'Оплата происходит в конце подачи заявки. Стоимость зависит от числа работ: 1 работа: 30 USD, 2 работы: 45 USD, 3 работы: 50 USD.',
+      detail2P3: 'Оплата происходит в конце подачи заявки. Стоимость зависит от числа работ: 40 USD за каждую работу — 1 работа: 40 USD, 2 работы: 80 USD, 3 работы: 120 USD.',
       detail3Title: 'Рассмотрение заявки',
       detail3P1: 'Все заявки рассматриваются международным экспертным жюри. Результаты будут отправлены на электронную почту и доступны в личном кабинете. Каждый участник получит ответ по своей заявке.',
       detail3Items: [
@@ -416,7 +416,7 @@ export const translations = {
       items: [
         { q: 'Who can apply?', a: 'Artists working in any media and direction of contemporary art.' },
         { q: 'What is the deadline?', a: 'Applications are open until 31 March 2027, 23:59. A live countdown runs on the home page.' },
-        { q: 'How much does it cost to apply?', a: 'The fee depends on the number of works: 1 work: 30 USD, 2 works: 45 USD, 3 works: 50 USD. Payment is made at the end of the application.' },
+        { q: 'How much does it cost to apply?', a: 'The fee is 40 USD per work — 1 work: 40 USD, 2 works: 80 USD, 3 works: 120 USD. Payment is made at the end of the application.' },
         { q: 'What materials do I need?', a: 'A portfolio of up to 3 works, a project description in Russian or English, and a short CV. Formats: JPEG, PNG, PDF, MP4 (up to 25 MB per work).' },
         { q: 'Who reviews the applications?', a: 'Every application is reviewed by an independent international jury of curators, artists and art theorists.' },
         { q: 'When will I get results?', a: 'Selection runs from April to June 2027. Results arrive by email and in your personal account. Every applicant receives feedback, regardless of the outcome.' },
@@ -639,7 +639,7 @@ export const translations = {
       payBank: 'Bank transfer',
       payBankDesc: 'For legal entities',
       fee: 'Application fee',
-      pricing: 'Fee: 1 work 30 USD · 2 works 45 USD · 3 works 50 USD',
+      pricing: 'Fee: 40 USD per work',
       payByn: 'BY / RU card · ERIP',
       payIntl: 'Visa / Mastercard / UnionPay',
       back: '← Back',
@@ -704,7 +704,7 @@ export const translations = {
       detail2Title: 'Fill out the application',
       detail2P1: 'Complete the online application: enter your contact details, upload your works and finish the submission.',
       detail2P2: 'All entered data is saved automatically in your browser. If you close the window and return later, continue from the same place.',
-      detail2P3: 'Payment is made at the end of the application. The fee depends on the number of works: 1 work: 30 USD, 2 works: 45 USD, 3 works: 50 USD.',
+      detail2P3: 'Payment is made at the end of the application. The fee is 40 USD per work — 1 work: 40 USD, 2 works: 80 USD, 3 works: 120 USD.',
       detail3Title: 'Review of your application',
       detail3P1: 'Every application is reviewed by an international expert jury. Results are sent by email and available in your personal account. Every applicant receives a response.',
       detail3Items: [
@@ -797,7 +797,7 @@ export const translations = {
       items: [
         { q: 'Кім өтінім бере алады?', a: 'Заманауи өнердің кез келген медиасы мен бағытында жұмыс істейтін суретшілер.' },
         { q: 'Қабылдау қашанға дейін?', a: 'Өтінімдер 2027 жылдың 31 наурызы, 23:59 дейін қабылданады. Кері санақ басты бетте жүреді.' },
-        { q: 'Өтінім қанша тұрады?', a: 'Құны жұмыс санына байланысты: 1 жұмыс: 30 USD, 2 жұмыс: 45 USD, 3 жұмыс: 50 USD. Төлем өтінім берудің соңында жүзеге асады.' },
+        { q: 'Өтінім қанша тұрады?', a: 'Әр жұмыс үшін 40 USD — 1 жұмыс: 40 USD, 2 жұмыс: 80 USD, 3 жұмыс: 120 USD. Төлем өтінім берудің соңында жүзеге асады.' },
         { q: 'Қандай материалдар қажет?', a: '3 жұмысқа дейінгі портфолио, жоба сипаттамасы (орысша немесе ағылшынша) және қысқаша CV. Форматтар: JPEG, PNG, PDF, MP4 (әр жұмысқа 25 MB дейін).' },
         { q: 'Өтінімдерді кім бағалайды?', a: 'Барлық өтінімдерді кураторлардан, суретшілерден және теоретиктерден тұратын тәуелсіз халықаралық жюри қарайды.' },
         { q: 'Нәтиже қашан болады?', a: 'Іріктеу 2027 жылдың сәуір–маусым айларында өтеді. Нәтижелер email және жеке кабинетке келеді. Әр қатысушы кері байланыс алады, нәтижеге қарамастан.' },
@@ -1020,7 +1020,7 @@ export const translations = {
       payBank: 'Банктік аударым',
       payBankDesc: 'Заңды тұлғаларға',
       fee: 'Өтінім құны',
-      pricing: 'Құны: 1 жұмыс 30 USD · 2 жұмыс 45 USD · 3 жұмыс 50 USD',
+      pricing: 'Құны: әр жұмыс үшін 40 USD',
       payByn: 'РБ / РФ картасы · ЕРИП',
       payIntl: 'Visa / Mastercard / UnionPay',
       back: '← Артқа',
@@ -1085,7 +1085,7 @@ export const translations = {
       detail2Title: 'Өтінімді толтырыңыз',
       detail2P1: 'Онлайн-өтінімді толтырыңыз: байланыс деректеріңізді енгізіп, жұмыстарыңызды жүктеңіз және өтінім беруді аяқтаңыз.',
       detail2P2: 'Енгізілген барлық деректер браузеріңізде автоматты сақталады.',
-      detail2P3: 'Төлем өтінім берудің соңында жүзеге асады. Құны жұмыс санына байланысты: 1 жұмыс: 30 USD, 2 жұмыс: 45 USD, 3 жұмыс: 50 USD.',
+      detail2P3: 'Төлем өтінім берудің соңында жүзеге асады. Әр жұмыс үшін 40 USD — 1 жұмыс: 40 USD, 2 жұмыс: 80 USD, 3 жұмыс: 120 USD.',
       detail3Title: 'Өтінімді қарау',
       detail3P1: 'Барлық өтінімдерді халықаралық сарапшы жюри қарайды. Нәтижелер электрондық поштаға жіберіліп, жеке кабинетте қолжетімді болады. Әр қатысушы өз өтінімі бойынша жауап алады.',
       detail3Items: [
@@ -1177,7 +1177,7 @@ export const translations = {
       items: [
         { q: '谁可以申请？', a: '从事任何媒介与方向的当代艺术家。' },
         { q: '申请截止到什么时候？', a: '申请开放至 2027 年 3 月 31 日 23:59。首页有实时倒计时。' },
-        { q: '申请费用是多少？', a: '费用取决于作品数量：1 件：30 USD，2 件：45 USD，3 件：50 USD。付款在申请最后一步完成。' },
+        { q: '申请费用是多少？', a: '每件作品 40 USD：1 件：40 USD，2 件：80 USD，3 件：120 USD。付款在申请最后一步完成。' },
         { q: '我需要准备哪些材料？', a: '最多 3 件作品的作品集、俄语或英语的项目说明，以及简短的简历。格式：JPEG、PNG、PDF、MP4（每件作品不超过 25 MB）。' },
         { q: '由谁评审申请？', a: '每份申请都由策展人、艺术家和艺术理论家组成的独立国际评审团审阅。' },
         { q: '什么时候出结果？', a: '评选于 2027 年 4 月至 6 月进行。结果通过电子邮件和个人账户发送。每位申请者都会收到反馈，无论结果如何。' },
@@ -1400,7 +1400,7 @@ export const translations = {
       payBank: '银行转账',
       payBankDesc: '适用于法人实体',
       fee: '申请费',
-      pricing: '费用：1 件作品 30 USD · 2 件 45 USD · 3 件 50 USD',
+      pricing: '费用：每件作品 40 USD',
       payByn: 'РБ/РФ 银行卡 · ERIP',
       payIntl: 'Visa / Mastercard / UnionPay',
       back: '← 返回',
@@ -1465,7 +1465,7 @@ export const translations = {
       detail2Title: '填写申请',
       detail2P1: '填写在线申请：填写联系方式，上传作品，完成申请提交。',
       detail2P2: '所有输入的数据会自动保存在您的浏览器中。如果您关闭窗口稍后返回，可从同一位置继续。',
-      detail2P3: '付款在申请最后一步完成。费用取决于作品数量：1 件：30 USD，2 件：45 USD，3 件：50 USD。',
+      detail2P3: '付款在申请最后一步完成。每件作品 40 USD：1 件：40 USD，2 件：80 USD，3 件：120 USD。',
       detail3Title: '申请审阅',
       detail3P1: '所有申请由国际专家评审团审阅。结果将通过电子邮件发送，并可在个人账户中查看。每位参与者都会收到关于自己申请的回复。',
       detail3Items: [

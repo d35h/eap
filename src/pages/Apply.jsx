@@ -26,7 +26,7 @@ const fmtSize = (bytes) => {
 
 // Стоимость зависит от числа работ. USD on every channel - see
 // netlify/functions/_lib/pricing.js, which is what actually gets charged.
-const PRICE_BY_COUNT = { 1: 30, 2: 45, 3: 50 };
+const PRICE_BY_COUNT = { 1: 40, 2: 80, 3: 120 };
 const feeFor = (n) => `${PRICE_BY_COUNT[Math.min(Math.max(n, 1), 3)]} USD`;
 
 export default function Apply() {
