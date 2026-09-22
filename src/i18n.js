@@ -26,7 +26,7 @@ export const translations = {
       toggle: 'Показать вопросы',
       lead: 'Коротко о том, как устроена подача и что вас ждёт.',
       items: [
-        { q: 'Кто может подать заявку?', a: 'Художники, работающие в любых медиа и направлениях современного искусства. Географических ограничений внутри Евразии нет: от Калининграда до Владивостока, от Алматы до Тбилиси.' },
+        { q: 'Кто может подать заявку?', a: 'Художники, работающие в любых медиа и направлениях современного искусства.' },
         { q: 'До какого числа открыт приём?', a: 'Заявки принимаются до 31 марта 2027, 23:59. Обратный отсчёт идёт на главной странице.' },
         { q: 'Сколько стоит подача?', a: 'Стоимость зависит от числа работ: 1 работа: 30 USD, 2 работы: 45 USD, 3 работы: 50 USD. Оплата происходит в конце подачи заявки.' },
         { q: 'Какие материалы нужны?', a: 'Портфолио до 3 работ, описание проекта на русском или английском и краткое CV. Форматы: JPEG, PNG, PDF, MP4 (до 25 MB на работу).' },
@@ -414,7 +414,7 @@ export const translations = {
       toggle: 'Show the questions',
       lead: 'A quick overview of how applying works and what to expect.',
       items: [
-        { q: 'Who can apply?', a: 'Artists working in any media and direction of contemporary art. There are no geographic limits within Eurasia: from Kaliningrad to Vladivostok, from Almaty to Tbilisi.' },
+        { q: 'Who can apply?', a: 'Artists working in any media and direction of contemporary art.' },
         { q: 'What is the deadline?', a: 'Applications are open until 31 March 2027, 23:59. A live countdown runs on the home page.' },
         { q: 'How much does it cost to apply?', a: 'The fee depends on the number of works: 1 work: 30 USD, 2 works: 45 USD, 3 works: 50 USD. Payment is made at the end of the application.' },
         { q: 'What materials do I need?', a: 'A portfolio of up to 3 works, a project description in Russian or English, and a short CV. Formats: JPEG, PNG, PDF, MP4 (up to 25 MB per work).' },
@@ -795,7 +795,7 @@ export const translations = {
       toggle: 'Сұрақтарды көрсету',
       lead: 'Өтінім қалай беріледі және сізді не күтіп тұрғаны туралы қысқаша.',
       items: [
-        { q: 'Кім өтінім бере алады?', a: 'Заманауи өнердің кез келген медиасы мен бағытында жұмыс істейтін суретшілер. Еуразия ішінде географиялық шектеу жоқ.' },
+        { q: 'Кім өтінім бере алады?', a: 'Заманауи өнердің кез келген медиасы мен бағытында жұмыс істейтін суретшілер.' },
         { q: 'Қабылдау қашанға дейін?', a: 'Өтінімдер 2027 жылдың 31 наурызы, 23:59 дейін қабылданады. Кері санақ басты бетте жүреді.' },
         { q: 'Өтінім қанша тұрады?', a: 'Құны жұмыс санына байланысты: 1 жұмыс: 30 USD, 2 жұмыс: 45 USD, 3 жұмыс: 50 USD. Төлем өтінім берудің соңында жүзеге асады.' },
         { q: 'Қандай материалдар қажет?', a: '3 жұмысқа дейінгі портфолио, жоба сипаттамасы (орысша немесе ағылшынша) және қысқаша CV. Форматтар: JPEG, PNG, PDF, MP4 (әр жұмысқа 25 MB дейін).' },
@@ -1175,7 +1175,7 @@ export const translations = {
       toggle: '查看问题',
       lead: '简要说明申请方式以及您将获得什么。',
       items: [
-        { q: '谁可以申请？', a: '从事任何媒介与方向的当代艺术家。欧亚范围内没有地域限制：从加里宁格勒到符拉迪沃斯托克，从阿拉木图到第比利斯。' },
+        { q: '谁可以申请？', a: '从事任何媒介与方向的当代艺术家。' },
         { q: '申请截止到什么时候？', a: '申请开放至 2027 年 3 月 31 日 23:59。首页有实时倒计时。' },
         { q: '申请费用是多少？', a: '费用取决于作品数量：1 件：30 USD，2 件：45 USD，3 件：50 USD。付款在申请最后一步完成。' },
         { q: '我需要准备哪些材料？', a: '最多 3 件作品的作品集、俄语或英语的项目说明，以及简短的简历。格式：JPEG、PNG、PDF、MP4（每件作品不超过 25 MB）。' },
