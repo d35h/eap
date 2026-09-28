@@ -479,8 +479,9 @@ input, textarea, select { font-family: inherit; }
 }
 .jury-grid--single .jury-member h4 { font-size: 2rem; margin-bottom: 6px; }
 .jury-grid--single .jury-member .bio {
-  font-family: var(--font-display); font-style: italic; font-size: 1.35rem;
-  line-height: 1.45; color: var(--fg); max-width: 46ch;
+  font-family: var(--font-display); font-style: normal; font-weight: 400;
+  font-size: 1.32rem; line-height: 1.6; letter-spacing: 0.005em;
+  color: var(--fg); max-width: 54ch;
 }
 .jury-years {
   font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.04em;
