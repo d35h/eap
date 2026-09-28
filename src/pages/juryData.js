@@ -10,7 +10,7 @@ export const JURY_CONTENT = {
       {
               name: "Илона Кособуко",
               role: "Куратор · международный член жюри",
-              bio: "Арт-профессионал, куратор и международный член жюри с обширным опытом в современном искусстве, выставках и культурных проектах. Участвует в жюри международных художественных конкурсов и биеннале, привнося экспертизу и глобальный взгляд в отбор и поддержку современных художников.",
+              bio: "Профессиональный художник, куратор и международный член жюри с обширным опытом в современном искусстве, выставках и культурных проектах. Участвует в жюри международных художественных конкурсов и биеннале, привнося экспертизу и глобальный взгляд в отбор и поддержку современных художников.",
               facts: [
                 {
                   label: "Образование",
@@ -208,7 +208,7 @@ export const JURY_CONTENT = {
       {
               name: "Ilona Kosobuko",
               role: "Curator · international juror",
-              bio: "An art professional, curator and international juror with extensive experience in contemporary art, exhibitions and cultural projects. She participates in juries of international art competitions and biennales, contributing her expertise and global perspective to the selection and support of contemporary artists.",
+              bio: "A professional artist, curator and international juror with extensive experience in contemporary art, exhibitions and cultural projects. She participates in juries of international art competitions and biennales, contributing her expertise and global perspective to the selection and support of contemporary artists.",
               facts: [
                 {
                   label: "Education",
@@ -406,7 +406,7 @@ export const JURY_CONTENT = {
       {
               name: "Илона Кособуко",
               role: "Куратор · халықаралық қазылар алқасының мүшесі",
-              bio: "Заманауи өнер, көрмелер мен мәдени жобаларда мол тәжірибесі бар арт-маман, куратор және халықаралық қазылар алқасының мүшесі. Халықаралық көркемөнер байқаулары мен биенналелердің қазылар алқасына қатысып, заманауи суретшілерді іріктеу мен қолдауға сараптамасы мен жаһандық көзқарасын қосады.",
+              bio: "Заманауи өнер, көрмелер мен мәдени жобаларда мол тәжірибесі бар кәсіби суретші, куратор және халықаралық қазылар алқасының мүшесі. Халықаралық көркемөнер байқаулары мен биенналелердің қазылар алқасына қатысып, заманауи суретшілерді іріктеу мен қолдауға сараптамасы мен жаһандық көзқарасын қосады.",
               facts: [
                 {
                   label: "Білімі",
@@ -604,7 +604,7 @@ export const JURY_CONTENT = {
       {
               name: "伊洛娜·科索布科",
               role: "策展人 · 国际评委",
-              bio: "一位在当代艺术、展览与文化项目方面经验丰富的艺术专业人士、策展人及国际评委。她参与国际艺术竞赛与双年展的评审工作，以其专业素养与全球视野，参与对当代艺术家的遴选与支持。",
+              bio: "一位在当代艺术、展览与文化项目方面经验丰富的职业艺术家、策展人及国际评委。她参与国际艺术竞赛与双年展的评审工作，以其专业素养与全球视野，参与对当代艺术家的遴选与支持。",
               facts: [
                 {
                   label: "教育",
