@@ -1,6 +1,6 @@
 // Jury content for the landing "Jury" section, kept out of the large i18n
 // bundle because it is a full structured profile. Per-language (ru/en/kz/zh);
-// the portrait itself is the public asset /jury/kosobuko.jpg.
+// the portrait is the public asset /jury/kosobuko.jpg.
 
 export const JURY_CONTENT = {
   ru: {
@@ -11,10 +11,7 @@ export const JURY_CONTENT = {
               name: "Илона Кособуко",
               role: "Куратор · международный член жюри",
               years: "р. 1966, Минск",
-              bio: "Арт-профессионал, куратор и международный член жюри с обширным опытом в современном искусстве, выставках и культурных проектах. Входит в состав жюри международных конкурсов и биеннале.",
-              bioFull: [
-                "Илона Кособуко — арт-профессионал, куратор и международный член жюри с обширным опытом в современном искусстве, выставках и культурных проектах. Она участвует в жюри международных художественных конкурсов и биеннале, привнося экспертизу и глобальный взгляд в отбор и поддержку современных художников.",
-              ],
+              bio: "Арт-профессионал, куратор и международный член жюри с обширным опытом в современном искусстве, выставках и культурных проектах. Участвует в жюри международных художественных конкурсов и биеннале, привнося экспертизу и глобальный взгляд в отбор и поддержку современных художников.",
               facts: [
                 {
                   label: "Образование",
@@ -65,6 +62,71 @@ export const JURY_CONTENT = {
                       year: "2017",
                       title: "Член жюри",
                       note: "2-я биеннале рисунка и графики, Лозанна, Швейцария",
+                    },
+                  ],
+                },
+                {
+                  heading: "Избранные выставки и проекты",
+                  items: [
+                    {
+                      year: "2026",
+                      title: "«Terra di Bellezza. Sole e Felicità»",
+                      note: "Резиденция посольства Италии, Минск, Беларусь",
+                    },
+                    {
+                      year: "2025",
+                      title: "«Тры чвэрці»",
+                      note: "Арт-центр музея Марка Шагала, Витебск, Беларусь",
+                    },
+                    {
+                      year: "2025",
+                      title: "«Французский дневник»",
+                      note: "Резиденция посольства Франции, Минск, Беларусь",
+                    },
+                    {
+                      year: "2020",
+                      title: "«Автономия свободы»",
+                      note: "Галерея «ДК», Минск, Беларусь",
+                    },
+                    {
+                      year: "2018",
+                      title: "Национальный художественный музей Китая",
+                      note: "Пекин / Шанхай, Китай",
+                    },
+                    {
+                      year: "2018",
+                      title: "Art Vilnius",
+                      note: "Вильнюс, Литва",
+                    },
+                    {
+                      year: "2017",
+                      title: "Berliner Liste",
+                      note: "Берлин, Германия",
+                    },
+                    {
+                      year: "2016",
+                      title: "«Связи»",
+                      note: "Художественный музей Чунцина / Арт-центр Чунцина, Китай",
+                    },
+                    {
+                      year: "2015",
+                      title: "Национальный художественный музей Республики Беларусь",
+                      note: "Минск, Беларусь",
+                    },
+                    {
+                      year: "2014",
+                      title: "Art Zurich",
+                      note: "Цюрих, Швейцария",
+                    },
+                    {
+                      year: "2010",
+                      title: "Национальный художественный музей Республики Беларусь",
+                      note: "Минск, Беларусь",
+                    },
+                    {
+                      year: "2010",
+                      title: "«Дневник одного года»",
+                      note: "Музей современного искусства, Минск, Беларусь",
                     },
                   ],
                 },
@@ -148,10 +210,7 @@ export const JURY_CONTENT = {
               name: "Ilona Kosobuko",
               role: "Curator · international juror",
               years: "b. 1966, Minsk",
-              bio: "Art professional, curator and international juror with extensive experience in contemporary art, exhibitions and cultural projects. She sits on the juries of international competitions and biennales.",
-              bioFull: [
-                "Ilona Kosobuko is an art professional, curator and international juror with extensive experience in contemporary art, exhibitions and cultural projects. She participates in juries of international art competitions and biennales, contributing her expertise and global perspective to the selection and support of contemporary artists.",
-              ],
+              bio: "An art professional, curator and international juror with extensive experience in contemporary art, exhibitions and cultural projects. She participates in juries of international art competitions and biennales, contributing her expertise and global perspective to the selection and support of contemporary artists.",
               facts: [
                 {
                   label: "Education",
@@ -202,6 +261,71 @@ export const JURY_CONTENT = {
                       year: "2017",
                       title: "Jury Member",
                       note: "2nd Drawing and Graphic Art Biennale, Lausanne, Switzerland",
+                    },
+                  ],
+                },
+                {
+                  heading: "Selected exhibitions & projects",
+                  items: [
+                    {
+                      year: "2026",
+                      title: "Terra di Bellezza. Sole e Felicità",
+                      note: "Residence of the Embassy of Italy, Minsk, Belarus",
+                    },
+                    {
+                      year: "2025",
+                      title: "Three Quarters",
+                      note: "Marc Chagall Museum Art Center, Vitebsk, Belarus",
+                    },
+                    {
+                      year: "2025",
+                      title: "French Diary",
+                      note: "Residence of the Embassy of France, Minsk, Belarus",
+                    },
+                    {
+                      year: "2020",
+                      title: "Autonomy of Freedom",
+                      note: "DK Gallery, Minsk, Belarus",
+                    },
+                    {
+                      year: "2018",
+                      title: "National Art Museum of China",
+                      note: "Beijing / Shanghai, China",
+                    },
+                    {
+                      year: "2018",
+                      title: "Art Vilnius",
+                      note: "Vilnius, Lithuania",
+                    },
+                    {
+                      year: "2017",
+                      title: "Berliner Liste",
+                      note: "Berlin, Germany",
+                    },
+                    {
+                      year: "2016",
+                      title: "Connections",
+                      note: "Chongqing Art Museum / Chongqing Art Center, China",
+                    },
+                    {
+                      year: "2015",
+                      title: "National Art Museum of the Republic of Belarus",
+                      note: "Minsk, Belarus",
+                    },
+                    {
+                      year: "2014",
+                      title: "Art Zurich",
+                      note: "Zurich, Switzerland",
+                    },
+                    {
+                      year: "2010",
+                      title: "National Art Museum of the Republic of Belarus",
+                      note: "Minsk, Belarus",
+                    },
+                    {
+                      year: "2010",
+                      title: "Diary of One Year",
+                      note: "Museum of Contemporary Art, Minsk, Belarus",
                     },
                   ],
                 },
@@ -285,10 +409,7 @@ export const JURY_CONTENT = {
               name: "Илона Кособуко",
               role: "Куратор · халықаралық қазылар алқасының мүшесі",
               years: "т. 1966, Минск",
-              bio: "Заманауи өнер, көрмелер мен мәдени жобаларда мол тәжірибесі бар арт-маман, куратор және халықаралық қазылар алқасының мүшесі. Халықаралық байқаулар мен биенналелердің қазылар алқасына кіреді.",
-              bioFull: [
-                "Илона Кособуко — заманауи өнер, көрмелер мен мәдени жобаларда мол тәжірибесі бар арт-маман, куратор және халықаралық қазылар алқасының мүшесі. Ол халықаралық көркемөнер байқаулары мен биенналелердің қазылар алқасына қатысып, заманауи суретшілерді іріктеу мен қолдауға сараптамасы мен жаһандық көзқарасын қосады.",
-              ],
+              bio: "Заманауи өнер, көрмелер мен мәдени жобаларда мол тәжірибесі бар арт-маман, куратор және халықаралық қазылар алқасының мүшесі. Халықаралық көркемөнер байқаулары мен биенналелердің қазылар алқасына қатысып, заманауи суретшілерді іріктеу мен қолдауға сараптамасы мен жаһандық көзқарасын қосады.",
               facts: [
                 {
                   label: "Білімі",
@@ -308,7 +429,7 @@ export const JURY_CONTENT = {
                 {
                   label: "Марапаттары",
                   value: "«Әлем суретшісі»",
-                  note: "Пекин, 2018 · 7-ші Пекин биенналесінің лауреаты, 2017",
+                  note: "Пекин, 2018 · 7-ші Пекин биеннале лауреаты, 2017",
                 },
               ],
               sections: [
@@ -339,6 +460,71 @@ export const JURY_CONTENT = {
                       year: "2017",
                       title: "Қазылар алқасының мүшесі",
                       note: "2-ші сурет пен графика биеннале, Лозанна, Швейцария",
+                    },
+                  ],
+                },
+                {
+                  heading: "Таңдаулы көрмелер мен жобалар",
+                  items: [
+                    {
+                      year: "2026",
+                      title: "«Terra di Bellezza. Sole e Felicità»",
+                      note: "Италия елшілігінің резиденциясы, Минск, Беларусь",
+                    },
+                    {
+                      year: "2025",
+                      title: "«Үш ширек»",
+                      note: "Марк Шагал мұражайының өнер орталығы, Витебск, Беларусь",
+                    },
+                    {
+                      year: "2025",
+                      title: "«Француз күнделігі»",
+                      note: "Франция елшілігінің резиденциясы, Минск, Беларусь",
+                    },
+                    {
+                      year: "2020",
+                      title: "«Еркіндік автономиясы»",
+                      note: "«ДК» галереясы, Минск, Беларусь",
+                    },
+                    {
+                      year: "2018",
+                      title: "Қытай ұлттық көркемөнер мұражайы",
+                      note: "Пекин / Шанхай, Қытай",
+                    },
+                    {
+                      year: "2018",
+                      title: "Art Vilnius",
+                      note: "Вильнюс, Литва",
+                    },
+                    {
+                      year: "2017",
+                      title: "Berliner Liste",
+                      note: "Берлин, Германия",
+                    },
+                    {
+                      year: "2016",
+                      title: "«Байланыстар»",
+                      note: "Чунцин көркемөнер мұражайы / Чунцин өнер орталығы, Қытай",
+                    },
+                    {
+                      year: "2015",
+                      title: "Беларусь Республикасының ұлттық көркемөнер мұражайы",
+                      note: "Минск, Беларусь",
+                    },
+                    {
+                      year: "2014",
+                      title: "Art Zurich",
+                      note: "Цюрих, Швейцария",
+                    },
+                    {
+                      year: "2010",
+                      title: "Беларусь Республикасының ұлттық көркемөнер мұражайы",
+                      note: "Минск, Беларусь",
+                    },
+                    {
+                      year: "2010",
+                      title: "«Бір жылдың күнделігі»",
+                      note: "Заманауи өнер мұражайы, Минск, Беларусь",
                     },
                   ],
                 },
@@ -422,10 +608,7 @@ export const JURY_CONTENT = {
               name: "伊洛娜·科索布科",
               role: "策展人 · 国际评委",
               years: "生于1966年，明斯克",
-              bio: "艺术专业人士、策展人及国际评委，在当代艺术、展览与文化项目方面经验丰富。她担任国际艺术竞赛与双年展的评委。",
-              bioFull: [
-                "伊洛娜·科索布科是一位艺术专业人士、策展人及国际评委，在当代艺术、展览与文化项目方面拥有丰富经验。她参与国际艺术竞赛与双年展的评审工作，以其专业素养与全球视野，参与对当代艺术家的遴选与支持。",
-              ],
+              bio: "一位在当代艺术、展览与文化项目方面经验丰富的艺术专业人士、策展人及国际评委。她参与国际艺术竞赛与双年展的评审工作，以其专业素养与全球视野，参与对当代艺术家的遴选与支持。",
               facts: [
                 {
                   label: "教育",
@@ -476,6 +659,71 @@ export const JURY_CONTENT = {
                       year: "2017",
                       title: "评委",
                       note: "第二届素描与版画双年展，洛桑，瑞士",
+                    },
+                  ],
+                },
+                {
+                  heading: "精选展览与项目",
+                  items: [
+                    {
+                      year: "2026",
+                      title: "Terra di Bellezza. Sole e Felicità",
+                      note: "意大利大使馆官邸，明斯克，白俄罗斯",
+                    },
+                    {
+                      year: "2025",
+                      title: "《三刻》",
+                      note: "马克·夏加尔博物馆艺术中心，维捷布斯克，白俄罗斯",
+                    },
+                    {
+                      year: "2025",
+                      title: "《法国日记》",
+                      note: "法国大使馆官邸，明斯克，白俄罗斯",
+                    },
+                    {
+                      year: "2020",
+                      title: "《自由的自主》",
+                      note: "DK 画廊，明斯克，白俄罗斯",
+                    },
+                    {
+                      year: "2018",
+                      title: "中国美术馆",
+                      note: "北京 / 上海，中国",
+                    },
+                    {
+                      year: "2018",
+                      title: "Art Vilnius",
+                      note: "维尔纽斯，立陶宛",
+                    },
+                    {
+                      year: "2017",
+                      title: "Berliner Liste",
+                      note: "柏林，德国",
+                    },
+                    {
+                      year: "2016",
+                      title: "《联系》",
+                      note: "重庆美术馆 / 重庆艺术中心，中国",
+                    },
+                    {
+                      year: "2015",
+                      title: "白俄罗斯共和国国家美术馆",
+                      note: "明斯克，白俄罗斯",
+                    },
+                    {
+                      year: "2014",
+                      title: "Art Zurich",
+                      note: "苏黎世，瑞士",
+                    },
+                    {
+                      year: "2010",
+                      title: "白俄罗斯共和国国家美术馆",
+                      note: "明斯克，白俄罗斯",
+                    },
+                    {
+                      year: "2010",
+                      title: "《一年的日记》",
+                      note: "当代艺术博物馆，明斯克，白俄罗斯",
                     },
                   ],
                 },
