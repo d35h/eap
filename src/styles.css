@@ -531,6 +531,19 @@ input, textarea, select { font-family: inherit; }
 .jury-selected .ev { color: var(--fg); font-size: 0.95rem; }
 .jury-selected .ev span { display: block; font-family: var(--font-mono); font-size: 0.72rem; color: var(--fg-faint); margin-top: 3px; }
 
+.jury-collections { margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--border); }
+.jury-collections ul {
+  list-style: none; margin: 10px 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 4px 28px;
+}
+.jury-collections li {
+  font-size: 0.9rem; color: var(--fg-muted); line-height: 1.5;
+  padding: 5px 0 5px 14px; position: relative;
+}
+.jury-collections li::before {
+  content: '·'; position: absolute; left: 2px; color: var(--accent);
+}
+
 @media (max-width: 720px) {
   .jury-grid--single .jury-member { grid-template-columns: 1fr; gap: 28px; }
   .jury-grid--single .jury-photo img { max-width: 300px; }

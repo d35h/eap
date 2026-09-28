@@ -4,16 +4,16 @@ import Countdown from '../components/Countdown.jsx';
 import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
 import OrganicCta from '../components/OrganicCta.jsx';
+import { JURY_CONTENT } from './juryData.js';
 
-// ── Состав жюри (hardcoded). Фото постоянно; имя, роль и тексты берутся из
-//    переводов (team.jury, по индексу), чтобы контент правился без кода. ──
-const JURY = [
-  { name: 'Илона Кособуко', photo: '/jury/kosobuko.jpg' },
-];
+// ── Состав жюри. Фото — постоянный ассет; тексты берутся из juryData (по языку),
+//    чтобы объёмный профиль не раздувал i18n. ──
+const JURY_PHOTOS = ['/jury/kosobuko.jpg'];
 
 export default function Landing() {
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
   const submOpen = useSubmissionsOpen(); // undefined = loading, then true/false
+  const juryContent = JURY_CONTENT[lang] || JURY_CONTENT.ru;
 
 
   return (
@@ -95,22 +95,18 @@ export default function Landing() {
             <p className="section-intro">{t('team.intro')}</p>
           </div>
 
-          <div className={`jury-grid${JURY.length === 1 ? ' jury-grid--single' : ''}`}>
-            {JURY.map((j, i) => {
-              const meta = (Array.isArray(t('team.jury')) ? t('team.jury') : [])[i] || {};
-              return (
-                <JuryMember
-                  key={j.name}
-                  id={`jury-detail-${i}`}
-                  photo={j.photo}
-                  name={meta.name || j.name}
-                  meta={meta}
-                  readMore={t('team.readMore')}
-                  collapse={t('team.collapse')}
-                  selectedLabel={t('team.selectedLabel')}
-                />
-              );
-            })}
+          <div className={`jury-grid${juryContent.members.length === 1 ? ' jury-grid--single' : ''}`}>
+            {juryContent.members.map((meta, i) => (
+              <JuryMember
+                key={meta.name}
+                id={`jury-detail-${i}`}
+                photo={JURY_PHOTOS[i]}
+                name={meta.name}
+                meta={meta}
+                readMore={juryContent.readMore}
+                collapse={juryContent.collapse}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -122,13 +118,14 @@ export default function Landing() {
   );
 }
 
-// ── One juror: photo + short bio always visible, detailed bio revealed on click ──
-function JuryMember({ id, photo, name, meta, readMore, collapse, selectedLabel }) {
+// ── One juror: photo + short bio always visible, full profile revealed on click ──
+function JuryMember({ id, photo, name, meta, readMore, collapse }) {
   const [open, setOpen] = useState(false);
   const bioFull = Array.isArray(meta.bioFull) ? meta.bioFull : [];
   const facts = Array.isArray(meta.facts) ? meta.facts : [];
-  const selected = Array.isArray(meta.selected) ? meta.selected : [];
-  const hasDetail = bioFull.length || facts.length || selected.length;
+  const sections = Array.isArray(meta.sections) ? meta.sections : [];
+  const collections = meta.collections && Array.isArray(meta.collections.items) ? meta.collections : null;
+  const hasDetail = bioFull.length || facts.length || sections.length || collections;
 
   return (
     <div className="jury-member">
@@ -174,11 +171,11 @@ function JuryMember({ id, photo, name, meta, readMore, collapse, selectedLabel }
                   </div>
                 ) : null}
 
-                {selected.length ? (
-                  <div className="jury-selected">
-                    {selectedLabel ? <div className="js-head">{selectedLabel}</div> : null}
+                {sections.map((sec, si) => (
+                  <div className="jury-selected" key={si}>
+                    {sec.heading ? <div className="js-head">{sec.heading}</div> : null}
                     <ul>
-                      {selected.map((s, k) => (
+                      {(sec.items || []).map((s, k) => (
                         <li key={k}>
                           <span className="yr">{s.year}</span>
                           <span className="ev">
@@ -186,6 +183,17 @@ function JuryMember({ id, photo, name, meta, readMore, collapse, selectedLabel }
                             {s.note ? <span>{s.note}</span> : null}
                           </span>
                         </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+
+                {collections ? (
+                  <div className="jury-collections">
+                    {collections.label ? <div className="js-head">{collections.label}</div> : null}
+                    <ul>
+                      {collections.items.map((c, k) => (
+                        <li key={k}>{c}</li>
                       ))}
                     </ul>
                   </div>
