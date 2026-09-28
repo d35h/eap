@@ -479,9 +479,9 @@ input, textarea, select { font-family: inherit; }
 }
 .jury-grid--single .jury-member h4 { font-size: 2rem; margin-bottom: 6px; }
 .jury-grid--single .jury-member .bio {
-  font-family: var(--font-display); font-style: normal; font-weight: 300;
-  font-size: 1.42rem; line-height: 1.6; letter-spacing: 0.004em;
-  color: var(--fg); max-width: 54ch;
+  font-family: var(--font-body); font-style: normal; font-weight: 400;
+  font-size: 1.02rem; line-height: 1.7; letter-spacing: 0;
+  color: var(--fg-muted); max-width: 56ch;
 }
 .jury-years {
   font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.04em;
@@ -549,7 +549,7 @@ input, textarea, select { font-family: inherit; }
   .jury-grid--single .jury-member { grid-template-columns: 1fr; gap: 28px; }
   .jury-grid--single .jury-photo img { max-width: 300px; }
   .jury-grid--single .jury-member h4 { font-size: 1.7rem; }
-  .jury-grid--single .jury-member .bio { font-size: 1.2rem; }
+  .jury-grid--single .jury-member .bio { font-size: 1rem; }
 }
 
 /* ─── Contact (ivory) ─── */
