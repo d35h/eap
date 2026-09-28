@@ -5,12 +5,10 @@ import { useTranslation } from '../hooks/useTranslation.jsx';
 import { useSubmissionsOpen } from '../lib/useSubmissionsOpen.js';
 import OrganicCta from '../components/OrganicCta.jsx';
 
-// ── Временный состав жюри (hardcoded). Имена и фото постоянны;
-//    роль и био берутся из переводов (team.jury, по индексу). ──
+// ── Состав жюри (hardcoded). Фото постоянно; имя, роль и тексты берутся из
+//    переводов (team.jury, по индексу), чтобы контент правился без кода. ──
 const JURY = [
-  { name: 'Marina Abramović', photo: '/jury/abramovic.jpg' },
-  { name: 'Ai Weiwei', photo: '/jury/aiweiwei.jpg' },
-  { name: 'Anish Kapoor', photo: '/jury/kapoor.jpg' },
+  { name: 'Илона Кособуко', photo: '/jury/kosobuko.jpg' },
 ];
 
 export default function Landing() {
@@ -97,18 +95,20 @@ export default function Landing() {
             <p className="section-intro">{t('team.intro')}</p>
           </div>
 
-          <div className="jury-grid">
+          <div className={`jury-grid${JURY.length === 1 ? ' jury-grid--single' : ''}`}>
             {JURY.map((j, i) => {
               const meta = (Array.isArray(t('team.jury')) ? t('team.jury') : [])[i] || {};
               return (
-                <div className="jury-member" key={j.name}>
-                  <div className="jury-photo">
-                    <img src={j.photo} alt={j.name} loading="lazy" />
-                  </div>
-                  <div className="role">{meta.role}</div>
-                  <h4>{j.name}</h4>
-                  <p className="bio">{meta.bio}</p>
-                </div>
+                <JuryMember
+                  key={j.name}
+                  id={`jury-detail-${i}`}
+                  photo={j.photo}
+                  name={meta.name || j.name}
+                  meta={meta}
+                  readMore={t('team.readMore')}
+                  collapse={t('team.collapse')}
+                  selectedLabel={t('team.selectedLabel')}
+                />
               );
             })}
           </div>
@@ -119,6 +119,83 @@ export default function Landing() {
       {/* CONTACT */}
       <ContactBlock />
     </main>
+  );
+}
+
+// ── One juror: photo + short bio always visible, detailed bio revealed on click ──
+function JuryMember({ id, photo, name, meta, readMore, collapse, selectedLabel }) {
+  const [open, setOpen] = useState(false);
+  const bioFull = Array.isArray(meta.bioFull) ? meta.bioFull : [];
+  const facts = Array.isArray(meta.facts) ? meta.facts : [];
+  const selected = Array.isArray(meta.selected) ? meta.selected : [];
+  const hasDetail = bioFull.length || facts.length || selected.length;
+
+  return (
+    <div className="jury-member">
+      <div className="jury-photo">
+        <img src={photo} alt={name} loading="lazy" />
+      </div>
+      <div className="jury-body">
+        <div className="role">{meta.role}</div>
+        <h4>{name}</h4>
+        {meta.years ? <div className="jury-years">{meta.years}</div> : null}
+        <p className="bio">{meta.bio}</p>
+
+        {hasDetail ? (
+          <>
+            <button
+              type="button"
+              className="jury-toggle"
+              aria-expanded={open}
+              aria-controls={id}
+              onClick={() => setOpen((o) => !o)}
+            >
+              <span className="arw" aria-hidden="true">›</span>
+              {open ? collapse : readMore}
+            </button>
+
+            {open ? (
+              <div className="jury-detail" id={id}>
+                {bioFull.map((p, k) => (
+                  <p key={k}>{p}</p>
+                ))}
+
+                {facts.length ? (
+                  <div className="jury-facts">
+                    {facts.map((f, k) => (
+                      <div className="jf" key={k}>
+                        <div className="jf-label">{f.label}</div>
+                        <div className="jf-val">
+                          {f.value}
+                          {f.note ? <span>{f.note}</span> : null}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : null}
+
+                {selected.length ? (
+                  <div className="jury-selected">
+                    {selectedLabel ? <div className="js-head">{selectedLabel}</div> : null}
+                    <ul>
+                      {selected.map((s, k) => (
+                        <li key={k}>
+                          <span className="yr">{s.year}</span>
+                          <span className="ev">
+                            {s.title}
+                            {s.note ? <span>{s.note}</span> : null}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+          </>
+        ) : null}
+      </div>
+    </div>
   );
 }
 
