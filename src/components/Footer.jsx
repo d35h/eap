@@ -52,6 +52,10 @@ export default function Footer() {
                 <span className="fname">{t('team.member4Name')}</span>
                 <span className="frole">{t('team.role4')}</span>
               </li>
+              <li className="founder">
+                <span className="fname">{t('team.member5Name')}</span>
+                <span className="frole">{t('team.role5')}</span>
+              </li>
             </ul>
           </div>
 
