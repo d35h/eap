@@ -8,7 +8,7 @@ import { JURY_CONTENT } from './juryData.js';
 
 // ── Состав жюри. Фото — постоянный ассет; тексты берутся из juryData (по языку),
 //    чтобы объёмный профиль не раздувал i18n. ──
-const JURY_PHOTOS = ['/jury/kosobuko.jpg'];
+const JURY_PHOTOS = ['/jury/kosobuko.jpg', '/jury/radaev.jpg'];
 
 export default function Landing() {
   const { t, lang } = useTranslation();
@@ -95,7 +95,7 @@ export default function Landing() {
             <p className="section-intro">{t('team.intro')}</p>
           </div>
 
-          <div className={`jury-grid${juryContent.members.length === 1 ? ' jury-grid--single' : ''}`}>
+          <div className="jury-grid jury-grid--feature">
             {juryContent.members.map((meta, i) => (
               <JuryMember
                 key={meta.name}

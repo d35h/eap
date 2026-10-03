@@ -466,19 +466,23 @@ input, textarea, select { font-family: inherit; }
 }
 .jury-member .bio { font-size: 0.9rem; color: var(--fg-muted); line-height: 1.6; }
 
-/* ─── Single featured juror: portrait beside an expandable dossier ─── */
-.jury-grid.jury-grid--single { grid-template-columns: 1fr; max-width: 1000px; }
-.jury-grid--single .jury-member {
+/* ─── Featured jurors: portrait beside an expandable dossier, stacked ─── */
+.jury-grid.jury-grid--feature { grid-template-columns: 1fr; max-width: 1000px; gap: 0; }
+.jury-grid--feature .jury-member {
   display: grid; grid-template-columns: minmax(240px, 320px) 1fr;
   gap: 52px; align-items: start;
 }
-.jury-grid--single .jury-photo { margin-bottom: 0; }
-.jury-grid--single .jury-photo img {
+/* Separate stacked jurors with a rule and breathing room. */
+.jury-grid--feature .jury-member + .jury-member {
+  margin-top: 56px; padding-top: 56px; border-top: 1px solid var(--border);
+}
+.jury-grid--feature .jury-photo { margin-bottom: 0; }
+.jury-grid--feature .jury-photo img {
   width: 100%; height: auto; max-height: none; aspect-ratio: 3 / 4;
   object-fit: cover; object-position: 50% 22%;
 }
-.jury-grid--single .jury-member h4 { font-size: 2rem; margin-bottom: 6px; }
-.jury-grid--single .jury-member .bio {
+.jury-grid--feature .jury-member h4 { font-size: 2rem; margin-bottom: 6px; }
+.jury-grid--feature .jury-member .bio {
   font-family: var(--font-body); font-style: normal; font-weight: 400;
   font-size: 1.02rem; line-height: 1.7; letter-spacing: 0;
   color: var(--fg-muted); max-width: 56ch;
@@ -546,10 +550,10 @@ input, textarea, select { font-family: inherit; }
 }
 
 @media (max-width: 720px) {
-  .jury-grid--single .jury-member { grid-template-columns: 1fr; gap: 28px; }
-  .jury-grid--single .jury-photo img { max-width: 300px; }
-  .jury-grid--single .jury-member h4 { font-size: 1.7rem; }
-  .jury-grid--single .jury-member .bio { font-size: 1rem; }
+  .jury-grid--feature .jury-member { grid-template-columns: 1fr; gap: 28px; }
+  .jury-grid--feature .jury-photo img { max-width: 300px; }
+  .jury-grid--feature .jury-member h4 { font-size: 1.7rem; }
+  .jury-grid--feature .jury-member .bio { font-size: 1rem; }
 }
 
 /* ─── Contact (ivory) ─── */
