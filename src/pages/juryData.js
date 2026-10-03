@@ -251,7 +251,7 @@ export const JURY_CONTENT = {
               },
               {
                 "year": "2012–2016",
-                "title": "Цикл «Краявіды зямлі беларускай»",
+                "title": "Цикл «Пейзажи белорусской земли»",
                 "note": "Литературный музей Янки Купалы, Минск"
               },
               {
@@ -271,7 +271,7 @@ export const JURY_CONTENT = {
               },
               {
                 "year": "2022",
-                "title": "«Меер Аксельрод. Успаміны пра Менск»",
+                "title": "«Меер Аксельрод. Воспоминания о Минске»",
                 "note": "Литературный музей Янки Купалы, Минск"
               }
             ]
@@ -548,7 +548,7 @@ export const JURY_CONTENT = {
               },
               {
                 "year": "2022",
-                "title": "“Meer Axelrod. Memories of Mensk”",
+                "title": "“Meer Axelrod. Memories of Minsk”",
                 "note": "Yanka Kupala Literary Museum, Minsk"
               }
             ]
@@ -825,7 +825,7 @@ export const JURY_CONTENT = {
               },
               {
                 "year": "2022",
-                "title": "«Меер Аксельрод. Менск туралы естеліктер»",
+                "title": "«Меер Аксельрод. Минск туралы естеліктер»",
                 "note": "Янка Купала атындағы әдебиет мұражайы, Минск"
               }
             ]
