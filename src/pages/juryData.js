@@ -201,7 +201,7 @@ export const JURY_CONTENT = {
       },
       {
         "name": "Александр Радаев",
-        "role": "Искусствовед · куратор",
+        "role": "Куратор · искусствовед",
         "bio": "Искусствовед. Куратор художественных и исторических выставок в государственных музеях и галереях Беларуси и других стран.",
         "facts": [
           {
@@ -577,7 +577,7 @@ export const JURY_CONTENT = {
       },
       {
         "name": "Alexander Radaev",
-        "role": "Art historian · curator",
+        "role": "Curator · art historian",
         "bio": "Art historian and curator of art and historical exhibitions in state museums and galleries in Belarus and abroad.",
         "facts": [
           {
@@ -953,7 +953,7 @@ export const JURY_CONTENT = {
       },
       {
         "name": "Александр Радаев",
-        "role": "Өнертанушы · куратор",
+        "role": "Куратор · өнертанушы",
         "bio": "Өнертанушы. Беларусь мен басқа елдердің мемлекеттік мұражайлары мен галереяларында көркем және тарихи көрмелердің кураторы.",
         "facts": [
           {
@@ -1329,7 +1329,7 @@ export const JURY_CONTENT = {
       },
       {
         "name": "亚历山大·拉达耶夫",
-        "role": "艺术史学者 · 策展人",
+        "role": "策展人 · 艺术史学者",
         "bio": "艺术史学者。曾在白俄罗斯及其他国家的国家博物馆与画廊策划艺术与历史展览。",
         "facts": [
           {
