@@ -277,6 +277,105 @@ export const JURY_CONTENT = {
             ]
           }
         ]
+      },
+      {
+        "name": "Елена Ге",
+        "role": "Куратор · Музей Марка Шагала",
+        "bio": "Куратор и старший научный сотрудник Музея Марка Шагала в Витебске. Работает с выставочными проектами, современными художниками и музейной коллекцией.",
+        "facts": [
+          {
+            "label": "Образование",
+            "value": "Витебский государственный университет",
+            "note": "Белорусская филология, история и культура, 1998"
+          },
+          {
+            "label": "Должность",
+            "value": "Музей Марка Шагала, Витебск",
+            "note": "Старший научный сотрудник, с 2018"
+          },
+          {
+            "label": "Ранее",
+            "value": "Витебский центр современного искусства",
+            "note": "Старший научный сотрудник, 2007–2018"
+          },
+          {
+            "label": "Стажировка",
+            "value": "Медиатека, Сан-Приест, Франция",
+            "note": "2000 · Салон молодого иллюстратора книг, 2001–2002"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Кураторские проекты",
+            "items": [
+              {
+                "year": "2026",
+                "title": "V Шагаловский пленэр по живописи",
+                "note": "Витебск"
+              },
+              {
+                "year": "2024",
+                "title": "Виктор Шилко. «Реальность»",
+                "note": "Пространство Art Roof, Витебск"
+              },
+              {
+                "year": "2022–2023",
+                "title": "«Ожидание» — серия выставок женщин-художниц",
+                "note": "Арт-центр Марка Шагала, Витебск"
+              },
+              {
+                "year": "2021",
+                "title": "Международный детский конкурс рисунков «Шагал: знакомый и незнакомый»",
+                "note": "Витебск · Франкфурт-на-Одере · Слубице"
+              },
+              {
+                "year": "2018–2022",
+                "title": "Международный проект «Третье течение»",
+                "note": "Витебск, Минск"
+              },
+              {
+                "year": "2019–2020",
+                "title": "Проект «Священная абстракция»",
+                "note": "Арт-центр Марка Шагала (Витебск) · Музей Рижского гетто (Латвия) · Галерея М. Савицкого (Минск)"
+              },
+              {
+                "year": "2019",
+                "title": "Елена Гурина. «Ужин с Платоном»",
+                "note": "Минск"
+              },
+              {
+                "year": "2018",
+                "title": "Израиль и Матвей Басовы. «Живопись чувств и размышлений»",
+                "note": "Арт-центр Марка Шагала, Витебск"
+              },
+              {
+                "year": "2018",
+                "title": "IV Шагаловский пленэр по живописи",
+                "note": "Витебск"
+              },
+              {
+                "year": "2017",
+                "title": "«Время женщин»",
+                "note": "Витебский центр современного искусства"
+              }
+            ]
+          },
+          {
+            "heading": "Публикации",
+            "items": [
+              {
+                "year": "2019",
+                "title": "Каталог III и IV Международных Шагаловских пленэров",
+                "note": "Минск: Медисонт"
+              },
+              {
+                "year": "2018",
+                "title": "«Валентина Ляхович. Живопись. Инсталляции. Объекты»",
+                "note": "Минск: Медисонт"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -550,6 +649,105 @@ export const JURY_CONTENT = {
                 "year": "2022",
                 "title": "“Meer Axelrod. Memories of Minsk”",
                 "note": "Yanka Kupala Literary Museum, Minsk"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Elena Ge",
+        "role": "Curator · Marc Chagall Museum",
+        "bio": "Curator and senior researcher at the Marc Chagall Museum in Vitebsk. She works on exhibition projects, with contemporary artists and the museum's collection.",
+        "facts": [
+          {
+            "label": "Education",
+            "value": "Vitebsk State University",
+            "note": "Belarusian philology, history & culture, 1998"
+          },
+          {
+            "label": "Position",
+            "value": "Marc Chagall Museum, Vitebsk",
+            "note": "Senior researcher, since 2018"
+          },
+          {
+            "label": "Previously",
+            "value": "Vitebsk Centre of Contemporary Art",
+            "note": "Senior researcher, 2007–2018"
+          },
+          {
+            "label": "Residency",
+            "value": "Médiathèque, Saint-Priest, France",
+            "note": "2000 · Young Book Illustrator Salon, 2001–2002"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Curatorial projects",
+            "items": [
+              {
+                "year": "2026",
+                "title": "5th Chagall Painting Plein-air",
+                "note": "Vitebsk"
+              },
+              {
+                "year": "2024",
+                "title": "Viktor Shilko. “Reality”",
+                "note": "Art Roof Space, Vitebsk"
+              },
+              {
+                "year": "2022–2023",
+                "title": "“Anticipation” — a series of exhibitions by women artists",
+                "note": "Marc Chagall Art Centre, Vitebsk"
+              },
+              {
+                "year": "2021",
+                "title": "International children's drawing competition “Chagall: Familiar and Unfamiliar”",
+                "note": "Vitebsk · Frankfurt (Oder) · Słubice"
+              },
+              {
+                "year": "2018–2022",
+                "title": "International project “The Third Current”",
+                "note": "Vitebsk, Minsk"
+              },
+              {
+                "year": "2019–2020",
+                "title": "Project “Sacred Abstraction”",
+                "note": "Marc Chagall Art Centre (Vitebsk) · Riga Ghetto Museum (Latvia) · M. Savitsky Gallery (Minsk)"
+              },
+              {
+                "year": "2019",
+                "title": "Elena Gurina. “Dinner with Plato”",
+                "note": "Minsk"
+              },
+              {
+                "year": "2018",
+                "title": "Izrail and Matvei Basov. “Painting of Feelings and Reflections”",
+                "note": "Marc Chagall Art Centre, Vitebsk"
+              },
+              {
+                "year": "2018",
+                "title": "4th Chagall Painting Plein-air",
+                "note": "Vitebsk"
+              },
+              {
+                "year": "2017",
+                "title": "“Time of Women”",
+                "note": "Vitebsk Centre of Contemporary Art"
+              }
+            ]
+          },
+          {
+            "heading": "Publications",
+            "items": [
+              {
+                "year": "2019",
+                "title": "Catalogue of the 3rd and 4th International Chagall Plein-airs",
+                "note": "Minsk: Medisont"
+              },
+              {
+                "year": "2018",
+                "title": "“Valentina Lyakhovich. Painting. Installations. Objects”",
+                "note": "Minsk: Medisont"
               }
             ]
           }
@@ -831,6 +1029,105 @@ export const JURY_CONTENT = {
             ]
           }
         ]
+      },
+      {
+        "name": "Елена Ге",
+        "role": "Куратор · Марк Шагал мұражайы",
+        "bio": "Витебсктегі Марк Шагал мұражайының кураторы әрі аға ғылыми қызметкері. Көрме жобаларымен, заманауи суретшілермен және мұражай қорымен жұмыс істейді.",
+        "facts": [
+          {
+            "label": "Білімі",
+            "value": "Витебск мемлекеттік университеті",
+            "note": "Беларусь филологиясы, тарихы және мәдениеті, 1998"
+          },
+          {
+            "label": "Қызметі",
+            "value": "Марк Шагал мұражайы, Витебск",
+            "note": "Аға ғылыми қызметкер, 2018 жылдан"
+          },
+          {
+            "label": "Бұрын",
+            "value": "Витебск заманауи өнер орталығы",
+            "note": "Аға ғылыми қызметкер, 2007–2018"
+          },
+          {
+            "label": "Тағылымдама",
+            "value": "Медиатека, Сан-Приест, Франция",
+            "note": "2000 · Жас кітап иллюстраторы салоны, 2001–2002"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "Кураторлық жобалар",
+            "items": [
+              {
+                "year": "2026",
+                "title": "V Шагалов пленэрі (кескіндеме)",
+                "note": "Витебск"
+              },
+              {
+                "year": "2024",
+                "title": "Виктор Шилко. «Реальность»",
+                "note": "Art Roof кеңістігі, Витебск"
+              },
+              {
+                "year": "2022–2023",
+                "title": "«Ожидание» — әйел-суретшілер көрмелерінің топтамасы",
+                "note": "Марк Шагал арт-орталығы, Витебск"
+              },
+              {
+                "year": "2021",
+                "title": "«Шагал: таныс және бейтаныс» халықаралық балалар сурет байқауы",
+                "note": "Витебск · Франкфурт-на-Одере · Слубице"
+              },
+              {
+                "year": "2018–2022",
+                "title": "«Третье течение» халықаралық жобасы",
+                "note": "Витебск, Минск"
+              },
+              {
+                "year": "2019–2020",
+                "title": "«Священная абстракция» жобасы",
+                "note": "Марк Шагал арт-орталығы (Витебск) · Рига геттосы мұражайы (Латвия) · М. Савицкий галереясы (Минск)"
+              },
+              {
+                "year": "2019",
+                "title": "Елена Гурина. «Ужин с Платоном»",
+                "note": "Минск"
+              },
+              {
+                "year": "2018",
+                "title": "Израиль мен Матвей Басовтар. «Живопись чувств и размышлений»",
+                "note": "Марк Шагал арт-орталығы, Витебск"
+              },
+              {
+                "year": "2018",
+                "title": "IV Шагалов пленэрі (кескіндеме)",
+                "note": "Витебск"
+              },
+              {
+                "year": "2017",
+                "title": "«Время женщин»",
+                "note": "Витебск заманауи өнер орталығы"
+              }
+            ]
+          },
+          {
+            "heading": "Басылымдар",
+            "items": [
+              {
+                "year": "2019",
+                "title": "III және IV Халықаралық Шагалов пленэрлерінің каталогы",
+                "note": "Минск: Медисонт"
+              },
+              {
+                "year": "2018",
+                "title": "«Валентина Ляхович. Живопись. Инсталляции. Объекты»",
+                "note": "Минск: Медисонт"
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -1104,6 +1401,105 @@ export const JURY_CONTENT = {
                 "year": "2022",
                 "title": "《梅尔·阿克塞尔罗德·关于明斯克的回忆》",
                 "note": "扬卡·库帕拉文学博物馆，明斯克"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "叶连娜·格",
+        "role": "策展人 · 马克·夏加尔博物馆",
+        "bio": "维捷布斯克马克·夏加尔博物馆的策展人及高级研究员。她从事展览项目，与当代艺术家合作，并对馆藏进行整理与激活。",
+        "facts": [
+          {
+            "label": "教育",
+            "value": "维捷布斯克国立大学",
+            "note": "白俄罗斯语文学、历史与文化，1998"
+          },
+          {
+            "label": "职务",
+            "value": "马克·夏加尔博物馆，维捷布斯克",
+            "note": "高级研究员，2018年起"
+          },
+          {
+            "label": "此前",
+            "value": "维捷布斯克当代艺术中心",
+            "note": "高级研究员，2007–2018"
+          },
+          {
+            "label": "进修",
+            "value": "媒体图书馆，圣普里斯特，法国",
+            "note": "2000 · 青年书籍插画家沙龙，2001–2002"
+          }
+        ],
+        "sections": [
+          {
+            "heading": "策展项目",
+            "items": [
+              {
+                "year": "2026",
+                "title": "第五届夏加尔绘画写生营",
+                "note": "维捷布斯克"
+              },
+              {
+                "year": "2024",
+                "title": "维克托·希尔科《现实》",
+                "note": "Art Roof 空间，维捷布斯克"
+              },
+              {
+                "year": "2022–2023",
+                "title": "《等待》——女性艺术家系列展",
+                "note": "马克·夏加尔艺术中心，维捷布斯克"
+              },
+              {
+                "year": "2021",
+                "title": "国际儿童绘画比赛《夏加尔：熟悉与陌生》",
+                "note": "维捷布斯克 · 奥得河畔法兰克福 · 斯武比采"
+              },
+              {
+                "year": "2018–2022",
+                "title": "国际项目《第三潮流》",
+                "note": "维捷布斯克，明斯克"
+              },
+              {
+                "year": "2019–2020",
+                "title": "项目《神圣的抽象》",
+                "note": "马克·夏加尔艺术中心（维捷布斯克）· 里加隔都博物馆（拉脱维亚）· 萨维茨基画廊（明斯克）"
+              },
+              {
+                "year": "2019",
+                "title": "叶莲娜·古里娜《与柏拉图共进晚餐》",
+                "note": "明斯克"
+              },
+              {
+                "year": "2018",
+                "title": "伊兹赖尔与马特维·巴索夫《情感与思考的绘画》",
+                "note": "马克·夏加尔艺术中心，维捷布斯克"
+              },
+              {
+                "year": "2018",
+                "title": "第四届夏加尔绘画写生营",
+                "note": "维捷布斯克"
+              },
+              {
+                "year": "2017",
+                "title": "《女性的时代》",
+                "note": "维捷布斯克当代艺术中心"
+              }
+            ]
+          },
+          {
+            "heading": "出版",
+            "items": [
+              {
+                "year": "2019",
+                "title": "第三、四届国际夏加尔写生营图录",
+                "note": "明斯克：Medisont"
+              },
+              {
+                "year": "2018",
+                "title": "《瓦伦蒂娜·利亚霍维奇·绘画·装置·物件》",
+                "note": "明斯克：Medisont"
               }
             ]
           }

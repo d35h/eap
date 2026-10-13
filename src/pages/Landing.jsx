@@ -8,7 +8,7 @@ import { JURY_CONTENT } from './juryData.js';
 
 // ── Состав жюри. Фото — постоянный ассет; тексты берутся из juryData (по языку),
 //    чтобы объёмный профиль не раздувал i18n. ──
-const JURY_PHOTOS = ['/jury/kosobuko.jpg', '/jury/radaev.jpg'];
+const JURY_PHOTOS = ['/jury/kosobuko.jpg', '/jury/radaev.jpg', '/jury/ge.jpg'];
 
 export default function Landing() {
   const { t, lang } = useTranslation();
